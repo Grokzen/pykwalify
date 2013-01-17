@@ -1,0 +1,15 @@
+# This logging configuration will be used in python versions >= 3.2.x
+
+version: 1
+formatters:
+  simple:
+    format: ' %(levelname)s - %(name)s:%(lineno)s - %(message)s'
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: simple
+    stream: ext://sys.stdout
+root:
+  level: INFO
+  handlers: [console]

@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" pykwalify """
+
+__author__ = 'Grokzen <grokzen@gmail.com>'
+
+import os
+import sys
+
+# Check minimum version of Python
+if sys.version_info < (3,1,0):
+  sys.stderr.write("ERROR: pykwalify: Python version 3.1.x or later is required, exiting...\n")
+  sys.exit(1)
+
+# Check if we are installed in the system already, otherwise update path
+(prefix, bindir) = os.path.split(os.path.dirname(os.path.abspath(sys.argv[0])))
+if bindir == 'bin':
+    # Assume we are installed on the system
+    pass
+else:
+    # Assume we are not yet installed
+    sys.path.append(os.path.join(prefix, bindir, 'lib'))
+
+import pykwalify.cli
+
+if __name__ == "__main__":
+    pykwalify.cli.main()
