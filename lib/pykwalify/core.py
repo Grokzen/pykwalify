@@ -2,6 +2,8 @@
 
 """ pyKwalify - Core.py """
 
+__author__ = 'Grokzen <grokzen@gmail.com>'
+
 # python std lib
 import re
 import os

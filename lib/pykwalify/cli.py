@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-""" cli for pykwalify """
+""" pyKwalify - cli for pykwalify """
 
-__author__ = 'Grok <Grokzen@gmail.com>'
+__author__ = 'Grokzen <grokzen@gmail.com>'
 
 # python std library
 import os

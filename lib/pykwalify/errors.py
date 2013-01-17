@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+__author__ = 'Grokzen <grokzen@gmail.com>'
+
 retcodes = {
     # PyKwalifyExit
     0: 'noerror',

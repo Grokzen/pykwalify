@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+""" pykwalify - script entry point """
+
+__author__ = 'Grokzen <grokzen@gmail.com>'
+
 import sys
 import os
 
