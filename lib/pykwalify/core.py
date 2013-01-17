@@ -84,6 +84,7 @@ class Core(object):
             print("validation.invalid")
             print(" - All found errors -")
             print(errors)
+            raise Exception("validation.invalid : %s" % errors)
 
     def start_validate(self, value = None):
         path = ""

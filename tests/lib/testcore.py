@@ -21,10 +21,24 @@ from pykwalify.core import Core
 class TestCore(TestHelper):
 
     def testCore(self):
-        d = ["foo", "bar", "foobar"]
-        e = {"type": "seq", "sequence": [ {"type": "str", "length": {"max": 5, "min": 1} } ] }
-        c = Core(source_data = d, schema_data = e)
+        # Test sequence with only string values
+        a = {"type": "seq", "sequence": [ {"type": "str"} ] }
+        b = ["foo", "bar", "baz"]
+        c = Core(source_data = a, schema_data = b)
         c.run_core()
+
+        # Test sequence with defined string content type but data only has integers
+        a = {"type": "seq", "sequence": [ {"type": "str"} ] }
+        b = [1, 2, 3]
+        c = Core(source_data = a, schema_data = b)
+        with self.assertRaises(Exception):
+            c.run_core()
+
+        a = ["foo", "bar", "foobar"]
+        b = {"type": "seq", "sequence": [ {"type": "str", "length": {"max": 5, "min": 1} } ] }
+        c = Core(source_data = a, schema_data = b)
+        with self.assertRaises(Exception):
+            c.run_core()
 
         print("\n\n\n")
         
