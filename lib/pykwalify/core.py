@@ -187,8 +187,9 @@ class Core(object):
         for k, rule in m.items():
             if rule._required and k not in value:
                 errors.append("required.nokey")
+
         for k, v in value.items():
-            rule = m[k]
+            rule = m.get(k, None)
             if rule is None:
                 errors.append("key.undefined")
             else:
