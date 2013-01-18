@@ -11,7 +11,7 @@ import os
 # Testhelper class
 #from .testhelper import * # TODO: this do not work Oo :: TypeError: attribute name must be string, not 'type'
 from tests.testhelper import run as run
-from tests.testhelper import TestHelper, Log, logging_regex, gettestcwd, makeTestFolder, removeTestFolder, makeTestFile, removeTestfile
+from tests.testhelper import TestHelper, Log, logging_regex, gettestcwd, makeTestFolder, removeTestFolder, makeTestFile, removeTestfile, _set_log_lv
 from tests.testhelper import Log
 
 # pyKwalify imports
@@ -19,9 +19,6 @@ import pykwalify
 from pykwalify.rule import Rule
 
 class TestRule(TestHelper):
-
-    def testEmptyInstance(self):
-        pass
 
     def testRuleClass(self):
         # this tests seq type with a internal type of str

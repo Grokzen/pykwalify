@@ -197,7 +197,6 @@ def run(argv):
         for name in sys.argv:
             try:
                 test = getattr(sys.modules['tests'], name)
-                print(test)
             except AttributeError:
                 continue
             suite.addTests(loader.loadTestsFromTestCase(test))
