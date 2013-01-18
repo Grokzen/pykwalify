@@ -17,14 +17,10 @@ Log = logging.getLogger(__name__)
 # pyKwalify imports
 from .rule import Rule
 from .types import *
+from .error import *
 
 # 3rd party imports
 import yaml
-
-class CoreException(Exception):
-    """ This exception is the main exception used by the Core class
-    """
-    pass
 
 class Core(object):
     """ Core class of pyKwalify """
@@ -40,7 +36,7 @@ class Core(object):
 
         if source_file is not None:
             if not os.path.exists(source_file):
-                raise CoreException("Provided source_file do not exists on disk")
+                raise CoreError("Provided source_file do not exists on disk")
                 
             with open(source_file, "r") as stream:
                 if source_file.endswith(".json"):
@@ -48,11 +44,11 @@ class Core(object):
                 elif source_file.endswith(".yaml"):
                     self.source = yaml.load(stream)
                 else:
-                    raise CoreException("Unable to load source_file. Unknown file format.")
+                    raise CoreError("Unable to load source_file. Unknown file format.")
 
         if schema_file is not None:
             if not os.path.exists(schema_file):
-                raise CoreException("Provided source_file do not exists on disk")
+                raise CoreError("Provided source_file do not exists on disk")
 
             with open(schema_file, "r") as stream:
                 if schema_file.endswith(".json"):
@@ -60,7 +56,7 @@ class Core(object):
                 elif schema_file.endswith(".yaml"):
                     self.schema = yaml.load(stream)
                 else:
-                    raise CoreException("Unable to load schema_file. Unknown file format.")
+                    raise CoreError("Unable to load schema_file. Unknown file format.")
 
         # Nothing was loaded so try the source_data variable
         if self.source is None:
@@ -70,14 +66,14 @@ class Core(object):
 
         # Test if anything was loaded
         if self.source is None:
-            raise CoreException("No source file/data was loaded")
+            raise CoreError("No source file/data was loaded")
         if self.schema is None:
-            raise CoreException("No schema file/data was loaded")
+            raise CoreError("No schema file/data was loaded")
 
         # Everything now is valid loaded
 
     def run_core(self):
-        errors = self.start_validate(self.source)
+        errors = self._start_validate(self.source)
         if errors is None or len(errors) == 0:
             Log.info("validation.valid")
         else:
@@ -86,7 +82,7 @@ class Core(object):
             Log.error(errors)
             raise Exception("validation.invalid : %s" % errors)
 
-    def start_validate(self, value = None):
+    def _start_validate(self, value = None):
         path = ""
         errors = []
         done = []
@@ -94,17 +90,17 @@ class Core(object):
         root_rule = Rule(schema = self.schema)
         Log.debug("Done building root rule")
 
-        self.validate(value, root_rule, path, errors, done)
+        self._validate(value, root_rule, path, errors, done)
 
         return errors
 
-    def validate(self, value, rule, path, errors, done):
+    def _validate(self, value, rule, path, errors, done):
         Log.debug("Rule: %s" % rule._type)
         Log.debug("Seq: %s" % rule._sequence)
         Log.debug("Map: %s" % rule._mapping)
 
         if rule._required and self.source is None:
-            raise CoreException("required.novalue")
+            raise CoreError("required.novalue")
 
         n = len(errors)
         if rule._sequence is not None:
@@ -132,7 +128,7 @@ class Core(object):
         i = 0
         for item in value:
             # Validate recursivley
-            self.validate(item, r, "%s/%s" % (path, i), errors, done)
+            self._validate(item, r, "%s/%s" % (path, i), errors, done)
 
         if rule._type == "map":
             mapping = rule._mapping
@@ -194,7 +190,7 @@ class Core(object):
                 errors.append("key.undefined")
             else:
                 # validate recursively
-                self.validate(v, rule, "%s/%s" % (path, k), errors, done)
+                self._validate(v, rule, "%s/%s" % (path, k), errors, done)
 
     def _validate_scalar(self, value, rule, path, errors = [], done = None):
         Log.debug("Validate scalar")
