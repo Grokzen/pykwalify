@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__author__ = 'Grokzen <grokzen@gmail.com>'
+__author__ = 'Grokzen <Grokzen@gmail.com>'
 
 retcodes = {
     # PyKwalifyExit
@@ -12,37 +12,27 @@ retcodes = {
     # PyKwalifyFileNotAccessible
     2: 'filenotaccessible',
 
-    # PyKwalifyFileTypeError
-    # e.g. when JsonConfig receives an erroneous file
-    3: 'filetypeerror',
-
     # PyKwalifyOptionError
     # e.g. when PyKwalifyApplication receives an erroneous configuration
-    4: 'optionerror',
+    3: 'optionerror',
 
     # PyKwalifyNotImplemented
-    5: 'notimplemented',
-
-    # PyKwalifyProcessorFailure
-    # e.g. pdf
-    6: 'processorfailure',
-
-    # PyKwalifyWriterFailure
-    # e.g. latex
-    7: 'writerfailure',
+    4: 'notimplemented',
 
     # PyKwalifyParseFailure
     # e.g. could not parse a configuration file
-    8: 'parsefailure',
+    5: 'parsefailure',
 
-    # PyKwalifyConvertError
-    9: "converterror",
-    # e.g. when type conversion any other convert between objects
+    # pyKwalifySchemaError
+    # e.g. when a rule or the core finds an error
+    6: 'schemaerror',
 
-    # PyKwalifyDocumentBuildFailure
-    10: "buildfailure",
-    # e.g. used by Application to signal to the caller that one of the buildt document failed
-           }
+    # pyKwalifyCoreError
+    # e.g. when the core fins an error that is not a SchemaError
+    7: 'coreerror',
+}
+
+
 retnames = dict((v, k) for (k, v) in retcodes.items())
 
 
@@ -148,7 +138,7 @@ class PyKwalifyExit(PyKwalifyException):
                          *args, **kwargs)
 
 
-class PyKwalifyUnknownError(PyKwalifyException):
+class UnknownError(PyKwalifyException):
     """
     """
     def __init__(self, *args, **kwargs):
@@ -159,7 +149,7 @@ class PyKwalifyUnknownError(PyKwalifyException):
                          *args, **kwargs)
 
 
-class PyKwalifyFileNotAccessible(PyKwalifyException):
+class FileNotAccessible(PyKwalifyException):
     """
     """
     def __init__(self, *args, **kwargs):
@@ -170,18 +160,7 @@ class PyKwalifyFileNotAccessible(PyKwalifyException):
                          *args, **kwargs)
 
 
-class PyKwalifyFileTypeError(PyKwalifyException):
-    """
-    """
-    def __init__(self, *args, **kwargs):
-        """
-        """
-        assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super().__init__(retcode=retnames['filetypeerror'],
-                         *args, **kwargs)
-
-
-class PyKwalifyOptionError(PyKwalifyException):
+class OptionError(PyKwalifyException):
     """
     """
     def __init__(self, *args, **kwargs):
@@ -192,7 +171,7 @@ class PyKwalifyOptionError(PyKwalifyException):
                          *args, **kwargs)
 
 
-class PyKwalifyNotImplemented(PyKwalifyException):
+class NotImplemented(PyKwalifyException):
     """
     """
     def __init__(self, *args, **kwargs):
@@ -203,29 +182,7 @@ class PyKwalifyNotImplemented(PyKwalifyException):
                          *args, **kwargs)
 
 
-class PyKwalifyProcessorFailure(PyKwalifyException):
-    """
-    """
-    def __init__(self, *args, **kwargs):
-        """
-        """
-        assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super().__init__(retcode=retnames['processorfailure'],
-                         *args, **kwargs)
-
-
-class PyKwalifyWriterFailure(PyKwalifyException):
-    """
-    """
-    def __init__(self, *args, **kwargs):
-        """
-        """
-        assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super().__init__(retcode=retnames['writerfailure'],
-                         *args, **kwargs)
-
-
-class PyKwalifyParseFailure(PyKwalifyException):
+class ParseFailure(PyKwalifyException):
     """
     """
     def __init__(self, *args, **kwargs):
@@ -236,22 +193,22 @@ class PyKwalifyParseFailure(PyKwalifyException):
                          *args, **kwargs)
 
 
-class PyKwalifyConvertError(PyKwalifyException):
-    """
-    """
-    def __init__(self, *args, **kwargs):
-        """
-        """
-        assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super().__init__(retcode=retnames['converterror'],
-                         *args, **kwargs)
-
-class PyKwalifyDocumentBuildFailure(PyKwalifyException):
+class SchemaError(PyKwalifyException):
     """
     """
     def __init__(self, *args, **kwargs):
         """
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
-        super().__init__(retcode=retnames["buildfailure"],
+        super().__init__(retcode=retnames["schemaerror"],
+                         *args, **kwargs)
+
+class CoreError(PyKwalifyException):
+    """
+    """
+    def __init__(self, *args, **kwargs):
+        """
+        """
+        assert "retcode" not in kwargs, "keyword retcode implicitly defined"
+        super().__init__(retcode=retnames["coreerror"],
                          *args, **kwargs)
