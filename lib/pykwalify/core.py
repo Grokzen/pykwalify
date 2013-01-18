@@ -17,7 +17,7 @@ Log = logging.getLogger(__name__)
 # pyKwalify imports
 from .rule import Rule
 from .types import *
-from .error import *
+from .errors import *
 
 # 3rd party imports
 import yaml
