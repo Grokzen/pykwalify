@@ -10,6 +10,10 @@ import re
 import sys
 import json
 
+# python std logging
+import logging
+Log = logging.getLogger(__name__)
+
 # pyKwalify imports
 from .types import *
 
@@ -35,12 +39,14 @@ class Rule(object):
         self._unique = None
 
         self._parent = parent
+        self._schema = schema
 
         if isinstance(schema, dict):
             self.init(schema, "")
 
-
     def init(self, schema, path):
+        Log.debug("Init schema: %s" % schema)
+
         if schema != None:
             assert isinstance(schema, dict), "schema is not a dict"
 
@@ -91,6 +97,9 @@ class Rule(object):
         self.checkConfliction(schema, rule, path)
 
     def initTypeValue(self, v, rule, path):
+        Log.debug("Init type value")
+        Log.debug("Type: %s %s" % (v, rule) )
+
         if v is None:
             v = DEFAULT_TYPE
         assert isinstance(v, str), "type.nostr"
@@ -102,17 +111,25 @@ class Rule(object):
             raise Exception("type.unknown")
 
     def initNameValue(self, v, rule, path):
+        Log.debug("Init name value")
+
         self._name = str(v)
 
     def initDescValue(self, v, rule, path):
+        Log.debug("Init descr value")
+
         self._desc = str(v)
 
     def initRequiredValue(self, v, rule, path):
+        Log.debug("Init required value")
+
         if not isinstance(v, bool):
             raise Exception("required.notbool")
         self._required = v
 
     def initPatternValue(self, v, rule, path):
+        Log.debug("Init pattern value")
+
         if not isinstance(v, str):
             raise Exception("pattern.notstr")
 
@@ -126,6 +143,8 @@ class Rule(object):
             raise Exception("pattern.syntaxerr")
 
     def initEnumValue(self, v, rule, path):
+        Log.debug("Init enum value")
+
         if not isinstance(v, list):
             raise Exception("enum.notseq")
         self._enum = v
@@ -144,6 +163,8 @@ class Rule(object):
             lookup.add(item)
 
     def initAssertValue(self, v, rule, path):
+        Log.debug("Init assert value")
+
         if not isinstance(v, str):
             raise Exception("assert.notstr")
 
@@ -152,6 +173,8 @@ class Rule(object):
         raise Exception("assert.NYI-Error")
 
     def initRangeValue(self, v, rule, path):
+        Log.debug("Init range value")
+
         if not isinstance(v, dict):
             raise Exception("range.notmap")
         if isCollectionType(self._type) or self._type == "bool":
@@ -189,6 +212,8 @@ class Rule(object):
                 raise Exception("range.maxexleminex")
 
     def initLengthValue(self, v, rule, path):
+        Log.debug("Init length value")
+
         if not isinstance(v, dict):
             raise Exception("length.notmap")
 
@@ -227,6 +252,8 @@ class Rule(object):
                 raise Exception("length.maxexleminex")
 
     def initIdentValue(self, v, rule, path):
+        Log.debug("Init ident value")
+
         if v is None or isinstance(v, bool):
             raise Exception("ident.notbool")
 
@@ -240,6 +267,8 @@ class Rule(object):
             raise Exception("ident.notmap")
 
     def initUniqueValue(self, v, rule, path):
+        Log.debug("Init unique value")
+
         if not isinstance(v, bool):
             raise Exception("unique.notbool")
         self._unique = bool(v)
@@ -249,6 +278,8 @@ class Rule(object):
             raise Exception("unique.onroot")
 
     def initSequenceValue(self, v, rule, path):
+        Log.debug("Init sequence value")
+
         if v is not None and not isinstance(v, list):
             raise Exception("sequence.notseq")
         self._sequence = v
@@ -271,6 +302,8 @@ class Rule(object):
         return rule
 
     def initMappingValue(self, v, rule, path):
+        Log.debug("Init mapping value")
+
         if v is not None and not isinstance(v, dict):
             raise Exception("mapping.notmap")
 
@@ -290,6 +323,8 @@ class Rule(object):
         return rule
 
     def checkConfliction(self, schema, rule, path):
+        Log.debug("Checking for conflicts")
+
         if self._type == "seq":
             if "sequence" not in schema:
                 raise Exception("seq.nosequence")

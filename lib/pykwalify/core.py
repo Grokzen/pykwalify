@@ -79,26 +79,29 @@ class Core(object):
     def run_core(self):
         errors = self.start_validate(self.source)
         if errors is None or len(errors) == 0:
-            print("validation.valid")
+            Log.info("validation.valid")
         else:
-            print("validation.invalid")
-            print(" - All found errors -")
-            print(errors)
+            Log.error("validation.invalid")
+            Log.error(" - All found errors -")
+            Log.error(errors)
             raise Exception("validation.invalid : %s" % errors)
 
     def start_validate(self, value = None):
         path = ""
         errors = []
         done = []
+        Log.debug("Building root rule object")
         root_rule = Rule(schema = self.schema)
+        Log.debug("Done building root rule")
 
         self.validate(value, root_rule, path, errors, done)
 
         return errors
 
     def validate(self, value, rule, path, errors, done):
-        Log.debug("Source: " + json.dumps(self.source, indent=2) )
-        Log.debug("Schema: " + json.dumps(self.schema, indent=2) )
+        Log.debug("Rule: %s" % rule._type)
+        Log.debug("Seq: %s" % rule._sequence)
+        Log.debug("Map: %s" % rule._mapping)
 
         if rule._required and self.source is None:
             raise CoreException("required.novalue")
@@ -115,9 +118,10 @@ class Core(object):
             return 
 
     def _validate_sequence(self, value, rule, path, errors = [], done = None):
-        print("\nValidate sequence")
-        print(value)
-        print(rule)
+        Log.debug("Validate sequence")
+        Log.debug(" * %s" % value)
+        Log.debug(" * %s" % rule)
+        Log.debug(" * %s" % rule._type)
 
         assert isinstance(rule._sequence, list), "sequence not of list type"
         assert len(rule._sequence) == 1, "only 1 item allowed in sequence rule"
@@ -134,8 +138,8 @@ class Core(object):
             mapping = rule._mapping
             unique_keys = []
             for k, rule in mapping.items():
-                print("Key: %s" % k)
-                print("Rule: %s" % rule)
+                Log.debug("Key: %s" % k)
+                Log.debug("Rule: %s" % rule)
 
                 if rule._unique or rule._ident:
                     unique_keys.append(k)
@@ -154,7 +158,7 @@ class Core(object):
                             errors.append("value.notunique")
 
         elif rule._unique:
-            print(" - validate sequence test unique")
+            Log.debug(" - validate sequence test unique")
             table = {}
             j = 0
             for val in value:
@@ -168,9 +172,12 @@ class Core(object):
                     table[val] = j
 
     def _validate_mapping(self, value, rule, path, errors = [], done = None):
-        print("\nValidate mapping")
-        print(value)
-        print(rule)
+        Log.debug("Validate mapping")
+        Log.debug(" + %s" % value)
+        Log.debug(" + %s" % rule)
+        Log.debug(" + %s" % rule._type)
+        Log.debug(rule._sequence)
+        Log.debug(rule._mapping)
 
         assert isinstance(rule._mapping, dict), "mapping is not a valid dict object"
         if value is None:
@@ -189,10 +196,11 @@ class Core(object):
                 self.validate(v, rule, "%s/%s" % (path, k), errors, done)
 
     def _validate_scalar(self, value, rule, path, errors = [], done = None):
-        print("\nValidate scalar")
-        print(value)
-        print(rule)
-        
+        Log.debug("Validate scalar")
+        Log.debug(" # %s" % value)
+        Log.debug(" # %s" % rule)
+        Log.debug(" # %s" % rule._type)
+
         assert rule._sequence is None, "found sequence when validating for scalar"
         assert rule._mapping is None, "found mapping when validating for scalar"
 
@@ -238,3 +246,20 @@ class Core(object):
                 errors.append("length.toolong-ex")
             if l.get("min-ex", None) is not None and l["min-ex"] >= L:
                 errors.append("length.tooshort-ex")
+
+        self._validate_scalar_type(value, rule._type, errors)
+
+    def _validate_scalar_type(self, value, t, errors):
+        Log.debug(type(value) )
+
+        if t == "str":
+            if not isinstance(value, str):
+                errors.append("Value: %s is not of type 'str'" % value)
+        elif t == "int":
+            if not isinstance(value, int):
+                errors.append("Value: %s is not of type 'int'" % value)
+        elif t == "bool":
+            if not isinstance(value, bool):
+                errors.append("Value: %s is not of type 'bool'" % value)
+        else:
+            raise Exception("Unknown type check")
