@@ -20,12 +20,11 @@ def _load_version(filename='lib/pykwalify/__init__.py'):
             msg = "Unable to find version number in {}".format(filename)
             raise RuntimeError(msg)
         version = match.group(1)
-        print(version)
+        
         return version
 
 
 def list_dir(dirname):
-    print("Listing dir: %s" % dirname)
     import os
 
     results = []
@@ -34,7 +33,6 @@ def list_dir(dirname):
         for f in files:
             results.append(os.path.join(root,f))
 
-    print(results)
     return results
 
 
