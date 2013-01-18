@@ -10,6 +10,8 @@ The schema used in this library: http://www.kuwata-lab.com/kwalify/ruby/users-gu
 
 ## How to install
 
+Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
+
 1. Download the release you want to install from a tag, latest stable build or the dev branch.
 2. Run "pip install pykwalify-x.x.x.tar.gz"
 3. To use pykwalify run "pykwalify" in your terminal
@@ -24,6 +26,18 @@ The schema used in this library: http://www.kuwata-lab.com/kwalify/ruby/users-gu
 
 1. Download the release you want to install from a tag, latest stable build or the dev branch.
 2. Run "make install"
+
+## pyKwalify python dependencies
+
+argparse 1.2.1
+PyYaml 3.10
+
+## Supported python version
+
+Python 2.7.x - (Not yet tested)
+Python 3.1.x - Yes
+Python 3.2.x - Yes
+Python 3.3.x - (Not yet tested)
 
 ## Contributing
 
