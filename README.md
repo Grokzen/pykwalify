@@ -8,6 +8,23 @@ The source code can be found at: http://sourceforge.net/projects/kwalify/files/k
 
 The schema used in this library: http://www.kuwata-lab.com/kwalify/ruby/users-guide.01.html#schema
 
+## How to install
+
+1. Download the release you want to install from a tag, latest stable build or the dev branch.
+2. Run "pip install pykwalify-x.x.x.tar.gz"
+3. To use pykwalify run "pykwalify" in your terminal
+
+## Build from source
+
+1. Download the release you want to install from a tag, latest stable build or the dev branch.
+2. Run "make sdist"
+3. To install run "make pip install dist/pykwalify-x.x.x.tar.gz"
+
+## Install from source
+
+1. Download the release you want to install from a tag, latest stable build or the dev branch.
+2. Run "make install"
+
 ## Contributing
 
 1. Fork it
