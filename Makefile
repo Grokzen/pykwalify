@@ -4,9 +4,6 @@ help:
 	@echo "  cleanall        all the above + tmp files from development tools"
 	@echo "  test            run test suite"
 	@echo "  sdist           make a source distribution"
-	@echo "  bdist           make an egg distribution"
-	@echo "  rdist           make a Mercurial bundle"
-	@echo "  all             make all dist targets"
 	@echo "  install         install package"
 
 clean:
@@ -29,11 +26,6 @@ test:
 
 sdist: cleanmeta
 	python setup.py sdist
-
-bdist:
-	python setup.py bdist_egg
-
-all: sdist bdist
 
 install: cleanmeta
 	python setup.py install
