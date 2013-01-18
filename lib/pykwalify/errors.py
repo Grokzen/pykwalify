@@ -6,30 +6,34 @@ retcodes = {
     # PyKwalifyExit
     0: 'noerror',
 
-    # PyKwalifyUnknownError
+    # UnknownError
     1: 'unknownerror',
 
-    # PyKwalifyFileNotAccessible
+    # FileNotAccessible
     2: 'filenotaccessible',
 
-    # PyKwalifyOptionError
+    # OptionError
     # e.g. when PyKwalifyApplication receives an erroneous configuration
     3: 'optionerror',
 
-    # PyKwalifyNotImplemented
+    # NotImplemented
     4: 'notimplemented',
 
-    # PyKwalifyParseFailure
+    # ParseFailure
     # e.g. could not parse a configuration file
     5: 'parsefailure',
 
-    # pyKwalifySchemaError
+    # SchemaError
     # e.g. when a rule or the core finds an error
     6: 'schemaerror',
 
-    # pyKwalifyCoreError
-    # e.g. when the core fins an error that is not a SchemaError
+    # CoreError
+    # e.g. when the core finds an error that is not a SchemaError
     7: 'coreerror',
+
+    # RuleError
+    # e.g. when the rule class finds an error that is not a SchemaError, similar to CoreError
+    8: 'ruleerror',
 }
 
 
@@ -211,4 +215,14 @@ class CoreError(PyKwalifyException):
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
         super().__init__(retcode=retnames["coreerror"],
+                         *args, **kwargs)
+
+class RuleError(PyKwalifyException):
+    """
+    """
+    def __init__(self, *args, **kwargs):
+        """
+        """
+        assert "retcode" not in kwargs, "keyword retcode implicitly defined"
+        super().__init__(retcode=retnames["ruleerror"],
                          *args, **kwargs)
