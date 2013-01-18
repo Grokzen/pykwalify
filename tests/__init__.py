@@ -12,8 +12,9 @@ from .testhelper import run as run # Required import for runtests.py to work pro
 
 # Imports all test files that is not located in this specificly
 from .lib.testrule import TestRule
+from .lib.testcore import TestCore
 
-__all__ = [TestRule]
+__all__ = [TestRule, TestCore]
 
 for test in __all__:
     testhelper.__all__.append(test)
