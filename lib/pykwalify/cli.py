@@ -45,8 +45,8 @@ def main():
 
     parser = argparse.ArgumentParser(description=__doc__.strip())
 
-    parser.add_argument("-f", "--file",
-                        dest = "file",
+    parser.add_argument("-d", "--data-file",
+                        dest = "datafile",
                         action = "store",
                         default = None,
                         help = "schema definition file")
@@ -55,8 +55,8 @@ def main():
                         action = 'store_true',
                         default = False,
                         help = "suppress terminal output")
-    parser.add_argument("-s", "--source-file",
-                        dest = "source",
+    parser.add_argument("-s", "--schema-file",
+                        dest = "schemafile",
                         action = "store",
                         default = None,
                         help = "the file to be tested")
@@ -100,18 +100,24 @@ def main():
             handler.level = 1337
 
     Log.debug("Setting verbose level: %s" % args.verbose)
-    Log.debug(args)
+    
+    Log.debug("Arguments from CLI: %s" % args)
 
     # if no arguments is passed, show the help message
     # TODO: Reimplement later
-    # if len(sys.argv) == 1:
-    #     parser.print_help()
-    #     sys.exit(retnames['optionerror'])
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit(retnames['optionerror'])
 
     # quickly show version and exit
     if args.version:
         print(pykwalify.__foobar__)
         sys.exit(retnames['noerror'])
 
-    c = Core(source_file = args.source, schema_file = args.file)
+    if not args.datafile and not args.schemafile:
+        print("ERROR: must provide both a data file and a schema file (use -f/--file and -s/--schema")
+        parser.print_help()
+        sys.exit(retnames["optionerror"])
+
+    c = Core(source_file = args.datafile, schema_file = args.schemafile)
     c.run_core()
