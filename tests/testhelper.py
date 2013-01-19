@@ -29,9 +29,6 @@ else:
     logging.config.fileConfig(os.path.join(os.sep, 'etc', "pykwalify", 'logging.ini'))
 Log = logging.getLogger()
 
-# $PACKAGE$ specific imports. NOTE: this must be after the creation of root logger or tests will fail later
-from pykwalify.utils import copytree, concat_path, makedirs, rmtree
-
 # Use this regexp to validate any logging output
 logging_regex = "%s - %s:[0-9]+ - %s" # % (LoggingLevel, LoggerName, Msg)
 
@@ -94,89 +91,8 @@ class TestHelper(unittest.TestCase):
         yield
         _set_log_lv(level = backup_log_lv, loggers = loggers)
 
-    @contextmanager
-    def redirect_logging(self, stdout, logger_instances = []):
-        """
-        """
-        bakup = {} # Bind logging instance to {} and HandlerInstance to old stream
-        for log in logger_instances:
-            bakup[log] = {}
-            for handler in log.handlers:
-                bakup[log][handler] = handler.stream
-                handler.stream = stdout
 
-        yield stdout
-
-        for log in logger_instances:
-            for handler in log.handlers:
-                handler.stream = bakup[log][handler]
-
-
-class TestHelperClass(TestHelper):
-    def testBasic(self):
-        @deprecated
-        def internalTest():
-            pass
-
-        out = None
-        with self._set_log_lv(level = logging.DEBUG):
-            logs_to_redir = [Log]
-            with self.redirect_logging(StringIO(), logs_to_redir) as stream:
-                internalTest() # @deprecated anotation tests logging from other module
-                Log.critical("foobar")
-                out = stream
-
-        output = out.getvalue().strip()
-        self.assertTrue("CRITICAL" in output,
-                        msg="critical was not in returned string")
-
-    def testCopyFolder(self):
-        """ 
-        If this failes somewhere in the middle, manual cleanup have to be done or it has to be done before this test
-        is runned to ensure a clean state. 
-        """
-        src = gettestcwd("abc")
-        dst = gettestcwd("def")
-        self.assertTrue(os.path.exists(src) == False, msg="Path allready exists. Remove it manualy. : %s" % src)
-        self.assertTrue(os.path.exists(dst) == False, msg="Path allready exists. Remove it manualy. : %s" % dst)
-        
-        p = makeTestFolder("abc")
-        self.assertTrue(os.path.exists(p), msg="path: %s was not created" % p)
-        
-        copytree(p, dst)
-        self.assertTrue(os.path.exists(dst), msg="Copy of folder did not work")
-        self.assertTrue(os.path.exists(p), msg="Source folder was removed in the copy process")
-
-        r = removeTestFolder("abc")
-        self.assertTrue(os.path.exists(r) == False, msg="Removing source folder failed")
-        s = removeTestFolder("def")
-        self.assertTrue(os.path.exists(s) == False, msg="Removing dst folder failded")
-
-    def testCopyFolderWithContent(self):
-        """
-        If this fails somewhere in the middle, manual cleanup have to be done or it has to be done before this test
-        is runned to ensure a clean state.
-        """
-        src_folder_name = "foo"
-        dst_folder_name = "bar"
-        src_file = "foo.yaml"
-
-        p = makeTestFolder(src_folder_name)
-        self.assertTrue(os.path.exists(p), msg="Source folder was not created proper : %s" % p)
-        q = makeTestFile(src_folder_name, src_file)
-        self.assertTrue(os.path.exists(q), msg="Source file was not created proper : %s" % q)
-
-        dst_folder = gettestcwd(dst_folder_name)
-        dst_file = gettestcwd(dst_folder_name, src_file)
-
-        copytree(p, gettestcwd(dst_folder_name) )
-        self.assertTrue(os.path.exists(dst_folder), msg="destination folder was not created proper : %s" % dst_folder)
-        self.assertTrue(os.path.exists(dst_file), msg="destination file was not created proper : %s" % dst_file)
-
-        removeTestFolder(dst_folder_name)
-        removeTestFolder(src_folder_name)
-
-__all__ = [TestHelperClass, TestHelper]
+__all__ = []
 
 def run(argv):
     #unittest.main()
@@ -221,33 +137,3 @@ def gettestcwd(*args):
     """
     (prefix, bindir) = os.path.split(os.path.dirname(os.path.abspath(sys.argv[0])))
     return concat_path(prefix, bindir, *args)
-
-def makeTestFile(*args):
-    path = concat_path(gettestcwd(), *args)
-    if os.path.exists(path):
-        raise Exception("File: %s allready exists." % path)
-
-    with open(path, "w") as stream:
-        stream.write("") # Creates the file as empty with no contents.
-    return path
-
-def makeTestFolder(*args):
-    path = concat_path(gettestcwd(), *args)
-    if os.path.exists(path):
-        raise Exception("Folder: %s allready exists." % path)
-    makedirs(path)
-    return path
-
-def removeTestfile(*args):
-    path = concat_path(gettestcwd(), *args)
-    if not os.path.exists(path):
-        raise Exception("Cannot remove testFile that do not exists: %s" % path)
-    os.remove(path)
-    return path
-
-def removeTestFolder(*args):
-    path = os.path.join(gettestcwd(), *args)
-    if not os.path.exists(path):
-        raise Exception("Cannot remove testfolder that do not exists: %s" % path)
-    rmtree(path)
-    return path
