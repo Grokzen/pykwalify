@@ -9,9 +9,8 @@ import sys
 import os
 
 # Testhelper class
-#from .testhelper import * # TODO: this do not work Oo :: TypeError: attribute name must be string, not 'type'
 from tests.testhelper import run as run
-from tests.testhelper import TestHelper, Log, logging_regex, gettestcwd, makeTestFolder, removeTestFolder, makeTestFile, removeTestfile, _set_log_lv
+from tests.testhelper import TestHelper, Log, logging_regex, gettestcwd, _set_log_lv
 from tests.testhelper import Log
 
 # pyKwalify imports
