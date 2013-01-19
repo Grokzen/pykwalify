@@ -259,6 +259,7 @@ class Rule(object):
 
         self._ident = bool(v)
         self._required = True
+
         if isCollectionType(self._type):
             raise Exception("ident.notscalar")
         if path == "":
@@ -271,7 +272,9 @@ class Rule(object):
 
         if not isinstance(v, bool):
             raise Exception("unique.notbool")
-        self._unique = bool(v)
+        
+        self._unique = v
+        
         if isCollectionType(self._type):
             raise Exception("unique.notscalar")
         if path == "":
@@ -282,7 +285,9 @@ class Rule(object):
 
         if v is not None and not isinstance(v, list):
             raise Exception("sequence.notseq")
+
         self._sequence = v
+
         if self._sequence is None or len(self._sequence) == 0:
             raise Exception("sequence.noelem :: %s" % self._sequence)
         if len(self._sequence) > 1:
@@ -315,6 +320,7 @@ class Rule(object):
         for k, v in v.items():
             if v is None:
                 v = {}
+                
             rule = Rule(None, self)
             rule.init(v, path + "/mapping/" + k)
 
