@@ -10,9 +10,8 @@ import unittest
 import logging
 
 # Testhelper class
-#from .testhelper import * # TODO: this do not work Oo :: TypeError: attribute name must be string, not 'type'
 from tests.testhelper import run as run
-from tests.testhelper import TestHelper, Log, logging_regex, gettestcwd, makeTestFolder, removeTestFolder, makeTestFile, removeTestfile, _set_log_lv
+from tests.testhelper import TestHelper, Log, logging_regex, gettestcwd, _set_log_lv
 
 # pyKwalify imports
 import pykwalify
@@ -120,3 +119,41 @@ class TestCore(TestHelper):
         c = Core(source_data = a, schema_data = b)
         with self.assertRaises(Exception):
             c.run_core()
+
+        # Test most of the implemented functions
+        a = [{"name": "foo", 
+              "email": "foo@mail.com", 
+              "password": "xxx123456", 
+              "age": 20, 
+              "blood": "A", 
+              "birth": "1985-01-01"}, 
+             {"name": "bar", 
+              "email": "bar@mail.net", 
+              "age": 25, 
+              "birth": "1980-01-01"} ]
+        b = {"type": "seq", "sequence": [ {"type": "map", "mapping": {"name": {"type": "str", "required": True}, 
+                                                                      "email": {"type": "str", "required": True, "pattern": ".+@.+"}, 
+                                                                      "password": {"type": "str", "length": {"max": 16, "min": 8} }, 
+                                                                      "age": {"type": "int", "range": {"max": 30, "min": 18} }, 
+                                                                      "blood": {"type": "str", "enum": ["A", "B", "C", "D"] }, 
+                                                                      "birth": {"type": "str"}, 
+                                                                      "memo": {"type": "any"}, 
+                                                                      "deleted": {"type": "bool"} } } ] }
+        c = Core(source_data = a, schema_data = b)
+        c.run_core()
+
+        a = [{"name": "foo", 
+              "email": "foo(at)mail.com", 
+              "password": "xxx123", 
+              "age": "twnty", 
+              "blood": "a", 
+              "birth": "1985-01-01"}, 
+             {"given-name": "bar", 
+              "family-name": "Bar", 
+              "email": "bar@mail.net", 
+              "age": 15, 
+              "blood": "AB", 
+              "birth": "1980/01/01"} ]
+        
+        c = Core(source_data = a, schema_data = b)
+        c.run_core()
