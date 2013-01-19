@@ -19,142 +19,73 @@ from pykwalify.core import Core
 
 class TestCore(TestHelper):
 
+    def f(self, *args):
+        return gettestcwd("tests", "files", *args)
+
     def testCore(self):
         # Test sequence with only string values
-        a = ["foo", "bar", "baz"]
-        b = {"type": "seq", "sequence": [ {"type": "str"} ] }
-        c = Core(source_data = a, schema_data = b)
+        c = Core(source_file = self.f("1a.yaml"), schema_file = self.f("1b.yaml") )
         c.run_core()
 
         # Test sequence with defined string content type but data only has integers
-        a = [1, 2, 3]
-        b = {"type": "seq", "sequence": [ {"type": "str"} ] }
-        c = Core(source_data = a, schema_data = b)
+        c = Core(source_file = self.f("2a.yaml"), schema_file = self.f("2b.yaml") )
         with self.assertRaises(Exception):
             c.run_core()
 
         # Test sequence where the only valid items is integers
-        a = [1, 2, 3, True, False]
-        b = {"type": "seq", "sequence": [ {"type": "int"} ] }
-        c = Core(source_data = a, schema_data = b)
+        c = Core(source_file = self.f("3a.yaml"), schema_file = self.f("3b.yaml") )
         c.run_core()
 
         # Test sequence with only booleans
-        a = [True, False]
-        b = {"type": "seq", "sequence": [ {"type": "bool"} ] }
-        c = Core(source_data = a, schema_data = b)
+        c = Core(source_file = self.f("4a.yaml"), schema_file = self.f("4b.yaml") )
         c.run_core()
 
         # Test sequence with defined string content type but data only has booleans
-        a = [True, False]
-        b = {"type": "seq", "sequence": [ {"type": "str"} ] }
-        c = Core(source_data = a, schema_data = b)
+        c = Core(source_file = self.f("5a.yaml"), schema_file = self.f("5b.yaml") )
         with self.assertRaises(Exception):
             c.run_core()
 
         # Test sequence with defined booleans but with one integer
-        a = [True, False, 1]
-        b = {"type": "seq", "sequence": [ {"type": "bool"} ] }
-        c = Core(source_data = a, schema_data = b)
+        c = Core(source_file = self.f("6a.yaml"), schema_file = self.f("6b.yaml") )
         with self.assertRaises(Exception):
             c.run_core()
 
         # Test sequence with strings and and lenght on each string
-        a = ["foo", "bar", "foobar"]
-        b = {"type": "seq", "sequence": [ {"type": "str", 
-                                           "length": {"max": 5, "min": 1} } ] }
-        c = Core(source_data = a, schema_data = b)
+        c = Core(source_file = self.f("7a.yaml"), schema_file = self.f("7b.yaml") )
         with self.assertRaises(Exception):
             c.run_core()
 
         # Test mapping with different types of data and some extra conditions
-        a = {"name": "foo", "email": "foo@mail.com", "age": 20, "birth": "1985-01-01"}
-        b = {"type": "map", "mapping": {"name":  {"type": "str", "required": True}, 
-                                        "email": {"type": "str", "pattern": ".+@.+"}, 
-                                        "age":   {"type": "int"}, 
-                                        "birth": {"type": "str"} } }
-        c = Core(source_data = a, schema_data = b)
+        c = Core(source_file = self.f("8a.yaml"), schema_file = self.f("8b.yaml") )
         c.run_core()
 
         # Test mapping that do not work
-        a = {"name": "foo", 
-             "email": "foo(at)mail.com", 
-             "age": "twnty", 
-             "birth": "Jun 01, 1985"}
-        c = Core(source_data = a, schema_data = b)
+        c = Core(source_file = self.f("9a.yaml"), schema_file = self.f("8b.yaml") )
         with self.assertRaises(Exception):
             c.run_core()
 
         # Test sequence with mapping with valid mapping
-        a = [ {"name": "foo", "email": "foo@mail.com"}, 
-              {"name": "bar", "email": "bar@mail.net"}, 
-              {"name": "baz", "email": "baz@mail.org"} ]
-        b = {"type": "seq", "sequence": [ {"type": "map", "mapping": {"name":  {"type": "str", "required": True}, 
-                                                                      "email": {"type": "str"} } } ] }
-        c = Core(source_data = a, schema_data = b)
+        c = Core(source_file = self.f("10a.yaml"), schema_file = self.f("10b.yaml") )
         c.run_core()
 
         # Test sequence with mapping with missing required key
-        a = [ {"name": "foo", "email": "foo@mail.com"}, 
-              {"naem": "bar", "email": "bar@mail.net"}, 
-              {"name": "baz", "mail": "baz@mail.org"} ]
-        c = Core(source_data = a, schema_data = b)
+        c = Core(source_file = self.f("11a.yaml"), schema_file = self.f("10b.yaml") )
         with self.assertRaises(Exception):
             c.run_core()
 
         # Test mapping with sequence with mapping and valid data
-        a = {"company": "Kuwata lab.", "email": "webmaster@kuwata-lab.com", "employees": [ {"code": 101, "name": "foo", "email": "foo@kuwata-lab.com"}, 
-                                                                                           {"code": 102, "name": "bar", "email": "bar@kuwata-lab.com"} ] }
-        b = {"type": "map", "mapping": {"company": {"type": "str", "required": True}, 
-                                        "email": {"type": "str"}, 
-                                        "employees": {"type": "seq", "sequence": [ {"type": "map", "mapping": {"code": {"type": "int", "required": True}, 
-                                                                                                               "name": {"type": "str", "required": True}, 
-                                                                                                               "email": {"type": "str"} } } ] } } }
-        c = Core(source_data = a, schema_data = b)
+        c = Core(source_file = self.f("12a.yaml"), schema_file = self.f("12b.yaml") )
         c.run_core()
 
         # Test mapping with sequence with mapping and invalid data
-        a = {"company": "Kuwata Lab.", "email": "Webmaster@kuwata-lab.com", "employees": [ {"code": "A101", "name": "foo", "email": "foo@kuwta-lab.com"}, 
-                                                                                           {"code": 102,    "name": "bar", "mail": "bar@kuwata-lab.com"} ] }
-        c = Core(source_data = a, schema_data = b)
+        c = Core(source_file = self.f("13a.yaml"), schema_file = self.f("12b.yaml") )
         with self.assertRaises(Exception):
             c.run_core()
 
         # Test most of the implemented functions
-        a = [{"name": "foo", 
-              "email": "foo@mail.com", 
-              "password": "xxx123456", 
-              "age": 20, 
-              "blood": "A", 
-              "birth": "1985-01-01"}, 
-             {"name": "bar", 
-              "email": "bar@mail.net", 
-              "age": 25, 
-              "birth": "1980-01-01"} ]
-        b = {"type": "seq", "sequence": [ {"type": "map", "mapping": {"name": {"type": "str", "required": True}, 
-                                                                      "email": {"type": "str", "required": True, "pattern": ".+@.+"}, 
-                                                                      "password": {"type": "str", "length": {"max": 16, "min": 8} }, 
-                                                                      "age": {"type": "int", "range": {"max": 30, "min": 18} }, 
-                                                                      "blood": {"type": "str", "enum": ["A", "B", "C", "D"] }, 
-                                                                      "birth": {"type": "str"}, 
-                                                                      "memo": {"type": "any"}, 
-                                                                      "deleted": {"type": "bool"} } } ] }
-        c = Core(source_data = a, schema_data = b)
+        c = Core(source_file = self.f("14a.yaml"), schema_file = self.f("14b.yaml") )
         c.run_core()
 
-        a = [{"name": "foo", 
-              "email": "foo(at)mail.com", 
-              "password": "xxx123", 
-              "age": "twnty", 
-              "blood": "a", 
-              "birth": "1985-01-01"}, 
-             {"given-name": "bar", 
-              "family-name": "Bar", 
-              "email": "bar@mail.net", 
-              "age": 15, 
-              "blood": "AB", 
-              "birth": "1980/01/01"} ]
-        
-        c = Core(source_data = a, schema_data = b)
+        c = Core(source_file = self.f("15a.yaml"), schema_file = self.f("14b.yaml") )
         with self.assertRaises(Exception):
             c.run_core()

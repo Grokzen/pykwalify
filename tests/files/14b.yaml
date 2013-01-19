@@ -1,0 +1,34 @@
+type: seq
+sequence:
+  - type: map
+    mapping:
+      name:
+        type: str
+        required: True
+      email:
+        type: str
+        required: True
+        pattern: .+@.+
+      password:
+        type: str
+        length: 
+          max: 16
+          min: 8
+      age:
+        type: int
+        range: 
+          max: 30
+          min: 18
+      blood:
+        type: str
+        enum: 
+          - A
+          - B
+          - O
+          - AB
+      birth:
+        type: str # Should be date
+      memo:
+        type: any
+      deleted:
+        type: bool

@@ -1,0 +1,6 @@
+type: seq
+sequence:
+  - type: str
+    length:
+      max: 5
+      min: 1
