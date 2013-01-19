@@ -89,3 +89,13 @@ class TestCore(TestHelper):
         c = Core(source_file = self.f("15a.yaml"), schema_file = self.f("14b.yaml") )
         with self.assertRaises(Exception):
             c.run_core()
+
+        # This will test the unique constraint
+        c = Core(source_file = self.f("16a.yaml"), schema_file = self.f("16b.yaml") )
+        c.run_core()
+
+        # TODO: The reverse unique do not currently work proper
+        # This will test the unique constraint but should fail
+        c = Core(source_file = self.f("17a.yaml"), schema_file = self.f("16b.yaml") )
+        with self.assertRaises(Exception):
+            c.run_core()
