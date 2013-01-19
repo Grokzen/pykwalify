@@ -40,7 +40,7 @@ Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
  - Python 3.3.x - (Not yet tested)
 
 # Implemented validation rules
-
+```
 type:
     Type of value. The followings are available:
      - str
@@ -85,6 +85,7 @@ name:
 
 desc:
     Description. This is not used for validation.
+```
 
 ## Contributing
 
