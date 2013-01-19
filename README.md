@@ -39,6 +39,53 @@ Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
  - Python 3.2.x - Yes
  - Python 3.3.x - (Not yet tested)
 
+# Implemented validation rules
+
+type:
+    Type of value. The followings are available:
+     - str
+     - int
+     - float [NYI]
+     - bool
+     - number (== int or float) [NYI]
+     - text (== str or number) [NYI]
+     - date [NYI]
+     - time [NYI]
+     - timestamp [NYI]
+     - seq
+     - map
+     - scalar (all but seq and map)
+     - any (means any data) [NYI]
+
+required:
+    Value is required when true (default is false). This is similar to not-null constraint in RDBMS.
+
+enum:
+    List of available values.
+
+pattern:
+    Specifies regular expression pattern of value. (Uses re.match() )
+
+range:
+    Range of value between max/max-ex and min/min-ex.
+    'max' means 'max-inclusive'. (a > b)
+    'min' means 'min-inclusive'. (a < b)
+    'max-ex' means 'max-exclusive'. (a >= b)
+    'min-ex' means 'min-exclusive'. (a <= b)
+    Type seq, map, bool and any are not available with range:.
+
+length:
+    Range of length of value between max/max-ex and min/min-ex. Only type str and text are available with length:.
+
+unique:
+    Value is unique for mapping or sequence. This is similar to unique constraint of RDBMS.
+
+name:
+    Name of schema.
+
+desc:
+    Description. This is not used for validation.
+
 ## Contributing
 
 1. Fork it
