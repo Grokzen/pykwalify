@@ -1,12 +1,5 @@
 exclude *.py
-include setup.py debug.py test.py
+include setup.py
 include lib/pykwalify/META-*
 graft lib/config
-graft doc
-graft templates
-graft examples
 graft tests
-graft tools
-graft emacs
-global-exclude slask.*
-recursive-exclude slask *
