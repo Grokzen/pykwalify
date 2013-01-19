@@ -128,6 +128,7 @@ def run(argv):
 
     unittest.TextTestRunner(verbosity=verbosity).run(suite)
 
+
 def gettestcwd(*args):
     """ Because os.getcwd() cannot be guaranted to work in all cases where the invoke path is
     from another place rather then where runtests.py script is located.
@@ -137,3 +138,25 @@ def gettestcwd(*args):
     """
     (prefix, bindir) = os.path.split(os.path.dirname(os.path.abspath(sys.argv[0])))
     return concat_path(prefix, bindir, *args)
+
+
+def concat_path(b, *args):
+    """ Concats b with all arguments in '*args', handles if any argument contains more then 1 directory, example: foo/bar/asd/
+
+    Note: this is analogous to list_path() except that this function returns a
+    string, though this function is not cross-platform since it uses a
+    hardcoded "/" instead of os.sep.
+
+    Arguments:
+    - `b`: string - base from where to concat all '*args'
+    - `*args`: strings - all extra paths to concat, concats in order of list
+    """
+    base = b # tmp var
+    for a in args:
+        if "/" in a:
+            for s in a.split("/"):
+                base = os.path.join(base, s)
+        else:
+            base = os.path.join(base, a)
+
+    return base
