@@ -156,4 +156,5 @@ class TestCore(TestHelper):
               "birth": "1980/01/01"} ]
         
         c = Core(source_data = a, schema_data = b)
-        c.run_core()
+        with self.assertRaises(Exception):
+            c.run_core()
