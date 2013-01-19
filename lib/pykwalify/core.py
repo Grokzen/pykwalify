@@ -36,7 +36,7 @@ class Core(object):
 
         if source_file is not None:
             if not os.path.exists(source_file):
-                raise CoreError("Provided source_file do not exists on disk")
+                raise CoreError("Provided source_file do not exists on disk: %s" % source_file)
                 
             with open(source_file, "r") as stream:
                 if source_file.endswith(".json"):
@@ -44,7 +44,7 @@ class Core(object):
                 elif source_file.endswith(".yaml"):
                     self.source = yaml.load(stream)
                 else:
-                    raise CoreError("Unable to load source_file. Unknown file format.")
+                    raise CoreError("Unable to load source_file. Unknown file format of specified file path: %s" % source_file)
 
         if schema_file is not None:
             if not os.path.exists(schema_file):
@@ -56,12 +56,14 @@ class Core(object):
                 elif schema_file.endswith(".yaml"):
                     self.schema = yaml.load(stream)
                 else:
-                    raise CoreError("Unable to load schema_file. Unknown file format.")
+                    raise CoreError("Unable to load source_file. Unknown file format of specified file path: %s" % schema_file)
 
         # Nothing was loaded so try the source_data variable
         if self.source is None:
+            Log.debug("No source file loaded, trying source data variable")
             self.source = source_data
         if self.schema is None:
+            Log.debug("No schema file loaded, trying schema data variable")
             self.schema = schema_data
 
         # Test if anything was loaded
@@ -73,19 +75,21 @@ class Core(object):
         # Everything now is valid loaded
 
     def run_core(self):
+        Log.debug("starting core")
         errors = self._start_validate(self.source)
         if errors is None or len(errors) == 0:
             Log.info("validation.valid")
         else:
             Log.error("validation.invalid")
-            Log.error(" - All found errors -")
+            Log.error(" --- All found errors ---")
             Log.error(errors)
-            raise Exception("validation.invalid : %s" % errors)
+            raise SchemaError("validation.invalid : %s" % errors)
 
     def _start_validate(self, value = None):
         path = ""
         errors = []
         done = []
+
         Log.debug("Building root rule object")
         root_rule = Rule(schema = self.schema)
         Log.debug("Done building root rule")
@@ -95,6 +99,7 @@ class Core(object):
         return errors
 
     def _validate(self, value, rule, path, errors, done):
+        Log.debug("Core validate")
         Log.debug("Rule: %s" % rule._type)
         Log.debug("Seq: %s" % rule._sequence)
         Log.debug("Map: %s" % rule._mapping)
@@ -114,7 +119,7 @@ class Core(object):
             return 
 
     def _validate_sequence(self, value, rule, path, errors = [], done = None):
-        Log.debug("Validate sequence")
+        Log.debug("Core Validate sequence")
         Log.debug(" * %s" % value)
         Log.debug(" * %s" % rule)
         Log.debug(" * %s" % rule._type)
@@ -122,15 +127,18 @@ class Core(object):
         assert isinstance(rule._sequence, list), "sequence not of list type"
         assert len(rule._sequence) == 1, "only 1 item allowed in sequence rule"
         if value is None:
+            Log.debug("Core seq: value is None")
             return
 
         r = rule._sequence[0]
         i = 0
         for item in value:
             # Validate recursivley
+            Log.debug("Core seq: validating recursivley: %s" % r)
             self._validate(item, r, "%s/%s" % (path, i), errors, done)
 
         if rule._type == "map":
+            Log.debug("Found map inside sequence")
             mapping = rule._mapping
             unique_keys = []
             for k, rule in mapping.items():
@@ -154,6 +162,7 @@ class Core(object):
                             errors.append("value.notunique")
 
         elif rule._unique:
+            Log.debug("Found unique value in sequence")
             Log.debug(" - validate sequence test unique")
             table = {}
             j = 0
@@ -190,6 +199,7 @@ class Core(object):
                 errors.append("key.undefined")
             else:
                 # validate recursively
+                Log.debug("Core Map: validate recursively: %s" % rule)
                 self._validate(v, rule, "%s/%s" % (path, k), errors, done)
 
     def _validate_scalar(self, value, rule, path, errors = [], done = None):
@@ -263,7 +273,8 @@ class Core(object):
         self._validate_scalar_type(value, rule._type, errors)
 
     def _validate_scalar_type(self, value, t, errors):
-        Log.debug(type(value) )
+        Log.debug("Core scalar: validating scalar type")
+        Log.debug("Core scalar: scalar type: %s" % type(value) )
 
         if t == "str":
             if not isinstance(value, str):
