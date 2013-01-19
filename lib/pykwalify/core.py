@@ -220,14 +220,30 @@ class Core(object):
             assert isScalar(value), "value is not a valid scalar"
 
             r = rule._range
-            if r.get("max", None) is not None and r["max"] < value:
-                errors.append("range.toolarge")
-            if r.get("min", None) is not None and r["min"] > value:
-                errors.append("range.toosmall")
-            if r.get("max-ex", None) is not None and r["max-ex"] <= value:
-                errors.append("range.tolarge-ex")
-            if r.get("min-ex", None) is not None and r["min-ex"] >= value:
-                errors.append("range.toosmall-ex")
+
+            try:
+                if r.get("max", None) is not None and r["max"] < value:
+                    errors.append("range.toolarge")
+            except Exception as e:
+                errors.append("EXCEPTION: range.%s :: %s < %s" % (e, r.get("max", None), value) )
+
+            try:
+                if r.get("min", None) is not None and r["min"] > value:
+                    errors.append("range.toosmall")
+            except Exception as e:
+                errors.append("EXCEPTION: range.%s :: %s > %s" % (e, r.get("min", None), value) )
+
+            try:
+                if r.get("max-ex", None) is not None and r["max-ex"] <= value:
+                    errors.append("range.tolarge-ex")
+            except Exception as e:
+                errors.append("EXCEPTION: range.%s :: %s <= %s" % (e, r.get("max-ex", None), value) )
+
+            try:
+                if r.get("min-ex", None) is not None and r["min-ex"] >= value:
+                    errors.append("range.toosmall-ex")
+            except Exception as e:
+                errors.append("EXCEPTION: range.%s :: %s >= %s" % (e, r.get("min-ex", None), value) )
 
         if rule._length is not None:
             assert isinstance(value, str), "value is not a valid string type"
