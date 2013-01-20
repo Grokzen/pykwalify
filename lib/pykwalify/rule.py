@@ -58,37 +58,39 @@ class Rule(object):
 
                 self._type = schema["type"]
 
+        rule = self
+
         t = schema["type"]
-        self.initTypeValue(t, self, path)
+        self.initTypeValue(t, rule, path)
 
         for k, v in schema.items():
             if k == "type":
                 # Done
                 pass
             elif k == "name":
-                self.initNameValue(v, self, path)
+                self.initNameValue(v, rule, path)
             elif k == "desc":
-                self.initDescValue(v, self, path)
+                self.initDescValue(v, rule, path)
             elif k == "required":
-                self.initRequiredValue(v, self, path)
+                self.initRequiredValue(v, rule, path)
             elif k == "pattern":
-                self.initPatternValue(v, self, path)
+                self.initPatternValue(v, rule, path)
             elif k == "enum":
-                self.initEnumValue(v, self, path)
+                self.initEnumValue(v, rule, path)
             elif k == "assert":
-                self.initAssertValue(v, self, path)
+                self.initAssertValue(v, rule, path)
             elif k == "range":
-                self.initRangeValue(v, self, path)
+                self.initRangeValue(v, rule, path)
             elif k == "length":
-                self.initLengthValue(v, self, path)
+                self.initLengthValue(v, rule, path)
             elif k == "ident":
-                self.initIdentValue(v, self, path)
+                self.initIdentValue(v, rule, path)
             elif k == "unique":
-                self.initUniqueValue(v, self, path)
+                self.initUniqueValue(v, rule, path)
             elif k == "sequence":
-                rule = self.initSequenceValue(v, self, path)
+                rule = self.initSequenceValue(v, rule, path)
             elif k == "mapping":
-                rule = self.initMappingValue(v, self, path)
+                rule = self.initMappingValue(v, rule, path)
             else:
                 raise Exception("Unknown key: %s found : %s" % (k, path) )
 
