@@ -9,13 +9,16 @@ help:
 
 clean:
 	-rm -f MANIFEST
-	-rm -rf dist/*
-	-rm -rf build/*
+	-rm -rf dist/
+	-rm -rf build/
 
 cleanmeta:
-	-rm -rf lib/pykwalify/META-*
+	-rm -rf pykwalify/META-*
 
-cleanall: clean cleanmeta
+cleanegg:
+	-rm -rf pykwalify.egg-info/
+
+cleanall: clean cleanmeta cleanegg
 	-find . -type f -name "*~" -exec rm -f "{}" \;
 	-find . -type f -name "*.orig" -exec rm -f "{}" \;
 	-find . -type f -name "*.rej" -exec rm -f "{}" \;
