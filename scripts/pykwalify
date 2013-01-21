@@ -1,0 +1,18 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+""" pykwalify - script entry point """
+
+__author__ = 'Grokzen <grokzen@gmail.com>'
+
+import sys
+
+# Check minimum version of Python
+if sys.version_info < (3,1,0):
+    sys.stderr.write("ERROR: pykwalify: Python version 3.1.x or later is required, exiting...\n")
+    sys.exit(1)
+
+import pykwalify.cli
+
+if __name__ == "__main__":
+    pykwalify.cli.main()
