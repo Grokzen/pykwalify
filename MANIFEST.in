@@ -1,5 +1,8 @@
 exclude *.py
+include License.txt
+include ReleaseNotes.rst
+include runtests.py
 include setup.py
-include lib/pykwalify/META-*
-graft lib/config
+include pykwalify/META-*
+graft config
 graft tests

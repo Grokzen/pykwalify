@@ -11,7 +11,7 @@ PACKAGE_NAME = "pykwalify"
 IN_VIRTUALENV = True if 'VIRTUAL_ENV' in os.environ else False
 
 
-def _load_version(filename='lib/pykwalify/__init__.py'):
+def _load_version(filename='pykwalify/__init__.py'):
     "Parse a __version__ number from a source file"
     with open(filename) as source:
         text = source.read()
@@ -145,15 +145,14 @@ def get_share_path(*args):
 settings.update(
     name = PACKAGE_NAME,
     version = _load_version(),
-    # description = '',
-    # long_description = '',
+    description = 'Python lib/cli for JSON/YAML schema validation',
+    long_description = 'Python lib/cli for JSON/YAML schema validation',
     author = "Grokzen",
     author_email = "Grokzen@gmail.com",
     exclude_package_data = { '': ['slask.py'] },
-    package_dir = {'': 'lib'},
     packages = ['pykwalify'],
-    scripts = ['pykwalify'],
-    data_files = [ (get_etc_path(), list_dir("lib/config") ) ],
+    scripts = ['scripts/pykwalify'],
+    data_files = [ (get_etc_path(), list_dir("config") ) ],
     install_requires = [
         'argparse==1.2.1',
         'PyYAML==3.10',
@@ -167,7 +166,6 @@ settings.update(
         'Programming Language :: Python :: 3.1',
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
-        #'Topic :: Text Processing ',
         )
     )
 
