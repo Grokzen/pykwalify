@@ -144,7 +144,7 @@ def get_share_path(*args):
 
 settings.update(
     name = PACKAGE_NAME,
-    version = _load_version(),
+    version = "0.1.2",
     description = 'Python lib/cli for JSON/YAML schema validation',
     long_description = 'Python lib/cli for JSON/YAML schema validation',
     author = "Grokzen",
