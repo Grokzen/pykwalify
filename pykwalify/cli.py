@@ -41,7 +41,7 @@ def main():
     #####
 
     __docopt__ = """
-usage: pykwalify -d DATAFILE -s SCHEMAFILE [-q] [-v]
+usage: pykwalify -d DATAFILE -s SCHEMAFILE [-q] [-v ...]
        pykwalify -h | --help
        pykwalify -V | --version
 
