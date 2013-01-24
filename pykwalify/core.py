@@ -315,5 +315,8 @@ class Core(object):
         elif t == "float":
             if not isinstance(value, float):
                 errors.append("Value: %s is not of type 'float' : %s" % (value, path) )
+        elif t == "number":
+            if not isinstance(value, float) and not isinstance(value, int):
+                errors.append("Value: %s is not of type 'number' : %s" % (value, path) )
         else:
             raise Exception("Unknown type check : %s : %s : %s" % (path, value, t) )

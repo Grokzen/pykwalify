@@ -47,7 +47,7 @@ type:
      - int
      - float
      - bool
-     - number (== int or float) [NYI]
+     - number (== int or float)
      - text (== str or number) [NYI]
      - date [NYI]
      - time [NYI]

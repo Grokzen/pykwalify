@@ -14,6 +14,7 @@ DEFAULT_TYPE = "str"
 _types = {"str": str,
           "int": int,
           "float": float,
+          "number": None,
           "bool": bool,
           "map": dict,
           "seq": list,
