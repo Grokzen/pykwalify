@@ -65,7 +65,7 @@ def isText(obj):
      return (isString(obj) or isNumber(obj) ) and isBool(obj) == False
 
 def isAny(obj):
-     return isString(obj) or isInt(obj) or isBool(obj) or isFloat(obj) or isNumber(obj) or isText(obj)
+     return isString(obj) or isInt(obj) or isBool(obj) or isFloat(obj) or isNumber(obj) or isText(obj) or isCollection(obj)
 
 tt = {"str": isString,
       "int": isInt,

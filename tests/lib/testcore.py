@@ -130,3 +130,6 @@ class TestCore(TestHelper):
         # This test the text validation rule
         c = Core(source_file = self.f("24a.yaml"), schema_file = self.f("25b.yaml") )
         c.run_core()
+
+        c = Core(source_file = self.f("26a.yaml"), schema_file = self.f("26b.yaml") )
+        c.run_core()
