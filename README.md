@@ -45,7 +45,7 @@ type:
     Type of value. The followings are available:
      - str
      - int
-     - float [NYI]
+     - float
      - bool
      - number (== int or float) [NYI]
      - text (== str or number) [NYI]

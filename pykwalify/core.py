@@ -312,5 +312,8 @@ class Core(object):
         elif t == "bool":
             if not isinstance(value, bool):
                 errors.append("Value: %s is not of type 'bool' : %s" % (value, path) )
+        elif t == "float":
+            if not isinstance(value, float):
+                errors.append("Value: %s is not of type 'float' : %s" % (value, path) )
         else:
             raise Exception("Unknown type check : %s : %s : %s" % (path, value, t) )
