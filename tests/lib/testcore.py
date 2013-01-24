@@ -109,9 +109,20 @@ class TestCore(TestHelper):
         c = Core(source_file = self.f("20a.yaml"), schema_file = self.f("20b.yaml") )
         c.run_core()
 
+        # This tests number validation rule
         c = Core(source_file = self.f("21a.yaml"), schema_file = self.f("21b.yaml") )
         c.run_core()
 
+        # This tests number validation rule with wrong data
         c = Core(source_file = self.f("22a.yaml"), schema_file = self.f("22b.yaml") )
+        with self.assertRaises(Exception):
+            c.run_core()
+
+        # This test the text validation rule
+        c = Core(source_file = self.f("23a.yaml"), schema_file = self.f("23b.yaml") )
+        c.run_core()
+
+        # This test the text validation rule with wrong data
+        c = Core(source_file = self.f("24a.yaml"), schema_file = self.f("24b.yaml") )
         with self.assertRaises(Exception):
             c.run_core()

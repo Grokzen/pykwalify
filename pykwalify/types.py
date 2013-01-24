@@ -22,6 +22,7 @@ _types = {"str": str,
           "date": datetime.datetime,
           "symbol": str,
           "scalar": None,
+          "text": None,
           "any": object}
 
 def typeClass(type):
@@ -43,5 +44,29 @@ def isScalar(obj):
      return not isCollection(obj)
 
 def isCorrectType(obj, type):
-     # TODO: not implemented proper yet
      return isinstance(obj, type)
+
+def isString(obj):
+     return isinstance(obj, str)
+
+def isInt(obj):
+     return isinstance(obj, int)
+
+def isBool(obj):
+     return isinstance(obj, bool)
+
+def isFloat(obj):
+     return isinstance(obj, float)
+
+def isNumber(obj):
+     return isInt(obj) or isFloat(obj)
+
+def isText(obj):
+     return (isString(obj) or isNumber(obj) ) and isBool(obj) == False
+
+tt = {"str": isString,
+      "int": isInt,
+      "bool": isBool,
+      "float": isFloat,
+      "number": isNumber,
+      "text": isText}

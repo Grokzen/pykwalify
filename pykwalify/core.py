@@ -303,20 +303,9 @@ class Core(object):
         Log.debug("Core scalar: validating scalar type")
         Log.debug("Core scalar: scalar type: %s" % type(value) )
 
-        if t == "str":
-            if not isinstance(value, str):
-                errors.append("Value: %s is not of type 'str' : %s" % (value, path) )
-        elif t == "int":
-            if not isinstance(value, int):
-                errors.append("Value: %s is not of type 'int' : %s" % (value, path) )
-        elif t == "bool":
-            if not isinstance(value, bool):
-                errors.append("Value: %s is not of type 'bool' : %s" % (value, path) )
-        elif t == "float":
-            if not isinstance(value, float):
-                errors.append("Value: %s is not of type 'float' : %s" % (value, path) )
-        elif t == "number":
-            if not isinstance(value, float) and not isinstance(value, int):
-                errors.append("Value: %s is not of type 'number' : %s" % (value, path) )
-        else:
-            raise Exception("Unknown type check : %s : %s : %s" % (path, value, t) )
+        try:
+            if not tt[t](value):
+                errors.append("Value: %s is not of type '%s' : %s" % (value, t, path) )
+        except Exception as e:
+            # Type not found in map
+            raise Exception("Unknown type check: %s : %s : %s" % (path, value, t) )
