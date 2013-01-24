@@ -99,3 +99,9 @@ class TestCore(TestHelper):
         c = Core(source_file = self.f("17a.yaml"), schema_file = self.f("16b.yaml") )
         with self.assertRaises(Exception):
             c.run_core()
+
+        c = Core(source_file = self.f("18a.yaml"), schema_file = self.f("18b.yaml") )
+        c.run_core()
+
+        c = Core(source_file = self.f("19a.yaml"), schema_file = self.f("19b.yaml") )
+        c.run_core()

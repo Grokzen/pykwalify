@@ -1,0 +1,5 @@
+type: map
+mapping:
+  datasources:
+    type: map
+    allowempty: True

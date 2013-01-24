@@ -37,12 +37,16 @@ class Rule(object):
         self._length = None
         self._ident = None
         self._unique = None
+        self._allowempty_map = None
 
         self._parent = parent
         self._schema = schema
 
         if isinstance(schema, dict):
             self.init(schema, "")
+
+    def __str__(self):
+        return "Rule: %s" % str(self._schema)
 
     def init(self, schema, path):
         Log.debug("Init schema: %s" % schema)
@@ -87,6 +91,8 @@ class Rule(object):
                 self.initIdentValue(v, rule, path)
             elif k == "unique":
                 self.initUniqueValue(v, rule, path)
+            elif k == "allowempty":
+                self.initAllowEmptyMap(v, rule, path)
             elif k == "sequence":
                 rule = self.initSequenceValue(v, rule, path)
             elif k == "mapping":
@@ -95,6 +101,12 @@ class Rule(object):
                 raise Exception("Unknown key: %s found : %s" % (k, path) )
 
         self.checkConfliction(schema, rule, path)
+
+    def initAllowEmptyMap(self, v, rule, path):
+        Log.debug("Init allow empty value: %s" % path)
+        Log.debug("Type: %s : %s" % (v, rule) )
+
+        self._allowempty_map = v
 
     def initTypeValue(self, v, rule, path):
         Log.debug("Init type value : %s" % path)
@@ -346,7 +358,7 @@ class Rule(object):
             if self._length is not None:
                 raise Exception("seq.conflict :: length: %s" % path)
         elif self._type == "map":
-            if "mapping" not in schema:
+            if "mapping" not in schema and not self._allowempty_map:
                 raise Exception("map.nomapping")
             if self._enum is not None:
                 raise Exception("map.conflict :: enum:")

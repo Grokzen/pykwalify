@@ -85,6 +85,10 @@ name:
 
 desc:
     Description. This is not used for validation.
+
+allowempty:
+    NOTE: Experimental feature!
+    Only applies to map. It enables a dict to have items in it that is not validated. It can be combined with mapping to check for some fixed properties but still validate if any random properties exists. See example testfile 18a, 18b, 19a, 19b.
 ```
 
 ## Contributing

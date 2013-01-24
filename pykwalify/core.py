@@ -107,10 +107,12 @@ class Core(object):
         if rule._required and self.source is None:
             raise CoreError("required.novalue : %s" % path)
 
+        Log.debug(" ? ValidateRule: %s" % rule)
+
         n = len(errors)
         if rule._sequence is not None:
             self._validate_sequence(value, rule, path, errors, done = None)
-        elif rule._mapping is not None:
+        elif rule._mapping is not None or rule._allowempty_map:
             self._validate_mapping(value, rule, path, errors, done = None)
         else:
             self._validate_scalar(value, rule, path, errors, done = None)
@@ -120,10 +122,10 @@ class Core(object):
 
     def _validate_sequence(self, value, rule, path, errors = [], done = None):
         Log.debug("Core Validate sequence")
-        Log.debug(" * %s" % value)
-        Log.debug(" * %s" % rule)
-        Log.debug(" * %s" % rule._type)
-        Log.debug(" * %s" % path)
+        Log.debug(" * Data: %s" % value)
+        Log.debug(" * Rule: %s" % rule)
+        Log.debug(" * RuleType: %s" % rule._type)
+        Log.debug(" * Path: %s" % path)
         Log.debug(" * Seq: %s" % rule._sequence)
         Log.debug(" * Map: %s" % rule._mapping)
 
@@ -187,30 +189,44 @@ class Core(object):
 
     def _validate_mapping(self, value, rule, path, errors = [], done = None):
         Log.debug("Validate mapping")
-        Log.debug(" + %s" % value)
-        Log.debug(" + %s" % rule)
-        Log.debug(" + %s" % rule._type)
-        Log.debug(" + %s" % path)
+        Log.debug(" + Data: %s" % value)
+        Log.debug(" + Rule: %s" % rule)
+        Log.debug(" + RuleType: %s" % rule._type)
+        Log.debug(" + Path: %s" % path)
         Log.debug(" + Seq: %s" % rule._sequence)
         Log.debug(" + Map: %s" % rule._mapping)
 
+        if rule._mapping is None:
+            Log.debug(" + No rule to apply, prolly because of allowempty: True")
+            return
+
         assert isinstance(rule._mapping, dict), "mapping is not a valid dict object"
         if value is None:
+            Log.debug(" + Value is None, returning...")
             return
 
         m = rule._mapping
+        Log.debug(" + RuleMapping: %s" % m) 
+
         for k, rule in m.items():
             if rule._required and k not in value:
                 errors.append("required.nokey : %s : %s" % (k, path) )
 
         for k, v in value.items():
-            rule = m.get(k, None)
-            if rule is None:
-                errors.append("key.undefined : %s : %s" % (k, path) )
+            r = m.get(k, None)
+            Log.debug(" + %s" % r)
+
+            if r is None:
+                if not rule._parent._allowempty_map:
+                    errors.append("key.undefined : %s : %s" % (k, path) )
             else:
-                # validate recursively
-                Log.debug("Core Map: validate recursively: %s" % rule)
-                self._validate(v, rule, "%s/%s" % (path, k), errors, done)
+                #if r._parent._mapping or r._mapping or not rule._allowempty_map:
+                if not r._schema:
+                    # validate recursively
+                    Log.debug("Core Map: validate recursively: %s" % r)
+                    self._validate(v, r, "%s/%s" % (path, k), errors, done)
+                else:
+                    print(" * Something is ignored Oo : %s" % r)
 
     def _validate_scalar(self, value, rule, path, errors = [], done = None):
         Log.debug("Validate scalar")
@@ -297,4 +313,4 @@ class Core(object):
             if not isinstance(value, bool):
                 errors.append("Value: %s is not of type 'bool' : %s" % (value, path) )
         else:
-            raise Exception("Unknown type check")
+            raise Exception("Unknown type check : %s : %s : %s" % (path, value, t) )
