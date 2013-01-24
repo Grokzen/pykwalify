@@ -29,7 +29,7 @@ Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
 
 ## pyKwalify python dependencies
 
- - argparse 1.2.1
+ - docopt 0.6.0
  - PyYaml 3.10
 
 ## Supported python version
