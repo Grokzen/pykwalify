@@ -64,9 +64,13 @@ def isNumber(obj):
 def isText(obj):
      return (isString(obj) or isNumber(obj) ) and isBool(obj) == False
 
+def isAny(obj):
+     return isString(obj) or isInt(obj) or isBool(obj) or isFloat(obj) or isNumber(obj) or isText(obj)
+
 tt = {"str": isString,
       "int": isInt,
       "bool": isBool,
       "float": isFloat,
       "number": isNumber,
-      "text": isText}
+      "text": isText,
+      "any": isAny}

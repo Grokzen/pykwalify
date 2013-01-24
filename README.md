@@ -55,7 +55,7 @@ type:
      - seq
      - map
      - scalar (all but seq and map)
-     - any (means any data) [NYI]
+     - any (means any data)
 
 required:
     Value is required when true (default is false). This is similar to not-null constraint in RDBMS.

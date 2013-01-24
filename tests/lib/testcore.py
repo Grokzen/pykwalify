@@ -126,3 +126,7 @@ class TestCore(TestHelper):
         c = Core(source_file = self.f("24a.yaml"), schema_file = self.f("24b.yaml") )
         with self.assertRaises(Exception):
             c.run_core()
+
+        # This test the text validation rule
+        c = Core(source_file = self.f("24a.yaml"), schema_file = self.f("25b.yaml") )
+        c.run_core()
