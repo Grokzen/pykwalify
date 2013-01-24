@@ -2,6 +2,15 @@
 Release Notes
 =============
 
+v0.1.1
+======
+
+ - Reworked the structure of the project to be more clean and easy to find stuff.
+ - lib/ folder is now removed and all contents is placed in the root of the project
+ - All scripts is now moved to its own folder scripts/ (To use the script during dev the path to the root of the project must be in your python path somehow, recomended is to create a virtualenv and export the correct path when it activates)
+ - New make target 'cleanegg'
+ - Fixed path bugs in Makefile
+ - Fixed path bugs in Manifest
 
 v0.1.0
 ======
