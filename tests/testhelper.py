@@ -22,8 +22,7 @@ if IN_VIRTUALENV:
     path = os.path.join(sys.prefix, 'etc', "pykwalify", 'logging.ini')
     if not os.path.exists(path): # we are not installed, running from source tree
         (prefix, bindir) = os.path.split(os.path.dirname(os.path.abspath(sys.argv[0])))
-        path = os.path.join(prefix, "pykwalify", "lib", "config", "logging.ini")
-
+        path = os.path.join(prefix, "pykwalify", "config", "logging.ini")
     logging.config.fileConfig(path)
 else:
     logging.config.fileConfig(os.path.join(os.sep, 'etc', "pykwalify", 'logging.ini'))
