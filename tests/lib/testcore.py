@@ -22,6 +22,10 @@ class TestCore(TestHelper):
     def f(self, *args):
         return gettestcwd("tests", "files", *args)
 
+    def testCoreDataMode(self):
+        c = Core(source_data = 3.14159, schema_data = {"type": "number"} )
+        c.run_core()
+
     def testCore(self):
         # Test sequence with only string values
         c = Core(source_file = self.f("1a.yaml"), schema_file = self.f("1b.yaml") )
