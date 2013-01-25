@@ -72,6 +72,8 @@ enum:
 
 pattern:
     Specifies regular expression pattern of value. (Uses re.match() )
+    pattern rule works in map to validate keys, it is usefull when allowempty is set to True.
+    Pattern also works on all scalar types.
 
 range:
     Range of value between max/max-ex and min/min-ex.

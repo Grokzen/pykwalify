@@ -1,0 +1,6 @@
+type: map
+pattern: "^[a-z]+$"
+allowempty: True
+mapping:
+  name:
+    type: str

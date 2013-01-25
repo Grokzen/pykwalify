@@ -133,3 +133,12 @@ class TestCore(TestHelper):
 
         c = Core(source_file = self.f("26a.yaml"), schema_file = self.f("26b.yaml") )
         c.run_core()
+
+        # This tests pattern matching on keys in a map
+        c = Core(source_file = self.f("27a.yaml"), schema_file = self.f("27b.yaml") )
+        with self.assertRaises(Exception):
+            c.run_core()
+
+        c = Core(source_file = self.f("28a.yaml"), schema_file = self.f("28b.yaml") )    
+        c.run_core()
+        

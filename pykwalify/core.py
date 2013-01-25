@@ -208,16 +208,22 @@ class Core(object):
         m = rule._mapping
         Log.debug(" + RuleMapping: %s" % m) 
 
-        for k, rule in m.items():
-            if rule._required and k not in value:
+        for k, rr in m.items():
+            if rr._required and k not in value:
                 errors.append("required.nokey : %s : %s" % (k, path) )
 
         for k, v in value.items():
             r = m.get(k, None)
             Log.debug(" + %s" % r)
 
+            if rule._pattern:
+                res = re.match(rule._pattern, str(k) )
+                Log.debug("Matching regexPattern: %s with value: %s" % (rule._pattern, k) )
+                if res is None: # Not matching
+                    errors.append("pattern.unmatch : %s --> %s : %s" % (rule._pattern, k, path) )
+
             if r is None:
-                if not rule._parent._allowempty_map:
+                if not rule._allowempty_map:
                     errors.append("key.undefined : %s : %s" % (k, path) )
             else:
                 #if r._parent._mapping or r._mapping or not rule._allowempty_map:

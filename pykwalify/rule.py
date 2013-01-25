@@ -362,8 +362,6 @@ class Rule(object):
                 raise Exception("map.nomapping")
             if self._enum is not None:
                 raise Exception("map.conflict :: enum:")
-            if self._pattern is not None:
-                raise Exception("map.conflict :: pattern: %s" % path)
             if self._sequence is not None:
                 raise Exception("map.conflict :: mapping: %s" % path)
             if self._range is not None:
