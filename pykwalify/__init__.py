@@ -4,7 +4,7 @@
 
 __author__ = 'Grokzen <Grokzen@gmail.com>'
 #__version__ = '.'.join(map(str, __version_info__))
-__foobar__ = "0.1.1"
+__foobar__ = "0.1.2"
 
 # Set to True to have revision from Version Control System in version string
 __devel__ = True
@@ -156,9 +156,14 @@ def get_config_path(extra = ""):
     IN_VIRTUALENV = True if hasattr(sys, 'real_prefix') else False
     if IN_VIRTUALENV:
         path = os.path.join(sys.prefix, "etc", PACKAGE_NAME, extra)
+
         if not os.path.exists(path): # we are not installed, running from source tree
             (prefix, bindir) = os.path.split(os.path.dirname(os.path.abspath(sys.argv[0])))
             p = os.path.join(prefix, PACKAGE_NAME, "lib", "config", extra)
+            if os.path.exists(p):
+                pass
+            else:
+                p = os.path.join(prefix, "config", extra)
         else:
             p = path
     else:

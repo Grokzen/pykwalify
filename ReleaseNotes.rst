@@ -2,6 +2,28 @@
 Release Notes
 =============
 
+v0.1.2
+======
+
+ - Added new and experimental validation rule allowempty. (See README for more info)
+ - Added TODO tracking file.
+ - Reworked the CLI to now use docopt and removede argparse.
+ - Implemented more typechecks, float, number, text, any
+ - Now suports python 3.3.x
+ - No longer support any python 2.x.y version
+ - Enabled pattern for map rule. It enables the validation of all keys in that map. (See README for more info)
+ - Alot more test files and now tests source_data and schema_data input arguments to core.py
+ - Alot of cleanup in the test suit
+
+v0.1.1
+======
+
+ - Reworked the structure of the project to be more clean and easy to find stuff.
+ - lib/ folder is now removed and all contents is placed in the root of the project
+ - All scripts is now moved to its own folder scripts/ (To use the script during dev the path to the root of the project must be in your python path somehow, recomended is to create a virtualenv and export the correct path when it activates)
+ - New make target 'cleanegg'
+ - Fixed path bugs in Makefile
+ - Fixed path bugs in Manifest
 
 v0.1.0
 ======

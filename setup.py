@@ -144,7 +144,7 @@ def get_share_path(*args):
 
 settings.update(
     name = PACKAGE_NAME,
-    version = _load_version(),
+    version = "0.1.2",
     description = 'Python lib/cli for JSON/YAML schema validation',
     long_description = 'Python lib/cli for JSON/YAML schema validation',
     author = "Grokzen",
@@ -154,7 +154,7 @@ settings.update(
     scripts = ['scripts/pykwalify'],
     data_files = [ (get_etc_path(), list_dir("config") ) ],
     install_requires = [
-        'argparse==1.2.1',
+        'docopt==0.6.0',
         'PyYAML==3.10',
         ],
     classifiers = (

@@ -14,7 +14,7 @@ from io import StringIO
 
 # 3rd party imports
 import yaml
-import argparse
+from docopt import docopt
 
 # Import pykwalify package
 import pykwalify
@@ -31,60 +31,45 @@ def main():
     """
     The outline of this function needs to be like this:
 
-    # TODO: update
     1. parse arguments
     2. validate arguments only, dont go into other logic/code
-    3. set up application
-    4. update internal application state
-    5. go into specific logic/code for various modes of operation
+    3. run application logic
     """
 
     #####
-    ##### 1. parse arguments
+    ##### 1. parse cli arguments
     #####
 
-    parser = argparse.ArgumentParser(description=__doc__.strip())
+    __docopt__ = """
+usage: pykwalify -d DATAFILE -s SCHEMAFILE [-q] [-v ...]
+       pykwalify -h | --help
+       pykwalify -V | --version
 
-    parser.add_argument("-d", "--data-file",
-                        dest = "datafile",
-                        action = "store",
-                        default = None,
-                        help = "schema definition file")
-    parser.add_argument("-q", "--quiet",
-                        dest = 'quiet',
-                        action = 'store_true',
-                        default = False,
-                        help = "suppress terminal output")
-    parser.add_argument("-s", "--schema-file",
-                        dest = "schemafile",
-                        action = "store",
-                        default = None,
-                        help = "the file to be tested")
-    parser.add_argument("-v", "--verbose",
-                        dest = 'verbose',
-                        action = 'count',
-                        default = False,
-                        help = "verbose terminal output (multiple -v increases verbosity)")
-    parser.add_argument("-V", "--version",
-                        dest = 'version',
-                        action = 'store_true',
-                        default = False,
-                        help = "display the version number and exit")
+pyKwalify - cli for pykwalify
 
-    args = parser.parse_args()
+optional arguments:
+  -d DATAFILE, --data-file DATAFILE        schema definition file
+  -s SCHEMAFILE, --schema-file SCHEMAFILE  the file to be tested
+  -q, --quiet                              suppress terminal output
+  -v, --verbose                            verbose terminal output (multiple -v increases verbosity)
+  -V, --version                            display the version number and exit
+  -h, --help                               show this help message and exit
+"""
+
+    args = docopt(__docopt__, version=pykwalify.__foobar__)
 
     #####
     ##### 2. validate arguments only, dont go into other code/logic
     #####
 
-    if args.verbose:
+    if args["--verbose"]:
         # Calculates what level to set the root logger,
         # -vvvvvv (6) will be logging.DEBUG + logs of all subcommands runned via utils.runcmd()
         # -vvvvv (5) will be logging.DEBUG, 
         # -v (1) will be logging.CRITICAL
         # HowTo log to -vvvvvv (6) veerbose level: Log.log(1, msg)
         # Dev Note: Cannot log to level 0 so use 1 if the logging should be above logging.DEBUG level
-        level = 60 - (args.verbose * 10)
+        level = 60 - (args["--verbose"] * 10)
 
         # Sets correct logging level to the root logger
         l = logging.getLogger()
@@ -93,13 +78,13 @@ def main():
             handler.level = level
 
     # If quiet then set the logging level above 50 so nothing is printed
-    if args.quiet:
+    if args["--quiet"]:
         l = logging.getLogger()
         l.setLevel(1337)
         for handler in l.handlers:
             handler.level = 1337
 
-    Log.debug("Setting verbose level: %s" % args.verbose)
+    Log.debug("Setting verbose level: %s" % args["--verbose"])
     
     Log.debug("Arguments from CLI: %s" % args)
 
@@ -109,15 +94,14 @@ def main():
         parser.print_help()
         sys.exit(retnames['optionerror'])
 
-    # quickly show version and exit
-    if args.version:
-        print(pykwalify.__foobar__)
-        sys.exit(retnames['noerror'])
-
-    if not args.datafile and not args.schemafile:
+    if not args["--data-file"] and not args["--schema-file"]:
         print("ERROR: must provide both a data file and a schema file (use -f/--file and -s/--schema")
         parser.print_help()
         sys.exit(retnames["optionerror"])
 
-    c = Core(source_file = args.datafile, schema_file = args.schemafile)
+    #####
+    ##### 3. parse cli arguments
+    #####
+
+    c = Core(source_file = args["--data-file"], schema_file = args["--schema-file"])
     c.run_core()
