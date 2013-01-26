@@ -2,6 +2,19 @@
 Release Notes
 =============
 
+v0.1.2
+======
+
+ - Added new and experimental validation rule allowempty. (See README for more info)
+ - Added TODO tracking file.
+ - Reworked the CLI to now use docopt and removede argparse.
+ - Implemented more typechecks, float, number, text, any
+ - Now suports python 3.3.x
+ - No longer support any python 2.x.y version
+ - Enabled pattern for map rule. It enables the validation of all keys in that map. (See README for more info)
+ - Alot more test files and now tests source_data and schema_data input arguments to core.py
+ - Alot of cleanup in the test suit
+
 v0.1.1
 ======
 
