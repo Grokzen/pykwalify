@@ -2,19 +2,10 @@
 
 """ Unit test for pyKwalify - Rule """
 
-# python std library
-import unittest
-import re
-import sys
-import os
-
 # Testhelper class
-from tests.testhelper import run as run
-from tests.testhelper import TestHelper, Log, logging_regex, gettestcwd, _set_log_lv
-from tests.testhelper import Log
+from tests.testhelper import TestHelper, _set_log_lv
 
 # pyKwalify imports
-import pykwalify
 from pykwalify.rule import Rule
 
 class TestRule(TestHelper):

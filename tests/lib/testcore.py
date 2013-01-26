@@ -2,19 +2,10 @@
 
 """ Unit test for pyKwalify - Core """
 
-# python std library
-import re
-import os
-import sys
-import unittest
-import logging
-
 # Testhelper class
-from tests.testhelper import run as run
-from tests.testhelper import TestHelper, Log, logging_regex, gettestcwd, _set_log_lv
+from tests.testhelper import TestHelper, gettestcwd, _set_log_lv
 
 # pyKwalify imports
-import pykwalify
 from pykwalify.core import Core
 
 class TestCore(TestHelper):
