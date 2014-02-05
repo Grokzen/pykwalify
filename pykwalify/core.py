@@ -6,8 +6,6 @@ __author__ = 'Grokzen <grokzen@gmail.com>'
 
 # python std lib
 import re
-import os
-import sys
 import json
 
 # python std logging
@@ -37,7 +35,7 @@ class Core(object):
         if source_file is not None:
             if not os.path.exists(source_file):
                 raise CoreError("Provided source_file do not exists on disk: %s" % source_file)
-                
+
             with open(source_file, "r") as stream:
                 if source_file.endswith(".json"):
                     self.source = json.load(stream)
@@ -74,8 +72,9 @@ class Core(object):
 
         # Everything now is valid loaded
 
-    def run_core(self):
+    def validate(self):
         Log.debug("starting core")
+
         errors = self._start_validate(self.source)
         if errors is None or len(errors) == 0:
             Log.info("validation.valid")
@@ -84,6 +83,10 @@ class Core(object):
             Log.error(" --- All found errors ---")
             Log.error(errors)
             raise SchemaError("validation.invalid : %s" % errors)
+
+        # Return validated data
+        return self.source
+
 
     def _start_validate(self, value = None):
         path = ""
@@ -108,7 +111,6 @@ class Core(object):
             raise CoreError("required.novalue : %s" % path)
 
         Log.debug(" ? ValidateRule: %s" % rule)
-
         n = len(errors)
         if rule._sequence is not None:
             self._validate_sequence(value, rule, path, errors, done = None)
@@ -118,7 +120,7 @@ class Core(object):
             self._validate_scalar(value, rule, path, errors, done = None)
 
         if len(errors) != n:
-            return 
+            return
 
     def _validate_sequence(self, value, rule, path, errors = [], done = None):
         Log.debug("Core Validate sequence")
@@ -166,9 +168,9 @@ class Core(object):
                         if val is None:
                             continue
                         if val in table:
-                            curr_path = "%s/%s/%s" % (path, j, key)
-                            prev_path = "%s/%s/%s" % (path, table[val], key)
-                            errors.append("value.notunique :: value: %s : %s" % (key, path) )
+                            curr_path = "%s/%s/%s" % (path, j, k)
+                            prev_path = "%s/%s/%s" % (path, table[val], k)
+                            errors.append("value.notunique :: value: %s : %s" % (k, path) )
 
         elif r._unique:
             Log.debug("Found unique value in sequence")
@@ -180,7 +182,7 @@ class Core(object):
 
                 if val in table:
                     curr_path = "%s/%s" % (path, j)
-                    prev_path = "%s/%s" % (path, table[val] ) 
+                    prev_path = "%s/%s" % (path, table[val] )
                     errors.append("value.notunique :: value: %s : %s : %s" % (val, curr_path, prev_path) )
                 else:
                     table[val] = j
@@ -206,11 +208,13 @@ class Core(object):
             return
 
         m = rule._mapping
-        Log.debug(" + RuleMapping: %s" % m) 
+        Log.debug(" + RuleMapping: %s" % m)
 
         for k, rr in m.items():
             if rr._required and k not in value:
                 errors.append("required.nokey : %s : %s" % (k, path) )
+            if rr._default:
+                value[k] = rr._default
 
         for k, v in value.items():
             r = m.get(k, None)
@@ -241,6 +245,7 @@ class Core(object):
         Log.debug(" # %s" % rule._type)
         Log.debug(" # %s" % path)
 
+
         assert rule._sequence is None, "found sequence when validating for scalar"
         assert rule._mapping is None, "found mapping when validating for scalar"
 
@@ -250,6 +255,10 @@ class Core(object):
         if rule._enum is not None:
             if value not in rule._enum:
                 errors.append("enum.notexists : %s : %s" % (value, path) )
+
+        # Set default value
+        if rule._default and value is None:
+            value = rule._default
 
         if value is None:
             return
@@ -302,6 +311,7 @@ class Core(object):
                 errors.append("length.toolong-ex : %s <= %s : %s" % (l["max-ex"], L, path) )
             if l.get("min-ex", None) is not None and l["min-ex"] >= L:
                 errors.append("length.tooshort-ex : %s >= %s : %s" % (l["min-ex"], L, path) )
+
 
         self._validate_scalar_type(value, rule._type, errors, path)
 
