@@ -213,7 +213,7 @@ class Core(object):
         for k, rr in m.items():
             if rr._required and k not in value:
                 errors.append("required.nokey : %s : %s" % (k, path) )
-            if rr._default or type(rr._default) == type(bool()):
+            if k not in value and rr._default is not None:
                 value[k] = rr._default
 
         for k, v in value.items():

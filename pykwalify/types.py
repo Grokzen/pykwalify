@@ -23,7 +23,9 @@ _types = {"str": str,
           "symbol": str,
           "scalar": None,
           "text": None,
-          "any": object}
+          "any": object,
+          "enum": str
+          }
 
 def typeClass(type):
      return _types[type]
@@ -67,10 +69,15 @@ def isText(obj):
 def isAny(obj):
      return isString(obj) or isInt(obj) or isBool(obj) or isFloat(obj) or isNumber(obj) or isText(obj) or isCollection(obj)
 
+def isEnum(obj):
+    return isinstance(obj, str)
+
 tt = {"str": isString,
       "int": isInt,
       "bool": isBool,
       "float": isFloat,
       "number": isNumber,
       "text": isText,
-      "any": isAny}
+      "any": isAny,
+      "enum": isEnum,
+      }
