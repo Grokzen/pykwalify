@@ -37,6 +37,7 @@ class Rule(object):
         self._length = None
         self._ident = None
         self._unique = None
+        self._default = None
         self._allowempty_map = None
 
         self._parent = parent
@@ -93,6 +94,8 @@ class Rule(object):
                 self.initUniqueValue(v, rule, path)
             elif k == "allowempty":
                 self.initAllowEmptyMap(v, rule, path)
+            elif k == "default":
+                self.initDefaultValue(v, rule, path)
             elif k == "sequence":
                 rule = self.initSequenceValue(v, rule, path)
             elif k == "mapping":
@@ -285,9 +288,9 @@ class Rule(object):
 
         if not isinstance(v, bool):
             raise Exception("unique.notbool : %s : %s" % (v, path) )
-        
+
         self._unique = v
-        
+
         if isCollectionType(self._type):
             raise Exception("unique.notscalar : %s : %s" % (self._type, path) )
         if path == "":
@@ -340,6 +343,19 @@ class Rule(object):
             self._mapping[k] = rule
 
         return rule
+
+    def initDefaultValue(self, v, rule, path):
+        Log.debug("Init default value : %s" % path)
+        self._default = v
+
+        if isCollectionType(self._type):
+            raise Exception("default.notscalar : %s : %s : %s" % (rule, path, v))
+
+        if self._type == "map" or self._type == "seq":
+            raise Exception("default.notscalar : %s : %s : %s" % (rule, os.path.dirname(path), v))
+
+        if not isinstance(v, self._type_class):
+            raise Exception("default.type.unmatch : %s --> %s : %s" % (v, self._type_class, path))
 
     def checkConfliction(self, schema, rule, path):
         Log.debug("Checking for conflicts : %s" % path)

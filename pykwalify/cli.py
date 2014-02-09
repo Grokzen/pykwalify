@@ -104,4 +104,4 @@ optional arguments:
     #####
 
     c = Core(source_file = args["--data-file"], schema_file = args["--schema-file"])
-    c.run_core()
+    c.validate()

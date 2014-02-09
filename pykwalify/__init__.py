@@ -9,6 +9,9 @@ __foobar__ = "0.1.2"
 # Set to True to have revision from Version Control System in version string
 __devel__ = True
 
+# Import Core as Kwalify
+from .core import Core as Kwalify
+
 import sys
 import os
 from io import StringIO
@@ -27,7 +30,7 @@ IN_VIRTUALENV = True if hasattr(sys, 'real_prefix') else False
 def init_logging():
     if sys.version_info >= (3,2,0):
         logging_file = "logging.yaml"
-    else: 
+    else:
         # If 3.1.x or lower use old ini file
         logging_file = "logging.ini"
 
