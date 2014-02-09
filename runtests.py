@@ -8,9 +8,9 @@ import sys
 import os
 
 # Check minimum version of Python
-if sys.version_info < (3,1,0):
-  sys.stderr.write("ERROR: sweddoc: Python version 3.1.x or later is required, exiting...\n")
-  sys.exit(1)
+if (3, 1, 0) > sys.version_info:
+    sys.stderr.write("ERROR: Python version 3.1.x or later is required, exiting...\n")
+    sys.exit(1)
 
 # Check if we are installed in the system already, otherwise update path
 (prefix, bindir) = os.path.split(os.path.dirname(os.path.abspath(sys.argv[0])))
