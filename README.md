@@ -33,8 +33,8 @@ Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
 
 ## pyKwalify python dependencies
 
- - docopt 0.6.0
- - PyYaml 3.10
+ - docopt 0.6.1
+ - PyYaml 3.11
 
 
 ## Supported python version

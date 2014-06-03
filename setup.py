@@ -15,8 +15,8 @@ settings.update(
     packages=['pykwalify'],
     scripts=['scripts/pykwalify'],
     install_requires=[
-        'docopt==0.6.0',
-        'PyYAML==3.10',
+        'docopt==0.6.1',
+        'PyYAML==3.11',
     ],
     classifiers=(
         'Development Status :: 1 - Alpha',
