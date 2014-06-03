@@ -27,50 +27,66 @@ _types = {"str": str,
           "enum": str
           }
 
+
 def typeClass(type):
-     return _types[type]
+    return _types[type]
+
 
 def isBuiltinType(type):
     return type in _types
 
+
 def isCollectionType(type):
-     return type.lower().strip() == "map" or type.lower().strip() == "seq"
+    return type.lower().strip() == "map" or type.lower().strip() == "seq"
+
 
 def isScalarType(type):
-     return not isCollectionType(type)
+    return not isCollectionType(type)
+
 
 def isCollection(obj):
-     return isinstance(obj, dict) or isinstance(obj, list)
+    return isinstance(obj, dict) or isinstance(obj, list)
+
 
 def isScalar(obj):
-     return not isCollection(obj)
+    return not isCollection(obj)
+
 
 def isCorrectType(obj, type):
-     return isinstance(obj, type)
+    return isinstance(obj, type)
+
 
 def isString(obj):
-     return isinstance(obj, str)
+    return isinstance(obj, str)
+
 
 def isInt(obj):
-     return isinstance(obj, int)
+    return isinstance(obj, int)
+
 
 def isBool(obj):
-     return isinstance(obj, bool)
+    return isinstance(obj, bool)
+
 
 def isFloat(obj):
-     return isinstance(obj, float)
+    return isinstance(obj, float)
+
 
 def isNumber(obj):
-     return isInt(obj) or isFloat(obj)
+    return isInt(obj) or isFloat(obj)
+
 
 def isText(obj):
-     return (isString(obj) or isNumber(obj) ) and isBool(obj) == False
+    return (isString(obj) or isNumber(obj)) and isBool(obj) is False
+
 
 def isAny(obj):
-     return isString(obj) or isInt(obj) or isBool(obj) or isFloat(obj) or isNumber(obj) or isText(obj) or isCollection(obj)
+    return isString(obj) or isInt(obj) or isBool(obj) or isFloat(obj) or isNumber(obj) or isText(obj) or isCollection(obj)
+
 
 def isEnum(obj):
     return isinstance(obj, str)
+
 
 tt = {"str": isString,
       "int": isInt,

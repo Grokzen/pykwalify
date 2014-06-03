@@ -65,7 +65,7 @@ optional arguments:
     if args["--verbose"]:
         # Calculates what level to set the root logger,
         # -vvvvvv (6) will be logging.DEBUG + logs of all subcommands runned via utils.runcmd()
-        # -vvvvv (5) will be logging.DEBUG, 
+        # -vvvvv (5) will be logging.DEBUG,
         # -v (1) will be logging.CRITICAL
         # HowTo log to -vvvvvv (6) veerbose level: Log.log(1, msg)
         # Dev Note: Cannot log to level 0 so use 1 if the logging should be above logging.DEBUG level
@@ -85,7 +85,7 @@ optional arguments:
             handler.level = 1337
 
     Log.debug("Setting verbose level: %s" % args["--verbose"])
-    
+
     Log.debug("Arguments from CLI: %s" % args)
 
     # if no arguments is passed, show the help message
@@ -103,5 +103,5 @@ optional arguments:
     ##### 3. parse cli arguments
     #####
 
-    c = Core(source_file = args["--data-file"], schema_file = args["--schema-file"])
+    c = Core(source_file=args["--data-file"], schema_file=args["--schema-file"])
     c.validate()

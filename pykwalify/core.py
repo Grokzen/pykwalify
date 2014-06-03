@@ -20,10 +20,11 @@ from .errors import *
 # 3rd party imports
 import yaml
 
+
 class Core(object):
     """ Core class of pyKwalify """
 
-    def __init__(self, source_file = None, schema_file = None, source_data = None, schema_data = None):
+    def __init__(self, source_file=None, schema_file=None, source_data=None, schema_data=None):
         Log.debug("source_file: %s" % source_file)
         Log.debug("schema_file: %s" % schema_file)
         Log.debug("source_data: %s" % source_data)
@@ -87,14 +88,13 @@ class Core(object):
         # Return validated data
         return self.source
 
-
-    def _start_validate(self, value = None):
+    def _start_validate(self, value=None):
         path = ""
         errors = []
         done = []
 
         Log.debug("Building root rule object")
-        root_rule = Rule(schema = self.schema)
+        root_rule = Rule(schema=self.schema)
         Log.debug("Done building root rule")
 
         self._validate(value, root_rule, path, errors, done)
@@ -113,16 +113,16 @@ class Core(object):
         Log.debug(" ? ValidateRule: %s" % rule)
         n = len(errors)
         if rule._sequence is not None:
-            self._validate_sequence(value, rule, path, errors, done = None)
+            self._validate_sequence(value, rule, path, errors, done=None)
         elif rule._mapping is not None or rule._allowempty_map:
-            self._validate_mapping(value, rule, path, errors, done = None)
+            self._validate_mapping(value, rule, path, errors, done=None)
         else:
-            self._validate_scalar(value, rule, path, errors, done = None)
+            self._validate_scalar(value, rule, path, errors, done=None)
 
         if len(errors) != n:
             return
 
-    def _validate_sequence(self, value, rule, path, errors = [], done = None):
+    def _validate_sequence(self, value, rule, path, errors=[], done=None):
         Log.debug("Core Validate sequence")
         Log.debug(" * Data: %s" % value)
         Log.debug(" * Rule: %s" % rule)
@@ -170,7 +170,7 @@ class Core(object):
                         if val in table:
                             curr_path = "%s/%s/%s" % (path, j, k)
                             prev_path = "%s/%s/%s" % (path, table[val], k)
-                            errors.append("value.notunique :: value: %s : %s" % (k, path) )
+                            errors.append("value.notunique :: value: %s : %s" % (k, path))
 
         elif r._unique:
             Log.debug("Found unique value in sequence")
@@ -182,14 +182,14 @@ class Core(object):
 
                 if val in table:
                     curr_path = "%s/%s" % (path, j)
-                    prev_path = "%s/%s" % (path, table[val] )
-                    errors.append("value.notunique :: value: %s : %s : %s" % (val, curr_path, prev_path) )
+                    prev_path = "%s/%s" % (path, table[val])
+                    errors.append("value.notunique :: value: %s : %s : %s" % (val, curr_path, prev_path))
                 else:
                     table[val] = j
 
                 j += 1
 
-    def _validate_mapping(self, value, rule, path, errors = [], done = None):
+    def _validate_mapping(self, value, rule, path, errors=[], done=None):
         Log.debug("Validate mapping")
         Log.debug(" + Data: %s" % value)
         Log.debug(" + Rule: %s" % rule)
@@ -212,7 +212,7 @@ class Core(object):
 
         for k, rr in m.items():
             if rr._required and k not in value:
-                errors.append("required.nokey : %s : %s" % (k, path) )
+                errors.append("required.nokey : %s : %s" % (k, path))
             if k not in value and rr._default is not None:
                 value[k] = rr._default
 
@@ -221,14 +221,14 @@ class Core(object):
             Log.debug(" + %s" % r)
 
             if rule._pattern:
-                res = re.match(rule._pattern, str(k) )
-                Log.debug("Matching regexPattern: %s with value: %s" % (rule._pattern, k) )
+                res = re.match(rule._pattern, str(k))
+                Log.debug("Matching regexPattern: %s with value: %s" % (rule._pattern, k))
                 if res is None: # Not matching
-                    errors.append("pattern.unmatch : %s --> %s : %s" % (rule._pattern, k, path) )
+                    errors.append("pattern.unmatch : %s --> %s : %s" % (rule._pattern, k, path))
 
             if r is None:
                 if not rule._allowempty_map:
-                    errors.append("key.undefined : %s : %s" % (k, path) )
+                    errors.append("key.undefined : %s : %s" % (k, path))
             else:
                 #if r._parent._mapping or r._mapping or not rule._allowempty_map:
                 if not r._schema:
@@ -238,23 +238,22 @@ class Core(object):
                 else:
                     print(" * Something is ignored Oo : %s" % r)
 
-    def _validate_scalar(self, value, rule, path, errors = [], done = None):
+    def _validate_scalar(self, value, rule, path, errors=[], done=None):
         Log.debug("Validate scalar")
         Log.debug(" # %s" % value)
         Log.debug(" # %s" % rule)
         Log.debug(" # %s" % rule._type)
         Log.debug(" # %s" % path)
 
-
         assert rule._sequence is None, "found sequence when validating for scalar"
         assert rule._mapping is None, "found mapping when validating for scalar"
 
         if rule._assert is not None:
-            pass # TODO: implement assertion prolly
+            pass  # TODO: implement assertion prolly
 
         if rule._enum is not None:
             if value not in rule._enum:
-                errors.append("enum.notexists : %s : %s" % (value, path) )
+                errors.append("enum.notexists : %s : %s" % (value, path))
 
         # Set default value
         if rule._default and value is None:
@@ -264,9 +263,9 @@ class Core(object):
             return
 
         if rule._pattern is not None:
-            res = re.match(rule._pattern, str(value) )
-            if res is None: # Not matching
-                errors.append("pattern.unmatch : %s --> %s : %s" % (rule._pattern, value, path) )
+            res = re.match(rule._pattern, str(value))
+            if res is None:  # Not matching
+                errors.append("pattern.unmatch : %s --> %s : %s" % (rule._pattern, value, path))
 
         if rule._range is not None:
             assert isScalar(value), "value is not a valid scalar"
@@ -275,27 +274,27 @@ class Core(object):
 
             try:
                 if r.get("max", None) is not None and r["max"] < value:
-                    errors.append("range.toolarge : %s < %s : %s" % (r["max"], value, path) )
+                    errors.append("range.toolarge : %s < %s : %s" % (r["max"], value, path))
             except Exception as e:
-                errors.append("EXCEPTION: range.%s :: %s < %s" % (e, r.get("max", None), value) )
+                errors.append("EXCEPTION: range.%s :: %s < %s" % (e, r.get("max", None), value))
 
             try:
                 if r.get("min", None) is not None and r["min"] > value:
-                    errors.append("range.toosmall : %s > %s : %s" % (r["min"], value, path) )
+                    errors.append("range.toosmall : %s > %s : %s" % (r["min"], value, path))
             except Exception as e:
-                errors.append("EXCEPTION: range.%s :: %s > %s" % (e, r.get("min", None), value) )
+                errors.append("EXCEPTION: range.%s :: %s > %s" % (e, r.get("min", None), value))
 
             try:
                 if r.get("max-ex", None) is not None and r["max-ex"] <= value:
-                    errors.append("range.tolarge-ex : %s <= %s : %s" % (r["max-ex"], value, path) )
+                    errors.append("range.tolarge-ex : %s <= %s : %s" % (r["max-ex"], value, path))
             except Exception as e:
-                errors.append("EXCEPTION: range.%s :: %s <= %s" % (e, r.get("max-ex", None), value) )
+                errors.append("EXCEPTION: range.%s :: %s <= %s" % (e, r.get("max-ex", None), value))
 
             try:
                 if r.get("min-ex", None) is not None and r["min-ex"] >= value:
-                    errors.append("range.toosmall-ex : %s >= %s : %s" % (r["min-ex"], value, path) )
+                    errors.append("range.toosmall-ex : %s >= %s : %s" % (r["min-ex"], value, path))
             except Exception as e:
-                errors.append("EXCEPTION: range.%s :: %s >= %s" % (e, r.get("min-ex", None), value) )
+                errors.append("EXCEPTION: range.%s :: %s >= %s" % (e, r.get("min-ex", None), value))
 
         if rule._length is not None:
             assert isinstance(value, str), "value is not a valid string type"
@@ -304,24 +303,23 @@ class Core(object):
             L = len(value)
 
             if l.get("max", None) is not None and l["max"] < L:
-                errors.append("length.toolong : %s < %s : %s" % (l["max"], L, path) )
+                errors.append("length.toolong : %s < %s : %s" % (l["max"], L, path))
             if l.get("min", None) is not None and l["min"] > L:
-                errors.append("length.tooshort : %s > %s : %s" % (l["min"], L, path) )
+                errors.append("length.tooshort : %s > %s : %s" % (l["min"], L, path))
             if l.get("max-ex", None) is not None and l["max-ex"] <= L:
-                errors.append("length.toolong-ex : %s <= %s : %s" % (l["max-ex"], L, path) )
+                errors.append("length.toolong-ex : %s <= %s : %s" % (l["max-ex"], L, path))
             if l.get("min-ex", None) is not None and l["min-ex"] >= L:
-                errors.append("length.tooshort-ex : %s >= %s : %s" % (l["min-ex"], L, path) )
-
+                errors.append("length.tooshort-ex : %s >= %s : %s" % (l["min-ex"], L, path))
 
         self._validate_scalar_type(value, rule._type, errors, path)
 
     def _validate_scalar_type(self, value, t, errors, path):
         Log.debug("Core scalar: validating scalar type")
-        Log.debug("Core scalar: scalar type: %s" % type(value) )
+        Log.debug("Core scalar: scalar type: %s" % type(value))
 
         try:
             if not tt[t](value):
-                errors.append("Value: %s is not of type '%s' : %s" % (value, t, path) )
-        except Exception as e:
+                errors.append("Value: %s is not of type '%s' : %s" % (value, t, path))
+        except Exception:
             # Type not found in map
-            raise Exception("Unknown type check: %s : %s : %s" % (path, value, t) )
+            raise Exception("Unknown type check: %s : %s : %s" % (path, value, t))

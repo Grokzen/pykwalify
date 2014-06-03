@@ -20,7 +20,7 @@ def _load_version(filename='pykwalify/__init__.py'):
             msg = "Unable to find version number in {}".format(filename)
             raise RuntimeError(msg)
         version = match.group(1)
-        
+
         return version
 
 
@@ -29,9 +29,9 @@ def list_dir(dirname):
 
     results = []
 
-    for root,dirs,files in os.walk(dirname):
+    for root, dirs, files in os.walk(dirname):
         for f in files:
-            results.append(os.path.join(root,f))
+            results.append(os.path.join(root, f))
 
     return results
 
@@ -59,7 +59,7 @@ def split_path(string):
     if os.sep in string:
         splitted = string.split(os.sep)
         for piece in reversed(splitted):
-            if piece: # remove empty pieces from split, e.g. /foo/bar is ['', 'foo', 'bar']
+            if piece:  # remove empty pieces from split, e.g. /foo/bar is ['', 'foo', 'bar']
                 res.append(piece)
     else:
         res.append(string)
@@ -103,7 +103,7 @@ def concat_path(b, *args):
     - `b`: string - base from where to concat all '*args'
     - `*args`: strings - all extra paths to concat, concats in order of list
     """
-    base = b # tmp var
+    base = b  # tmp var
     for a in args:
         if "/" in a:
             for s in a.split("/"):
@@ -143,21 +143,21 @@ def get_share_path(*args):
 
 
 settings.update(
-    name = PACKAGE_NAME,
-    version = "0.1.2",
-    description = 'Python lib/cli for JSON/YAML schema validation',
-    long_description = 'Python lib/cli for JSON/YAML schema validation',
-    author = "Grokzen",
-    author_email = "Grokzen@gmail.com",
-    exclude_package_data = { '': ['slask.py'] },
-    packages = ['pykwalify'],
-    scripts = ['scripts/pykwalify'],
-    data_files = [],
-    install_requires = [
+    name=PACKAGE_NAME,
+    version="0.1.2",
+    description='Python lib/cli for JSON/YAML schema validation',
+    long_description='Python lib/cli for JSON/YAML schema validation',
+    author="Grokzen",
+    author_email="Grokzen@gmail.com",
+    exclude_package_data={'': ['slask.py']},
+    packages=['pykwalify'],
+    scripts=['scripts/pykwalify'],
+    data_files=[],
+    install_requires=[
         'docopt==0.6.0',
         'PyYAML==3.10',
         ],
-    classifiers = (
+    classifiers=(
         'Development Status :: 1 - Alpha',
         'Environment :: Console',
         'Operating System :: POSIX',

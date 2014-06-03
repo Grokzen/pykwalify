@@ -51,7 +51,7 @@ class PyKwalifyException(RuntimeError):
         - `msg`: a string
         - `retcode`: an integer, defined in PyKwalify.errors.retcodes
         """
-        self.msg     = msg
+        self.msg = msg
         self.retcode = retcode
         self.retname = retcodes[retcode]
 
@@ -207,6 +207,7 @@ class SchemaError(PyKwalifyException):
         super().__init__(retcode=retnames["schemaerror"],
                          *args, **kwargs)
 
+
 class CoreError(PyKwalifyException):
     """
     """
@@ -216,6 +217,7 @@ class CoreError(PyKwalifyException):
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
         super().__init__(retcode=retnames["coreerror"],
                          *args, **kwargs)
+
 
 class RuleError(PyKwalifyException):
     """
