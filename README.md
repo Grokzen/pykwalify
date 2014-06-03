@@ -9,32 +9,37 @@ The source code can be found at: http://sourceforge.net/projects/kwalify/files/k
 The schema used in this library: http://www.kuwata-lab.com/kwalify/ruby/users-guide.01.html#schema
 
 
+
 ## How to install
 
 Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
 
-1. Download
+1. Download a tar.gz release from https://github.com/Grokzen/pykwalify/releases
 2. Run "pip install pykwalify-x.y.z.tar.gz"
-3. To use pykwalify run "pykwalify" in your terminal
+3. Run "pykwalify --help" in your terminal
+
 
 
 ## Build from source
 
 1. Clone the repo
 2. Run "make sdist"
-3. To install run "pip install dist/pykwalify-x.x.x.tar.gz"
+3. Install with "pip install dist/pykwalify-x.y.z.tar.gz"
+
 
 
 ## Install from source
 
 1. Clone the repo
-2. Run "make install"
+2. Run "make install" or "python setup.py install"
+
 
 
 ## pyKwalify python dependencies
 
  - docopt 0.6.1
  - PyYaml 3.11
+
 
 
 ## Supported python version
@@ -44,6 +49,7 @@ Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
  - Python 3.2.x - Yes
  - Python 3.3.x - Yes
  - Python 3.4.x - Not yet tested
+
 
 
 # Implemented validation rules
