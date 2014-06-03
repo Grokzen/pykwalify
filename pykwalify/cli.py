@@ -88,17 +88,6 @@ optional arguments:
 
     Log.debug("Arguments from CLI: %s" % args)
 
-    # if no arguments is passed, show the help message
-    # TODO: Reimplement later
-    if len(sys.argv) == 1:
-        parser.print_help()
-        sys.exit(retnames['optionerror'])
-
-    if not args["--data-file"] and not args["--schema-file"]:
-        print("ERROR: must provide both a data file and a schema file (use -f/--file and -s/--schema")
-        parser.print_help()
-        sys.exit(retnames["optionerror"])
-
     #####
     ##### 3. parse cli arguments
     #####
