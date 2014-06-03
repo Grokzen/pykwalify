@@ -218,15 +218,15 @@ class Core(object):
 
         for k, v in value.items():
             r = m.get(k, None)
-            Log.debug(" + %s" % r)
+            Log.debug(" + %s %s" % (k, v))
+            Log.debug(" + r: %s" % r)
 
             if rule._pattern:
                 res = re.match(rule._pattern, str(k))
                 Log.debug("Matching regexPattern: %s with value: %s" % (rule._pattern, k))
-                if res is None: # Not matching
+                if res is None:  # Not matching
                     errors.append("pattern.unmatch : %s --> %s : %s" % (rule._pattern, k, path))
-
-            if r is None:
+            elif r is None:
                 if not rule._allowempty_map:
                     errors.append("key.undefined : %s : %s" % (k, path))
             else:
