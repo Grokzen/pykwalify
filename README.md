@@ -113,4 +113,4 @@ allowempty:
 
 ## License
 
-MIT.
+MIT [See LICENSE file]
