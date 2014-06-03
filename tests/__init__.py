@@ -8,7 +8,7 @@
 import unittest
 
 # Testhelper class
-from .testhelper import run as run # Required import for runtests.py to work proper
+from .testhelper import run as run  # Required import for runtests.py to work proper
 
 # Imports all test files that is not located in this specificly
 from .lib.testrule import TestRule

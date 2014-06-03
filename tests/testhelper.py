@@ -23,6 +23,7 @@ Log = logging.getLogger()
 # Use this regexp to validate any logging output
 logging_regex = "%s - %s:[0-9]+ - %s"  # % (LoggingLevel, LoggerName, Msg)
 
+
 # Set the root logger to be silent so all code that uses the python logger
 # will not print anything unless we want it to, then it should be specified
 # in each test and reseted after that test
