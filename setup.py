@@ -152,7 +152,7 @@ settings.update(
     exclude_package_data = { '': ['slask.py'] },
     packages = ['pykwalify'],
     scripts = ['scripts/pykwalify'],
-    data_files = [ (get_etc_path(), list_dir("config") ) ],
+    data_files = [],
     install_requires = [
         'docopt==0.6.0',
         'PyYAML==3.10',

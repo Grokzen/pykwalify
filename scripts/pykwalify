@@ -5,12 +5,17 @@
 
 __author__ = 'Grokzen <grokzen@gmail.com>'
 
+import os
 import sys
 
 # Check minimum version of Python
-if sys.version_info < (3,1,0):
+if sys.version_info < (3, 1, 0):
     sys.stderr.write("ERROR: pykwalify: Python version 3.1.x or later is required, exiting...\n")
     sys.exit(1)
+
+# Add current path so python can find pykwalify folder if it is not installed yet
+(prefix, bindir) = os.path.split(os.path.dirname(os.path.abspath(sys.argv[0])))
+sys.path.append(prefix)
 
 import pykwalify.cli
 
