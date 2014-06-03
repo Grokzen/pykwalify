@@ -9,9 +9,6 @@ __foobar__ = "0.1.2"
 # Set to True to have revision from Version Control System in version string
 __devel__ = True
 
-# Import Core as Kwalify
-from .core import Core as Kwalify
-
 # import sys
 import os
 
@@ -28,8 +25,8 @@ def init_logging():
 
     # This logging config can only be used with python >= 3.2.0
     logging_conf = {"version": 1,
-                    "root": {"level": "INFO", "handlers": ["console"]},
-                    "handlers": {"console": {"class": "logging.StreamHandler", "level": "INFO", "formatter": "simple", "stream": "ext://sys.stdout"}},
+                    "root": {"level": "DEBUG", "handlers": ["console"]},
+                    "handlers": {"console": {"class": "logging.StreamHandler", "level": "DEBUG", "formatter": "simple", "stream": "ext://sys.stdout"}},
                     "formatters": {"simple": {"format": " {}".format(msg)}}}
 
     logging.config.dictConfig(logging_conf)
