@@ -9,9 +9,8 @@ import os
 import sys
 
 # Check minimum version of Python
-if sys.version_info < (3, 1, 0):
-    sys.stderr.write("ERROR: pykwalify: Python version 3.1.x or later is required, exiting...\n")
-    sys.exit(1)
+if sys.version_info < (2, 7, 0):
+    sys.stderr.write("WARNING: pykwalify: It is recommended to run pykwalify on python version 2.7.x or later...\n\n")
 
 # Add current path so python can find pykwalify folder if it is not installed yet
 (prefix, bindir) = os.path.split(os.path.dirname(os.path.abspath(sys.argv[0])))

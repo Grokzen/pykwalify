@@ -7,11 +7,6 @@ __author__ = 'Grokzen <grokzen@gmail.com>'
 import sys
 import os
 
-# Check minimum version of Python
-if (3, 1, 0) > sys.version_info:
-    sys.stderr.write("ERROR: Python version 3.1.x or later is required, exiting...\n")
-    sys.exit(1)
-
 # Check if we are installed in the system already, otherwise update path
 (prefix, bindir) = os.path.split(os.path.dirname(os.path.abspath(sys.argv[0])))
 if bindir == 'bin':

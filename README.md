@@ -39,10 +39,11 @@ Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
 
 ## Supported python version
 
- - Python 2.7.x - (Not supported, never will be)
- - Python 3.1.x - Yes
+ - Python 2.7.x - No
+ - Python 3.1.x - No longer supported, python 3.1 is deprecated
  - Python 3.2.x - Yes
  - Python 3.3.x - Yes
+ - Python 3.4.x - Not yet tested
 
 
 # Implemented validation rules
