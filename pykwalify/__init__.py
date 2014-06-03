@@ -23,7 +23,7 @@ import logging.config
 PACKAGE_NAME = "pykwalify"
 
 
-def init_logging(json_logging=False):
+def init_logging():
     msg = "%(levelname)s - %(name)s:%(lineno)s - %(message)s" if "DEBUG" in os.environ else "%(levelname)s - %(message)s"
 
     # This logging config can only be used with python >= 3.2.0
