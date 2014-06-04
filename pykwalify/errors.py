@@ -138,8 +138,8 @@ class PyKwalifyExit(PyKwalifyException):
         """
         """
         assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super().__init__(retcode=retnames['noerror'],
-                         *args, **kwargs)
+        super(PyKwalifyExit, self).__init__(retcode=retnames['noerror'],
+                                            *args, **kwargs)
 
 
 class UnknownError(PyKwalifyException):
@@ -149,8 +149,8 @@ class UnknownError(PyKwalifyException):
         """
         """
         assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super().__init__(retcode=retnames['unknownerror'],
-                         *args, **kwargs)
+        super(UnknownError, self).__init__(retcode=retnames['unknownerror'],
+                                           *args, **kwargs)
 
 
 class FileNotAccessible(PyKwalifyException):
@@ -160,8 +160,8 @@ class FileNotAccessible(PyKwalifyException):
         """
         """
         assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super().__init__(retcode=retnames['filenotaccessible'],
-                         *args, **kwargs)
+        super(FileNotAccessible, self).__init__(retcode=retnames['filenotaccessible'],
+                                                *args, **kwargs)
 
 
 class OptionError(PyKwalifyException):
@@ -171,8 +171,8 @@ class OptionError(PyKwalifyException):
         """
         """
         assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super().__init__(retcode=retnames['optionerror'],
-                         *args, **kwargs)
+        super(OptionError, self).__init__(retcode=retnames['optionerror'],
+                                          *args, **kwargs)
 
 
 class NotImplemented(PyKwalifyException):
@@ -182,8 +182,8 @@ class NotImplemented(PyKwalifyException):
         """
         """
         assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super().__init__(retcode=retnames['notimplemented'],
-                         *args, **kwargs)
+        super(NotImplemented, self).__init__(retcode=retnames['notimplemented'],
+                                             *args, **kwargs)
 
 
 class ParseFailure(PyKwalifyException):
@@ -193,8 +193,8 @@ class ParseFailure(PyKwalifyException):
         """
         """
         assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super().__init__(retcode=retnames['parsefailure'],
-                         *args, **kwargs)
+        super(ParseFailure, self).__init__(retcode=retnames['parsefailure'],
+                                           *args, **kwargs)
 
 
 class SchemaError(PyKwalifyException):
@@ -204,8 +204,8 @@ class SchemaError(PyKwalifyException):
         """
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
-        super().__init__(retcode=retnames["schemaerror"],
-                         *args, **kwargs)
+        super(SchemaError, self).__init__(retcode=retnames["schemaerror"],
+                                          *args, **kwargs)
 
 
 class CoreError(PyKwalifyException):
@@ -215,8 +215,8 @@ class CoreError(PyKwalifyException):
         """
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
-        super().__init__(retcode=retnames["coreerror"],
-                         *args, **kwargs)
+        super(CoreError, self).__init__(retcode=retnames["coreerror"],
+                                        *args, **kwargs)
 
 
 class RuleError(PyKwalifyException):
@@ -226,5 +226,5 @@ class RuleError(PyKwalifyException):
         """
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
-        super().__init__(retcode=retnames["ruleerror"],
-                         *args, **kwargs)
+        super(RuleError, self).__init__(retcode=retnames["ruleerror"],
+                                        *args, **kwargs)
