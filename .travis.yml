@@ -1,0 +1,20 @@
+# Setup python versions to test
+language: python
+python:
+  - "2.7"
+  - "3.2"
+  - "3.3"
+  - "3.4"
+
+# command to install redisco with dependencies
+install:
+  - pip install . --use-mirrors
+  # - pip install nose coverage python-coveralls --use-mirrors  # TODO: Implement this at later time
+
+# command to run tests
+script:
+  - python runtests.py
+
+# TODO: Implement this at later time
+# after_success:
+#   - coveralls
