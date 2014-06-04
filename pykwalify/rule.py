@@ -73,40 +73,28 @@ class Rule(object):
         t = schema["type"]
         self.initTypeValue(t, rule, path)
 
+        func_mapping = {
+            "type": lambda x, y, z: (),
+            "name": self.initNameValue,
+            "desc": self.initDescValue,
+            "required": self.initRequiredValue,
+            "pattern": self.initPatternValue,
+            "enum": self.initEnumValue,
+            "assert": self.initAssertValue,
+            "range": self.initRangeValue,
+            "length": self.initRangeValue,
+            "ident": self.initIdentValue,
+            "unique": self.initUniqueValue,
+            "allowempty": self.initAllowEmptyMap,
+            "default": self.initDefaultValue,
+            "sequence": self.initSequenceValue,
+            "mapping": self.initMappingValue,
+            "matching-rule": self.initMatchingRule,
+        }
+
         for k, v in schema.items():
-            if k == "type":
-                # Done
-                pass
-            elif k == "name":
-                self.initNameValue(v, rule, path)
-            elif k == "desc":
-                self.initDescValue(v, rule, path)
-            elif k == "required":
-                self.initRequiredValue(v, rule, path)
-            elif k == "pattern":
-                self.initPatternValue(v, rule, path)
-            elif k == "enum":
-                self.initEnumValue(v, rule, path)
-            elif k == "assert":
-                self.initAssertValue(v, rule, path)
-            elif k == "range":
-                self.initRangeValue(v, rule, path)
-            elif k == "length":
-                self.initLengthValue(v, rule, path)
-            elif k == "ident":
-                self.initIdentValue(v, rule, path)
-            elif k == "unique":
-                self.initUniqueValue(v, rule, path)
-            elif k == "allowempty":
-                self.initAllowEmptyMap(v, rule, path)
-            elif k == "default":
-                self.initDefaultValue(v, rule, path)
-            elif k == "sequence":
-                rule = self.initSequenceValue(v, rule, path)
-            elif k == "mapping":
-                rule = self.initMappingValue(v, rule, path)
-            elif k == "matching-rule":
-                rule = self.initMatchingRule(v, rule, path)
+            if k in func_mapping:
+                func_mapping[k](v, rule, path)
             else:
                 raise Exception("Unknown key: {} found : {}".format(k, path))
 
