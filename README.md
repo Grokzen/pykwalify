@@ -48,7 +48,7 @@ Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
  - Python 3.1.x - No longer supported, python 3.1 is deprecated
  - Python 3.2.x - Yes
  - Python 3.3.x - Yes
- - Python 3.4.x - Not yet tested
+ - Python 3.4.x - Yes
 
 
 
