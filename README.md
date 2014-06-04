@@ -105,6 +105,12 @@ desc:
 allowempty:
     NOTE: Experimental feature!
     Only applies to map. It enables a dict to have items in it that is not validated. It can be combined with mapping to check for some fixed properties but still validate if any random properties exists. See example testfile 18a, 18b, 19a, 19b.
+
+matching-rule:
+    NOTE: Experimental feature!
+    Only applies to map. This enables more finegrained control over how the matching rule should behave when validation keys inside mappings.
+    Currently supported rules is
+     - any [This will match any number of hits, 0 to n number of hits will be allowed]
 ```
 
 
