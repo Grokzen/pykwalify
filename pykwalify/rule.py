@@ -7,15 +7,13 @@ __author__ = 'Grokzen <grokzen@gmail.com>'
 # python std lib
 import os
 import re
-import sys
-import json
 
 # python std logging
 import logging
 Log = logging.getLogger(__name__)
 
 # pyKwalify imports
-from .types import *
+from pykwalify.types import DEFAULT_TYPE, typeClass, isBuiltinType, isCollectionType
 
 
 class Rule(object):

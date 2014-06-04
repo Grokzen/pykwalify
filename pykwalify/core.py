@@ -5,6 +5,7 @@
 __author__ = 'Grokzen <grokzen@gmail.com>'
 
 # python std lib
+import os
 import re
 import json
 
@@ -13,9 +14,9 @@ import logging
 Log = logging.getLogger(__name__)
 
 # pyKwalify imports
-from .rule import Rule
-from .types import *
-from .errors import *
+from pykwalify.rule import Rule
+from pykwalify.types import isScalar, tt
+from pykwalify.errors import CoreError, SchemaError
 
 # 3rd party imports
 import yaml
