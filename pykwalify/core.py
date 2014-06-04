@@ -74,7 +74,7 @@ class Core(object):
 
         # Everything now is valid loaded
 
-    def validate(self):
+    def validate(self, raise_exception=True):
         Log.debug("starting core")
 
         errors = self._start_validate(self.source)
@@ -84,7 +84,10 @@ class Core(object):
             Log.error("validation.invalid")
             Log.error(" --- All found errors ---")
             Log.error(errors)
-            raise SchemaError("validation.invalid : {}".format(errors))
+            if raise_exception:
+                raise SchemaError("validation.invalid : {}".format(errors))
+            else:
+                Log.error("Errors found but will not raise exception...")
 
         # Return validated data
         return self.source
