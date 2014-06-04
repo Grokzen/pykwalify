@@ -33,6 +33,7 @@ class Core(object):
 
         self.source = None
         self.schema = None
+        self.validation_errors = None
 
         if source_file is not None:
             if not os.path.exists(source_file):
@@ -78,6 +79,8 @@ class Core(object):
         Log.debug("starting core")
 
         errors = self._start_validate(self.source)
+        self.validation_errors = errors
+
         if errors is None or len(errors) == 0:
             Log.info("validation.valid")
         else:
