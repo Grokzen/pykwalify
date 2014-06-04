@@ -45,97 +45,47 @@ class TestCore(TestHelper):
             Core(source_data=dict, schema_data={"type": "any"}).validate()
 
     def testCore(self):
-        # Test sequence with only string values
-        Core(source_file=self.f("1a.yaml"), schema_file=self.f("1b.yaml")).validate()
+        # These tests should pass with no exception raised
+        pass_tests = [
+            ("1a.yaml", "1b.yaml"),  # Test sequence with only string values
+            ("3a.yaml", "3b.yaml"),  # Test sequence where the only valid items is integers
+            ("4a.yaml", "4b.yaml"),  # Test sequence with only booleans
+            ("8a.yaml", "8b.yaml"),  # Test mapping with different types of data and some extra conditions
+            ("10a.yaml", "10b.yaml"),  # Test sequence with mapping with valid mapping
+            ("12a.yaml", "12b.yaml"),  # Test mapping with sequence with mapping and valid data
+            ("14a.yaml", "14b.yaml"),  # Test most of the implemented functions
+            ("16a.yaml", "16b.yaml"),  # This will test the unique constraint
+            ("18a.yaml", "18b.yaml"),
+            ("19a.yaml", "19b.yaml"),
+            ("20a.yaml", "20b.yaml"),
+            ("21a.yaml", "21b.yaml"),  # This tests number validation rule
+            ("23a.yaml", "23b.yaml"),  # This test the text validation rule
+            ("24a.yaml", "25b.yaml"),  # This test the text validation rule
+            ("26a.yaml", "26b.yaml"),
+            ("28a.yaml", "28b.yaml"),
+            ("29a.yaml", "29b.yaml"),
+            ("30a.yaml", "30b.yaml"),
+        ]
 
-        # Test sequence with defined string content type but data only has integers
-        with self.assertRaises(Exception):
-            Core(source_file=self.f("2a.yaml"), schema_file=self.f("2b.yaml")).validate()
+        # These tests are designed to fail with some exception raised
+        fail_tests = [
+            ("2a.yaml", "2b.yaml", Exception),  # Test sequence with defined string content type but data only has integers
+            ("5a.yaml", "5b.yaml", Exception),  # Test sequence with defined string content type but data only has booleans
+            ("6a.yaml", "6b.yaml", Exception),  # Test sequence with defined booleans but with one integer
+            ("7a.yaml", "7b.yaml", Exception),  # Test sequence with strings and and lenght on each string
+            ("9a.yaml", "9b.yaml", Exception),  # Test mapping that do not work
+            ("11a.yaml", "11b.yaml", Exception),  # Test sequence with mapping with missing required key
+            ("13a.yaml", "13b.yaml", Exception),  # Test mapping with sequence with mapping and invalid data
+            ("15a.yaml", "15b.yaml", Exception),
+            ("17a.yaml", "17b.yaml", Exception),  # TODO: The reverse unique do not currently work proper # This will test the unique constraint but should fail
+            ("22a.yaml", "22b.yaml", Exception),  # This tests number validation rule with wrong data
+            ("24a.yaml", "24b.yaml", Exception),  # This test the text validation rule with wrong data
+            ("27a.yaml", "27b.yaml", Exception),  # This tests pattern matching on keys in a map
+        ]
 
-        # Test sequence where the only valid items is integers
-        Core(source_file=self.f("3a.yaml"), schema_file=self.f("3b.yaml")).validate()
+        for passing_test in pass_tests:
+            Core(source_file=self.f(passing_test[0]), schema_file=self.f(passing_test[1])).validate()
 
-        # Test sequence with only booleans
-        Core(source_file=self.f("4a.yaml"), schema_file=self.f("4b.yaml")).validate()
-
-        # Test sequence with defined string content type but data only has booleans
-        with self.assertRaises(Exception):
-            Core(source_file=self.f("5a.yaml"), schema_file=self.f("5b.yaml")).validate()
-
-        # Test sequence with defined booleans but with one integer
-        with self.assertRaises(Exception):
-            Core(source_file=self.f("6a.yaml"), schema_file=self.f("6b.yaml")).validate()
-
-        # Test sequence with strings and and lenght on each string
-        with self.assertRaises(Exception):
-            Core(source_file=self.f("7a.yaml"), schema_file=self.f("7b.yaml")).validate()
-
-        # Test mapping with different types of data and some extra conditions
-        Core(source_file=self.f("8a.yaml"), schema_file=self.f("8b.yaml")).validate()
-
-        # Test mapping that do not work
-        with self.assertRaises(Exception):
-            Core(source_file=self.f("9a.yaml"), schema_file=self.f("8b.yaml")).validate()
-
-        # Test sequence with mapping with valid mapping
-        Core(source_file=self.f("10a.yaml"), schema_file=self.f("10b.yaml")).validate()
-
-        # Test sequence with mapping with missing required key
-        with self.assertRaises(Exception):
-            Core(source_file=self.f("11a.yaml"), schema_file=self.f("10b.yaml")).validate()
-
-        # Test mapping with sequence with mapping and valid data
-        Core(source_file=self.f("12a.yaml"), schema_file=self.f("12b.yaml")).validate()
-
-        # Test mapping with sequence with mapping and invalid data
-        with self.assertRaises(Exception):
-            Core(source_file=self.f("13a.yaml"), schema_file=self.f("12b.yaml")).validate()
-
-        # Test most of the implemented functions
-        Core(source_file=self.f("14a.yaml"), schema_file=self.f("14b.yaml")).validate()
-
-        with self.assertRaises(Exception):
-            Core(source_file=self.f("15a.yaml"), schema_file=self.f("14b.yaml")).validate()
-
-        # This will test the unique constraint
-        Core(source_file=self.f("16a.yaml"), schema_file=self.f("16b.yaml")).validate()
-
-        # TODO: The reverse unique do not currently work proper
-        # This will test the unique constraint but should fail
-        with self.assertRaises(Exception):
-            Core(source_file=self.f("17a.yaml"), schema_file=self.f("16b.yaml")).validate()
-
-        Core(source_file=self.f("18a.yaml"), schema_file=self.f("18b.yaml")).validate()
-
-        Core(source_file=self.f("19a.yaml"), schema_file=self.f("19b.yaml")).validate()
-
-        Core(source_file=self.f("20a.yaml"), schema_file=self.f("20b.yaml")).validate()
-
-        # This tests number validation rule
-        Core(source_file=self.f("21a.yaml"), schema_file=self.f("21b.yaml")).validate()
-
-        # This tests number validation rule with wrong data
-        with self.assertRaises(Exception):
-            Core(source_file=self.f("22a.yaml"), schema_file=self.f("22b.yaml")).validate()
-
-        # This test the text validation rule
-        Core(source_file=self.f("23a.yaml"), schema_file=self.f("23b.yaml")).validate()
-
-        # This test the text validation rule with wrong data
-        with self.assertRaises(Exception):
-            Core(source_file=self.f("24a.yaml"), schema_file=self.f("24b.yaml")).validate()
-
-        # This test the text validation rule
-        Core(source_file=self.f("24a.yaml"), schema_file=self.f("25b.yaml")).validate()
-
-        Core(source_file=self.f("26a.yaml"), schema_file=self.f("26b.yaml")).validate()
-
-        # This tests pattern matching on keys in a map
-        with self.assertRaises(Exception):
-            Core(source_file=self.f("27a.yaml"), schema_file=self.f("27b.yaml")).validate()
-
-        Core(source_file=self.f("28a.yaml"), schema_file=self.f("28b.yaml"))
-
-        Core(source_file=self.f("29a.yaml"), schema_file=self.f("29b.yaml"))
-
-        Core(source_file=self.f("30a.yaml"), schema_file=self.f("30b.yaml"))
+        for failing_test in fail_tests:
+            with self.assertRaises(failing_test[2], msg="Test file: {} : {}".format(failing_test[0], failing_test[1])):
+                Core(source_file=self.f(failing_test[0]), schema_file=self.f(failing_test[1])).validate()
