@@ -143,7 +143,7 @@ class Core(object):
         for item in value:
             # Validate recursivley
             Log.debug("Core seq: validating recursivley: {}".format(r))
-            self._validate(item, r, "{}/{}".format((path, i), errors, done))
+            self._validate(item, r, "{}/{}".format(path, i), errors, done)
             i += 1
 
         Log.debug("Core seq: validation recursivley done...")

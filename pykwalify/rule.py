@@ -113,7 +113,7 @@ class Rule(object):
         self._allowempty_map = v
 
     def initTypeValue(self, v, rule, path):
-        Log.debug("Init type value : {}" % path)
+        Log.debug("Init type value : {}".format(path))
         Log.debug("Type: {} {}".format(v, rule))
 
         if v is None:
