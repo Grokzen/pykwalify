@@ -82,7 +82,7 @@ class Rule(object):
             "enum": self.initEnumValue,
             "assert": self.initAssertValue,
             "range": self.initRangeValue,
-            "length": self.initRangeValue,
+            "length": self.initLengthValue,
             "ident": self.initIdentValue,
             "unique": self.initUniqueValue,
             "allowempty": self.initAllowEmptyMap,
