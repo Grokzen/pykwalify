@@ -228,3 +228,14 @@ class RuleError(PyKwalifyException):
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
         super(RuleError, self).__init__(retcode=retnames["ruleerror"],
                                         *args, **kwargs)
+
+
+class SchemaConflict(PyKwalifyException):
+    """
+    """
+    def __init__(self, *args, **kwargs):
+        """
+        """
+        assert "retcode" not in kwargs, "keyword retcode implicitly defined"
+        super(SchemaConflict, self).__init__(retcode=retnames["ruleerror"],
+                                             *args, **kwargs)

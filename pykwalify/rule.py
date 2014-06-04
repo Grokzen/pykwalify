@@ -14,6 +14,7 @@ Log = logging.getLogger(__name__)
 
 # pyKwalify imports
 from pykwalify.types import DEFAULT_TYPE, typeClass, isBuiltinType, isCollectionType
+from pykwalify.errors import SchemaConflict
 
 
 class Rule(object):
@@ -387,37 +388,37 @@ class Rule(object):
 
         if self._type == "seq":
             if "sequence" not in schema:
-                raise Exception("seq.nosequence")
+                raise SchemaConflict("seq.nosequence")
             if self._enum is not None:
-                raise Exception("seq.conflict :: enum: {}".format(path))
+                raise SchemaConflict("seq.conflict :: enum: {}".format(path))
             if self._pattern is not None:
-                raise Exception("seq.conflict :: pattern: {}".format(path))
+                raise SchemaConflict("seq.conflict :: pattern: {}".format(path))
             if self._mapping is not None:
-                raise Exception("seq.conflict :: mapping: {}".format(path))
+                raise SchemaConflict("seq.conflict :: mapping: {}".format(path))
             if self._range is not None:
-                raise Exception("seq.conflict :: range: {}".format(path))
+                raise SchemaConflict("seq.conflict :: range: {}".format(path))
             if self._length is not None:
-                raise Exception("seq.conflict :: length: {}".format(path))
+                raise SchemaConflict("seq.conflict :: length: {}".format(path))
         elif self._type == "map":
             if "mapping" not in schema and not self._allowempty_map:
-                raise Exception("map.nomapping")
+                raise SchemaConflict("map.nomapping")
             if self._enum is not None:
-                raise Exception("map.conflict :: enum:")
+                raise SchemaConflict("map.conflict :: enum:")
             if self._sequence is not None:
-                raise Exception("map.conflict :: mapping: {}".format(path))
+                raise SchemaConflict("map.conflict :: mapping: {}".format(path))
             if self._range is not None:
-                raise Exception("map.conflict :: range: {}".format(path))
+                raise SchemaConflict("map.conflict :: range: {}".format(path))
             if self._length is not None:
-                raise Exception("map.conflict :: length: {}".format(path))
+                raise SchemaConflict("map.conflict :: length: {}".format(path))
         else:
             if self._sequence is not None:
-                raise Exception("scalar.conflict :: sequence: {}".format(path))
+                raise SchemaConflict("scalar.conflict :: sequence: {}".format(path))
             if self._mapping is not None:
-                raise Exception("scalar.conflict :: mapping: {}".format(path))
+                raise SchemaConflict("scalar.conflict :: mapping: {}".format(path))
             if self._enum is not None:
                 if self._range is not None:
-                    raise Exception("enum.conflict :: range: {}".format(path))
+                    raise SchemaConflict("enum.conflict :: range: {}".format(path))
                 if self._length is not None:
-                    raise Exception("enum.conflict :: length: {}".format(path))
+                    raise SchemaConflict("enum.conflict :: length: {}".format(path))
                 if self._pattern is not None:
-                    raise Exception("enum.conflict :: length: {}".format(path))
+                    raise SchemaConflict("enum.conflict :: length: {}".format(path))
