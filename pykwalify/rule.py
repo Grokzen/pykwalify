@@ -101,8 +101,8 @@ class Rule(object):
         self.checkConfliction(schema, rule, path)
 
     def initMatchingRule(self, v, rule, path):
-        Log.info("Init matching-rule: {}".format(path))
-        Log.info("{} {}".format(v, rule))
+        Log.debug("Init matching-rule: {}".format(path))
+        Log.debug("{} {}".format(v, rule))
 
         # Verify that the provided rule is part of one of the allowed one
         allowed = ["any"]
@@ -347,7 +347,7 @@ class Rule(object):
 
             # Check if this is a regex rule. Handle specially
             if k.startswith("regex;"):
-                Log.info("Found regex map rule")
+                Log.debug("Found regex map rule")
                 regex = k.split(";", 1)
                 if len(regex) != 2:
                     raise Exception("Malformed regex key : {}".format(k))
