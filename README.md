@@ -10,7 +10,27 @@ The schema used in this library: http://www.kuwata-lab.com/kwalify/ruby/users-gu
 
 
 
-## How to install
+# test status
+
+
+## master branch
+
+.. image:: https://travis-ci.org/Grokzen/pykwalify.svg?branch=master
+   :target: https://travis-ci.org/Grokzen/pykwalify
+
+
+
+## develop branch
+
+.. image:: https://travis-ci.org/Grokzen/pykwalify.svg?branch=develop
+   :target: https://travis-ci.org/Grokzen/pykwalify
+
+
+
+# How to install
+
+
+## Install stable release
 
 Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
 
