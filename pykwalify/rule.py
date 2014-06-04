@@ -40,15 +40,19 @@ class Rule(object):
         self._unique = None
         self._default = None
         self._allowempty_map = None
+        self._matching_rule = None
+        self._map_regex_rule = None
+        self._regex_mappings = None
 
         self._parent = parent
         self._schema = schema
+        self._schema_str = schema
 
         if isinstance(schema, dict):
             self.init(schema, "")
 
     def __str__(self):
-        return "Rule: {}".format(str(self._schema))
+        return "Rule: {}".format(str(self._schema_str))
 
     def init(self, schema, path):
         Log.debug("Init schema: {}".format(schema))
@@ -65,6 +69,8 @@ class Rule(object):
                 self._type = schema["type"]
 
         rule = self
+
+        self._schema_str = schema
 
         t = schema["type"]
         self.initTypeValue(t, rule, path)
@@ -101,10 +107,24 @@ class Rule(object):
                 rule = self.initSequenceValue(v, rule, path)
             elif k == "mapping":
                 rule = self.initMappingValue(v, rule, path)
+            elif k == "matching-rule":
+                rule = self.initMatchingRule(v, rule, path)
             else:
                 raise Exception("Unknown key: {} found : {}".format(k, path))
 
         self.checkConfliction(schema, rule, path)
+
+    def initMatchingRule(self, v, rule, path):
+        Log.info("Init matching-rule: {}".format(path))
+        Log.info("{} {}".format(v, rule))
+
+        # Verify that the provided rule is part of one of the allowed one
+        allowed = ["any"]
+        # ["none", "one", "all"] Is currently awaiting proper implementation
+        if v not in allowed:
+            raise Exception("Specefied rule in key : {} is not part of allowed rule set : {}".format(v, allowed))
+        else:
+            self._matching_rule = v
 
     def initAllowEmptyMap(self, v, rule, path):
         Log.debug("Init allow empty value: {}".format(path))
@@ -333,15 +353,33 @@ class Rule(object):
             raise Exception("mapping.noelem : {} : {}".format(v, path))
 
         self._mapping = {}
+        self._regex_mappings = []
 
         for k, v in v.items():
             if v is None:
                 v = {}
 
-            rule = Rule(None, self)
-            rule.init(v, "{}/mapping/{}".format(path, k))
-
-            self._mapping[k] = rule
+            # Check if this is a regex rule. Handle specially
+            if k.startswith("regex;"):
+                Log.info("Found regex map rule")
+                regex = k.split(";", 1)
+                if len(regex) != 2:
+                    raise Exception("Malformed regex key : {}".format(k))
+                else:
+                    regex = regex[1]
+                    # Strip [ ] from the regex if they exists
+                    if regex[0] == "[" and regex[-1] == "]":
+                        # ok
+                        regex_rule = Rule(None, self)
+                        regex_rule.init(v, "{}/mapping;regex/{}".format(path, regex[1:-1]))
+                        regex_rule._map_regex_rule = regex[1:-1]
+                        self._regex_mappings.append(regex_rule)
+                    else:
+                        raise Exception("Malformed regex found : {} : The regex should be wrapped with [ ] to work properly".format(k))
+            else:
+                rule = Rule(None, self)
+                rule.init(v, "{}/mapping/{}".format(path, k))
+                self._mapping[k] = rule
 
         return rule
 

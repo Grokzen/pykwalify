@@ -137,3 +137,5 @@ class TestCore(TestHelper):
         Core(source_file=self.f("28a.yaml"), schema_file=self.f("28b.yaml"))
 
         Core(source_file=self.f("29a.yaml"), schema_file=self.f("29b.yaml"))
+
+        Core(source_file=self.f("30a.yaml"), schema_file=self.f("30b.yaml"))
