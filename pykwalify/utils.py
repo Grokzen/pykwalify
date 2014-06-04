@@ -23,9 +23,9 @@ def deprecated(funz):
     is deprecated.
     """
     def dec(*args, **kwargs):
-        fu = "%s.%s" % (funz.__module__, funz.__name__)
+        fu = "{}.{}".format(funz.__module__, funz.__name__)
 
-        _Log.debug("function %s is deprecated" % fu)
+        _Log.debug("function {} is deprecated".format(fu))
         # TODO: print stack_len=2
         #_Log.debug("")
 
@@ -53,7 +53,7 @@ def str2bool(v):
     elif v.lower() in ("no", "false", "f", "0", "null", "none"):
         return False
     else:
-        raise Exception("Could not convert boolean to True/False value. Value: %s" % v)
+        raise Exception("Could not convert boolean to True/False value. Value: {}".format(v))
 
 
 def to_abs(path):
@@ -71,7 +71,7 @@ def make_guid(guid_length=8):
     rand = random.SystemRandom()
     chars = string.ascii_letters + string.digits
     guid = ''.join(rand.choice(chars) for _ in range(guid_length))
-    _Log.debug("creating new guid %s" % guid)
+    _Log.debug("creating new guid {}".format(guid))
     return guid
 
 
@@ -112,7 +112,7 @@ def runcmd(cmd, supress_output=False, timeout=900000, log_file=None, halt_on_err
     assert cmd is not None, "value is None"
     assert isinstance(cmd, str), "command must be a string"
 
-    _Log.debug("Running command: %s" % cmd)
+    _Log.debug("Running command: {}".format(cmd))
 
     if pipe:
         pass
@@ -130,12 +130,12 @@ def runcmd(cmd, supress_output=False, timeout=900000, log_file=None, halt_on_err
             _Log.debug("Logging to file: {0}".format(log_file))
             cmd += " > {0} 2>&1".format(log_file)  # Appends proper logging arguments
         else:
-            _Log.debug("No file to log to was specified for command: %s" % cmd)
+            _Log.debug("No file to log to was specified for command: {}".format(cmd))
 
     p = None
     try:
         if pipe:
-            _Log.debug("Running cmd: %s" % cmd)
+            _Log.debug("Running cmd: {}".format(cmd))
             p = Popen(cmd, shell=True, stdin=PIPE, stdout=PIPE, stderr=STDOUT)
         elif supress_output:
             devnull = open(os.devnull, 'w')
@@ -144,7 +144,7 @@ def runcmd(cmd, supress_output=False, timeout=900000, log_file=None, halt_on_err
         else:
             p = Popen(cmd, shell=True, cwd=None, env=None, stdout=PIPE)
     except Exception as e:
-        _Log.error("Exception when running command: %s\nEXCEPTION: %s" % (cmd, e))
+        _Log.error("Exception when running command: {}\nEXCEPTION: {}".format(cmd, e))
         raise
 
     stdout, stderr = p.communicate()
@@ -162,19 +162,19 @@ def runcmd(cmd, supress_output=False, timeout=900000, log_file=None, halt_on_err
                 log_data = stream.read()
                 _Log.log(1, log_data)
         else:
-            _Log.error("could not find the file that command: %s have logged to..." % cmd)
+            _Log.error("could not find the file that command: {} have logged to...".format(cmd))
 
         if code != 0:
-            _Log.error("return code %s while running command \"%s\"" % (code, cmd))
+            _Log.error("return code {} while running command \"{}\"".format(code, cmd))
 
             _Log.critical(log_data)
 
             if halt_on_error:
-                raise Exception("halted when running command: %s" % cmd)
+                raise Exception("halted when running command: {}".format(cmd))
         else:
-            _Log.debug("running of command: %s was ok..." % cmd)
+            _Log.debug("running of command: {} was ok...".format(cmd))
     else:
-        _Log.debug("command: %s did not log to any file... nothing to read" % cmd)
+        _Log.debug("command: {} did not log to any file... nothing to read".format(cmd))
 
     return p.returncode, stdout, stderr, log_data, log_file
 
@@ -191,7 +191,7 @@ def bytestr2str(byte_string, encoding="utf-8"):
         return None
 
     a = byte_string.decode(encoding)
-    b = "%s" % a
+    b = "{}".format(a)
     c = b.split("\n")
     return c
 
@@ -251,8 +251,8 @@ def chdir(dirname=None):
     try:
         if dirname is not None:
             os.chdir(dirname)
-            _Log.debug("changed directory to \"%s\"" % os.path.abspath(dirname))
+            _Log.debug("changed directory to \"{}\"".format(os.path.abspath(dirname)))
         yield
     finally:
         os.chdir(curdir)
-        _Log.debug("changed directory back to \"%s\"" % os.path.abspath(curdir))
+        _Log.debug("changed directory back to \"{}\"".format(os.path.abspath(curdir)))

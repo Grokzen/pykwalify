@@ -61,30 +61,30 @@ class PyKwalifyException(RuntimeError):
         # <PyKwalifyException msg='foo bar' retcode=1>
         #kwargs = []
         #if self.msg:
-        #        kwargs.append("msg='%s'" % self.msg)
+        #        kwargs.append("msg='{}'".format(self.msg))
         #if self.retcode != retnames['noerror']:
         #        kwargs.append("retcode=%d" % self.retcode)
         #if kwargs:
         #        kwargs.insert(0, '')
-        #return "<%s%s>" % (self.__class__.__name__, ' '.join(kwargs))
+        #return "<{}{}>".format(self.__class__.__name__, ' '.join(kwargs))
 
         # <PyKwalifyException: error code 1: foo bar>
         kwargs = []
         if self.retcode != retnames['noerror']:
-                kwargs.append("error code %d" % self.retcode)
+                kwargs.append("error code {}".format(self.retcode))
         if self.msg:
                 kwargs.append(self.msg)
         if kwargs:
                 kwargs.insert(0, '')
-        return "<%s%s>" % (self.__class__.__name__, ': '.join(kwargs))
+        return "<{}{}>".format(self.__class__.__name__, ': '.join(kwargs))
 
     def __repr__(self):
         """
         """
         kwargs = []
         if self.msg:
-                kwargs.append("msg='%s'" % self.msg)
-        return "%s(%s)" % (self.__class__.__name__, ', '.join(kwargs))
+                kwargs.append("msg='{}'".format(self.msg))
+        return "{}({})".format(self.__class__.__name__, ', '.join(kwargs))
 
     def msg():
         doc = """ """

@@ -115,7 +115,7 @@ def run(argv):
             suite.addTests(loader.loadTestsFromTestCase(test))
             tests.append(name)
 
-    print("TESTS: %s" % ', '.join(tests))
+    print("TESTS: {}".format(', '.join(tests)))
 
     # Can be used to reduce the output from the tests if so desired
     if "verbosity" in os.environ:
