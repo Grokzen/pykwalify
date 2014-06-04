@@ -15,15 +15,12 @@ The schema used in this library: http://www.kuwata-lab.com/kwalify/ruby/users-gu
 
 ## master branch
 
-.. image:: https://travis-ci.org/Grokzen/pykwalify.svg?branch=master
-   :target: https://travis-ci.org/Grokzen/pykwalify
-
+[![Build Status](https://travis-ci.org/Grokzen/pykwalify.svg?branch=master)](https://travis-ci.org/Grokzen/pykwalify)
 
 
 ## develop branch
 
-.. image:: https://travis-ci.org/Grokzen/pykwalify.svg?branch=develop
-   :target: https://travis-ci.org/Grokzen/pykwalify
+[![Build Status](https://travis-ci.org/Grokzen/pykwalify.svg?branch=develop)](https://travis-ci.org/Grokzen/pykwalify)
 
 
 
