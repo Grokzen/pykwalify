@@ -2,14 +2,13 @@
 
 """ Unit test for pyKwalify - Rule """
 
-# Testhelper class
-from tests.testhelper import TestHelper
+import unittest
 
 # pyKwalify imports
 from pykwalify.rule import Rule
 
 
-class TestRule(TestHelper):
+class TestRule(unittest.TestCase):
 
     def testRuleClass(self):
         # this tests seq type with a internal type of str

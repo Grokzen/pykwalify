@@ -2,8 +2,9 @@
 
 """ Unit test for pyKwalify - Core """
 
-# Testhelper class
-from tests.testhelper import TestHelper, gettestcwd
+# python std lib
+import os
+import unittest
 
 # 3rd party imports
 from testfixtures import compare
@@ -13,10 +14,13 @@ from pykwalify.core import Core
 from pykwalify.errors import PyKwalifyExit, UnknownError, FileNotAccessible, OptionError, NotImplemented, ParseFailure, SchemaError, CoreError, RuleError
 
 
-class TestCore(TestHelper):
+# class TestCore(TestHelper):
+class TestCore(unittest.TestCase):
 
     def f(self, *args):
-        return gettestcwd("tests", "files", *args)
+        # return gettestcwd("tests", "files", *args)
+        # return os.path.join(__file__, "files", *args)
+        return os.path.join(os.path.dirname(os.path.realpath(__file__)), "files", *args)
 
     def testCoreDataMode(self):
         Core(source_data=3.14159,  schema_data={"type": "number"}).validate()
