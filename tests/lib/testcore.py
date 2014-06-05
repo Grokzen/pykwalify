@@ -14,12 +14,9 @@ from pykwalify.core import Core
 from pykwalify.errors import PyKwalifyExit, UnknownError, FileNotAccessible, OptionError, NotImplemented, ParseFailure, SchemaError, CoreError, RuleError
 
 
-# class TestCore(TestHelper):
 class TestCore(unittest.TestCase):
 
     def f(self, *args):
-        # return gettestcwd("tests", "files", *args)
-        # return os.path.join(__file__, "files", *args)
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "files", *args)
 
     def testCoreDataMode(self):
