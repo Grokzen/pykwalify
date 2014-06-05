@@ -127,4 +127,4 @@ class TestCore(unittest.TestCase):
                 c = Core(source_file=self.f(failing_test[0]), schema_file=self.f(failing_test[1]))
                 c.validate()
 
-            compare(c.validation_errors, failing_test[3], prefix="Wrong validation errors when parsing files : {} : {}".format(failing_test[0], failing_test[1]))
+            compare(sorted(c.validation_errors), sorted(failing_test[3]), prefix="Wrong validation errors when parsing files : {} : {}".format(failing_test[0], failing_test[1]))
