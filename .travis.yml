@@ -9,6 +9,7 @@ python:
 # command to install redisco with dependencies
 install:
   - pip install . --use-mirrors
+  - pip install -r test-requirements.txt
   # - pip install nose coverage python-coveralls --use-mirrors  # TODO: Implement this at later time
 
 # command to run tests

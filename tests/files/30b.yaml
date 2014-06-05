@@ -6,7 +6,7 @@ sequence:
       regex;[mi.+]:
         type: seq
         sequence:
-          - type: bool
+          - type: str
       regex;[mo.+]:
         type: seq
         sequence:

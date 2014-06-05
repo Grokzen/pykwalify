@@ -109,6 +109,7 @@ class Core(object):
         return errors
 
     def _validate(self, value, rule, path, errors, done):
+        Log.debug("{}".format(rule))
         Log.debug("Core validate")
         Log.debug(" ? Rule: {}".format(rule._type))
         Log.debug(" ? Seq: {}".format(rule._sequence))
@@ -146,12 +147,10 @@ class Core(object):
             return
 
         r = rule._sequence[0]
-        i = 0
-        for item in value:
+        for i, item in enumerate(value):
             # Validate recursivley
             Log.debug("Core seq: validating recursivley: {}".format(r))
             self._validate(item, r, "{}/{}".format(path, i), errors, done)
-            i += 1
 
         Log.debug("Core seq: validation recursivley done...")
 
@@ -181,8 +180,7 @@ class Core(object):
         elif r._unique:
             Log.debug("Found unique value in sequence")
             table = {}
-            j = 0
-            for val in value:
+            for j, val in enumerate(value):
                 if val is None:
                     continue
 
@@ -192,8 +190,6 @@ class Core(object):
                     errors.append("value.notunique :: value: {} : {} : {}".format(val, curr_path, prev_path))
                 else:
                     table[val] = j
-
-                j += 1
 
     def _validate_mapping(self, value, rule, path, errors=[], done=None):
         Log.debug("Validate mapping")
@@ -224,8 +220,12 @@ class Core(object):
 
         for k, v in value.items():
             r = m.get(k, None)
-            Log.debug(" + {} {}".format(k, v))
+            Log.debug(" + m: {}".format(m))
+            Log.debug(" + rr: {} {}".format(k, v))
             Log.debug(" + r: {}".format(r))
+
+            regex_mappings = [(regex_rule, re.match(regex_rule._map_regex_rule, str(k))) for regex_rule in rule._regex_mappings]
+            Log.debug(" + Mapping Regex matches: {}".format(regex_mappings))
 
             if rule._pattern:
                 # This is the global regex pattern specefied at the same level as mapping: and type: map keys
@@ -233,14 +233,16 @@ class Core(object):
                 Log.debug("Matching regexPattern: {} with value: {}".format(rule._pattern, k))
                 if res is None:  # Not matching
                     errors.append("pattern.unmatch : {} --> {} : {}".format(rule._pattern, k, path))
-            elif any([re.match(regex_rule._map_regex_rule, str(k)) for regex_rule in rule._regex_mappings]):
+            elif any(regex_mappings):
                 # Found atleast one that matches a mapping regex
-                pass
+                for mm in regex_mappings:
+                    if mm[1]:
+                        Log.debug(" + Matching regex patter: {}".format(mm[0]))
+                        self._validate(v, mm[0], "{}/{}".format(path, k), errors, done)
             elif r is None:
                 if not rule._allowempty_map:
                     errors.append("key.undefined : {} : {}".format(k, path))
             else:
-                #if r._parent._mapping or r._mapping or not rule._allowempty_map:
                 if not r._schema:
                     # validate recursively
                     Log.debug("Core Map: validate recursively: {}".format(r))
@@ -283,28 +285,52 @@ class Core(object):
             r = rule._range
 
             try:
-                if r.get("max", None) is not None and r["max"] < value:
+                if r.get("max", None) is not None and r["max"] < int(value):
                     errors.append("range.toolarge : {} < {} : {}".format(r["max"], value, path))
             except Exception as e:
-                errors.append("EXCEPTION: range.{} :: {} < {}".format(e, r.get("max", None), value))
+                # In python3 there can be issues when comparing for example int < str.
+                # Try to apply len() but if that fails then report it as an exception
+                try:
+                    if r.get("max", None) is not None and r["max"] < len(value):
+                        errors.append("range.toolarge : {} < {} : {}".format(r["max"], value, path))
+                except Exception as e:
+                    errors.append("EXCEPTION: range.{} :: {} < {}".format(e, r.get("max", None), value))
 
             try:
-                if r.get("min", None) is not None and r["min"] > value:
+                if r.get("min", None) is not None and r["min"] > int(value):
                     errors.append("range.toosmall : {} > {} : {}".format(r["min"], value, path))
             except Exception as e:
-                errors.append("EXCEPTION: range.{} :: {} > {}".format(e, r.get("min", None), value))
+                # In python3 there can be issues when comparing for example int < str.
+                # Try to apply len() but if that fails then report it as an exception
+                try:
+                    if r.get("max", None) is not None and r["max"] < len(value):
+                        errors.append("range.toosmall : {} > {} : {}".format(r["min"], value, path))
+                except Exception as e:
+                    errors.append("EXCEPTION: range.{} :: {} > {}".format(e, r.get("min", None), value))
 
             try:
-                if r.get("max-ex", None) is not None and r["max-ex"] <= value:
+                if r.get("max-ex", None) is not None and r["max-ex"] <= int(value):
                     errors.append("range.tolarge-ex : {} <= {} : {}".format(r["max-ex"], value, path))
             except Exception as e:
-                errors.append("EXCEPTION: range.{} :: {} <= {}".format(e, r.get("max-ex", None), value))
+                # In python3 there can be issues when comparing for example int < str.
+                # Try to apply len() but if that fails then report it as an exception
+                try:
+                    if r.get("max", None) is not None and r["max"] < len(value):
+                        errors.append("range.tolarge-ex : {} <= {} : {}".format(r["max-ex"], value, path))
+                except Exception as e:
+                    errors.append("EXCEPTION: range.{} :: {} <= {}".format(e, r.get("max-ex", None), value))
 
             try:
-                if r.get("min-ex", None) is not None and r["min-ex"] >= value:
+                if r.get("min-ex", None) is not None and r["min-ex"] >= int(value):
                     errors.append("range.toosmall-ex : {} >= {} : {}".format(r["min-ex"], value, path))
             except Exception as e:
-                errors.append("EXCEPTION: range.{} :: {} >= {}".format(e, r.get("min-ex", None), value))
+                # In python3 there can be issues when comparing for example int < str.
+                # Try to apply len() but if that fails then report it as an exception
+                try:
+                    if r.get("max", None) is not None and r["max"] < len(value):
+                        errors.append("range.toosmall-ex : {} >= {} : {}".format(r["min-ex"], value, path))
+                except Exception as e:
+                    errors.append("EXCEPTION: range.{} :: {} >= {}".format(e, r.get("min-ex", None), value))
 
         if rule._length is not None:
             assert isinstance(value, str), "value is not a valid string type"

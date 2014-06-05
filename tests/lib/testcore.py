@@ -5,6 +5,9 @@
 # Testhelper class
 from tests.testhelper import TestHelper, gettestcwd
 
+# 3rd party imports
+from testfixtures import compare
+
 # pyKwalify imports
 from pykwalify.core import Core
 from pykwalify.errors import PyKwalifyExit, UnknownError, FileNotAccessible, OptionError, NotImplemented, ParseFailure, SchemaError, CoreError, RuleError
@@ -70,23 +73,54 @@ class TestCore(TestHelper):
 
         # These tests are designed to fail with some exception raised
         fail_tests = [
-            ("2a.yaml", "2b.yaml", SchemaError),  # Test sequence with defined string content type but data only has integers
-            ("5a.yaml", "5b.yaml", SchemaError),  # Test sequence with defined string content type but data only has booleans
-            ("6a.yaml", "6b.yaml", SchemaError),  # Test sequence with defined booleans but with one integer
-            ("7a.yaml", "7b.yaml", SchemaError),  # Test sequence with strings and and lenght on each string
-            ("9a.yaml", "8b.yaml", SchemaError),  # Test mapping that do not work
-            ("11a.yaml", "10b.yaml", SchemaError),  # Test sequence with mapping with missing required key
-            ("13a.yaml", "12b.yaml", SchemaError),  # Test mapping with sequence with mapping and invalid data
-            ("15a.yaml", "14b.yaml", SchemaError),
-            ("17a.yaml", "16b.yaml", SchemaError),  # TODO: The reverse unique do not currently work proper # This will test the unique constraint but should fail
-            ("22a.yaml", "22b.yaml", SchemaError),  # This tests number validation rule with wrong data
-            ("24a.yaml", "24b.yaml", SchemaError),  # This test the text validation rule with wrong data
-            ("27a.yaml", "27b.yaml", SchemaError),  # This tests pattern matching on keys in a map
+            # Test sequence with defined string content type but data only has integers
+            ("2a.yaml", "2b.yaml", SchemaError, ["Value: 1 is not of type 'str' : /0",
+                                                 "Value: 2 is not of type 'str' : /1",
+                                                 "Value: 3 is not of type 'str' : /2"]),
+            # Test sequence with defined string content type but data only has booleans
+            ("5a.yaml", "5b.yaml", SchemaError, ["Value: True is not of type 'str' : /0",
+                                                 "Value: False is not of type 'str' : /1"]),
+            # Test sequence with defined booleans but with one integer
+            ("6a.yaml", "6b.yaml", SchemaError, ["Value: 1 is not of type 'bool' : /2"]),
+            # Test sequence with strings and and lenght on each string
+            ("7a.yaml", "7b.yaml", SchemaError, ['length.toolong : 5 < 6 : /2']),
+            # Test mapping that do not work
+            ("9a.yaml", "8b.yaml", SchemaError, ["Value: twnty is not of type 'int' : /age",
+                                                 'pattern.unmatch : .+@.+ --> foo(at)mail.com : /email']),
+            # Test sequence with mapping with missing required key
+            ("11a.yaml", "10b.yaml", SchemaError, ['required.nokey : name : /1',
+                                                   'key.undefined : naem : /1',
+                                                   'key.undefined : mail : /2']),
+            # Test mapping with sequence with mapping and invalid data
+            ("13a.yaml", "12b.yaml", SchemaError, ["Value: A101 is not of type 'int' : /employees/0/code",
+                                                   'key.undefined : mail : /employees/1']),
+            # TODO: write
+            ("15a.yaml", "14b.yaml", SchemaError, ["Value: twenty is not of type 'int' : /0/age",
+                                                   'length.tooshort : 8 > 6 : /0/password',
+                                                   'pattern.unmatch : .+@.+ --> foo(at)mail.com : /0/email',
+                                                   'enum.notexists : a : /0/blood',
+                                                   'required.nokey : name : /1',
+                                                   'key.undefined : given-name : /1',
+                                                   'key.undefined : family-name : /1',
+                                                   'range.toosmall : 18 > 15 : /1/age']),
+            # TODO: The reverse unique do not currently work proper # This will test the unique constraint but should fail
+            ("17a.yaml", "16b.yaml", SchemaError, ['value.notunique :: value: foo : /0/groups/3 : /0/groups/0']),
+            # This tests number validation rule with wrong data
+            ("22a.yaml", "22b.yaml", SchemaError, ["Value: abc is not of type 'number' : /2"]),
+            # This test the text validation rule with wrong data
+            ("24a.yaml", "24b.yaml", SchemaError, ["Value: True is not of type 'text' : /3"]),
+            # This tests pattern matching on keys in a map
+            ("27a.yaml", "27b.yaml", SchemaError, ['pattern.unmatch : ^[a-z]+$ --> na1me : ']),
         ]
 
         for passing_test in pass_tests:
-            Core(source_file=self.f(passing_test[0]), schema_file=self.f(passing_test[1])).validate()
+            c = Core(source_file=self.f(passing_test[0]), schema_file=self.f(passing_test[1]))
+            c.validate()
+            compare(c.validation_errors, [], prefix="No validation errors should exist...")
 
         for failing_test in fail_tests:
             with self.assertRaises(failing_test[2], msg="Test file: {} : {}".format(failing_test[0], failing_test[1])):
-                Core(source_file=self.f(failing_test[0]), schema_file=self.f(failing_test[1])).validate()
+                c = Core(source_file=self.f(failing_test[0]), schema_file=self.f(failing_test[1]))
+                c.validate()
+
+            compare(c.validation_errors, failing_test[3], prefix="Wrong validation errors when parsing files : {} : {}".format(failing_test[0], failing_test[1]))

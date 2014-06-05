@@ -356,11 +356,11 @@ class Rule(object):
                     regex = regex[1]
                     # Strip [ ] from the regex if they exists
                     if regex[0] == "[" and regex[-1] == "]":
-                        # ok
                         regex_rule = Rule(None, self)
                         regex_rule.init(v, "{}/mapping;regex/{}".format(path, regex[1:-1]))
                         regex_rule._map_regex_rule = regex[1:-1]
                         self._regex_mappings.append(regex_rule)
+                        self._mapping[k] = regex_rule
                     else:
                         raise Exception("Malformed regex found : {} : The regex should be wrapped with [ ] to work properly".format(k))
             else:
