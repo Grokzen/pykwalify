@@ -52,24 +52,42 @@ class TestCore(unittest.TestCase):
     def testCore(self):
         # These tests should pass with no exception raised
         pass_tests = [
-            ("1a.yaml", "1b.yaml"),  # Test sequence with only string values
-            ("3a.yaml", "3b.yaml"),  # Test sequence where the only valid items is integers
-            ("4a.yaml", "4b.yaml"),  # Test sequence with only booleans
-            ("8a.yaml", "8b.yaml"),  # Test mapping with different types of data and some extra conditions
-            ("10a.yaml", "10b.yaml"),  # Test sequence with mapping with valid mapping
-            ("12a.yaml", "12b.yaml"),  # Test mapping with sequence with mapping and valid data
-            ("14a.yaml", "14b.yaml"),  # Test most of the implemented functions
-            ("16a.yaml", "16b.yaml"),  # This will test the unique constraint
-            ("18a.yaml", "18b.yaml"),
-            ("19a.yaml", "19b.yaml"),
-            ("20a.yaml", "20b.yaml"),
-            ("21a.yaml", "21b.yaml"),  # This tests number validation rule
-            ("23a.yaml", "23b.yaml"),  # This test the text validation rule
-            ("24a.yaml", "25b.yaml"),  # This test the text validation rule
-            ("26a.yaml", "26b.yaml"),
-            ("28a.yaml", "28b.yaml"),
-            ("29a.yaml", "29b.yaml"),
-            ("30a.yaml", "30b.yaml"),
+            # Test sequence with only string values
+            ("1a.yaml", "1b.yaml", {'sequence': [{'type': 'str'}], 'type': 'seq'}),
+            # Test sequence where the only valid items is integers
+            ("3a.yaml", "3b.yaml", {'sequence': [{'type': 'int'}], 'type': 'seq'}),
+            # Test sequence with only booleans
+            ("4a.yaml", "4b.yaml", {'sequence': [{'type': 'bool'}], 'type': 'seq'}),
+            # Test mapping with different types of data and some extra conditions
+            ("8a.yaml", "8b.yaml", {'mapping': {'age': {'type': 'int'}, 'birth': {'type': 'str'}, 'email': {'pattern': '.+@.+', 'type': 'str'}, 'name': {'required': True, 'type': 'str'}}, 'type': 'map'}),
+            # Test sequence with mapping with valid mapping
+            ("10a.yaml", "10b.yaml", {'sequence': [{'mapping': {'email': {'type': 'str'}, 'name': {'required': True, 'type': 'str'}}, 'type': 'map'}], 'type': 'seq'}),
+            # Test mapping with sequence with mapping and valid data
+            ("12a.yaml", "12b.yaml", {'mapping': {'company': {'required': True, 'type': 'str'}, 'email': {'type': 'str'}, 'employees': {'sequence': [{'mapping': {'code': {'required': True, 'type': 'int'}, 'email': {'type': 'str'}, 'name': {'required': True, 'type': 'str'}}, 'type': 'map'}], 'type': 'seq'}}, 'type': 'map'}),
+            # Test most of the implemented functions
+            ("14a.yaml", "14b.yaml", {'sequence': [{'mapping': {'age': {'range': {'max': 30, 'min': 18}, 'type': 'int'}, 'birth': {'type': 'str'}, 'blood': {'enum': ['A', 'B', 'O', 'AB'], 'type': 'str'}, 'deleted': {'type': 'bool'}, 'email': {'pattern': '.+@.+', 'required': True, 'type': 'str'}, 'memo': {'type': 'any'}, 'name': {'required': True, 'type': 'str'}, 'password': {'length': {'max': 16, 'min': 8}, 'type': 'str'}}, 'type': 'map'}], 'type': 'seq'}),
+            # This will test the unique constraint
+            ("16a.yaml", "16b.yaml", {'sequence': [{'mapping': {'email': {'type': 'str'}, 'groups': {'sequence': [{'type': 'str', 'unique': True}], 'type': 'seq'}, 'name': {'required': True, 'type': 'str', 'unique': True}}, 'required': True, 'type': 'map'}], 'type': 'seq'}),
+            #
+            ("18a.yaml", "18b.yaml", {'mapping': {'datasources': {'allowempty': True, 'type': 'map'}}, 'type': 'map'}),
+            #
+            ("19a.yaml", "19b.yaml", {'mapping': {'datasources': {'allowempty': True, 'mapping': {'test1': {'type': 'str'}}, 'type': 'map'}}, 'type': 'map'}),
+            #
+            ("20a.yaml", "20b.yaml", {'type': 'float'}),
+            # This tests number validation rule
+            ("21a.yaml", "21b.yaml", {'sequence': [{'type': 'number'}], 'type': 'seq'}),
+            # This test the text validation rule
+            ("23a.yaml", "23b.yaml", {'sequence': [{'type': 'text'}], 'type': 'seq'}),
+            # This test the text validation rule
+            ("24a.yaml", "25b.yaml", {'sequence': [{'type': 'any'}], 'type': 'seq'}),
+            #
+            ("26a.yaml", "26b.yaml", {'type': 'any'}),
+            #
+            ("28a.yaml", "28b.yaml", {'allowempty': True, 'mapping': {'name': {'type': 'str'}}, 'pattern': '^[a-z0-9]+$', 'type': 'map'}),
+            #
+            ("29a.yaml", "29b.yaml", {'sequence': [{'mapping': {'bits': {'type': 'str'}, 'name': {'type': 'str'}}, 'pattern': '.+', 'type': 'map'}], 'type': 'seq'}),
+            #
+            ("30a.yaml", "30b.yaml", {'sequence': [{'mapping': {'foobar': {'mapping': {'opa': {'type': 'bool'}}, 'type': 'map'}, 'media': {'type': 'int'}, 'regex;[mi.+]': {'sequence': [{'type': 'str'}], 'type': 'seq'}, 'regex;[mo.+]': {'sequence': [{'type': 'bool'}], 'type': 'seq'}}, 'matching-rule': 'any', 'type': 'map'}], 'type': 'seq'}),
         ]
 
         # These tests are designed to fail with some exception raised
@@ -118,6 +136,9 @@ class TestCore(unittest.TestCase):
             c = Core(source_file=self.f(passing_test[0]), schema_file=self.f(passing_test[1]))
             c.validate()
             compare(c.validation_errors, [], prefix="No validation errors should exist...")
+
+            # This serve as an extra schema validation that tests more complex structures then testrule.py do
+            compare(c.root_rule._schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed...")
 
         for failing_test in fail_tests:
             with self.assertRaises(failing_test[2], msg="Test file: {} : {}".format(failing_test[0], failing_test[1])):
