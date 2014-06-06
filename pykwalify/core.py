@@ -34,6 +34,7 @@ class Core(object):
         self.source = None
         self.schema = None
         self.validation_errors = None
+        self.root_rule = None
 
         if source_file is not None:
             if not os.path.exists(source_file):
@@ -102,6 +103,7 @@ class Core(object):
 
         Log.debug("Building root rule object")
         root_rule = Rule(schema=self.schema)
+        self.root_rule = root_rule
         Log.debug("Done building root rule")
 
         self._validate(value, root_rule, path, errors, done)
