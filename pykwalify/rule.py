@@ -14,7 +14,7 @@ Log = logging.getLogger(__name__)
 
 # pyKwalify imports
 from pykwalify.types import DEFAULT_TYPE, typeClass, isBuiltinType, isCollectionType
-from pykwalify.errors import SchemaConflict
+from pykwalify.errors import SchemaConflict, RuleError
 
 
 class Rule(object):
@@ -60,10 +60,10 @@ class Rule(object):
             # assert isinstance(schema, dict), "schema is not a dict : {}".format(path)
 
             if "type" not in schema:
-                raise Exception("key 'type' not found in schema rule : {}".format(path))
+                raise RuleError("key 'type' not found in schema rule : {}".format(path))
             else:
                 if not isinstance(schema["type"], str):
-                    raise Exception("key 'type' in schema rule is not a string type : {}".format(path))
+                    raise RuleError("key 'type' in schema rule is not a string type : {}".format(path))
 
                 self._type = schema["type"]
 
@@ -97,7 +97,7 @@ class Rule(object):
             if k in func_mapping:
                 func_mapping[k](v, rule, path)
             else:
-                raise Exception("Unknown key: {} found : {}".format(k, path))
+                raise RuleError("Unknown key: {} found : {}".format(k, path))
 
         self.checkConfliction(schema, rule, path)
 
@@ -109,7 +109,7 @@ class Rule(object):
         allowed = ["any"]
         # ["none", "one", "all"] Is currently awaiting proper implementation
         if v not in allowed:
-            raise Exception("Specefied rule in key : {} is not part of allowed rule set : {}".format(v, allowed))
+            raise RuleError("Specefied rule in key : {} is not part of allowed rule set : {}".format(v, allowed))
         else:
             self._matching_rule = v
 
@@ -132,7 +132,7 @@ class Rule(object):
         self._type_class = typeClass(v)
 
         if not isBuiltinType(self._type):
-            raise Exception("type.unknown : {} : {}".format(self._type, path))
+            raise RuleError("type.unknown : {} : {}".format(self._type, path))
 
     def initNameValue(self, v, rule, path):
         Log.debug("Init name value : {}".format(path))
@@ -148,14 +148,14 @@ class Rule(object):
         Log.debug("Init required value : {}".format(path))
 
         if not isinstance(v, bool):
-            raise Exception("required.notbool : {} : {}".format(v, path))
+            raise RuleError("required.notbool : {} : {}".format(v, path))
         self._required = v
 
     def initPatternValue(self, v, rule, path):
         Log.debug("Init pattern value : {}".format(path))
 
         if not isinstance(v, str):
-            raise Exception("pattern.notstr : {} : {}".format(v, path))
+            raise RuleError("pattern.notstr : {} : {}".format(v, path))
 
         self._pattern = v
 
@@ -164,25 +164,25 @@ class Rule(object):
         try:
             self._pattern_regexp = re.compile(self._pattern)
         except Exception:
-            raise Exception("pattern.syntaxerr : {} --> {} : {}".format(self._pattern_regexp, self._pattern_regexp, path))
+            raise RuleError("pattern.syntaxerr : {} --> {} : {}".format(self._pattern_regexp, self._pattern_regexp, path))
 
     def initEnumValue(self, v, rule, path):
         Log.debug("Init enum value : {}".format(path))
 
         if not isinstance(v, list):
-            raise Exception("enum.notseq")
+            raise RuleError("enum.notseq")
         self._enum = v
 
         if isCollectionType(self._type):
-            raise Exception("enum.notscalar")
+            raise RuleError("enum.notscalar")
 
         lookup = set()
         for item in v:
             if not isinstance(item, self._type_class):
-                raise Exception("enum.type.unmatch : {} --> {} : {}".format(item, self._type_class, path))
+                raise RuleError("enum.type.unmatch : {} --> {} : {}".format(item, self._type_class, path))
 
             if item in lookup:
-                raise Exception("enum.duplicate : {} : {}".format(item, path))
+                raise RuleError("enum.duplicate : {} : {}".format(item, path))
 
             lookup.add(item)
 
@@ -190,19 +190,19 @@ class Rule(object):
         Log.debug("Init assert value : {}".format(path))
 
         if not isinstance(v, str):
-            raise Exception("assert.notstr : {}".format(path))
+            raise RuleError("assert.notstr : {}".format(path))
 
         self._assert = v
 
-        raise Exception("assert.NYI-Error : {}".format(path))
+        raise RuleError("assert.NYI-Error : {}".format(path))
 
     def initRangeValue(self, v, rule, path):
         Log.debug("Init range value : {}".format(path))
 
         if not isinstance(v, dict):
-            raise Exception("range.notmap : {} : {}".format(v, path))
+            raise RuleError("range.notmap : {} : {}".format(v, path))
         if isCollectionType(self._type) or self._type == "bool":
-            raise Exception("range.notscalar : {} : {}".format(self._type, path))
+            raise RuleError("range.notscalar : {} : {}".format(self._type, path))
 
         self._range = v  # dict that should contain min, max, min-ex, max-ex keys
 
@@ -210,14 +210,14 @@ class Rule(object):
         for k, v in self._range.items():
             if k == "max" or k == "min" or k == "max-ex" or k == "min-ex":
                 if not isinstance(v, self._type_class):
-                    raise Exception("range.type.unmatch : {} --> {} : {}".format(v, self._type_class, path))
+                    raise RuleError("range.type.unmatch : {} --> {} : {}".format(v, self._type_class, path))
             else:
-                raise Exception("range.undefined key : {} : {}".format(k, path))
+                raise RuleError("range.undefined key : {} : {}".format(k, path))
 
         if "max" in self._range and "max-ex" in self._range:
-            raise Exception("range.twomax : {}".format(path))
+            raise RuleError("range.twomax : {}".format(path))
         if "min" in self._range and "min-ex" in self._range:
-            raise Exception("range.twomin : {}".format(path))
+            raise RuleError("range.twomin : {}".format(path))
 
         max = self._range.get("max", None)
         min = self._range.get("min", None)
@@ -226,38 +226,38 @@ class Rule(object):
 
         if max is not None:
             if min is not None and max < min:
-                raise Exception("range.maxltmin : {} < {} : {}".format(max, min, path))
+                raise RuleError("range.maxltmin : {} < {} : {}".format(max, min, path))
             elif min_ex is not None and max <= min_ex:
-                raise Exception("range.maxleminex : {} <= {} : {}".format(max, min_ex, path))
+                raise RuleError("range.maxleminex : {} <= {} : {}".format(max, min_ex, path))
         elif max_ex is not None:
             if min is not None and max_ex < min:
-                raise Exception("range.maxexlemiin : {} < {} : {}".format(max_ex, min, path))
+                raise RuleError("range.maxexlemiin : {} < {} : {}".format(max_ex, min, path))
             elif min_ex is not None and max_ex <= min_ex:
-                raise Exception("range.maxexleminex : {} <= {} : {}".format(max_ex, min_ex, path))
+                raise RuleError("range.maxexleminex : {} <= {} : {}".format(max_ex, min_ex, path))
 
     def initLengthValue(self, v, rule, path):
         Log.debug("Init length value : {}".format(path))
 
         if not isinstance(v, dict):
-            raise Exception("length.notmap : {} : {}".format(v, path))
+            raise RuleError("length.notmap : {} : {}".format(v, path))
 
         self._length = v
 
         if not (self._type == "str" or self._type == "text"):
-            raise Exception("length.nottext : {} : {}".format(self._type, path))
+            raise RuleError("length.nottext : {} : {}".format(self._type, path))
 
         # This should validate that only min, max, min-ex, max-ex exists in the dict
         for k, v in self._length.items():
             if k == "max" or k == "min" or k == "max-ex" or k == "min-ex":
                 if not isinstance(v, int):
-                    raise Exception("length.notint : {} : {}".format(v, path))
+                    raise RuleError("length.notint : {} : {}".format(v, path))
             else:
-                raise Exception("length.undefined key : {} : {}".format(k, path))
+                raise RuleError("length.undefined key : {} : {}".format(k, path))
 
         if "max" in self._length and "max-ex" in self._length:
-            raise Exception("length.twomax : {}".format(path))
+            raise RuleError("length.twomax : {}".format(path))
         if "min" in self._length and "min-ex" in self._length:
-            raise Exception("length.twomin : {}".format(path))
+            raise RuleError("length.twomin : {}".format(path))
 
         max = self._length.get("max", None)
         min = self._length.get("min", None)
@@ -266,56 +266,56 @@ class Rule(object):
 
         if max is not None:
             if min is not None and max < min:
-                raise Exception("length.maxltmin: {} < {} : {}".format(max, min, path))
+                raise RuleError("length.maxltmin: {} < {} : {}".format(max, min, path))
             elif min_ex is not None and max <= min_ex:
-                raise Exception("length.maxleminex : {} <= {} : {}".format(max, min_ex, path))
+                raise RuleError("length.maxleminex : {} <= {} : {}".format(max, min_ex, path))
         elif max_ex is not None:
             if min is not None and max_ex < min:
-                raise Exception("length.maxexlemiin : {} < {} : {}".format(max_ex, min, path))
+                raise RuleError("length.maxexlemiin : {} < {} : {}".format(max_ex, min, path))
             elif min_ex is not None and max_ex <= min_ex:
-                raise Exception("length.maxexleminex : {} <= {} : {}".format(max_ex, min_ex, path))
+                raise RuleError("length.maxexleminex : {} <= {} : {}".format(max_ex, min_ex, path))
 
     def initIdentValue(self, v, rule, path):
         Log.debug("Init ident value : {}".format(path))
 
         if v is None or isinstance(v, bool):
-            raise Exception("ident.notbool : {} : {}".format(v, path))
+            raise RuleError("ident.notbool : {} : {}".format(v, path))
 
         self._ident = bool(v)
         self._required = True
 
         if isCollectionType(self._type):
-            raise Exception("ident.notscalar : {} : {}".format(self._type, path))
+            raise RuleError("ident.notscalar : {} : {}".format(self._type, path))
         if path == "":
-            raise Exception("ident.onroot")
+            raise RuleError("ident.onroot")
         if self._parent is None or not self._parent._type == "map":
-            raise Exception("ident.notmap : {}".format(path))
+            raise RuleError("ident.notmap : {}".format(path))
 
     def initUniqueValue(self, v, rule, path):
         Log.debug("Init unique value : {}".format(path))
 
         if not isinstance(v, bool):
-            raise Exception("unique.notbool : {} : {}".format(v, path))
+            raise RuleError("unique.notbool : {} : {}".format(v, path))
 
         self._unique = v
 
         if isCollectionType(self._type):
-            raise Exception("unique.notscalar : {} : {}".format(self._type, path))
+            raise RuleError("unique.notscalar : {} : {}".format(self._type, path))
         if path == "":
-            raise Exception("unique.onroot")
+            raise RuleError("unique.onroot")
 
     def initSequenceValue(self, v, rule, path):
         Log.debug("Init sequence value : {}".format(path))
 
         if v is not None and not isinstance(v, list):
-            raise Exception("sequence.notseq : {} : {}".format(v, path))
+            raise RuleError("sequence.notseq : {} : {}".format(v, path))
 
         self._sequence = v
 
         if self._sequence is None or len(self._sequence) == 0:
-            raise Exception("sequence.noelem : {} : {}".format(self._sequence, path))
+            raise RuleError("sequence.noelem : {} : {}".format(self._sequence, path))
         if len(self._sequence) > 1:
-            raise Exception("sequence.toomany : {} : {}".format(self._sequence, path))
+            raise RuleError("sequence.toomany : {} : {}".format(self._sequence, path))
 
         elem = self._sequence[0]
         if elem is None:
@@ -334,10 +334,10 @@ class Rule(object):
         Log.debug("Init mapping value : {}".format(path))
 
         if v is not None and not isinstance(v, dict):
-            raise Exception("mapping.notmap : {} : {}".format(v, path))
+            raise RuleError("mapping.notmap : {} : {}".format(v, path))
 
         if v is None or len(v) == 0:
-            raise Exception("mapping.noelem : {} : {}".format(v, path))
+            raise RuleError("mapping.noelem : {} : {}".format(v, path))
 
         self._mapping = {}
         self._regex_mappings = []
@@ -351,7 +351,7 @@ class Rule(object):
                 Log.debug("Found regex map rule")
                 regex = k.split(";", 1)
                 if len(regex) != 2:
-                    raise Exception("Malformed regex key : {}".format(k))
+                    raise RuleError("Malformed regex key : {}".format(k))
                 else:
                     regex = regex[1]
                     # Strip [ ] from the regex if they exists
@@ -362,7 +362,7 @@ class Rule(object):
                         self._regex_mappings.append(regex_rule)
                         self._mapping[k] = regex_rule
                     else:
-                        raise Exception("Malformed regex found : {} : The regex should be wrapped with [ ] to work properly".format(k))
+                        raise RuleError("Malformed regex found : {} : The regex should be wrapped with [ ] to work properly".format(k))
             else:
                 rule = Rule(None, self)
                 rule.init(v, "{}/mapping/{}".format(path, k))
@@ -375,13 +375,13 @@ class Rule(object):
         self._default = v
 
         if isCollectionType(self._type):
-            raise Exception("default.notscalar : {} : {} : {}".format(rule, path, v))
+            raise RuleError("default.notscalar : {} : {} : {}".format(rule, path, v))
 
         if self._type == "map" or self._type == "seq":
-            raise Exception("default.notscalar : {} : {} : {}".format(rule, os.path.dirname(path), v))
+            raise RuleError("default.notscalar : {} : {} : {}".format(rule, os.path.dirname(path), v))
 
         if not isinstance(v, self._type_class):
-            raise Exception("default.type.unmatch : {} --> {} : {}".format(v, self._type_class, path))
+            raise RuleError("default.type.unmatch : {} --> {} : {}".format(v, self._type_class, path))
 
     def checkConfliction(self, schema, rule, path):
         Log.debug("Checking for conflicts : {}".format(path))

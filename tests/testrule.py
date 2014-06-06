@@ -6,6 +6,7 @@ import unittest
 
 # pyKwalify imports
 from pykwalify.rule import Rule
+from pykwalify.errors import RuleError
 
 
 class TestRule(unittest.TestCase):
@@ -19,7 +20,7 @@ class TestRule(unittest.TestCase):
         self.assertTrue(isinstance(r._sequence, list), msg="rule is not a list")
 
         # this tests that the type key must be a string
-        with self.assertRaises(Exception):
+        with self.assertRaises(RuleError):
             Rule(schema={"type": 1}, parent=None)
 
         # Test the name value
@@ -35,7 +36,7 @@ class TestRule(unittest.TestCase):
         self.assertTrue(r._mapping["name"]._pattern == ".+@.+",  msg="pattern is not set to correct value")
 
         # this tests a invalid regexp pattern
-        with self.assertRaises(Exception):
+        with self.assertRaises(RuleError):
             Rule(schema={"type": "str", "pattern": "/@/\\"})
 
         # this tests the various valid enum types
@@ -47,11 +48,11 @@ class TestRule(unittest.TestCase):
         self.assertTrue(len(r._enum) == 3,         msg="invalid length of enum entries")
 
         # this tests the missmatch between the type and the data inside a enum
-        with self.assertRaises(Exception):
+        with self.assertRaises(RuleError):
             Rule(schema={"type": "str", "enum": [1, 2, 3]})
 
         # this test the NYI exception for the assert key
-        with self.assertRaises(Exception):
+        with self.assertRaises(RuleError):
             Rule(schema={"type": "seq", "sequence": [{"type": "str", "assert": "foobar"}]})
 
         r = Rule(schema={"type": "int", "range": {"max": 10, "min": 1}})
@@ -59,18 +60,18 @@ class TestRule(unittest.TestCase):
         self.assertTrue(isinstance(r._range, dict), msg="range var is not of dict type")
 
         # this tests that the range key must be a dict
-        with self.assertRaises(Exception):
+        with self.assertRaises(RuleError):
             Rule(schema={"type": "int", "range": []})
 
         Rule(schema={"type": "str", "range": {"max": "z", "min": "a"}})
 
         # this tests that the range values is not for the string but only for int.
         # min/max must be the same type as the value of the type key
-        with self.assertRaises(Exception):
+        with self.assertRaises(RuleError):
             Rule(schema={"type": "str", "range": {"max": 10, "min": 1}})
 
         # this tests that min is bigger then max that should not be possible
-        with self.assertRaises(Exception):
+        with self.assertRaises(RuleError):
             Rule(schema={"type": "int", "range": {"max": 10, "min": 11}})
 
         # this tests that length works with str type
@@ -79,21 +80,21 @@ class TestRule(unittest.TestCase):
         self.assertTrue(isinstance(r._length, dict), msg="length var is not of dict type")
 
         # this tests that length do not work with int type
-        with self.assertRaises(Exception):
+        with self.assertRaises(RuleError):
             Rule(schema={"type": "int", "length": {"max": 10, "min": 11}})
 
         # this tests that min cannot be above max even with correct type
-        with self.assertRaises(Exception):
+        with self.assertRaises(RuleError):
             Rule(schema={"type": "str", "length": {"max": 10, "min": 11}})
 
         # this tests that this cannot be used in the root level
-        with self.assertRaises(Exception):
+        with self.assertRaises(RuleError):
             Rule(schema={"type": "str", "unique": True})
 
         # this tests that unique cannot be used at root level
-        with self.assertRaises(Exception):
+        with self.assertRaises(RuleError):
             Rule(schema={"type": "seq", "unique": True})
 
         # this tests map/dict but with no elements
-        with self.assertRaises(Exception):
+        with self.assertRaises(RuleError):
             Rule(schema={"type": "map", "mapping": {}})
