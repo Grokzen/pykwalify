@@ -126,7 +126,8 @@ class Rule(object):
         if v is None:
             v = DEFAULT_TYPE
 
-        assert isinstance(v, str), "type.nostr : {} : {}".format(v, path)
+        if not isinstance(v, str):
+            raise RuleError("type.nostr : {} : {}".format(v, path))
 
         self._type = v
         self._type_class = typeClass(v)

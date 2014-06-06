@@ -139,8 +139,10 @@ class Core(object):
         Log.debug(" * Seq: {}".format(rule._sequence))
         Log.debug(" * Map: {}".format(rule._mapping))
 
-        assert isinstance(rule._sequence, list), "sequence data not of list type : {}".format(path)
-        assert len(rule._sequence) == 1, "only 1 item allowed in sequence rule : {}".format(path)
+        if not isinstance(rule._sequence, list):
+            raise CoreError("sequence data not of list type : {}".format(path))
+        if not len(rule._sequence) == 1:
+            raise CoreError("only 1 item allowed in sequence rule : {}".format(path))
 
         if value is None:
             Log.debug("Core seq: sequence data is None")
@@ -204,7 +206,9 @@ class Core(object):
             Log.debug(" + No rule to apply, prolly because of allowempty: True")
             return
 
-        assert isinstance(rule._mapping, dict), "mapping is not a valid dict object"
+        if not isinstance(rule._mapping, dict):
+            raise CoreError("mapping is not a valid dict object")
+
         if value is None:
             Log.debug(" + Value is None, returning...")
             return
@@ -257,8 +261,10 @@ class Core(object):
         Log.debug(" # {}".format(rule._type))
         Log.debug(" # {}".format(path))
 
-        assert rule._sequence is None, "found sequence when validating for scalar"
-        assert rule._mapping is None, "found mapping when validating for scalar"
+        if not rule._sequence is None:
+            raise CoreError("found sequence when validating for scalar")
+        if not rule._mapping is None:
+            raise CoreError("found mapping when validating for scalar")
 
         if rule._assert is not None:
             pass  # TODO: implement assertion prolly
@@ -280,7 +286,8 @@ class Core(object):
                 errors.append("pattern.unmatch : {} --> {} : {}".format(rule._pattern, value, path))
 
         if rule._range is not None:
-            assert isScalar(value), "value is not a valid scalar"
+            if not isScalar(value):
+                raise CoreError("value is not a valid scalar")
 
             r = rule._range
 
@@ -333,7 +340,8 @@ class Core(object):
                     errors.append("EXCEPTION: range.{} :: {} >= {}".format(e, r.get("min-ex", None), value))
 
         if rule._length is not None:
-            assert isinstance(value, str), "value is not a valid string type"
+            if not isinstance(value, str):
+                raise CoreError("value is not a valid string type")
 
             l = rule._length
             L = len(value)
