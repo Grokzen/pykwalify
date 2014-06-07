@@ -24,6 +24,7 @@ cleanall: clean cleanmeta cleanegg
 	-find . -type f -name "*.rej" -exec rm -f "{}" \;
 	-find . -type f -name "*.pyc" -exec rm -f "{}" \;
 	-find . -type f -name "*.parse-index" -exec rm -f "{}" \;
+	-find . -type d -name "__pycache__" -exec rm -rf "{}" \;
 
 test:
 	python runtests.py
