@@ -9,40 +9,64 @@ The source code can be found at: http://sourceforge.net/projects/kwalify/files/k
 The schema used in this library: http://www.kuwata-lab.com/kwalify/ruby/users-guide.01.html#schema
 
 
-## How to install
+
+# test status
+
+
+## master branch
+
+[![Build Status](https://travis-ci.org/Grokzen/pykwalify.svg?branch=master)](https://travis-ci.org/Grokzen/pykwalify)
+
+
+## develop branch
+
+[![Build Status](https://travis-ci.org/Grokzen/pykwalify.svg?branch=develop)](https://travis-ci.org/Grokzen/pykwalify)
+
+
+
+# How to install
+
+
+## Install stable release
 
 Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
 
-1. Download
+1. Download a tar.gz release from https://github.com/Grokzen/pykwalify/releases
 2. Run "pip install pykwalify-x.y.z.tar.gz"
-3. To use pykwalify run "pykwalify" in your terminal
+3. Run "pykwalify --help" in your terminal
+
 
 
 ## Build from source
 
 1. Clone the repo
 2. Run "make sdist"
-3. To install run "pip install dist/pykwalify-x.x.x.tar.gz"
+3. Install with "pip install dist/pykwalify-x.y.z.tar.gz"
+
 
 
 ## Install from source
 
 1. Clone the repo
-2. Run "make install"
+2. Run "make install" or "python setup.py install"
+
 
 
 ## pyKwalify python dependencies
 
- - docopt 0.6.0
- - PyYaml 3.10
+ - docopt 0.6.1
+ - PyYaml 3.11
+
 
 
 ## Supported python version
 
- - Python 2.7.x - (Not supported, never will be)
- - Python 3.1.x - Yes
+ - Python 2.7.x - Yes
+ - Python 3.1.x - No longer supported, python 3.1 is deprecated
  - Python 3.2.x - Yes
  - Python 3.3.x - Yes
+ - Python 3.4.x - Yes
+
 
 
 # Implemented validation rules
@@ -74,6 +98,11 @@ pattern:
     Specifies regular expression pattern of value. (Uses re.match() )
     pattern rule works in map to validate keys, it is usefull when allowempty is set to True.
     Pattern also works on all scalar types.
+    This will be matched against all keys in a map.
+
+regex;<regex pattern>:
+    This is only implemented in map where a key inside the mapping keyword can implement this regex; pattern and all keys will be matched against the pattern.
+    If a match is found then it will parsed the subrules on that key. A single key can be matched against multiple regex rules and the normal map rules.
 
 range:
     Range of value between max/max-ex and min/min-ex.
@@ -98,18 +127,16 @@ desc:
 allowempty:
     NOTE: Experimental feature!
     Only applies to map. It enables a dict to have items in it that is not validated. It can be combined with mapping to check for some fixed properties but still validate if any random properties exists. See example testfile 18a, 18b, 19a, 19b.
+
+matching-rule:
+    NOTE: Experimental feature!
+    Only applies to map. This enables more finegrained control over how the matching rule should behave when validation keys inside mappings.
+    Currently supported rules is
+     - any [This will match any number of hits, 0 to n number of hits will be allowed]
 ```
 
-
-## Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Added some features'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
 
 
 ## License
 
-MIT.
+MIT [See LICENSE file]

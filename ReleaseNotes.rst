@@ -2,6 +2,24 @@
 Release Notes
 =============
 
+v14.06
+======
+
+ - New version scheme [YY.MM(.Minor-Release)]
+ - Added TravisCI support
+ - Update runtime dependency docopt to 0.6.1
+ - Update runtime dependency pyyaml to 3.11
+ - Huge refactoring of logging and how it works. Logging config files is now removed and everything is alot simpler
+ - Cleanup some checks that docopt now handles
+ - New keyword "regex;<regex-pattern>" that can be used as a key in map to give more flexibility when validating map keys
+ - New keyword "matching-rule" that can be used to control how keys should be matched
+ - Added python 3.4 & python 2.7 support (See TravisCI tests for status)
+ - Dropped python 3.1 support
+ - Alot of refactoring of testing code.
+ - Tests should now be runned with "nosetests" and not "python runtests.py"
+ - Refactored alot of exceptions to be more specific (SchemaError and RuleError for example) and not a generic Exception
+ - Parsed rules is now stored correctly in Core() so it can be tested from the outside
+
 v0.1.2
 ======
 
