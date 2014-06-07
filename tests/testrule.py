@@ -98,3 +98,7 @@ class TestRule(unittest.TestCase):
         # this tests map/dict but with no elements
         with self.assertRaises(RuleError):
             Rule(schema={"type": "map", "mapping": {}})
+
+        # This will test that a invalid regex will throw error when parsing rules
+        with self.assertRaises(RuleError):
+            Rule(schema={"type": "map", "matching-rule": "any", "mapping": {"regex;(+": {"type": "seq", "sequence": [{"type": "str"}]}}})

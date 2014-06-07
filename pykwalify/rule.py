@@ -355,15 +355,16 @@ class Rule(object):
                     raise RuleError("Malformed regex key : {}".format(k))
                 else:
                     regex = regex[1]
-                    # Strip [ ] from the regex if they exists
-                    if regex[0] == "[" and regex[-1] == "]":
-                        regex_rule = Rule(None, self)
-                        regex_rule.init(v, "{}/mapping;regex/{}".format(path, regex[1:-1]))
-                        regex_rule._map_regex_rule = regex[1:-1]
-                        self._regex_mappings.append(regex_rule)
-                        self._mapping[k] = regex_rule
-                    else:
-                        raise RuleError("Malformed regex found : {} : The regex should be wrapped with [ ] to work properly".format(k))
+                    try:
+                        re.compile(regex)
+                    except Exception as e:
+                        raise RuleError("Unable to compile regex '{}' '{}'".format(regex, e))
+
+                    regex_rule = Rule(None, self)
+                    regex_rule.init(v, "{}/mapping;regex/{}".format(path, regex[1:-1]))
+                    regex_rule._map_regex_rule = regex[1:-1]
+                    self._regex_mappings.append(regex_rule)
+                    self._mapping[k] = regex_rule
             else:
                 rule = Rule(None, self)
                 rule.init(v, "{}/mapping/{}".format(path, k))

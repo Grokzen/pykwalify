@@ -88,6 +88,8 @@ class TestCore(unittest.TestCase):
             ("29a.yaml", "29b.yaml", {'sequence': [{'mapping': {'bits': {'type': 'str'}, 'name': {'type': 'str'}}, 'pattern': '.+', 'type': 'map'}], 'type': 'seq'}),
             #
             ("30a.yaml", "30b.yaml", {'sequence': [{'mapping': {'foobar': {'mapping': {'opa': {'type': 'bool'}}, 'type': 'map'}, 'media': {'type': 'int'}, 'regex;[mi.+]': {'sequence': [{'type': 'str'}], 'type': 'seq'}, 'regex;[mo.+]': {'sequence': [{'type': 'bool'}], 'type': 'seq'}}, 'matching-rule': 'any', 'type': 'map'}], 'type': 'seq'}),
+            # This test that a regex that will compile
+            ("31a.yaml", "31b.yaml", {'mapping': {'regex;mi.+': {'sequence': [{'type': 'str'}], 'type': 'seq'}}, 'matching-rule': 'any', 'type': 'map'}),
         ]
 
         # These tests are designed to fail with some exception raised
