@@ -96,11 +96,10 @@ enum:
 
 pattern:
     Specifies regular expression pattern of value. (Uses re.match() )
-    pattern rule works in map to validate keys, it is usefull when allowempty is set to True.
     Pattern also works on all scalar types.
-    This will be matched against all keys in a map.
+    Pattern no longer works in map. Use regex;<regex-pattern> as keys in "mapping:"
 
-regex;<regex pattern>:
+regex;<regex-pattern>:
     This is only implemented in map where a key inside the mapping keyword can implement this regex; pattern and all keys will be matched against the pattern.
     If a match is found then it will parsed the subrules on that key. A single key can be matched against multiple regex rules and the normal map rules.
 
