@@ -1,9 +1,0 @@
-type: seq
-sequence:
-  - type: map
-    pattern: ".+"
-    mapping:
-      name:
-        type: str
-      bits:
-        type: str

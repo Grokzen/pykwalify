@@ -85,8 +85,6 @@ class TestCore(unittest.TestCase):
             #
             ("28a.yaml", "28b.yaml", {'allowempty': True, 'mapping': {'name': {'type': 'str'}}, 'pattern': '^[a-z0-9]+$', 'type': 'map'}),
             #
-            ("29a.yaml", "29b.yaml", {'sequence': [{'mapping': {'bits': {'type': 'str'}, 'name': {'type': 'str'}}, 'pattern': '.+', 'type': 'map'}], 'type': 'seq'}),
-            #
             ("30a.yaml", "30b.yaml", {'sequence': [{'mapping': {'foobar': {'mapping': {'opa': {'type': 'bool'}}, 'type': 'map'}, 'media': {'type': 'int'}, 'regex;[mi.+]': {'sequence': [{'type': 'str'}], 'type': 'seq'}, 'regex;[mo.+]': {'sequence': [{'type': 'bool'}], 'type': 'seq'}}, 'matching-rule': 'any', 'type': 'map'}], 'type': 'seq'}),
             # This test that a regex that will compile
             ("31a.yaml", "31b.yaml", {'mapping': {'regex;mi.+': {'sequence': [{'type': 'str'}], 'type': 'seq'}}, 'matching-rule': 'any', 'type': 'map'}),
@@ -130,14 +128,16 @@ class TestCore(unittest.TestCase):
             ("22a.yaml", "22b.yaml", SchemaError, ["Value: abc is not of type 'number' : /2"]),
             # This test the text validation rule with wrong data
             ("24a.yaml", "24b.yaml", SchemaError, ["Value: True is not of type 'text' : /3"]),
-            # This tests pattern matching on keys in a map
-            ("27a.yaml", "27b.yaml", SchemaError, ['pattern.unmatch : ^[a-z]+$ --> na1me : ']),
         ]
 
         for passing_test in pass_tests:
-            c = Core(source_file=self.f(passing_test[0]), schema_file=self.f(passing_test[1]))
-            c.validate()
-            compare(c.validation_errors, [], prefix="No validation errors should exist...")
+            try:
+                c = Core(source_file=self.f(passing_test[0]), schema_file=self.f(passing_test[1]))
+                c.validate()
+                compare(c.validation_errors, [], prefix="No validation errors should exist...")
+            except Exception as e:
+                print("ERROR RUNNING FILE: {} : {}".format(passing_test[0], passing_test[1]))
+                raise e
 
             # This serve as an extra schema validation that tests more complex structures then testrule.py do
             compare(c.root_rule._schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed...")

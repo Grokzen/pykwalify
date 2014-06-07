@@ -1,6 +1,0 @@
-- mic:
-    name: input
-    bits: 16
-- media:
-    name: output
-    bits: 32

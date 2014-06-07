@@ -233,13 +233,7 @@ class Core(object):
             regex_mappings = [(regex_rule, re.match(regex_rule._map_regex_rule, str(k))) for regex_rule in rule._regex_mappings]
             Log.debug(" + Mapping Regex matches: {}".format(regex_mappings))
 
-            if rule._pattern:
-                # This is the global regex pattern specefied at the same level as mapping: and type: map keys
-                res = re.match(rule._pattern, str(k))
-                Log.debug("Matching regexPattern: {} with value: {}".format(rule._pattern, k))
-                if res is None:  # Not matching
-                    errors.append("pattern.unmatch : {} --> {} : {}".format(rule._pattern, k, path))
-            elif any(regex_mappings):
+            if any(regex_mappings):
                 # Found atleast one that matches a mapping regex
                 for mm in regex_mappings:
                     if mm[1]:
