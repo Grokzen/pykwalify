@@ -102,3 +102,7 @@ class TestRule(unittest.TestCase):
         # This will test that a invalid regex will throw error when parsing rules
         with self.assertRaises(RuleError):
             Rule(schema={"type": "map", "matching-rule": "any", "mapping": {"regex;(+": {"type": "seq", "sequence": [{"type": "str"}]}}})
+
+        # Test that pattern keyword is not allowed when using a map
+        with self.assertRaisesRegexp(RuleError, ".+map\.pattern.+"):
+            Rule(schema={"type": "map", "pattern": "^[a-z]+$", "allowempty": True, "mapping": {"name": {"type": "str"}}})

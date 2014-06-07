@@ -1,6 +1,0 @@
-type: map
-pattern: "^[a-z0-9]+$"
-allowempty: True
-mapping:
-  name:
-    type: str

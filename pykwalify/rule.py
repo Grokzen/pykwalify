@@ -160,6 +160,9 @@ class Rule(object):
 
         self._pattern = v
 
+        if self._schema_str["type"] == "map":
+            raise RuleError("map.pattern : pattern not allowed inside map : {} : {}".format(v, path))
+
         # TODO: Some form of validation of the regexp? it exists in the source
 
         try:

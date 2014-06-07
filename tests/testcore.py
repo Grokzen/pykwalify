@@ -83,8 +83,6 @@ class TestCore(unittest.TestCase):
             #
             ("26a.yaml", "26b.yaml", {'type': 'any'}),
             #
-            ("28a.yaml", "28b.yaml", {'allowempty': True, 'mapping': {'name': {'type': 'str'}}, 'pattern': '^[a-z0-9]+$', 'type': 'map'}),
-            #
             ("30a.yaml", "30b.yaml", {'sequence': [{'mapping': {'foobar': {'mapping': {'opa': {'type': 'bool'}}, 'type': 'map'}, 'media': {'type': 'int'}, 'regex;[mi.+]': {'sequence': [{'type': 'str'}], 'type': 'seq'}, 'regex;[mo.+]': {'sequence': [{'type': 'bool'}], 'type': 'seq'}}, 'matching-rule': 'any', 'type': 'map'}], 'type': 'seq'}),
             # This test that a regex that will compile
             ("31a.yaml", "31b.yaml", {'mapping': {'regex;mi.+': {'sequence': [{'type': 'str'}], 'type': 'seq'}}, 'matching-rule': 'any', 'type': 'map'}),
@@ -148,3 +146,4 @@ class TestCore(unittest.TestCase):
                 c.validate()
 
             compare(sorted(c.validation_errors), sorted(failing_test[3]), prefix="Wrong validation errors when parsing files : {} : {}".format(failing_test[0], failing_test[1]))
+    
