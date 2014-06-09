@@ -14,6 +14,7 @@ import logging
 Log = logging.getLogger(__name__)
 
 # pyKwalify imports
+import pykwalify
 from pykwalify.rule import Rule
 from pykwalify.types import isScalar, tt
 from pykwalify.errors import CoreError, SchemaError
@@ -25,9 +26,9 @@ import yaml
 class Core(object):
     """ Core class of pyKwalify """
 
-    def __init__(self, source_file=None, schema_file=None, source_data=None, schema_data=None):
+    def __init__(self, source_file=None, schema_files=[], source_data=None, schema_data=None):
         Log.debug("source_file: {}".format(source_file))
-        Log.debug("schema_file: {}".format(schema_file))
+        Log.debug("schema_file: {}".format(schema_files))
         Log.debug("source_data: {}".format(source_data))
         Log.debug("schema_data: {}".format(schema_data))
 
@@ -48,17 +49,35 @@ class Core(object):
                 else:
                     raise CoreError("Unable to load source_file. Unknown file format of specified file path: {}".format(source_file))
 
-        if schema_file is not None:
-            if not os.path.exists(schema_file):
-                raise CoreError("Provided source_file do not exists on disk")
+        if not isinstance(schema_files, list):
+            raise CoreError("schema_files must be of list type")
 
-            with open(schema_file, "r") as stream:
-                if schema_file.endswith(".json"):
-                    self.schema = json.load(stream)
-                elif schema_file.endswith(".yaml"):
-                    self.schema = yaml.load(stream)
-                else:
-                    raise CoreError("Unable to load source_file. Unknown file format of specified file path: {}".format(schema_file))
+        # Merge all schema files into one signel file for easy parsing
+        if len(schema_files) > 0:
+            schema_data = {}
+            for f in schema_files:
+                if not os.path.exists(f):
+                    raise CoreError("Provided source_file do not exists on disk")
+
+                with open(f, "r") as stream:
+                    if f.endswith(".json"):
+                        data = json.load(stream)
+                        if not data:
+                            raise CoreError("No data loaded from file : {}".format(f))
+                    elif f.endswith(".yaml") or f.endswith(".yml"):
+                        data = yaml.load(stream)
+                        if not data:
+                            raise CoreError("No data loaded from file : {}".format(f))
+                    else:
+                        raise CoreError("Unable to load file : {} : Unknown file format. Supported file endings is [.json, .yaml, .yml]")
+
+                    for key in data.keys():
+                        if key in schema_data.keys():
+                            raise CoreError("Parsed key : {} : two times in schema files...".format(key))
+
+                    schema_data = dict(schema_data, **data)
+
+            self.schema = schema_data
 
         # Nothing was loaded so try the source_data variable
         if self.source is None:
@@ -101,10 +120,26 @@ class Core(object):
         errors = []
         done = []
 
+        s = {}
+
+        # Look for schema; tags so they can be parsed before the root rule is parsed
+        for k, v in self.schema.items():
+            if k.startswith("schema;"):
+                Log.debug("Found partial schema; : {}".format(v))
+                r = Rule(schema=v)
+                Log.debug(" Partial schema : {}".format(r))
+                pykwalify.partial_schemas[k.split(";", 1)[1]] = r
+            else:
+                # readd all items that is not schema; so they can be parsed
+                s[k] = v
+
+        self.schema = s
+
         Log.debug("Building root rule object")
         root_rule = Rule(schema=self.schema)
         self.root_rule = root_rule
         Log.debug("Done building root rule")
+        Log.debug("Root rule: {}".format(self.root_rule))
 
         self._validate(value, root_rule, path, errors, done)
 

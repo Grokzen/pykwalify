@@ -106,3 +106,15 @@ class TestRule(unittest.TestCase):
         # Test that pattern keyword is not allowed when using a map
         with self.assertRaisesRegexp(RuleError, ".+map\.pattern.+"):
             Rule(schema={"type": "map", "pattern": "^[a-z]+$", "allowempty": True, "mapping": {"name": {"type": "str"}}})
+
+        # Test that error is raised when using include tag but schema do not exists
+        with self.assertRaises(RuleError):
+            r = Rule(schema={"type": "map", "mapping": {"foo": {"include": "str"}}})
+
+        # Test that when only having a schema; rule it should throw error
+        with self.assertRaises(RuleError):
+            r = Rule(schema={"schema;fooone": {"type": "map", "mapping": {"foo": {"type": "str"}}}})
+
+        # Test that when using both schema; and include tag that it throw an error because schema; tags should be parsed via Core()
+        with self.assertRaises(RuleError):
+            r = Rule(schema={"schema;str": {"type": "map", "mapping": {"foo": {"type": "str"}}}, "type": "map", "mapping": {"foo": {"include": "str"}}})

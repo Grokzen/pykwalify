@@ -13,6 +13,7 @@ import logging
 Log = logging.getLogger(__name__)
 
 # pyKwalify imports
+import pykwalify
 from pykwalify.types import DEFAULT_TYPE, typeClass, isBuiltinType, isCollectionType
 from pykwalify.errors import SchemaConflict, RuleError
 
@@ -56,9 +57,20 @@ class Rule(object):
     def init(self, schema, path):
         Log.debug("Init schema: {}".format(schema))
 
-        if schema is not None:
-            # assert isinstance(schema, dict), "schema is not a dict : {}".format(path)
+        include = schema.get("include", None)
 
+        # Check if this item is a include, overwrite schema with include schema and continue to parse
+        if include:
+            Log.debug("Found include tag...")
+            partial_schema = pykwalify.partial_schemas.get(include, None)
+            if not partial_schema:
+                raise RuleError("include partial schema id error : schema id '{}' not found : Available partial schemas [{}]".format(include, ", ".join(pykwalify.partial_schemas.keys())))
+
+            # Partial schema found, overwrite this rule with the partial schema rule and continue to parse like normal...
+            schema = partial_schema._schema_str
+            Log.debug("Parsing partial schema rule : {}".format(schema))
+
+        if schema is not None:
             if "type" not in schema:
                 raise RuleError("key 'type' not found in schema rule : {}".format(path))
             else:
@@ -96,6 +108,9 @@ class Rule(object):
         for k, v in schema.items():
             if k in func_mapping:
                 func_mapping[k](v, rule, path)
+            elif k.startswith("schema;"):
+                Log.debug("Found schema tag...")
+                raise RuleError("Schema is only allowed on top level of schema file...")
             else:
                 raise RuleError("Unknown key: {} found : {}".format(k, path))
 

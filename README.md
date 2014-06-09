@@ -136,6 +136,40 @@ matching-rule:
 
 
 
+## Partial schemas
+
+It is possible to create small partial schemas that can be included in other schemas. This feature do not use any built-in YAML or JSON linking.
+
+To define a partial schema use the keyword "schema;<schema-id>:". <schema-id> must be globally unique for the loaded schema partials. If collisions is detected then error will be raised.
+
+To use a partial schema use the keyword "include: <schema-id>:". This will work at any place you can specify the keyword "type". Include directive do not currently work inside a partial schema.
+
+It is possible to define any number of partial schemas in any schema file as long as they are defined at top level of the schema.
+
+For example, this schema contains one partial and the regular schema.
+
+```yaml
+schema;fooone:
+  type: map
+  mapping:
+    foo:
+      type: str
+
+
+type: seq
+sequence:
+  - include: fooone
+
+```
+
+And it can be used to validate the following data
+
+```yaml
+- foo: "opa"
+```
+
+
+
 ## License
 
 MIT [See LICENSE file]

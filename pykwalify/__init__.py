@@ -4,7 +4,7 @@
 
 __author__ = 'Grokzen <Grokzen@gmail.com>'
 #__version__ = '.'.join(map(str, __version_info__))
-__foobar__ = "0.1.2"
+__foobar__ = "14.06"
 
 # Set to True to have revision from Version Control System in version string
 __devel__ = True
@@ -30,3 +30,10 @@ def init_logging():
                     "formatters": {"simple": {"format": " {}".format(msg)}}}
 
     logging.config.dictConfig(logging_conf)
+
+
+partial_schemas = {}
+
+
+def add_partial_schema(schema_id, rule_object):
+    partial_schemas[schema_id] = rule_object
