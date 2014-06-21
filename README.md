@@ -69,6 +69,22 @@ Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
 
 
 
+# How to run tests
+
+Install test requirements with
+
+```
+pip install -r test-requirements.txt
+```
+
+Run tests with
+
+```
+nosetests
+```
+
+
+
 # Implemented validation rules
 
 ```
