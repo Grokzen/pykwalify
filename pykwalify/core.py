@@ -250,6 +250,10 @@ class Core(object):
             Log.debug(" + Value is None, returning...")
             return
 
+        if not isinstance(value, dict):
+            errors.append("mapping.value.notdict : {} : {}".format(value, path))
+            return
+
         m = rule._mapping
         Log.debug(" + RuleMapping: {}".format(m))
 
