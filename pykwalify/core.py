@@ -157,7 +157,9 @@ class Core(object):
 
         Log.debug(" ? ValidateRule: {}".format(rule))
         n = len(errors)
-        if rule._sequence is not None:
+        if rule._include_name is not None:
+            self._validate_include(value, rule, path, errors, done=None)
+        elif rule._sequence is not None:
             self._validate_sequence(value, rule, path, errors, done=None)
         elif rule._mapping is not None or rule._allowempty_map:
             self._validate_mapping(value, rule, path, errors, done=None)
@@ -166,6 +168,19 @@ class Core(object):
 
         if len(errors) != n:
             return
+
+    def _validate_include(self, value, rule, path, errors=[], done=None):
+        if rule._include_name is None:
+            errors.append("Include name not valid : {} : {}".format(path, value))
+            return
+
+        include_name = rule._include_name
+        partial_schema_rule = pykwalify.partial_schemas.get(include_name, None)
+        if not partial_schema_rule:
+            errors.append("No partial schema found for name : {} : Existing partial schemas: {}".format(include_name, ", ".join(sorted(pykwalify.partial_schemas.keys()))))
+            return
+
+        self._validate(value, partial_schema_rule, path, errors, done)
 
     def _validate_sequence(self, value, rule, path, errors=[], done=None):
         Log.debug("Core Validate sequence")

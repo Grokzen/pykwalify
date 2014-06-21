@@ -13,7 +13,6 @@ import logging
 Log = logging.getLogger(__name__)
 
 # pyKwalify imports
-import pykwalify
 from pykwalify.types import DEFAULT_TYPE, typeClass, isBuiltinType, isCollectionType
 from pykwalify.errors import SchemaConflict, RuleError
 
@@ -43,6 +42,7 @@ class Rule(object):
         self._matching_rule = None
         self._map_regex_rule = None
         self._regex_mappings = None
+        self._include_name = None
 
         self._parent = parent
         self._schema = schema
@@ -62,13 +62,8 @@ class Rule(object):
         # Check if this item is a include, overwrite schema with include schema and continue to parse
         if include:
             Log.debug("Found include tag...")
-            partial_schema = pykwalify.partial_schemas.get(include, None)
-            if not partial_schema:
-                raise RuleError("include partial schema id error : schema id '{}' not found : Available partial schemas [{}]".format(include, ", ".join(pykwalify.partial_schemas.keys())))
-
-            # Partial schema found, overwrite this rule with the partial schema rule and continue to parse like normal...
-            schema = partial_schema._schema_str
-            Log.debug("Parsing partial schema rule : {}".format(schema))
+            self._include_name = include
+            return
 
         if schema is not None:
             if "type" not in schema:

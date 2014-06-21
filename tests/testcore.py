@@ -10,11 +10,15 @@ import unittest
 from testfixtures import compare
 
 # pyKwalify imports
+import pykwalify
 from pykwalify.core import Core
 from pykwalify.errors import PyKwalifyExit, UnknownError, FileNotAccessible, OptionError, NotImplemented, ParseFailure, SchemaError, CoreError, RuleError
 
 
 class TestCore(unittest.TestCase):
+
+    def setUp(self):
+        pykwalify.partial_schemas = {}
 
     def f(self, *args):
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "files", *args)
@@ -56,15 +60,15 @@ class TestCore(unittest.TestCase):
         pass_tests = [
             # Test that include directive can be used at top level of the schema
             ([self.f("33a.yaml"), self.f("33b.yaml")], self.f("33c.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'}),
-            # This test that include directive works inside sequence
-            ([self.f("33a.yaml"), self.f("33b.yaml")], self.f("33c.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'}),
+            # # This test that include directive works inside sequence
+            # ([self.f("33a.yaml"), self.f("33b.yaml")], self.f("33c.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'}),
             # This test recursive schemas
             ([self.f("35a.yaml"), self.f("35b.yaml")], self.f("35c.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'})
         ]
 
         failing_tests = [
-            # Test include inside partial schema  # TODO: This test do not currently work correctly
-            ([self.f("34a.yaml"), self.f("34b.yaml")], self.f("34c.yaml"), SchemaError, ['mapping.value.notdict : opa : /0/foo'])
+            # Test include inside partial schema
+            ([self.f("34a.yaml"), self.f("34b.yaml")], self.f("34c.yaml"), SchemaError, ['No partial schema found for name : fooonez : Existing partial schemas: fooone, foothree, footwo'])
         ]
 
         for passing_test in pass_tests:
@@ -83,6 +87,9 @@ class TestCore(unittest.TestCase):
             with self.assertRaises(failing_test[2], msg="Test files: {} : {}".format(", ".join(failing_test[0]), failing_test[1])):
                 c = Core(schema_files=failing_test[0], source_file=failing_test[1])
                 c.validate()
+
+            if not c.validation_errors:
+                raise AssertionError("No validation_errors was raised...")
 
             compare(sorted(c.validation_errors), sorted(failing_test[3]), prefix="Wrong validation errors when parsing files : {} : {}".format(failing_test[0], failing_test[1]))
 

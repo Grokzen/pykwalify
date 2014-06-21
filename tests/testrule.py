@@ -5,11 +5,15 @@
 import unittest
 
 # pyKwalify imports
+import pykwalify
 from pykwalify.rule import Rule
-from pykwalify.errors import RuleError
+from pykwalify.errors import RuleError, SchemaError
 
 
 class TestRule(unittest.TestCase):
+
+    def setUp(self):
+        pykwalify.partial_schemas = {}
 
     def testRuleClass(self):
         # this tests seq type with a internal type of str
@@ -106,10 +110,6 @@ class TestRule(unittest.TestCase):
         # Test that pattern keyword is not allowed when using a map
         with self.assertRaisesRegexp(RuleError, ".+map\.pattern.+"):
             Rule(schema={"type": "map", "pattern": "^[a-z]+$", "allowempty": True, "mapping": {"name": {"type": "str"}}})
-
-        # Test that error is raised when using include tag but schema do not exists
-        with self.assertRaises(RuleError):
-            r = Rule(schema={"type": "map", "mapping": {"foo": {"include": "str"}}})
 
         # Test that when only having a schema; rule it should throw error
         with self.assertRaises(RuleError):
