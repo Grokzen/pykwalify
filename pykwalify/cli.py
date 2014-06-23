@@ -31,7 +31,7 @@ def main():
     #####
 
     __docopt__ = """
-usage: pykwalify -d DATAFILE -s SCHEMAFILE [-q] [-v ...]
+usage: pykwalify -d DATAFILE -s SCHEMAFILE ... [-q] [-v ...]
        pykwalify -h | --help
        pykwalify -V | --version
 
@@ -92,5 +92,5 @@ optional arguments:
     ##### 3. parse cli arguments
     #####
 
-    c = Core(source_file=args["--data-file"], schema_file=args["--schema-file"])
+    c = Core(source_file=args["--data-file"], schema_files=args["--schema-file"])
     c.validate()

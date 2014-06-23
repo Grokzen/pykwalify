@@ -10,11 +10,15 @@ import unittest
 from testfixtures import compare
 
 # pyKwalify imports
+import pykwalify
 from pykwalify.core import Core
 from pykwalify.errors import PyKwalifyExit, UnknownError, FileNotAccessible, OptionError, NotImplemented, ParseFailure, SchemaError, CoreError, RuleError
 
 
 class TestCore(unittest.TestCase):
+
+    def setUp(self):
+        pykwalify.partial_schemas = {}
 
     def f(self, *args):
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "files", *args)
@@ -48,6 +52,46 @@ class TestCore(unittest.TestCase):
 
         with self.assertRaises(SchemaError):
             Core(source_data=dict, schema_data={"type": "any"}).validate()
+
+    def test_multi_file_support(self):
+        """
+        This should test that multiple files is supported correctly
+        """
+        pass_tests = [
+            # Test that include directive can be used at top level of the schema
+            ([self.f("33a.yaml"), self.f("33b.yaml")], self.f("33c.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'}),
+            # # This test that include directive works inside sequence
+            # ([self.f("33a.yaml"), self.f("33b.yaml")], self.f("33c.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'}),
+            # This test recursive schemas
+            ([self.f("35a.yaml"), self.f("35b.yaml")], self.f("35c.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'})
+        ]
+
+        failing_tests = [
+            # Test include inside partial schema
+            ([self.f("34a.yaml"), self.f("34b.yaml")], self.f("34c.yaml"), SchemaError, ['No partial schema found for name : fooonez : Existing partial schemas: fooone, foothree, footwo'])
+        ]
+
+        for passing_test in pass_tests:
+            try:
+                c = Core(source_file=passing_test[1], schema_files=passing_test[0])
+                c.validate()
+                compare(c.validation_errors, [], prefix="No validation errors should exist...")
+            except Exception as e:
+                print("ERROR RUNNING FILE: {} : {}".format(passing_test[0], passing_test[1]))
+                raise e
+
+            # This serve as an extra schema validation that tests more complex structures then testrule.py do
+            compare(c.root_rule._schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed...")
+
+        for failing_test in failing_tests:
+            with self.assertRaises(failing_test[2], msg="Test files: {} : {}".format(", ".join(failing_test[0]), failing_test[1])):
+                c = Core(schema_files=failing_test[0], source_file=failing_test[1])
+                c.validate()
+
+            if not c.validation_errors:
+                raise AssertionError("No validation_errors was raised...")
+
+            compare(sorted(c.validation_errors), sorted(failing_test[3]), prefix="Wrong validation errors when parsing files : {} : {}".format(failing_test[0], failing_test[1]))
 
     def testCore(self):
         # These tests should pass with no exception raised
@@ -130,7 +174,7 @@ class TestCore(unittest.TestCase):
 
         for passing_test in pass_tests:
             try:
-                c = Core(source_file=self.f(passing_test[0]), schema_file=self.f(passing_test[1]))
+                c = Core(source_file=self.f(passing_test[0]), schema_files=[self.f(passing_test[1])])
                 c.validate()
                 compare(c.validation_errors, [], prefix="No validation errors should exist...")
             except Exception as e:
@@ -142,8 +186,7 @@ class TestCore(unittest.TestCase):
 
         for failing_test in fail_tests:
             with self.assertRaises(failing_test[2], msg="Test file: {} : {}".format(failing_test[0], failing_test[1])):
-                c = Core(source_file=self.f(failing_test[0]), schema_file=self.f(failing_test[1]))
+                c = Core(source_file=self.f(failing_test[0]), schema_files=[self.f(failing_test[1])])
                 c.validate()
 
             compare(sorted(c.validation_errors), sorted(failing_test[3]), prefix="Wrong validation errors when parsing files : {} : {}".format(failing_test[0], failing_test[1]))
-    

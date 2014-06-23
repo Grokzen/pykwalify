@@ -1,0 +1,11 @@
+schema;fooone:
+  type: map
+  mapping:
+    foo:
+      include: footwo
+
+schema;footwo:
+  type: map
+  mapping:
+    foo:
+      type: bool
