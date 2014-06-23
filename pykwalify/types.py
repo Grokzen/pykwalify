@@ -24,7 +24,8 @@ _types = {"str": str,
           "scalar": None,
           "text": None,
           "any": object,
-          "enum": str
+          "enum": str,
+          "none": None
           }
 
 
@@ -88,6 +89,10 @@ def isEnum(obj):
     return isinstance(obj, str)
 
 
+def isNone(obj):
+    return obj is None
+
+
 tt = {"str": isString,
       "int": isInt,
       "bool": isBool,
@@ -96,4 +101,5 @@ tt = {"str": isString,
       "text": isText,
       "any": isAny,
       "enum": isEnum,
+      "none": isNone
       }

@@ -101,6 +101,7 @@ type:
      - timestamp [NYI]
      - seq
      - map
+     - none
      - scalar (all but seq and map)
      - any (means any implemented type of data)
 

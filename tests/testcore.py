@@ -130,6 +130,8 @@ class TestCore(unittest.TestCase):
             ("30a.yaml", "30b.yaml", {'sequence': [{'mapping': {'foobar': {'mapping': {'opa': {'type': 'bool'}}, 'type': 'map'}, 'media': {'type': 'int'}, 'regex;[mi.+]': {'sequence': [{'type': 'str'}], 'type': 'seq'}, 'regex;[mo.+]': {'sequence': [{'type': 'bool'}], 'type': 'seq'}}, 'matching-rule': 'any', 'type': 'map'}], 'type': 'seq'}),
             # This test that a regex that will compile
             ("31a.yaml", "31b.yaml", {'mapping': {'regex;mi.+': {'sequence': [{'type': 'str'}], 'type': 'seq'}}, 'matching-rule': 'any', 'type': 'map'}),
+            # Test that type can be set to 'None' and it will validate ok
+            ("37a.yaml", "37b.yaml", {'mapping': {'streams': {'required': True, 'sequence': [{'mapping': {'name': {'required': True, 'type': 'none'}, 'sampleRateMultiple': {'required': True, 'type': 'int'}}, 'type': 'map'}], 'type': 'seq'}}, 'type': 'map'}),
         ]
 
         # These tests are designed to fail with some exception raised
@@ -170,6 +172,8 @@ class TestCore(unittest.TestCase):
             ("22a.yaml", "22b.yaml", SchemaError, ["Value: abc is not of type 'number' : /2"]),
             # This test the text validation rule with wrong data
             ("24a.yaml", "24b.yaml", SchemaError, ["Value: True is not of type 'text' : /3"]),
+            # This test that typechecking works when value in map is None
+            ("36a.yaml", "36b.yaml", SchemaError, ["Value: None is not of type 'str' : /streams/0/name"])
         ]
 
         for passing_test in pass_tests:
