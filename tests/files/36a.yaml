@@ -1,0 +1,5 @@
+streams:
+  - name:
+    sampleRateMultiple: 1
+  - name: media
+    sampleRateMultiple: 2

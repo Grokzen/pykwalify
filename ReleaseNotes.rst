@@ -2,6 +2,16 @@
 Release Notes
 =============
 
+v14.06.1
+========
+
+ - New feature "partial schema". Define a small schema with a ID that can be reused at other places in the schema. See readme for details.
+ - New directive "include" that is used to include a partial schema at the specefied location.
+ - Cli and Core() now can handle multiple schema files.
+ - Directive "pattern" can no longer be used with map to validate all keys against that regex. Use "regex;" inside "mapping:"
+ - 'none' can now be used as a type
+ - Many more tests added
+
 v14.06
 ======
 

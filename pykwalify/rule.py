@@ -42,6 +42,7 @@ class Rule(object):
         self._matching_rule = None
         self._map_regex_rule = None
         self._regex_mappings = None
+        self._include_name = None
 
         self._parent = parent
         self._schema = schema
@@ -56,9 +57,15 @@ class Rule(object):
     def init(self, schema, path):
         Log.debug("Init schema: {}".format(schema))
 
-        if schema is not None:
-            # assert isinstance(schema, dict), "schema is not a dict : {}".format(path)
+        include = schema.get("include", None)
 
+        # Check if this item is a include, overwrite schema with include schema and continue to parse
+        if include:
+            Log.debug("Found include tag...")
+            self._include_name = include
+            return
+
+        if schema is not None:
             if "type" not in schema:
                 raise RuleError("key 'type' not found in schema rule : {}".format(path))
             else:
@@ -96,6 +103,9 @@ class Rule(object):
         for k, v in schema.items():
             if k in func_mapping:
                 func_mapping[k](v, rule, path)
+            elif k.startswith("schema;"):
+                Log.debug("Found schema tag...")
+                raise RuleError("Schema is only allowed on top level of schema file...")
             else:
                 raise RuleError("Unknown key: {} found : {}".format(k, path))
 
@@ -159,6 +169,9 @@ class Rule(object):
             raise RuleError("pattern.notstr : {} : {}".format(v, path))
 
         self._pattern = v
+
+        if self._schema_str["type"] == "map":
+            raise RuleError("map.pattern : pattern not allowed inside map : {} : {}".format(v, path))
 
         # TODO: Some form of validation of the regexp? it exists in the source
 

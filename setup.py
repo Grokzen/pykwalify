@@ -7,7 +7,7 @@ settings = dict()
 
 settings.update(
     name="pykwalify",
-    version="14.06",
+    version="14.06.1",
     description='Python lib/cli for JSON/YAML schema validation',
     long_description='Python lib/cli for JSON/YAML schema validation',
     author="Grokzen",

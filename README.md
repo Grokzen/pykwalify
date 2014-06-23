@@ -69,6 +69,22 @@ Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
 
 
 
+# How to run tests
+
+Install test requirements with
+
+```
+pip install -r test-requirements.txt
+```
+
+Run tests with
+
+```
+nosetests
+```
+
+
+
 # Implemented validation rules
 
 ```
@@ -85,6 +101,7 @@ type:
      - timestamp [NYI]
      - seq
      - map
+     - none
      - scalar (all but seq and map)
      - any (means any implemented type of data)
 
@@ -96,11 +113,10 @@ enum:
 
 pattern:
     Specifies regular expression pattern of value. (Uses re.match() )
-    pattern rule works in map to validate keys, it is usefull when allowempty is set to True.
     Pattern also works on all scalar types.
-    This will be matched against all keys in a map.
+    Pattern no longer works in map. Use regex;<regex-pattern> as keys in "mapping:"
 
-regex;<regex pattern>:
+regex;<regex-pattern>:
     This is only implemented in map where a key inside the mapping keyword can implement this regex; pattern and all keys will be matched against the pattern.
     If a match is found then it will parsed the subrules on that key. A single key can be matched against multiple regex rules and the normal map rules.
 
@@ -133,6 +149,40 @@ matching-rule:
     Only applies to map. This enables more finegrained control over how the matching rule should behave when validation keys inside mappings.
     Currently supported rules is
      - any [This will match any number of hits, 0 to n number of hits will be allowed]
+```
+
+
+
+## Partial schemas
+
+It is possible to create small partial schemas that can be included in other schemas. This feature do not use any built-in YAML or JSON linking.
+
+To define a partial schema use the keyword "schema;<schema-id>:". <schema-id> must be globally unique for the loaded schema partials. If collisions is detected then error will be raised.
+
+To use a partial schema use the keyword "include: <schema-id>:". This will work at any place you can specify the keyword "type". Include directive do not currently work inside a partial schema.
+
+It is possible to define any number of partial schemas in any schema file as long as they are defined at top level of the schema.
+
+For example, this schema contains one partial and the regular schema.
+
+```yaml
+schema;fooone:
+  type: map
+  mapping:
+    foo:
+      type: str
+
+
+type: seq
+sequence:
+  - include: fooone
+
+```
+
+And it can be used to validate the following data
+
+```yaml
+- foo: "opa"
 ```
 
 

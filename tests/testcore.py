@@ -10,11 +10,15 @@ import unittest
 from testfixtures import compare
 
 # pyKwalify imports
+import pykwalify
 from pykwalify.core import Core
 from pykwalify.errors import PyKwalifyExit, UnknownError, FileNotAccessible, OptionError, NotImplemented, ParseFailure, SchemaError, CoreError, RuleError
 
 
 class TestCore(unittest.TestCase):
+
+    def setUp(self):
+        pykwalify.partial_schemas = {}
 
     def f(self, *args):
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "files", *args)
@@ -48,6 +52,46 @@ class TestCore(unittest.TestCase):
 
         with self.assertRaises(SchemaError):
             Core(source_data=dict, schema_data={"type": "any"}).validate()
+
+    def test_multi_file_support(self):
+        """
+        This should test that multiple files is supported correctly
+        """
+        pass_tests = [
+            # Test that include directive can be used at top level of the schema
+            ([self.f("33a.yaml"), self.f("33b.yaml")], self.f("33c.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'}),
+            # # This test that include directive works inside sequence
+            # ([self.f("33a.yaml"), self.f("33b.yaml")], self.f("33c.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'}),
+            # This test recursive schemas
+            ([self.f("35a.yaml"), self.f("35b.yaml")], self.f("35c.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'})
+        ]
+
+        failing_tests = [
+            # Test include inside partial schema
+            ([self.f("34a.yaml"), self.f("34b.yaml")], self.f("34c.yaml"), SchemaError, ['No partial schema found for name : fooonez : Existing partial schemas: fooone, foothree, footwo'])
+        ]
+
+        for passing_test in pass_tests:
+            try:
+                c = Core(source_file=passing_test[1], schema_files=passing_test[0])
+                c.validate()
+                compare(c.validation_errors, [], prefix="No validation errors should exist...")
+            except Exception as e:
+                print("ERROR RUNNING FILE: {} : {}".format(passing_test[0], passing_test[1]))
+                raise e
+
+            # This serve as an extra schema validation that tests more complex structures then testrule.py do
+            compare(c.root_rule._schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed...")
+
+        for failing_test in failing_tests:
+            with self.assertRaises(failing_test[2], msg="Test files: {} : {}".format(", ".join(failing_test[0]), failing_test[1])):
+                c = Core(schema_files=failing_test[0], source_file=failing_test[1])
+                c.validate()
+
+            if not c.validation_errors:
+                raise AssertionError("No validation_errors was raised...")
+
+            compare(sorted(c.validation_errors), sorted(failing_test[3]), prefix="Wrong validation errors when parsing files : {} : {}".format(failing_test[0], failing_test[1]))
 
     def testCore(self):
         # These tests should pass with no exception raised
@@ -83,13 +127,11 @@ class TestCore(unittest.TestCase):
             #
             ("26a.yaml", "26b.yaml", {'type': 'any'}),
             #
-            ("28a.yaml", "28b.yaml", {'allowempty': True, 'mapping': {'name': {'type': 'str'}}, 'pattern': '^[a-z0-9]+$', 'type': 'map'}),
-            #
-            ("29a.yaml", "29b.yaml", {'sequence': [{'mapping': {'bits': {'type': 'str'}, 'name': {'type': 'str'}}, 'pattern': '.+', 'type': 'map'}], 'type': 'seq'}),
-            #
             ("30a.yaml", "30b.yaml", {'sequence': [{'mapping': {'foobar': {'mapping': {'opa': {'type': 'bool'}}, 'type': 'map'}, 'media': {'type': 'int'}, 'regex;[mi.+]': {'sequence': [{'type': 'str'}], 'type': 'seq'}, 'regex;[mo.+]': {'sequence': [{'type': 'bool'}], 'type': 'seq'}}, 'matching-rule': 'any', 'type': 'map'}], 'type': 'seq'}),
             # This test that a regex that will compile
             ("31a.yaml", "31b.yaml", {'mapping': {'regex;mi.+': {'sequence': [{'type': 'str'}], 'type': 'seq'}}, 'matching-rule': 'any', 'type': 'map'}),
+            # Test that type can be set to 'None' and it will validate ok
+            ("37a.yaml", "37b.yaml", {'mapping': {'streams': {'required': True, 'sequence': [{'mapping': {'name': {'required': True, 'type': 'none'}, 'sampleRateMultiple': {'required': True, 'type': 'int'}}, 'type': 'map'}], 'type': 'seq'}}, 'type': 'map'}),
         ]
 
         # These tests are designed to fail with some exception raised
@@ -130,21 +172,25 @@ class TestCore(unittest.TestCase):
             ("22a.yaml", "22b.yaml", SchemaError, ["Value: abc is not of type 'number' : /2"]),
             # This test the text validation rule with wrong data
             ("24a.yaml", "24b.yaml", SchemaError, ["Value: True is not of type 'text' : /3"]),
-            # This tests pattern matching on keys in a map
-            ("27a.yaml", "27b.yaml", SchemaError, ['pattern.unmatch : ^[a-z]+$ --> na1me : ']),
+            # This test that typechecking works when value in map is None
+            ("36a.yaml", "36b.yaml", SchemaError, ["Value: None is not of type 'str' : /streams/0/name"])
         ]
 
         for passing_test in pass_tests:
-            c = Core(source_file=self.f(passing_test[0]), schema_file=self.f(passing_test[1]))
-            c.validate()
-            compare(c.validation_errors, [], prefix="No validation errors should exist...")
+            try:
+                c = Core(source_file=self.f(passing_test[0]), schema_files=[self.f(passing_test[1])])
+                c.validate()
+                compare(c.validation_errors, [], prefix="No validation errors should exist...")
+            except Exception as e:
+                print("ERROR RUNNING FILE: {} : {}".format(passing_test[0], passing_test[1]))
+                raise e
 
             # This serve as an extra schema validation that tests more complex structures then testrule.py do
             compare(c.root_rule._schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed...")
 
         for failing_test in fail_tests:
             with self.assertRaises(failing_test[2], msg="Test file: {} : {}".format(failing_test[0], failing_test[1])):
-                c = Core(source_file=self.f(failing_test[0]), schema_file=self.f(failing_test[1]))
+                c = Core(source_file=self.f(failing_test[0]), schema_files=[self.f(failing_test[1])])
                 c.validate()
 
             compare(sorted(c.validation_errors), sorted(failing_test[3]), prefix="Wrong validation errors when parsing files : {} : {}".format(failing_test[0], failing_test[1]))

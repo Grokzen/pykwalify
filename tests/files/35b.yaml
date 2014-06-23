@@ -1,0 +1,16 @@
+schema;footwo:
+  type: map
+  mapping:
+    bar:
+      include: foothree
+
+schema;fooone:
+  type: map
+  mapping:
+    foo:
+      include: footwo
+
+schema;foothree:
+  type: seq
+  sequence:
+    - type: bool

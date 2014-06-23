@@ -5,11 +5,15 @@
 import unittest
 
 # pyKwalify imports
+import pykwalify
 from pykwalify.rule import Rule
-from pykwalify.errors import RuleError
+from pykwalify.errors import RuleError, SchemaError
 
 
 class TestRule(unittest.TestCase):
+
+    def setUp(self):
+        pykwalify.partial_schemas = {}
 
     def testRuleClass(self):
         # this tests seq type with a internal type of str
@@ -102,3 +106,15 @@ class TestRule(unittest.TestCase):
         # This will test that a invalid regex will throw error when parsing rules
         with self.assertRaises(RuleError):
             Rule(schema={"type": "map", "matching-rule": "any", "mapping": {"regex;(+": {"type": "seq", "sequence": [{"type": "str"}]}}})
+
+        # Test that pattern keyword is not allowed when using a map
+        with self.assertRaisesRegexp(RuleError, ".+map\.pattern.+"):
+            Rule(schema={"type": "map", "pattern": "^[a-z]+$", "allowempty": True, "mapping": {"name": {"type": "str"}}})
+
+        # Test that when only having a schema; rule it should throw error
+        with self.assertRaises(RuleError):
+            r = Rule(schema={"schema;fooone": {"type": "map", "mapping": {"foo": {"type": "str"}}}})
+
+        # Test that when using both schema; and include tag that it throw an error because schema; tags should be parsed via Core()
+        with self.assertRaises(RuleError):
+            r = Rule(schema={"schema;str": {"type": "map", "mapping": {"foo": {"type": "str"}}}, "type": "map", "mapping": {"foo": {"include": "str"}}})
