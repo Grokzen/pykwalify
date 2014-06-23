@@ -273,6 +273,8 @@ class Core(object):
         if rule._default and value is None:
             value = rule._default
 
+        self._validate_scalar_type(value, rule._type, errors, path)
+
         if value is None:
             return
 
@@ -351,7 +353,6 @@ class Core(object):
             if l.get("min-ex", None) is not None and l["min-ex"] >= L:
                 errors.append("length.tooshort-ex : {} >= {} : {}".format(l["min-ex"], L, path))
 
-        self._validate_scalar_type(value, rule._type, errors, path)
 
     def _validate_scalar_type(self, value, t, errors, path):
         Log.debug("Core scalar: validating scalar type")
