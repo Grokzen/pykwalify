@@ -2,6 +2,12 @@
 Release Notes
 =============
 
+v14.06.2
+========
+
+ - Keyword 'range' can now be applied to map & seq types.
+ - Added many more test files.
+
 v14.06.1
 ========
 
