@@ -1,8 +1,10 @@
 help:
 	@echo "Please use 'make <target>' where <target> is one of"
 	@echo "  clean           remove temporary files created by build tools"
+	@echo "  cleantox        remove files created by tox"
+	@echo "  cleanegg        remove temporary files created by build tools"
+	@echo "  cleanpy         remove temporary python files"
 	@echo "  cleanall        all the above + tmp files from development tools"
-	@echo "  cleanmeta       Cleans out all META.* files from the lib folder"
 	@echo "  test            run test suite"
 	@echo "  sdist           make a source distribution"
 	@echo "  install         install package"
@@ -15,9 +17,6 @@ clean:
 cleantox:
 	-rm -rf .tox/
 
-cleanmeta:
-	-rm -rf pykwalify/META-*
-
 cleanegg:
 	-rm -rf pykwalify.egg-info/
 
@@ -29,13 +28,13 @@ cleanpy:
 	-find . -type f -name "*.parse-index" -exec rm -f "{}" \;
 	-find . -type d -name "__pycache__" -exec rm -rf "{}" \;
 
-cleanall: clean cleanmeta cleanegg cleantox cleanpy
+cleanall: clean cleanegg cleantox cleanpy
 
 test:
 	python runtests.py
 
-sdist: cleanmeta
+sdist:
 	python setup.py sdist
 
-install: cleanmeta
+install:
 	python setup.py install
