@@ -12,19 +12,24 @@ clean:
 	-rm -rf dist/
 	-rm -rf build/
 
+cleantox:
+	-rm -rf .tox/
+
 cleanmeta:
 	-rm -rf pykwalify/META-*
 
 cleanegg:
 	-rm -rf pykwalify.egg-info/
 
-cleanall: clean cleanmeta cleanegg
+cleanpy:
 	-find . -type f -name "*~" -exec rm -f "{}" \;
 	-find . -type f -name "*.orig" -exec rm -f "{}" \;
 	-find . -type f -name "*.rej" -exec rm -f "{}" \;
 	-find . -type f -name "*.pyc" -exec rm -f "{}" \;
 	-find . -type f -name "*.parse-index" -exec rm -f "{}" \;
 	-find . -type d -name "__pycache__" -exec rm -rf "{}" \;
+
+cleanall: clean cleanmeta cleanegg cleantox cleanpy
 
 test:
 	python runtests.py
