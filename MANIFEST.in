@@ -2,3 +2,4 @@ exclude *.py
 include License.txt
 include ReleaseNotes.rst
 include setup.py
+include README.md
