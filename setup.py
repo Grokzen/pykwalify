@@ -8,9 +8,7 @@ with open('README.md') as f:
 with open('ReleaseNotes.rst') as f:
     history = f.read()
 
-settings = dict()
-
-settings.update(
+setup(
     name="pykwalify",
     version="14.06.1",
     description='Python lib/cli for JSON/YAML schema validation',
@@ -34,5 +32,3 @@ settings.update(
         'Programming Language :: Python :: 3.3',
     )
 )
-
-setup(**settings)
