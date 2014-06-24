@@ -1,21 +1,8 @@
-# Setup python versions to test
+# Travis (http://travis-ci.org/) is a continuous integration
+# service for open source projects. This file configures
+# Travis to install and run "tox" test runner, which is
+# configured in tox.ini file.
+
 language: python
-python:
-  - "2.7"
-  - "3.2"
-  - "3.3"
-  - "3.4"
-
-# command to install redisco with dependencies
-install:
-  - pip install . --use-mirrors
-  - pip install -r test-requirements.txt
-  # - pip install coverage python-coveralls --use-mirrors  # TODO: Implement this at later time
-
-# command to run tests
-script:
-  - nosetests
-
-# TODO: Implement this at later time
-# after_success:
-#   - coveralls
+install: pip install tox --use-mirrors
+script: tox

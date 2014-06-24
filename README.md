@@ -74,13 +74,19 @@ Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
 Install test requirements with
 
 ```
-pip install -r test-requirements.txt
+pip install -r dev-requirements.txt
 ```
 
-Run tests with
+Run tests with with the current python version
 
 ```
-nosetests
+py.test
+```
+
+or if you want to test against all python versions run
+
+```
+tox
 ```
 
 
