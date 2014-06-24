@@ -407,28 +407,28 @@ class Core(object):
             if not isinstance(max_, int):
                 raise Exception("INTERNAL ERROR: variable 'max' not of 'int' type")
 
-            if max_ <= value:
+            if max_ < value:
                 errors.append("{}.range.toolarge : {} < {} : {}".format(prefix, max_, value, path))
 
         if min_ is not None:
             if not isinstance(min_, int):
                 raise Exception("INTERNAL ERROR: variable 'min_' not of 'int' type")
 
-            if min_ >= value:
+            if min_ > value:
                 errors.append("{}.range.toosmall : {} > {} : {}".format(prefix, min_, value, path))
 
         if max_ex is not None:
             if not isinstance(max_ex, int):
                 raise Exception("INTERNAL ERROR: variable 'max_ex' not of 'int' type")
 
-            if max_ex < value:
+            if max_ex <= value:
                 errors.append("{}.range.tolarge-ex : {} <= {} : {}".format(prefix, max_ex, value, path))
 
         if min_ex is not None:
             if not isinstance(min_ex, int):
                 raise Exception("INTERNAL ERROR: variable 'min_ex' not of 'int' type")
 
-            if min_ex > value:
+            if min_ex >= value:
                 errors.append("{}.range.toosmall-ex : {} >= {} : {}".format(prefix, min_ex, value, path))
 
     def _validate_scalar_type(self, value, t, errors, path):
