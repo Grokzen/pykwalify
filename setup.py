@@ -3,13 +3,18 @@ try:
 except ImportError:
     from distutils.core import setup
 
+with open('README.md') as f:
+    readme = f.read()
+with open('ReleaseNotes.rst') as f:
+    history = f.read()
+
 settings = dict()
 
 settings.update(
     name="pykwalify",
     version="14.06.1",
     description='Python lib/cli for JSON/YAML schema validation',
-    long_description='Python lib/cli for JSON/YAML schema validation',
+    long_description=readme + '\n\n' + history,
     author="Grokzen",
     author_email="Grokzen@gmail.com",
     packages=['pykwalify'],
