@@ -208,6 +208,18 @@ class Core(object):
 
         Log.debug("Core seq: validation recursivley done...")
 
+        if rule._range is not None:
+            rr = rule._range
+
+            self._validate_range(rr.get("max", None),
+                                 rr.get("min", None),
+                                 rr.get("max-ex", None),
+                                 rr.get("min-ex", None),
+                                 errors,
+                                 len(value),
+                                 path,
+                                 "seq")
+
         if r._type == "map":
             Log.debug("Found map inside sequence")
             mapping = r._mapping
@@ -271,6 +283,18 @@ class Core(object):
 
         m = rule._mapping
         Log.debug(" + RuleMapping: {}".format(m))
+
+        if rule._range is not None:
+            r = rule._range
+
+            self._validate_range(r.get("max", None),
+                                 r.get("min", None),
+                                 r.get("max-ex", None),
+                                 r.get("min-ex", None),
+                                 errors,
+                                 len(value),
+                                 path,
+                                 "map")
 
         for k, rr in m.items():
             if rr._required and k not in value:
@@ -344,52 +368,19 @@ class Core(object):
             r = rule._range
 
             try:
-                if r.get("max", None) is not None and r["max"] < int(value):
-                    errors.append("range.toolarge : {} < {} : {}".format(r["max"], value, path))
-            except Exception as e:
-                # In python3 there can be issues when comparing for example int < str.
-                # Try to apply len() but if that fails then report it as an exception
-                try:
-                    if r.get("max", None) is not None and r["max"] < len(value):
-                        errors.append("range.toolarge : {} < {} : {}".format(r["max"], value, path))
-                except Exception as e:
-                    errors.append("EXCEPTION: range.{} :: {} < {}".format(e, r.get("max", None), value))
+                v = len(value)
+                value = v
+            except Exception:
+                pass
 
-            try:
-                if r.get("min", None) is not None and r["min"] > int(value):
-                    errors.append("range.toosmall : {} > {} : {}".format(r["min"], value, path))
-            except Exception as e:
-                # In python3 there can be issues when comparing for example int < str.
-                # Try to apply len() but if that fails then report it as an exception
-                try:
-                    if r.get("max", None) is not None and r["max"] < len(value):
-                        errors.append("range.toosmall : {} > {} : {}".format(r["min"], value, path))
-                except Exception as e:
-                    errors.append("EXCEPTION: range.{} :: {} > {}".format(e, r.get("min", None), value))
-
-            try:
-                if r.get("max-ex", None) is not None and r["max-ex"] <= int(value):
-                    errors.append("range.tolarge-ex : {} <= {} : {}".format(r["max-ex"], value, path))
-            except Exception as e:
-                # In python3 there can be issues when comparing for example int < str.
-                # Try to apply len() but if that fails then report it as an exception
-                try:
-                    if r.get("max", None) is not None and r["max"] < len(value):
-                        errors.append("range.tolarge-ex : {} <= {} : {}".format(r["max-ex"], value, path))
-                except Exception as e:
-                    errors.append("EXCEPTION: range.{} :: {} <= {}".format(e, r.get("max-ex", None), value))
-
-            try:
-                if r.get("min-ex", None) is not None and r["min-ex"] >= int(value):
-                    errors.append("range.toosmall-ex : {} >= {} : {}".format(r["min-ex"], value, path))
-            except Exception as e:
-                # In python3 there can be issues when comparing for example int < str.
-                # Try to apply len() but if that fails then report it as an exception
-                try:
-                    if r.get("max", None) is not None and r["max"] < len(value):
-                        errors.append("range.toosmall-ex : {} >= {} : {}".format(r["min-ex"], value, path))
-                except Exception as e:
-                    errors.append("EXCEPTION: range.{} :: {} >= {}".format(e, r.get("min-ex", None), value))
+            self._validate_range(r.get("max", None),
+                                 r.get("min", None),
+                                 r.get("max-ex", None),
+                                 r.get("min-ex", None),
+                                 errors,
+                                 value,
+                                 path,
+                                 "scalar")
 
         if rule._length is not None:
             if not isinstance(value, str):
@@ -407,9 +398,41 @@ class Core(object):
             if l.get("min-ex", None) is not None and l["min-ex"] >= L:
                 errors.append("length.tooshort-ex : {} >= {} : {}".format(l["min-ex"], L, path))
 
+    def _validate_range(self, max_, min_, max_ex, min_ex, errors, value, path, prefix):
+        ##########
+        # Test max
+        Log.debug("Validate range : {} : {} : {} : {} : {} : {}".format(max_, min_, max_ex, min_ex, value, path))
+
+        if max_ is not None:
+            if not isinstance(max_, int):
+                raise Exception("INTERNAL ERROR: variable 'max' not of 'int' type")
+
+            if max_ <= value:
+                errors.append("{}.range.toolarge : {} < {} : {}".format(prefix, max_, value, path))
+
+        if min_ is not None:
+            if not isinstance(min_, int):
+                raise Exception("INTERNAL ERROR: variable 'min_' not of 'int' type")
+
+            if min_ >= value:
+                errors.append("{}.range.toosmall : {} > {} : {}".format(prefix, min_, value, path))
+
+        if max_ex is not None:
+            if not isinstance(max_ex, int):
+                raise Exception("INTERNAL ERROR: variable 'max_ex' not of 'int' type")
+
+            if max_ex < value:
+                errors.append("{}.range.tolarge-ex : {} <= {} : {}".format(prefix, max_ex, value, path))
+
+        if min_ex is not None:
+            if not isinstance(min_ex, int):
+                raise Exception("INTERNAL ERROR: variable 'min_ex' not of 'int' type")
+
+            if min_ex > value:
+                errors.append("{}.range.toosmall-ex : {} >= {} : {}".format(prefix, min_ex, value, path))
 
     def _validate_scalar_type(self, value, t, errors, path):
-        Log.debug("Core scalar: validating scalar type")
+        Log.debug("Core scalar: validating scalar type : {}".format(t))
         Log.debug("Core scalar: scalar type: {}".format(type(value)))
 
         try:

@@ -126,7 +126,8 @@ range:
     'min' means 'min-inclusive'. (a < b)
     'max-ex' means 'max-exclusive'. (a >= b)
     'min-ex' means 'min-exclusive'. (a <= b)
-    Type seq, map, bool and any are not available with range
+    This works with map & seq, str, int
+    Type bool and any are not available with range
 
 length:
     Range of length of value between max/max-ex and min/min-ex. Only type str and text are available with length

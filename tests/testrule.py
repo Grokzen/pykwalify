@@ -69,11 +69,6 @@ class TestRule(unittest.TestCase):
 
         Rule(schema={"type": "str", "range": {"max": "z", "min": "a"}})
 
-        # this tests that the range values is not for the string but only for int.
-        # min/max must be the same type as the value of the type key
-        with self.assertRaises(RuleError):
-            Rule(schema={"type": "str", "range": {"max": 10, "min": 1}})
-
         # this tests that min is bigger then max that should not be possible
         with self.assertRaises(RuleError):
             Rule(schema={"type": "int", "range": {"max": 10, "min": 11}})

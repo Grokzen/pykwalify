@@ -215,17 +215,14 @@ class Rule(object):
 
         if not isinstance(v, dict):
             raise RuleError("range.notmap : {} : {}".format(v, path))
-        if isCollectionType(self._type) or self._type == "bool":
-            raise RuleError("range.notscalar : {} : {}".format(self._type, path))
+        if self._type not in ["str", "int", "map", "seq"]:
+            raise RuleError("range.not-supported-type : {} : {}".format(self._type, path))
 
         self._range = v  # dict that should contain min, max, min-ex, max-ex keys
 
         # This should validate that only min, max, min-ex, max-ex exists in the dict
         for k, v in self._range.items():
-            if k == "max" or k == "min" or k == "max-ex" or k == "min-ex":
-                if not isinstance(v, self._type_class):
-                    raise RuleError("range.type.unmatch : {} --> {} : {}".format(v, self._type_class, path))
-            else:
+            if k not in ["max", "min", "max-ex", "min-ex"]:
                 raise RuleError("range.undefined key : {} : {}".format(k, path))
 
         if "max" in self._range and "max-ex" in self._range:
@@ -410,10 +407,6 @@ class Rule(object):
                 raise SchemaConflict("seq.conflict :: pattern: {}".format(path))
             if self._mapping is not None:
                 raise SchemaConflict("seq.conflict :: mapping: {}".format(path))
-            if self._range is not None:
-                raise SchemaConflict("seq.conflict :: range: {}".format(path))
-            if self._length is not None:
-                raise SchemaConflict("seq.conflict :: length: {}".format(path))
         elif self._type == "map":
             if "mapping" not in schema and not self._allowempty_map:
                 raise SchemaConflict("map.nomapping")
@@ -421,10 +414,6 @@ class Rule(object):
                 raise SchemaConflict("map.conflict :: enum:")
             if self._sequence is not None:
                 raise SchemaConflict("map.conflict :: mapping: {}".format(path))
-            if self._range is not None:
-                raise SchemaConflict("map.conflict :: range: {}".format(path))
-            if self._length is not None:
-                raise SchemaConflict("map.conflict :: length: {}".format(path))
         else:
             if self._sequence is not None:
                 raise SchemaConflict("scalar.conflict :: sequence: {}".format(path))

@@ -1,0 +1,11 @@
+type: map
+mapping:
+    streams:
+        type: map
+        range:
+            min: 2
+            max: 3
+        mapping:
+            sampleRateMultiple:
+                type: int
+                required: True

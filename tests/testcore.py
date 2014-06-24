@@ -132,6 +132,10 @@ class TestCore(unittest.TestCase):
             ("31a.yaml", "31b.yaml", {'mapping': {'regex;mi.+': {'sequence': [{'type': 'str'}], 'type': 'seq'}}, 'matching-rule': 'any', 'type': 'map'}),
             # Test that type can be set to 'None' and it will validate ok
             ("37a.yaml", "37b.yaml", {'mapping': {'streams': {'required': True, 'sequence': [{'mapping': {'name': {'required': True, 'type': 'none'}, 'sampleRateMultiple': {'required': True, 'type': 'int'}}, 'type': 'map'}], 'type': 'seq'}}, 'type': 'map'}),
+            # Test that range validates with map
+            ("40a.yaml", "40b.yaml", {'mapping': {'foo': {'type': 'str'}, 'streams': {'type': 'str'}}, 'range': {'max': 3, 'min': 1}, 'type': 'map'}),
+            # Test that range validates with seq
+            ("41a.yaml", "41b.yaml", {'range': {'max': 3, 'min': 1}, 'sequence': [{'type': 'str'}], 'type': 'seq'}),
         ]
 
         # These tests are designed to fail with some exception raised
@@ -165,7 +169,8 @@ class TestCore(unittest.TestCase):
                                                    'required.nokey : name : /1',
                                                    'key.undefined : given-name : /1',
                                                    'key.undefined : family-name : /1',
-                                                   'range.toosmall : 18 > 15 : /1/age']),
+                                                   'scalar.range.toosmall : 18 > 15 : /1/age',
+                                                   'scalar.range.toosmall : 18 > 6 : /0/age']),
             # TODO: The reverse unique do not currently work proper # This will test the unique constraint but should fail
             ("17a.yaml", "16b.yaml", SchemaError, ['value.notunique :: value: foo : /0/groups/3 : /0/groups/0']),
             # This tests number validation rule with wrong data
@@ -173,7 +178,11 @@ class TestCore(unittest.TestCase):
             # This test the text validation rule with wrong data
             ("24a.yaml", "24b.yaml", SchemaError, ["Value: True is not of type 'text' : /3"]),
             # This test that typechecking works when value in map is None
-            ("36a.yaml", "36b.yaml", SchemaError, ["Value: None is not of type 'str' : /streams/0/name"])
+            ("36a.yaml", "36b.yaml", SchemaError, ["Value: None is not of type 'str' : /streams/0/name"]),
+            # Test that range validates on 'map' raise correct error
+            ("38a.yaml", "38b.yaml", SchemaError, ['map.range.toosmall : 2 > 1 : /streams']),
+            # Test that range validates on 'seq' raise correct error
+            ("39a.yaml", "39b.yaml", SchemaError, ['seq.range.toolarge : 3 < 3 : '])
         ]
 
         for passing_test in pass_tests:
@@ -186,7 +195,7 @@ class TestCore(unittest.TestCase):
                 raise e
 
             # This serve as an extra schema validation that tests more complex structures then testrule.py do
-            compare(c.root_rule._schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed...")
+            compare(c.root_rule._schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed... files : {} : {}".format(passing_test[0], passing_test[1]))
 
         for failing_test in fail_tests:
             with self.assertRaises(failing_test[2], msg="Test file: {} : {}".format(failing_test[0], failing_test[1])):
