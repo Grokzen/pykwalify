@@ -109,7 +109,7 @@ class TestCore(unittest.TestCase):
             # Test mapping with sequence with mapping and valid data
             ("12a.yaml", "12b.yaml", {'mapping': {'company': {'required': True, 'type': 'str'}, 'email': {'type': 'str'}, 'employees': {'sequence': [{'mapping': {'code': {'required': True, 'type': 'int'}, 'email': {'type': 'str'}, 'name': {'required': True, 'type': 'str'}}, 'type': 'map'}], 'type': 'seq'}}, 'type': 'map'}),
             # Test most of the implemented functions
-            ("14a.yaml", "14b.yaml", {'sequence': [{'mapping': {'age': {'range': {'max': 30, 'min': 18}, 'type': 'int'}, 'birth': {'type': 'str'}, 'blood': {'enum': ['A', 'B', 'O', 'AB'], 'type': 'str'}, 'deleted': {'type': 'bool'}, 'email': {'pattern': '.+@.+', 'required': True, 'type': 'str'}, 'memo': {'type': 'any'}, 'name': {'required': True, 'type': 'str'}, 'password': {'length': {'max': 16, 'min': 8}, 'type': 'str'}}, 'type': 'map'}], 'type': 'seq'}),
+            ("14a.yaml", "14b.yaml", {'sequence': [{'mapping': {'age': {'range': {'max': 30, 'min': 18}, 'type': 'int'}, 'birth': {'type': 'str'}, 'blood': {'enum': ['A', 'B', 'O', 'AB'], 'type': 'str'}, 'deleted': {'type': 'bool'}, 'email': {'pattern': '.+@.+', 'required': True, 'type': 'str'}, 'memo': {'type': 'any'}, 'name': {'required': True, 'type': 'str'}, 'password': {'range': {'max': 16, 'min': 8}, 'type': 'str'}}, 'type': 'map'}], 'type': 'seq'}),
             # This will test the unique constraint
             ("16a.yaml", "16b.yaml", {'sequence': [{'mapping': {'email': {'type': 'str'}, 'groups': {'sequence': [{'type': 'str', 'unique': True}], 'type': 'seq'}, 'name': {'required': True, 'type': 'str', 'unique': True}}, 'required': True, 'type': 'map'}], 'type': 'seq'}),
             #
@@ -150,7 +150,7 @@ class TestCore(unittest.TestCase):
             # Test sequence with defined booleans but with one integer
             ("6a.yaml", "6b.yaml", SchemaError, ["Value: 1 is not of type 'bool' : /2"]),
             # Test sequence with strings and and lenght on each string
-            ("7a.yaml", "7b.yaml", SchemaError, ['length.toolong : 5 < 6 : /2']),
+            ("7a.yaml", "7b.yaml", SchemaError, ['scalar.range.toolarge : 5 < 6 : /2']),
             # Test mapping that do not work
             ("9a.yaml", "8b.yaml", SchemaError, ["Value: twnty is not of type 'int' : /age",
                                                  'pattern.unmatch : .+@.+ --> foo(at)mail.com : /email']),
@@ -163,12 +163,12 @@ class TestCore(unittest.TestCase):
                                                    'key.undefined : mail : /employees/1']),
             # TODO: write
             ("15a.yaml", "14b.yaml", SchemaError, ["Value: twenty is not of type 'int' : /0/age",
-                                                   'length.tooshort : 8 > 6 : /0/password',
                                                    'pattern.unmatch : .+@.+ --> foo(at)mail.com : /0/email',
                                                    'enum.notexists : a : /0/blood',
                                                    'required.nokey : name : /1',
                                                    'key.undefined : given-name : /1',
                                                    'key.undefined : family-name : /1',
+                                                   'scalar.range.toosmall : 8 > 6 : /0/password',
                                                    'scalar.range.toosmall : 18 > 15 : /1/age',
                                                    'scalar.range.toosmall : 18 > 6 : /0/age']),
             # TODO: The reverse unique do not currently work proper # This will test the unique constraint but should fail
@@ -182,7 +182,7 @@ class TestCore(unittest.TestCase):
             # Test that range validates on 'map' raise correct error
             ("38a.yaml", "38b.yaml", SchemaError, ['map.range.toosmall : 2 > 1 : /streams']),
             # Test that range validates on 'seq' raise correct error
-            ("39a.yaml", "39b.yaml", SchemaError, ['seq.range.toolarge : 3 < 3 : '])
+            ("39a.yaml", "39b.yaml", SchemaError, ['seq.range.toolarge : 2 < 3 : '])
         ]
 
         for passing_test in pass_tests:
@@ -191,15 +191,19 @@ class TestCore(unittest.TestCase):
                 c.validate()
                 compare(c.validation_errors, [], prefix="No validation errors should exist...")
             except Exception as e:
-                print("ERROR RUNNING FILE: {} : {}".format(passing_test[0], passing_test[1]))
+                print("ERROR RUNNING FILES: {} : {}".format(passing_test[0], passing_test[1]))
                 raise e
 
             # This serve as an extra schema validation that tests more complex structures then testrule.py do
             compare(c.root_rule._schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed... files : {} : {}".format(passing_test[0], passing_test[1]))
 
         for failing_test in fail_tests:
-            with self.assertRaises(failing_test[2], msg="Test file: {} : {}".format(failing_test[0], failing_test[1])):
+            try:
                 c = Core(source_file=self.f(failing_test[0]), schema_files=[self.f(failing_test[1])])
                 c.validate()
+            except failing_test[2]:
+                pass  # OK
+            else:
+                raise AssertionError("Exception {} not raised as expected... FILES: {} : {}".format(failing_test[2], failing_test[0], failing_test[1]))
 
             compare(sorted(c.validation_errors), sorted(failing_test[3]), prefix="Wrong validation errors when parsing files : {} : {}".format(failing_test[0], failing_test[1]))

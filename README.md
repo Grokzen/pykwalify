@@ -137,11 +137,6 @@ Range of value between ``max / max-ex`` and ``min / min-ex``.
 This works with ``map, seq, str, int``
 Type bool and any are not available with range
 
-### length
-
-Range of length of value between ``max / max-ex`` and ``min / min-ex``.
-Only type str and text are available with length.
-
 ### unique
 
 Value is unique for mapping or sequence. 

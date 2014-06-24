@@ -11,7 +11,7 @@ sequence:
         pattern: .+@.+
       password:
         type: str
-        length: 
+        range:
           max: 16
           min: 8
       age:

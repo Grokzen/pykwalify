@@ -7,6 +7,8 @@ v14.06.2
 
  - Keyword 'range' can now be applied to map & seq types.
  - Added many more test files.
+ - Keyword 'length' was removed because 'range' can handle all cases now.
+ - Keyword 'range' now correctly checks the internal keys to be integers
 
 v14.06.1
 ========

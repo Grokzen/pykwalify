@@ -13,7 +13,7 @@ import logging
 Log = logging.getLogger(__name__)
 
 # pyKwalify imports
-from pykwalify.types import DEFAULT_TYPE, typeClass, isBuiltinType, isCollectionType
+from pykwalify.types import DEFAULT_TYPE, typeClass, isBuiltinType, isCollectionType, isInt
 from pykwalify.errors import SchemaConflict, RuleError
 
 
@@ -34,7 +34,6 @@ class Rule(object):
         self._mapping = None
         self._assert = None
         self._range = None
-        self._length = None
         self._ident = None
         self._unique = None
         self._default = None
@@ -90,7 +89,6 @@ class Rule(object):
             "enum": self.initEnumValue,
             "assert": self.initAssertValue,
             "range": self.initRangeValue,
-            "length": self.initLengthValue,
             "ident": self.initIdentValue,
             "unique": self.initUniqueValue,
             "allowempty": self.initAllowEmptyMap,
@@ -235,6 +233,18 @@ class Rule(object):
         max_ex = self._range.get("max-ex", None)
         min_ex = self._range.get("min-ex", None)
 
+        if max is not None and not isInt(max):
+            raise RuleError("range.max.notint : {} : {}".format(max, path))
+
+        if min is not None and not isInt(min):
+            raise RuleError("range.min.notint : {} : {}".format(min, path))
+
+        if max_ex is not None and not isInt(max_ex):
+            raise RuleError("range.max_ex.notint : {} : {}".format(max_ex, path))
+
+        if min_ex is not None and not isInt(min_ex):
+            raise RuleError("range.min_ex.notint : {} : {}".format(min_ex, path))
+
         if max is not None:
             if min is not None and max < min:
                 raise RuleError("range.maxltmin : {} < {} : {}".format(max, min, path))
@@ -245,46 +255,6 @@ class Rule(object):
                 raise RuleError("range.maxexlemiin : {} < {} : {}".format(max_ex, min, path))
             elif min_ex is not None and max_ex <= min_ex:
                 raise RuleError("range.maxexleminex : {} <= {} : {}".format(max_ex, min_ex, path))
-
-    def initLengthValue(self, v, rule, path):
-        Log.debug("Init length value : {}".format(path))
-
-        if not isinstance(v, dict):
-            raise RuleError("length.notmap : {} : {}".format(v, path))
-
-        self._length = v
-
-        if not (self._type == "str" or self._type == "text"):
-            raise RuleError("length.nottext : {} : {}".format(self._type, path))
-
-        # This should validate that only min, max, min-ex, max-ex exists in the dict
-        for k, v in self._length.items():
-            if k == "max" or k == "min" or k == "max-ex" or k == "min-ex":
-                if not isinstance(v, int):
-                    raise RuleError("length.notint : {} : {}".format(v, path))
-            else:
-                raise RuleError("length.undefined key : {} : {}".format(k, path))
-
-        if "max" in self._length and "max-ex" in self._length:
-            raise RuleError("length.twomax : {}".format(path))
-        if "min" in self._length and "min-ex" in self._length:
-            raise RuleError("length.twomin : {}".format(path))
-
-        max = self._length.get("max", None)
-        min = self._length.get("min", None)
-        max_ex = self._length.get("max-ex", None)
-        min_ex = self._length.get("min-ex", None)
-
-        if max is not None:
-            if min is not None and max < min:
-                raise RuleError("length.maxltmin: {} < {} : {}".format(max, min, path))
-            elif min_ex is not None and max <= min_ex:
-                raise RuleError("length.maxleminex : {} <= {} : {}".format(max, min_ex, path))
-        elif max_ex is not None:
-            if min is not None and max_ex < min:
-                raise RuleError("length.maxexlemiin : {} < {} : {}".format(max_ex, min, path))
-            elif min_ex is not None and max_ex <= min_ex:
-                raise RuleError("length.maxexleminex : {} <= {} : {}".format(max_ex, min_ex, path))
 
     def initIdentValue(self, v, rule, path):
         Log.debug("Init ident value : {}".format(path))
@@ -422,7 +392,5 @@ class Rule(object):
             if self._enum is not None:
                 if self._range is not None:
                     raise SchemaConflict("enum.conflict :: range: {}".format(path))
-                if self._length is not None:
-                    raise SchemaConflict("enum.conflict :: length: {}".format(path))
                 if self._pattern is not None:
                     raise SchemaConflict("enum.conflict :: length: {}".format(path))

@@ -1,6 +1,6 @@
 type: seq
 sequence:
   - type: str
-    length:
+    range:
       max: 5
       min: 1

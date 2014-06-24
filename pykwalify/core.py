@@ -382,22 +382,6 @@ class Core(object):
                                  path,
                                  "scalar")
 
-        if rule._length is not None:
-            if not isinstance(value, str):
-                raise CoreError("value is not a valid string type")
-
-            l = rule._length
-            L = len(value)
-
-            if l.get("max", None) is not None and l["max"] < L:
-                errors.append("length.toolong : {} < {} : {}".format(l["max"], L, path))
-            if l.get("min", None) is not None and l["min"] > L:
-                errors.append("length.tooshort : {} > {} : {}".format(l["min"], L, path))
-            if l.get("max-ex", None) is not None and l["max-ex"] <= L:
-                errors.append("length.toolong-ex : {} <= {} : {}".format(l["max-ex"], L, path))
-            if l.get("min-ex", None) is not None and l["min-ex"] >= L:
-                errors.append("length.tooshort-ex : {} >= {} : {}".format(l["min-ex"], L, path))
-
     def _validate_range(self, max_, min_, max_ex, min_ex, errors, value, path, prefix):
         ##########
         # Test max

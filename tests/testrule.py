@@ -67,24 +67,16 @@ class TestRule(unittest.TestCase):
         with self.assertRaises(RuleError):
             Rule(schema={"type": "int", "range": []})
 
-        Rule(schema={"type": "str", "range": {"max": "z", "min": "a"}})
+        with self.assertRaises(RuleError):
+            Rule(schema={"type": "str", "range": {"max": "z", "min": "a"}})
 
         # this tests that min is bigger then max that should not be possible
         with self.assertRaises(RuleError):
             Rule(schema={"type": "int", "range": {"max": 10, "min": 11}})
 
-        # this tests that length works with str type
-        r = Rule(schema={"type": "str", "length": {"max": 16, "min": 8}})
-        self.assertTrue(r._length is not None, msg="lenght var not set proper")
-        self.assertTrue(isinstance(r._length, dict), msg="length var is not of dict type")
-
-        # this tests that length do not work with int type
+        # test that min-ex is bigger then max-ex, that should not be possible
         with self.assertRaises(RuleError):
-            Rule(schema={"type": "int", "length": {"max": 10, "min": 11}})
-
-        # this tests that min cannot be above max even with correct type
-        with self.assertRaises(RuleError):
-            Rule(schema={"type": "str", "length": {"max": 10, "min": 11}})
+            Rule(schema={"type": "int", "range": {"max-ex": 10, "min-ex": 11}})
 
         # this tests that this cannot be used in the root level
         with self.assertRaises(RuleError):
