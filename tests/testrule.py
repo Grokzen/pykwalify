@@ -18,9 +18,9 @@ class TestRule(unittest.TestCase):
     def testRuleClass(self):
         # this tests seq type with a internal type of str
         r = Rule(schema={"type": "seq", "sequence": [{"type": "str"}]})
-        self.assertTrue(r._type is not None,           msg="rule not contain type var")
-        self.assertTrue(r._type == "seq",              msg="type not 'seq'")
-        self.assertTrue(r._sequence is not None,       msg="rule not contain sequence var")
+        self.assertTrue(r._type is not None, msg="rule not contain type var")
+        self.assertTrue(r._type == "seq", msg="type not 'seq'")
+        self.assertTrue(r._sequence is not None, msg="rule not contain sequence var")
         self.assertTrue(isinstance(r._sequence, list), msg="rule is not a list")
 
         # this tests that the type key must be a string
@@ -33,11 +33,11 @@ class TestRule(unittest.TestCase):
 
         # This tests mapping with a nested type and pattern
         r = Rule(schema={"type": "map", "mapping": {"name": {"type": "str", "pattern": ".+@.+"}}})
-        self.assertTrue(r._type == "map",                        msg="rule type is not map")
-        self.assertTrue(isinstance(r._mapping, dict),            msg="mapping is not dict")
-        self.assertTrue(r._mapping["name"]._type == "str",       msg="nested mapping is not of string type")
+        self.assertTrue(r._type == "map", msg="rule type is not map")
+        self.assertTrue(isinstance(r._mapping, dict), msg="mapping is not dict")
+        self.assertTrue(r._mapping["name"]._type == "str", msg="nested mapping is not of string type")
         self.assertTrue(r._mapping["name"]._pattern is not None, msg="nested mapping has no pattern var set")
-        self.assertTrue(r._mapping["name"]._pattern == ".+@.+",  msg="pattern is not set to correct value")
+        self.assertTrue(r._mapping["name"]._pattern == ".+@.+", msg="pattern is not set to correct value")
 
         # this tests a invalid regexp pattern
         with self.assertRaises(RuleError):
@@ -47,9 +47,9 @@ class TestRule(unittest.TestCase):
         r = Rule(schema={"type": "int", "enum": [1, 2, 3]})
         r = Rule(schema={"type": "bool", "enum": [True, False]})
         r = Rule(schema={"type": "str", "enum": ["a", "b", "c"]})
-        self.assertTrue(r._enum is not None,       msg="enum var is not set proper")
+        self.assertTrue(r._enum is not None, msg="enum var is not set proper")
         self.assertTrue(isinstance(r._enum, list), msg="enum is not set to a list")
-        self.assertTrue(len(r._enum) == 3,         msg="invalid length of enum entries")
+        self.assertTrue(len(r._enum) == 3, msg="invalid length of enum entries")
 
         # this tests the missmatch between the type and the data inside a enum
         with self.assertRaises(RuleError):
@@ -60,7 +60,7 @@ class TestRule(unittest.TestCase):
             Rule(schema={"type": "seq", "sequence": [{"type": "str", "assert": "foobar"}]})
 
         r = Rule(schema={"type": "int", "range": {"max": 10, "min": 1}})
-        self.assertTrue(r._range is not None,       msg="range var not set proper")
+        self.assertTrue(r._range is not None, msg="range var not set proper")
         self.assertTrue(isinstance(r._range, dict), msg="range var is not of dict type")
 
         # this tests that the range key must be a dict

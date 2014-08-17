@@ -26,9 +26,9 @@ def main():
     3. run application logic
     """
 
-    #####
-    ##### 1. parse cli arguments
-    #####
+    #
+    # 1. parse cli arguments
+    #
 
     __docopt__ = """
 usage: pykwalify -d DATAFILE -s SCHEMAFILE ... [-q] [-v ...]
@@ -58,9 +58,9 @@ optional arguments:
     from .errors import retnames
     from .core import Core
 
-    #####
-    ##### 2. validate arguments only, dont go into other code/logic
-    #####
+    #
+    # 2. validate arguments only, dont go into other code/logic
+    #
 
     # Calculates what level to set to all loggers
     # -vvvvv (5) will be logging.DEBUG,
@@ -88,9 +88,9 @@ optional arguments:
 
     Log.debug("Arguments from CLI: {}".format(args))
 
-    #####
-    ##### 3. parse cli arguments
-    #####
+    #
+    # 3. parse cli arguments
+    #
 
     c = Core(source_file=args["--data-file"], schema_files=args["--schema-file"])
     c.validate()

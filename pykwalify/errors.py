@@ -59,14 +59,14 @@ class PyKwalifyException(RuntimeError):
         """
         """
         # <PyKwalifyException msg='foo bar' retcode=1>
-        #kwargs = []
-        #if self.msg:
+        # kwargs = []
+        # if self.msg:
         #        kwargs.append("msg='{}'".format(self.msg))
-        #if self.retcode != retnames['noerror']:
+        # if self.retcode != retnames['noerror']:
         #        kwargs.append("retcode=%d" % self.retcode)
-        #if kwargs:
+        # if kwargs:
         #        kwargs.insert(0, '')
-        #return "<{}{}>".format(self.__class__.__name__, ' '.join(kwargs))
+        # return "<{}{}>".format(self.__class__.__name__, ' '.join(kwargs))
 
         # <PyKwalifyException: error code 1: foo bar>
         kwargs = []

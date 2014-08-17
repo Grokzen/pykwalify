@@ -335,9 +335,9 @@ class Core(object):
         Log.debug(" # {}".format(rule._type))
         Log.debug(" # {}".format(path))
 
-        if not rule._sequence is None:
+        if rule._sequence is not None:
             raise CoreError("found sequence when validating for scalar")
-        if not rule._mapping is None:
+        if rule._mapping is not None:
             raise CoreError("found mapping when validating for scalar")
 
         if rule._assert is not None:

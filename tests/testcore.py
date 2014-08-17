@@ -24,16 +24,16 @@ class TestCore(unittest.TestCase):
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "files", *args)
 
     def testCoreDataMode(self):
-        Core(source_data=3.14159,  schema_data={"type": "number"}).validate()
-        Core(source_data=3.14159,  schema_data={"type": "float"}).validate()
-        Core(source_data=3,        schema_data={"type": "int"}).validate()
-        Core(source_data=True,     schema_data={"type": "bool"}).validate()
+        Core(source_data=3.14159, schema_data={"type": "number"}).validate()
+        Core(source_data=3.14159, schema_data={"type": "float"}).validate()
+        Core(source_data=3, schema_data={"type": "int"}).validate()
+        Core(source_data=True, schema_data={"type": "bool"}).validate()
         Core(source_data="foobar", schema_data={"type": "str"}).validate()
         Core(source_data="foobar", schema_data={"type": "text"}).validate()
         Core(source_data="foobar", schema_data={"type": "any"}).validate()
 
         with self.assertRaises(SchemaError):
-            Core(source_data="abc",  schema_data={"type": "number"}).validate()
+            Core(source_data="abc", schema_data={"type": "number"}).validate()
 
         with self.assertRaises(SchemaError):
             Core(source_data=3, schema_data={"type": "float"}).validate()

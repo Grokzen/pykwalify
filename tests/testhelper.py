@@ -20,7 +20,7 @@ def _set_log_lv(level=1337, loggers=None):
             handler.level = level
     else:
         # If we have other logging instances specified apply to root logger and them
-        if not Log in loggers:
+        if Log not in loggers:
             loggers.append(Log)
 
         for log_instance in loggers:

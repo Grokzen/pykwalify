@@ -26,8 +26,8 @@ def deprecated(funz):
         fu = "{}.{}".format(funz.__module__, funz.__name__)
 
         _Log.debug("function {} is deprecated".format(fu))
-        # TODO: print stack_len=2
-        #_Log.debug("")
+        #  TODO: print stack_len=2
+        # _Log.debug("")
 
         return funz(*args, **kwargs)
 

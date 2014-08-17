@@ -3,7 +3,7 @@
 """ pykwalify """
 
 __author__ = 'Grokzen <Grokzen@gmail.com>'
-#__version__ = '.'.join(map(str, __version_info__))
+# __version__ = '.'.join(map(str, __version_info__))
 __foobar__ = "14.06.1"
 
 # Set to True to have revision from Version Control System in version string
