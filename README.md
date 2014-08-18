@@ -16,10 +16,6 @@ The schema used in this library: http://www.kuwata-lab.com/kwalify/ruby/users-gu
 
 **Coverage - master**: [![Coverage Status](https://coveralls.io/repos/Grokzen/pykwalify/badge.png?branch=master)](https://coveralls.io/r/Grokzen/pykwalify)
 
-**develop branch**: [![Build Status](https://travis-ci.org/Grokzen/pykwalify.svg?branch=develop)](https://travis-ci.org/Grokzen/pykwalify)
-
-**Coverage - developp**[![Coverage Status](https://coveralls.io/repos/Grokzen/pykwalify/badge.png?branch=develop)](https://coveralls.io/r/Grokzen/pykwalify?branch=coveralls)
-
 
 
 # How to install
