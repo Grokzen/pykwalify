@@ -20,14 +20,44 @@ import logging.config
 PACKAGE_NAME = "pykwalify"
 
 
-def init_logging():
-    msg = "%(levelname)s - %(name)s:%(lineno)s - %(message)s" if "DEBUG" in os.environ else "%(levelname)s - %(message)s"
+log_level_to_string_map = {
+    5: "DEBUG",
+    4: "INFO",
+    3: "WARNING",
+    2: "ERROR",
+    1: "CRITICAL",
+    0: "INFO"
+}
 
-    # This logging config can only be used with python >= 3.2.0
-    logging_conf = {"version": 1,
-                    "root": {"level": "DEBUG", "handlers": ["console"]},
-                    "handlers": {"console": {"class": "logging.StreamHandler", "level": "DEBUG", "formatter": "simple", "stream": "ext://sys.stdout"}},
-                    "formatters": {"simple": {"format": " {}".format(msg)}}}
+
+def init_logging(log_level):
+    """
+    Init logging settings with default set to INFO
+    """
+    l = log_level_to_string_map[log_level]
+
+    msg = "%(levelname)s - %(name)s:%(lineno)s - %(message)s" if l in os.environ else "%(levelname)s - %(message)s"
+
+    logging_conf = {
+        "version": 1,
+        "root": {
+            "level": l,
+            "handlers": ["console"]
+        },
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "level": l,
+                "formatter": "simple",
+                "stream": "ext://sys.stdout"
+            }
+        },
+        "formatters": {
+            "simple": {
+                "format": " {}".format(msg)
+            }
+        }
+    }
 
     logging.config.dictConfig(logging_conf)
 

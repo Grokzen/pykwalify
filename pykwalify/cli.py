@@ -51,7 +51,7 @@ optional arguments:
 
     args = docopt(__docopt__, version=pykwalify.__foobar__)
 
-    pykwalify.init_logging()
+    pykwalify.init_logging(1 if args["--quiet"] else args["--verbose"])
     Log = logging.getLogger(__name__)
 
     # pykwalify importrs
@@ -62,30 +62,7 @@ optional arguments:
     # 2. validate arguments only, dont go into other code/logic
     #
 
-    # Calculates what level to set to all loggers
-    # -vvvvv (5) will be logging.DEBUG,
-    # -v (1) will be logging.CRITICAL
-    # Default log level is INFO
-    if not args["--verbose"]:
-        level = 20
-    else:
-        # If anything is specefied
-        level = 60 - (args["--verbose"] * 10)
-
-    if args["--quiet"]:
-        # This will silence all pykwalify loggers
-        level = 1337
-
-    # Loop all implemented loggers and update them
-    for key, _logger in logging.Logger.manager.loggerDict.items():
-        if key.startswith("pykwalify"):
-            l = logging.getLogger(key)
-            l.setLevel(level)
-            for handler in l.handlers:
-                handler.level = level
-
     Log.debug("Setting verbose level: {}".format(args["--verbose"]))
-
     Log.debug("Arguments from CLI: {}".format(args))
 
     #
