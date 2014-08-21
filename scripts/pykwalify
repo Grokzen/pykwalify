@@ -19,4 +19,4 @@ sys.path.append(prefix)
 import pykwalify.cli
 
 if __name__ == "__main__":
-    pykwalify.cli.main()
+    pykwalify.cli.run(pykwalify.cli.parse_cli())

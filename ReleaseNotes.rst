@@ -9,6 +9,7 @@ v14.06.2
  - Added many more test files.
  - Keyword 'length' was removed because 'range' can handle all cases now.
  - Keyword 'range' now correctly checks the internal keys to be integers
+ - Major update to testing and increased coverage.
 
 v14.06.1
 ========

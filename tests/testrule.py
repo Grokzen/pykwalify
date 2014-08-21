@@ -156,7 +156,7 @@ class TestRule(unittest.TestCase):
 
         # Test that exception is raised when a invalid matching rule is used
         with pytest.raises(RuleError) as ex:
-            Rule(schema={"type": "map", "matching-rule": "foobar", "mapping": {"regex;(+": {"type": "seq", "sequence": [{"type": "str"}]}}})
+            Rule(schema={"type": "map", "matching-rule": "foobar", "mapping": {"regex;.+": {"type": "seq", "sequence": [{"type": "str"}]}}})
         assert ex.value.msg.startswith("Specefied rule in key : foobar is not part of allowed rule set")
 
         # Test that providing an unknown key raises exception

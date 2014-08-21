@@ -17,7 +17,7 @@ import yaml
 from docopt import docopt
 
 
-def main():
+def parse_cli():
     """
     The outline of this function needs to be like this:
 
@@ -65,9 +65,16 @@ optional arguments:
     Log.debug("Setting verbose level: {}".format(args["--verbose"]))
     Log.debug("Arguments from CLI: {}".format(args))
 
-    #
-    # 3. parse cli arguments
-    #
+    return args
 
-    c = Core(source_file=args["--data-file"], schema_files=args["--schema-file"])
+
+def run(cli_args):
+    """
+    Split the functionality into 2 methods.
+
+    One for parsing the cli and one that runs the application.
+    """
+    from .core import Core
+
+    c = Core(source_file=cli_args["--data-file"], schema_files=cli_args["--schema-file"])
     c.validate()
