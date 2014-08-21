@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # python std lib
+import os
 import sys
 
 # pykwalify package imports
@@ -18,7 +19,7 @@ class TestCLI(object):
         schema_file = tmpdir.join("1b.yaml")
 
         sys.argv = [
-            'scripts/dj',
+            'scripts/pykwalify',
             '-d', str(input),
             '-s', str(schema_file),
             '-v'
@@ -38,3 +39,26 @@ class TestCLI(object):
         for k, v in expected.items():
             assert k in cli_args
             assert cli_args[k] == expected[k]
+
+    def f(self, *args):
+        """
+        Returns abs path to test files inside tests/files/
+        """
+        return os.path.join(os.path.dirname(os.path.realpath(__file__)), "files", *args)
+
+    def test_run_cli(self):
+        """
+        This should test that running the cli still works as expected
+        """
+        input = self.f("1a.yaml")
+        schema_file = self.f("1b.yaml")
+
+        sys.argv = [
+            'scripts/pykwalify',
+            '-d', str(input),
+            '-s', str(schema_file),
+        ]
+
+        cli_args = cli.parse_cli()
+        c = cli.run(cli_args)
+        assert c.validation_errors == []

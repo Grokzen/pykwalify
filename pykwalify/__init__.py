@@ -63,7 +63,3 @@ def init_logging(log_level):
 
 
 partial_schemas = {}
-
-
-def add_partial_schema(schema_id, rule_object):
-    partial_schemas[schema_id] = rule_object

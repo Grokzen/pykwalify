@@ -78,3 +78,4 @@ def run(cli_args):
 
     c = Core(source_file=cli_args["--data-file"], schema_files=cli_args["--schema-file"])
     c.validate()
+    return c

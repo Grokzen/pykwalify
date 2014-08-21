@@ -61,11 +61,11 @@ class PyKwalifyException(RuntimeError):
         # <PyKwalifyException: error code 1: foo bar>
         kwargs = []
         if self.retcode != retnames['noerror']:
-                kwargs.append("error code {}".format(self.retcode))
+            kwargs.append("error code {}".format(self.retcode))
         if self.msg:
-                kwargs.append(self.msg)
+            kwargs.append(self.msg)
         if kwargs:
-                kwargs.insert(0, '')
+            kwargs.insert(0, '')
         return "<{}{}>".format(self.__class__.__name__, ': '.join(kwargs))
 
     def __repr__(self):
@@ -73,15 +73,13 @@ class PyKwalifyException(RuntimeError):
         """
         kwargs = []
         if self.msg:
-                kwargs.append("msg='{}'".format(self.msg))
+            kwargs.append("msg='{}'".format(self.msg))
         return "{}({})".format(self.__class__.__name__, ', '.join(kwargs))
 
     def msg():
         doc = """ """
 
         def fget(self):
-            if not hasattr(self, '_msg'):
-                self._msg = ''
             return self._msg
 
         def fset(self, value):
@@ -95,8 +93,6 @@ class PyKwalifyException(RuntimeError):
         doc = """ """
 
         def fget(self):
-            if not hasattr(self, '_retcode'):
-                self._retcode = retnames['unknownerror']
             return self._retcode
 
         def fset(self, value):
@@ -171,5 +167,5 @@ class SchemaConflict(PyKwalifyException):
         """
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
-        super(SchemaConflict, self).__init__(retcode=retnames["ruleerror"],
+        super(SchemaConflict, self).__init__(retcode=retnames["schemaconflict"],
                                              *args, **kwargs)
