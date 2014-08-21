@@ -4,16 +4,64 @@
 
 import unittest
 
+# 3rd party imports
+import pytest
+
 # pyKwalify imports
 import pykwalify
 from pykwalify.rule import Rule
-from pykwalify.errors import RuleError, SchemaError
+from pykwalify.errors import RuleError, SchemaError, SchemaConflict
 
 
 class TestRule(unittest.TestCase):
 
     def setUp(self):
         pykwalify.partial_schemas = {}
+
+    def test_schema_conflicts(self):
+        # TODO: Each exception must be checked what key is raised withiin it...
+
+        # Test error is raised when sequence key is missing
+        with pytest.raises(SchemaConflict) as ex:
+            r = Rule(schema={"type": "seq"})
+        assert ex.value.msg.startswith("seq.nosequence"), "Wrong exception was raised"
+
+        # TODO: This do not work and enum schema conflict is not raised... RuleError: <RuleError: error code 4: enum.notscalar>
+        # with pytest.raises(SchemaConflict) as ex:
+        #     r = Rule(schema={"type": "seq", "sequence": [{"type": "str"}], "enum": [1, 2, 3]})
+        # assert ex.value.msg.startswith("seq.conflict :: enum"), "Wrong exception was raised"
+
+        with pytest.raises(SchemaConflict) as ex:
+            r = Rule(schema={"type": "seq", "sequence": [{"type": "str"}], "pattern": "..."})
+        assert ex.value.msg.startswith("seq.conflict :: pattern"), "Wrong exception was raised"
+
+        with pytest.raises(SchemaConflict) as ex:
+            r = Rule(schema={"type": "seq", "sequence": [{"type": "str"}], "mapping": {"name": {"type": "str", "pattern": ".+@.+"}}})
+        assert ex.value.msg.startswith("seq.conflict :: mapping"), "Wrong exception was raised"
+
+        with pytest.raises(SchemaConflict) as ex:
+            r = Rule(schema={"type": "map"})
+        assert ex.value.msg.startswith("map.nomapping"), "Wrong exception was raised"
+
+        # TODO: This do not work because it currently raises RuleError: <RuleError: error code 4: enum.notscalar>
+        # with pytest.raises(SchemaConflict):
+        #     r = Rule(schema={"type": "map", "enum": [1, 2, 3]})
+
+        with pytest.raises(SchemaConflict) as ex:
+            r = Rule(schema={"type": "map", "mapping": {"foo": {"type": "str"}}, "sequence": [{"type": "str"}]})
+        assert ex.value.msg.startswith("map.conflict :: mapping"), "Wrong exception was raised"
+
+        with pytest.raises(SchemaConflict) as ex:
+            r = Rule(schema={"type": "int", "sequence": [{"type": "str"}]})
+        assert ex.value.msg.startswith("scalar.conflict :: sequence"), "Wrong exception was raised"
+
+        with pytest.raises(SchemaConflict) as ex:
+            r = Rule(schema={"type": "int", "mapping": {"foo": {"type": "str"}}})
+        assert ex.value.msg.startswith("scalar.conflict :: mapping"), "Wrong exception was raised"
+
+        with pytest.raises(SchemaConflict) as ex:
+            r = Rule(schema={"type": "int", "enum": [1, 2, 3], "range": {"max": 10, "min": 1}})
+        assert ex.value.msg.startswith("enum.conflict :: range"), "Wrong exception was raised"
 
     def testRuleClass(self):
         # this tests seq type with a internal type of str
@@ -100,8 +148,37 @@ class TestRule(unittest.TestCase):
 
         # Test that when only having a schema; rule it should throw error
         with self.assertRaises(RuleError):
-            r = Rule(schema={"schema;fooone": {"type": "map", "mapping": {"foo": {"type": "str"}}}})
+            Rule(schema={"schema;fooone": {"type": "map", "mapping": {"foo": {"type": "str"}}}})
 
         # Test that when using both schema; and include tag that it throw an error because schema; tags should be parsed via Core()
         with self.assertRaises(RuleError):
-            r = Rule(schema={"schema;str": {"type": "map", "mapping": {"foo": {"type": "str"}}}, "type": "map", "mapping": {"foo": {"include": "str"}}})
+            Rule(schema={"schema;str": {"type": "map", "mapping": {"foo": {"type": "str"}}}, "type": "map", "mapping": {"foo": {"include": "str"}}})
+
+        # Test that exception is raised when a invalid matching rule is used
+        with pytest.raises(RuleError) as ex:
+            Rule(schema={"type": "map", "matching-rule": "foobar", "mapping": {"regex;(+": {"type": "seq", "sequence": [{"type": "str"}]}}})
+        assert ex.value.msg.startswith("Specefied rule in key : foobar is not part of allowed rule set")
+
+        # Test that providing an unknown key raises exception
+        with pytest.raises(RuleError) as ex:
+            Rule(schema={"type": "str", "foobar": True})
+        assert ex.value.msg.startswith("Unknown key: foobar found")
+
+        # Test that type key must be string otherwise exception is raised
+        with pytest.raises(RuleError) as ex:
+            Rule(schema={"type": 1})
+        assert ex.value.msg.startswith("key 'type' in schema rule is not a string type")
+
+        # Test that required value must be bool otherwise exception is raised
+        with pytest.raises(RuleError) as ex:
+            Rule(schema={"type": "str", "required": "foobar"})
+        assert ex.value.msg.startswith("required.notbool : foobar")
+
+        # Test that pattern value must be string otherwise exception is raised
+        with pytest.raises(RuleError) as ex:
+            Rule(schema={"type": "str", "pattern": 1})
+        assert ex.value.msg.startswith("pattern.notstr : 1 :")
+
+        with pytest.raises(RuleError) as ex:
+            Rule(schema={"type": "str", "enum": True})
+        assert ex.value.msg.startswith("enum.notseq")

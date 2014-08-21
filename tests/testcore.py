@@ -4,24 +4,176 @@
 
 # python std lib
 import os
-import unittest
+import logging
 
 # 3rd party imports
-from testfixtures import compare
+import pytest
+from testfixtures import compare, LogCapture
 
 # pyKwalify imports
 import pykwalify
 from pykwalify.core import Core
-from pykwalify.errors import PyKwalifyExit, UnknownError, FileNotAccessible, OptionError, NotImplemented, ParseFailure, SchemaError, CoreError, RuleError
+from pykwalify.errors import SchemaError, CoreError, RuleError
 
 
-class TestCore(unittest.TestCase):
+class TestCore(object):
 
     def setUp(self):
         pykwalify.partial_schemas = {}
 
     def f(self, *args):
         return os.path.join(os.path.dirname(os.path.realpath(__file__)), "files", *args)
+
+    def test_create_empty_core_object(self, tmpdir):
+        """
+        If createing a core object without any source or schema file an exception should be raised.
+        """
+        with pytest.raises(CoreError) as ex:
+            Core()
+        assert "No source file/data was loaded" in str(ex.value)
+
+        # To trigger schema exception we must pass in a source file
+        source_f = tmpdir.join("bar.json")
+        source_f.write("3.14159")
+
+        with pytest.raises(CoreError) as ex:
+            Core(source_file=str(source_f))
+        assert "No schema file/data was loaded" in str(ex.value)
+
+    def test_load_non_existing_file(self):
+        file_to_load = "/tmp/foo/bar/barfoo"
+        assert not os.path.exists(file_to_load), "Following file cannot exists on your system while running these tests : {0}".format(file_to_load)
+        with pytest.raises(CoreError) as ex:
+            Core(source_file=file_to_load)
+        assert "Provided source_file do not exists on disk" in str(ex.value)
+
+    def test_load_non_existsing_schema_file(self):
+        """
+        Exception should be raised if the specefied schema file do not exists on disk.
+        """
+        file_to_load = "/tmp/foo/bar/barfoo"
+        assert not os.path.exists(file_to_load), "Following file cannot exists on your system while running these tests : {0}".format(file_to_load)
+        with pytest.raises(CoreError) as ex:
+            Core(schema_files=[file_to_load])
+        assert "Provided source_file do not exists on disk" in str(ex.value)
+
+    def test_load_wrong_schema_files_type(self):
+        """
+        It should only be possible to send in a list type as 'schema_files' object
+        """
+        with pytest.raises(CoreError) as ex:
+            Core(source_file=None, schema_files={})
+        assert "schema_files must be of list type" in str(ex.value)
+
+    def test_load_json_file(self, tmpdir):
+        """
+        Load source & schema files that has json file ending.
+        """
+        source_f = tmpdir.join("bar.json")
+        source_f.write("3.14159")
+
+        schema_f = tmpdir.join("foo.json")
+        schema_f.write('{"type": "float"}')
+
+        Core(source_file=str(source_f), schema_files=[str(schema_f)])
+
+        # TODO: Try to load a non existing json file
+
+    def test_load_yaml_files(self, tmpdir):
+        """
+        Load source & schema files that has yaml file ending.
+        """
+        source_f = tmpdir.join("foo.yaml")
+        source_f.write("3.14159")
+
+        schema_f = tmpdir.join("bar.yaml")
+        schema_f.write("type: float")
+
+        Core(source_file=str(source_f), schema_files=[str(schema_f)])
+
+    def test_load_unsupported_format(self, tmpdir):
+        """
+        Try to load some fileending that is not supported.
+        Currently XML is not supported.
+        """
+        source_f = tmpdir.join("foo.xml")
+        source_f.write("<foo>bar</foo>")
+
+        schema_f = tmpdir.join("bar.xml")
+        schema_f.write("<foo>bar</foo>")
+
+        with pytest.raises(CoreError) as ex:
+            Core(source_file=str(source_f))
+        assert "Unable to load source_file. Unknown file format of specified file path" in str(ex.value)
+
+        with pytest.raises(CoreError) as ex:
+            Core(schema_files=[str(schema_f)])
+        assert "Unknown file format. Supported file endings is" in str(ex.value)
+
+    def test_load_empty_json_file(self, tmpdir):
+        """
+        Loading an empty json files should raise an exception
+        """
+        # Load empty source file
+        source_f = tmpdir.join("foo.json")
+        source_f.write("")
+
+        schema_f = tmpdir.join("bar.json")
+        schema_f.write("")
+
+        with pytest.raises(CoreError) as ex:
+            Core(source_file=str(source_f), schema_files=[str(schema_f)])
+        assert "Unable to load any data from source json file" in str(ex.value)
+
+        # Load empty schema files
+        source_f = tmpdir.join("foo.json")
+        source_f.write("3.14159")
+
+        schema_f = tmpdir.join("bar.json")
+        schema_f.write("")
+
+        with pytest.raises(CoreError) as ex:
+            Core(source_file=str(source_f), schema_files=[str(schema_f)])
+        assert "No data loaded from file" in str(ex.value)
+
+    def test_load_empty_yaml_file(self, tmpdir):
+        """
+        Loading empty yaml files should raise an exception
+        """
+        # Load empty source file
+        source_f = tmpdir.join("foo.yaml")
+        source_f.write("")
+
+        schema_f = tmpdir.join("bar.yaml")
+        schema_f.write("")
+
+        # TODO: This is abit buggy because wrong exception is raised...
+        with pytest.raises(CoreError) as ex:
+            Core(source_file=str(source_f), schema_files=[str(schema_f)])
+        # assert "Unable to load any data from source yaml file" in str(ex.value)
+
+        # Load empty schema files
+        source_f = tmpdir.join("foo.yaml")
+        source_f.write("3.14159")
+
+        schema_f = tmpdir.join("bar.yaml")
+        schema_f.write("")
+
+        with pytest.raises(CoreError) as ex:
+            Core(source_file=str(source_f), schema_files=[str(schema_f)])
+        assert "No data loaded from file" in str(ex.value)
+
+    def test_validation_error_but_not_raise_exception(self):
+        """
+        Test that if 'raise_exception=False' when validating that no exception is raised.
+
+        Currently file 2a.yaml & 2b.yaml is designed to cause exception.
+        """
+        with LogCapture(level=logging.ERROR) as l:
+            c = Core(source_file=self.f("2a.yaml"), schema_files=[self.f("2b.yaml")])
+            c.validate(raise_exception=False)
+
+        assert ('pykwalify.core', 'ERROR', 'Errors found but will not raise exception...') in l.actual()
 
     def testCoreDataMode(self):
         Core(source_data=3.14159, schema_data={"type": "number"}).validate()
@@ -32,25 +184,25 @@ class TestCore(unittest.TestCase):
         Core(source_data="foobar", schema_data={"type": "text"}).validate()
         Core(source_data="foobar", schema_data={"type": "any"}).validate()
 
-        with self.assertRaises(SchemaError):
+        with pytest.raises(SchemaError):
             Core(source_data="abc", schema_data={"type": "number"}).validate()
 
-        with self.assertRaises(SchemaError):
+        with pytest.raises(SchemaError):
             Core(source_data=3, schema_data={"type": "float"}).validate()
 
-        with self.assertRaises(SchemaError):
+        with pytest.raises(SchemaError):
             Core(source_data=3.14159, schema_data={"type": "int"}).validate()
 
-        with self.assertRaises(SchemaError):
+        with pytest.raises(SchemaError):
             Core(source_data=1337, schema_data={"type": "bool"}).validate()
 
-        with self.assertRaises(SchemaError):
+        with pytest.raises(SchemaError):
             Core(source_data=1, schema_data={"type": "str"}).validate()
 
-        with self.assertRaises(SchemaError):
+        with pytest.raises(SchemaError):
             Core(source_data=True, schema_data={"type": "text"}).validate()
 
-        with self.assertRaises(SchemaError):
+        with pytest.raises(SchemaError):
             Core(source_data=dict, schema_data={"type": "any"}).validate()
 
     def test_multi_file_support(self):
@@ -84,7 +236,7 @@ class TestCore(unittest.TestCase):
             compare(c.root_rule._schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed...")
 
         for failing_test in failing_tests:
-            with self.assertRaises(failing_test[2], msg="Test files: {} : {}".format(", ".join(failing_test[0]), failing_test[1])):
+            with pytest.raises(failing_test[2], msg="Test files: {} : {}".format(", ".join(failing_test[0]), failing_test[1])):
                 c = Core(schema_files=failing_test[0], source_file=failing_test[1])
                 c.validate()
 
@@ -182,7 +334,7 @@ class TestCore(unittest.TestCase):
             # Test that range validates on 'map' raise correct error
             ("38a.yaml", "38b.yaml", SchemaError, ['map.range.toosmall : 2 > 1 : /streams']),
             # Test that range validates on 'seq' raise correct error
-            ("39a.yaml", "39b.yaml", SchemaError, ['seq.range.toolarge : 2 < 3 : '])
+            ("39a.yaml", "39b.yaml", SchemaError, ['seq.range.toolarge : 2 < 3 : ']),
         ]
 
         for passing_test in pass_tests:

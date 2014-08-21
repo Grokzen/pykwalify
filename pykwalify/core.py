@@ -43,9 +43,17 @@ class Core(object):
 
             with open(source_file, "r") as stream:
                 if source_file.endswith(".json"):
-                    self.source = json.load(stream)
+                    try:
+                        self.source = json.load(stream)
+                    except Exception as e:
+                        raise CoreError("Unable to load any data from source json file")
                 elif source_file.endswith(".yaml"):
-                    self.source = yaml.load(stream)
+                    try:
+                        self.source = yaml.load(stream)
+                        # if len(self.source) == 0:
+                        #     raise Exception(".")
+                    except Exception as e:
+                        raise CoreError("Unable to load any data from source yaml file")
                 else:
                     raise CoreError("Unable to load source_file. Unknown file format of specified file path: {}".format(source_file))
 
@@ -57,12 +65,13 @@ class Core(object):
             schema_data = {}
             for f in schema_files:
                 if not os.path.exists(f):
-                    raise CoreError("Provided source_file do not exists on disk")
+                    raise CoreError("Provided source_file do not exists on disk : {0}".format(f))
 
                 with open(f, "r") as stream:
                     if f.endswith(".json"):
-                        data = json.load(stream)
-                        if not data:
+                        try:
+                            data = json.load(stream)
+                        except Exception as e:
                             raise CoreError("No data loaded from file : {}".format(f))
                     elif f.endswith(".yaml") or f.endswith(".yml"):
                         data = yaml.load(stream)
@@ -170,6 +179,7 @@ class Core(object):
             return
 
     def _validate_include(self, value, rule, path, errors=[], done=None):
+        # TODO: It is difficult to get a good test case to trigger this if case
         if rule._include_name is None:
             errors.append("Include name not valid : {} : {}".format(path, value))
             return
@@ -339,9 +349,6 @@ class Core(object):
             raise CoreError("found sequence when validating for scalar")
         if rule._mapping is not None:
             raise CoreError("found mapping when validating for scalar")
-
-        if rule._assert is not None:
-            pass  # TODO: implement assertion prolly
 
         if rule._enum is not None:
             if value not in rule._enum:

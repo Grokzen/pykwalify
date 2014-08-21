@@ -9,31 +9,21 @@ retcodes = {
     # UnknownError
     1: 'unknownerror',
 
-    # FileNotAccessible
-    2: 'filenotaccessible',
-
-    # OptionError
-    # e.g. when PyKwalifyApplication receives an erroneous configuration
-    3: 'optionerror',
-
-    # NotImplemented
-    4: 'notimplemented',
-
-    # ParseFailure
-    # e.g. could not parse a configuration file
-    5: 'parsefailure',
-
     # SchemaError
     # e.g. when a rule or the core finds an error
-    6: 'schemaerror',
+    2: 'schemaerror',
 
     # CoreError
     # e.g. when the core finds an error that is not a SchemaError
-    7: 'coreerror',
+    3: 'coreerror',
 
     # RuleError
     # e.g. when the rule class finds an error that is not a SchemaError, similar to CoreError
-    8: 'ruleerror',
+    4: 'ruleerror',
+
+    # SchemaConflict
+    # e.g. when a schema conflict occurs
+    5: 'schemaconflict',
 }
 
 
@@ -130,18 +120,6 @@ class PyKwalifyException(RuntimeError):
     retname = property(**retname())
 
 
-class PyKwalifyExit(PyKwalifyException):
-    """ This is the only exception that carries the error code 0, which is the
-    program return code that indicates no error.
-    """
-    def __init__(self, *args, **kwargs):
-        """
-        """
-        assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super(PyKwalifyExit, self).__init__(retcode=retnames['noerror'],
-                                            *args, **kwargs)
-
-
 class UnknownError(PyKwalifyException):
     """
     """
@@ -150,50 +128,6 @@ class UnknownError(PyKwalifyException):
         """
         assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
         super(UnknownError, self).__init__(retcode=retnames['unknownerror'],
-                                           *args, **kwargs)
-
-
-class FileNotAccessible(PyKwalifyException):
-    """
-    """
-    def __init__(self, *args, **kwargs):
-        """
-        """
-        assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super(FileNotAccessible, self).__init__(retcode=retnames['filenotaccessible'],
-                                                *args, **kwargs)
-
-
-class OptionError(PyKwalifyException):
-    """
-    """
-    def __init__(self, *args, **kwargs):
-        """
-        """
-        assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super(OptionError, self).__init__(retcode=retnames['optionerror'],
-                                          *args, **kwargs)
-
-
-class NotImplemented(PyKwalifyException):
-    """
-    """
-    def __init__(self, *args, **kwargs):
-        """
-        """
-        assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super(NotImplemented, self).__init__(retcode=retnames['notimplemented'],
-                                             *args, **kwargs)
-
-
-class ParseFailure(PyKwalifyException):
-    """
-    """
-    def __init__(self, *args, **kwargs):
-        """
-        """
-        assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super(ParseFailure, self).__init__(retcode=retnames['parsefailure'],
                                            *args, **kwargs)
 
 
