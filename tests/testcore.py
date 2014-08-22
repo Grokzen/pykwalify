@@ -177,15 +177,6 @@ class TestCore(object):
         # TODO: Fix this issue...
         # assert ('pykwalify.core', 'ERROR', 'Errors found but will not raise exception...') in l.actual()
 
-    def test_invalid_mapping_data_type(self):
-        """
-        Test that validating range object raises correct error messages when wrong
-        values is sent into the function.
-        """
-        # c = Core(source_data={"foo": None}, schema_data={"type": "map", "mapping": {"foo": {"type": "str"}}})
-        # c.validate()
-        pass
-
     def testCoreDataMode(self):
         Core(source_data=3.14159, schema_data={"type": "number"}).validate()
         Core(source_data=3.14159, schema_data={"type": "float"}).validate()
