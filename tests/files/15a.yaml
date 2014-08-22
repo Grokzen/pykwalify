@@ -10,3 +10,8 @@
   age: 15
   blood: AB
   birth: "1980/01/01"
+- email: bar@mail.net
+  age: 20
+  blood: AB
+  birth: "1980/01/01"
+  name: bar

@@ -177,6 +177,15 @@ class TestCore(object):
         # TODO: Fix this issue...
         # assert ('pykwalify.core', 'ERROR', 'Errors found but will not raise exception...') in l.actual()
 
+    def test_invalid_mapping_data_type(self):
+        """
+        Test that validating range object raises correct error messages when wrong
+        values is sent into the function.
+        """
+        # c = Core(source_data={"foo": None}, schema_data={"type": "map", "mapping": {"foo": {"type": "str"}}})
+        # c.validate()
+        pass
+
     def testCoreDataMode(self):
         Core(source_data=3.14159, schema_data={"type": "number"}).validate()
         Core(source_data=3.14159, schema_data={"type": "float"}).validate()
@@ -263,7 +272,7 @@ class TestCore(object):
             # Test mapping with sequence with mapping and valid data
             ("12a.yaml", "12b.yaml", {'mapping': {'company': {'required': True, 'type': 'str'}, 'email': {'type': 'str'}, 'employees': {'sequence': [{'mapping': {'code': {'required': True, 'type': 'int'}, 'email': {'type': 'str'}, 'name': {'required': True, 'type': 'str'}}, 'type': 'map'}], 'type': 'seq'}}, 'type': 'map'}),
             # Test most of the implemented functions
-            ("14a.yaml", "14b.yaml", {'sequence': [{'mapping': {'age': {'range': {'max': 30, 'min': 18}, 'type': 'int'}, 'birth': {'type': 'str'}, 'blood': {'enum': ['A', 'B', 'O', 'AB'], 'type': 'str'}, 'deleted': {'type': 'bool'}, 'email': {'pattern': '.+@.+', 'required': True, 'type': 'str'}, 'memo': {'type': 'any'}, 'name': {'required': True, 'type': 'str'}, 'password': {'range': {'max': 16, 'min': 8}, 'type': 'str'}}, 'type': 'map'}], 'type': 'seq'}),
+            ("14a.yaml", "14b.yaml", {'sequence': [{'mapping': {'age': {'range': {'max-ex': 30, 'min-ex': 18}, 'type': 'int'}, 'birth': {'type': 'str'}, 'blood': {'enum': ['A', 'B', 'O', 'AB'], 'type': 'str'}, 'deleted': {'type': 'bool'}, 'email': {'pattern': '.+@.+', 'required': True, 'type': 'str'}, 'memo': {'type': 'any'}, 'name': {'required': True, 'type': 'str'}, 'password': {'range': {'max': 16, 'min': 8}, 'type': 'str'}}, 'type': 'map'}], 'type': 'seq'}),
             # This will test the unique constraint
             ("16a.yaml", "16b.yaml", {'sequence': [{'mapping': {'email': {'type': 'str'}, 'groups': {'sequence': [{'type': 'str', 'unique': True}], 'type': 'seq'}, 'name': {'required': True, 'type': 'str', 'unique': True}}, 'required': True, 'type': 'map'}], 'type': 'seq'}),
             #
@@ -316,15 +325,17 @@ class TestCore(object):
             ("13a.yaml", "12b.yaml", SchemaError, ["Value: A101 is not of type 'int' : /employees/0/code",
                                                    'key.undefined : mail : /employees/1']),
             # TODO: write
-            ("15a.yaml", "14b.yaml", SchemaError, ["Value: twenty is not of type 'int' : /0/age",
+            ("15a.yaml", "15b.yaml", SchemaError, ["Value: twenty is not of type 'int' : /0/age",
                                                    'pattern.unmatch : .+@.+ --> foo(at)mail.com : /0/email',
                                                    'enum.notexists : a : /0/blood',
                                                    'required.nokey : name : /1',
                                                    'key.undefined : given-name : /1',
                                                    'key.undefined : family-name : /1',
+                                                   'scalar.range.toosmall-ex : 18 >= 15 : /1/age',
+                                                   'scalar.range.toosmall-ex : 18 >= 6 : /0/age',
                                                    'scalar.range.toosmall : 8 > 6 : /0/password',
-                                                   'scalar.range.toosmall : 18 > 15 : /1/age',
-                                                   'scalar.range.toosmall : 18 > 6 : /0/age']),
+                                                   'scalar.range.tolarge-ex : 19 <= 20 : /2/age',
+                                                   ]),
             # TODO: The reverse unique do not currently work proper # This will test the unique constraint but should fail
             ("17a.yaml", "16b.yaml", SchemaError, ['value.notunique :: value: foo : /0/groups/3 : /0/groups/0']),
             # This tests number validation rule with wrong data

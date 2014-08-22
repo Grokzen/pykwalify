@@ -50,8 +50,6 @@ class Core(object):
                 elif source_file.endswith(".yaml"):
                     try:
                         self.source = yaml.load(stream)
-                        # if len(self.source) == 0:
-                        #     raise Exception(".")
                     except Exception as e:
                         raise CoreError("Unable to load any data from source yaml file")
                 else:
@@ -201,8 +199,6 @@ class Core(object):
         Log.debug(" * Seq: {}".format(rule._sequence))
         Log.debug(" * Map: {}".format(rule._mapping))
 
-        if not isinstance(rule._sequence, list):
-            raise CoreError("sequence data not of list type : {}".format(path))
         if not len(rule._sequence) == 1:
             raise CoreError("only 1 item allowed in sequence rule : {}".format(path))
 
@@ -280,17 +276,6 @@ class Core(object):
             Log.debug(" + No rule to apply, prolly because of allowempty: True")
             return
 
-        if not isinstance(rule._mapping, dict):
-            raise CoreError("mapping is not a valid dict object")
-
-        if value is None:
-            Log.debug(" + Value is None, returning...")
-            return
-
-        if not isinstance(value, dict):
-            errors.append("mapping.value.notdict : {} : {}".format(value, path))
-            return
-
         m = rule._mapping
         Log.debug(" + RuleMapping: {}".format(m))
 
@@ -345,11 +330,6 @@ class Core(object):
         Log.debug(" # {}".format(rule._type))
         Log.debug(" # {}".format(path))
 
-        if rule._sequence is not None:
-            raise CoreError("found sequence when validating for scalar")
-        if rule._mapping is not None:
-            raise CoreError("found mapping when validating for scalar")
-
         if rule._enum is not None:
             if value not in rule._enum:
                 errors.append("enum.notexists : {} : {}".format(value, path))
@@ -390,35 +370,25 @@ class Core(object):
                                  "scalar")
 
     def _validate_range(self, max_, min_, max_ex, min_ex, errors, value, path, prefix):
-        ##########
-        # Test max
+        """
+        Validate that value is within range values.
+        """
+
         Log.debug("Validate range : {} : {} : {} : {} : {} : {}".format(max_, min_, max_ex, min_ex, value, path))
 
         if max_ is not None:
-            if not isinstance(max_, int):
-                raise Exception("INTERNAL ERROR: variable 'max' not of 'int' type")
-
             if max_ < value:
                 errors.append("{}.range.toolarge : {} < {} : {}".format(prefix, max_, value, path))
 
         if min_ is not None:
-            if not isinstance(min_, int):
-                raise Exception("INTERNAL ERROR: variable 'min_' not of 'int' type")
-
             if min_ > value:
                 errors.append("{}.range.toosmall : {} > {} : {}".format(prefix, min_, value, path))
 
         if max_ex is not None:
-            if not isinstance(max_ex, int):
-                raise Exception("INTERNAL ERROR: variable 'max_ex' not of 'int' type")
-
             if max_ex <= value:
                 errors.append("{}.range.tolarge-ex : {} <= {} : {}".format(prefix, max_ex, value, path))
 
         if min_ex is not None:
-            if not isinstance(min_ex, int):
-                raise Exception("INTERNAL ERROR: variable 'min_ex' not of 'int' type")
-
             if min_ex >= value:
                 errors.append("{}.range.toosmall-ex : {} >= {} : {}".format(prefix, min_ex, value, path))
 

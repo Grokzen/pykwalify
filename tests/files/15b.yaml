@@ -17,7 +17,7 @@ sequence:
       age:
         type: int
         range: 
-          max-ex: 30
+          max-ex: 19
           min-ex: 18
       blood:
         type: str

@@ -55,7 +55,7 @@ class TestTypes(unittest.TestCase):
 
         assert types.isFloat(1.0)
         assert not types.isFloat("foo")
-        
+
         assert types.isNumber(1)
         assert types.isNumber(1.0)
         assert not types.isNumber("foo")

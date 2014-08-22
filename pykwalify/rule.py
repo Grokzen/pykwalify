@@ -13,7 +13,7 @@ import logging
 Log = logging.getLogger(__name__)
 
 # pyKwalify imports
-from pykwalify.types import DEFAULT_TYPE, typeClass, isBuiltinType, isCollectionType, isInt
+from pykwalify.types import DEFAULT_TYPE, typeClass, isBuiltinType, isCollectionType, isInt, isBool
 from pykwalify.errors import SchemaConflict, RuleError
 
 
@@ -230,16 +230,16 @@ class Rule(object):
         max_ex = self._range.get("max-ex", None)
         min_ex = self._range.get("min-ex", None)
 
-        if max is not None and not isInt(max):
+        if max is not None and not isInt(max) or isBool(max):
             raise RuleError("range.max.notint : {} : {}".format(max, path))
 
-        if min is not None and not isInt(min):
+        if min is not None and not isInt(min) or isBool(min):
             raise RuleError("range.min.notint : {} : {}".format(min, path))
 
-        if max_ex is not None and not isInt(max_ex):
+        if max_ex is not None and not isInt(max_ex) or isBool(max_ex):
             raise RuleError("range.max_ex.notint : {} : {}".format(max_ex, path))
 
-        if min_ex is not None and not isInt(min_ex):
+        if min_ex is not None and not isInt(min_ex) or isBool(min_ex):
             raise RuleError("range.min_ex.notint : {} : {}".format(min_ex, path))
 
         if max is not None:
