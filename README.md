@@ -6,7 +6,7 @@ This framework is a port of the java version of the framework kwalify that can b
 
 The source code can be found at: http://sourceforge.net/projects/kwalify/files/kwalify-java/0.5.1/
 
-The schema used in this library: http://www.kuwata-lab.com/kwalify/ruby/users-guide.01.html#schema
+The schema this library is base and extended from: http://www.kuwata-lab.com/kwalify/ruby/users-guide.01.html#schema
 
 
 
@@ -18,35 +18,26 @@ The schema used in this library: http://www.kuwata-lab.com/kwalify/ruby/users-gu
 
 
 
-# How to install
+# Installation
 
 
 ## Install stable release
 
-Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
+Latest stable release from pypi
 
-1. Download a tar.gz release from https://github.com/Grokzen/pykwalify/releases
-2. Run ``pip install pykwalify-yy.mm.xx.tar.gz``
-3. Run ``pykwalify --help``
+```
+$ pip install pykwalify
+```
 
+or from source
 
-
-## Build from source
-
-1. Clone the repo
-2. Run ``make sdist``
-3. Install with ``pip install dist/pykwalify-yy.mm.xx.tar.gz``
+```
+$ python setup.py install
+```
 
 
 
-## Install from source
-
-1. Clone the repo
-2. Run ``make install`` or ``python setup.py install``
-
-
-
-## pyKwalify python dependencies
+## python dependencies
 
  - docopt 0.6.1
  - PyYaml 3.11
@@ -62,24 +53,24 @@ Note: It is recomended allways to use a virtual-enviroment when using pyKwalify
 
 
 
-# How to run tests
+# How to test
 
 Install test requirements with
 
 ```
-pip install -r dev-requirements.txt
+$ pip install -r dev-requirements.txt
 ```
 
-Run tests with with the current python version
+Run tests with
 
 ```
-py.test
+$ py.test
 ```
 
-or if you want to test against all python versions run
+or if you want to test against all python versions and pep8
 
 ```
-tox
+$ tox
 ```
 
 

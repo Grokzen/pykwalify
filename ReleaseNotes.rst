@@ -2,9 +2,10 @@
 Release Notes
 =============
 
-v14.06.2
-========
+v14.08
+======
 
+ - First version to be uploaded to pypi
  - Keyword 'range' can now be applied to map & seq types.
  - Added many more test files.
  - Keyword 'length' was removed because 'range' can handle all cases now.
