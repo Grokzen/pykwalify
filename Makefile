@@ -19,6 +19,7 @@ cleantox:
 	-rm -rf .tox/
 
 cleancov:
+	coverage combine
 	coverage erase
 	-rm -rf htmlcov/
 
