@@ -1,14 +1,14 @@
 type: map
 mapping:
-    streams:
-        type: seq
-        required: True
-        sequence:
-            -   type: map
-                mapping:
-                    name:
-                        type: none
-                        required: True
-                    sampleRateMultiple:
-                        type: int
-                        required: True
+  streams:
+    type: seq
+    required: True
+    sequence:
+      - type: map
+        mapping:
+          name:
+            type: none
+            required: True
+          sampleRateMultiple:
+            type: int
+            required: True
