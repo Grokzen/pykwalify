@@ -13,7 +13,7 @@ import logging
 Log = logging.getLogger(__name__)
 
 # pyKwalify imports
-from pykwalify.types import DEFAULT_TYPE, typeClass, isBuiltinType, isCollectionType, isInt, isBool
+from pykwalify.types import DEFAULT_TYPE, typeClass, isBuiltinType, isCollectionType, isInt, isBool, sequence_aliases, mapping_aliases
 from pykwalify.errors import SchemaConflict, RuleError
 
 
@@ -85,6 +85,7 @@ class Rule(object):
             "name": self.initNameValue,
             "desc": self.initDescValue,
             "required": self.initRequiredValue,
+            "req": self.initRequiredValue,
             "pattern": self.initPatternValue,
             "enum": self.initEnumValue,
             "assert": self.initAssertValue,
@@ -94,7 +95,9 @@ class Rule(object):
             "allowempty": self.initAllowEmptyMap,
             "default": self.initDefaultValue,
             "sequence": self.initSequenceValue,
+            "seq": self.initSequenceValue,
             "mapping": self.initMappingValue,
+            "map": self.initMappingValue,
             "matching-rule": self.initMatchingRule,
         }
 
@@ -325,7 +328,7 @@ class Rule(object):
                 v = {}
 
             # Check if this is a regex rule. Handle specially
-            if k.startswith("regex;"):
+            if k.startswith("regex;") or k.startswith("re;"):
                 Log.debug("Found regex map rule")
                 regex = k.split(";", 1)
                 if len(regex) != 2:
@@ -366,7 +369,7 @@ class Rule(object):
         Log.debug("Checking for conflicts : {}".format(path))
 
         if self._type == "seq":
-            if "sequence" not in schema:
+            if all([sa not in schema for sa in sequence_aliases]):
                 raise SchemaConflict("seq.nosequence")
             if self._enum is not None:
                 raise SchemaConflict("seq.conflict :: enum: {}".format(path))
@@ -375,7 +378,8 @@ class Rule(object):
             if self._mapping is not None:
                 raise SchemaConflict("seq.conflict :: mapping: {}".format(path))
         elif self._type == "map":
-            if "mapping" not in schema and not self._allowempty_map:
+            if all([ma not in schema for ma in mapping_aliases]) and not self._allowempty_map:
+            # if "mapping" not in schema and not self._allowempty_map:
                 raise SchemaConflict("map.nomapping")
             if self._enum is not None:
                 raise SchemaConflict("map.conflict :: enum:")

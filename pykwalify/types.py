@@ -103,3 +103,14 @@ tt = {"str": isString,
       "enum": isEnum,
       "none": isNone
       }
+
+sequence_aliases = ["sequence", "seq"]
+mapping_aliases = ["map", "mapping"]
+
+
+def is_sequence_alias(alias):
+    return alias in sequence_aliases
+
+
+def is_mapping_alias(alias):
+    return alias in mapping_aliases

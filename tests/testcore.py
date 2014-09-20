@@ -290,6 +290,14 @@ class TestCore(object):
             "19s.yaml",
             # Test that range validates with seq
             "20s.yaml",
+            # Test that 'seq' can use seq instead of 'sequence'
+            "21s.yaml",
+            # Test that 'map' can be used instead of 'mapping'
+            "22s.yaml",
+            # Test that 're' can be used instead of 'regex'
+            "23s.yaml",
+            # Test that 'req' can be used instead of 'required'
+            "24s.yaml",
         ]
 
         _fail_tests = [

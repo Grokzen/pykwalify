@@ -1,0 +1,20 @@
+data:
+  - mic:
+    - input
+      foo
+    - output
+      bar
+schema:
+  type: seq
+  sequence:
+    - type: map
+      matching-rule: "any"
+      mapping:
+        re;[mi.+]:
+          type: seq
+          sequence:
+            - type: str
+        regex;[mo.+]:
+          type: seq
+          sequence:
+            - type: bool

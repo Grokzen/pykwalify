@@ -5,7 +5,6 @@ This document will describe all implemented validation rules.
 [NYI] means Not Yet Implemented
 
 
-
 ## type
 
 Type of value. 
@@ -20,24 +19,22 @@ The followings are available:
  - date [NYI]
  - time [NYI]
  - timestamp [NYI]
- - seq
- - map
+ - sequence or seq
+ - mapping or map
  - none
  - scalar (all but seq and map)
  - any (means any implemented type of data)
+ - regex or re
 
 
-
-## required
+## required or req
 
 Value is required when true (Default is false). This is similar to not-null constraint in RDBMS.
-
 
 
 ## enum
 
 List of available values.
-
 
 
 ## pattern
@@ -47,11 +44,10 @@ Pattern also works on all scalar types.
 Pattern no longer works in map. Use ``regex;(regex-pattern)`` as keys in ``mapping``
 
 
-## regex;(regex-pattern)
+## regex;(regex-pattern) or re;(regex-pattern)
 
 This is only implemented in map where a key inside the mapping keyword can implement this ``regex;(regex-pattern)`` pattern and all keys will be matched against the pattern.
 If a match is found then it will parsed the subrules on that key. A single key can be matched against multiple regex rules and the normal map rules.
-
 
 
 ## range
@@ -67,12 +63,10 @@ This works with ``map, seq, str, int``
 Type bool and any are not available with range
 
 
-
 ## unique
 
 Value is unique for mapping or sequence. 
 This is similar to unique constraint of RDBMS.
-
 
 
 ## name
@@ -80,11 +74,9 @@ This is similar to unique constraint of RDBMS.
 Name of schema.
 
 
-
 ## desc
 
 Description is not used for validation.
-
 
 
 ## allowempty
@@ -92,7 +84,6 @@ Description is not used for validation.
 NOTE: Experimental feature!
 
 Only applies to map. It enables a dict to have items in it that is not validated. It can be combined with mapping to check for some fixed properties but still validate if any random properties exists. See example testfile 18a, 18b, 19a, 19b.
-
 
 
 ## matching-rule
@@ -106,17 +97,14 @@ Currently supported rules is
  - any [This will match any number of hits, 0 to n number of hits will be allowed]
 
 
-
 ## schema;(schema-name)
 
 See ``Partial schemas`` section
 
 
-
 ## include
 
 See ``Partial schemas`` section
-
 
 
 # Partial schemas

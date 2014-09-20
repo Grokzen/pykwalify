@@ -1,0 +1,8 @@
+data:
+  name: foo
+schema:
+  type: map
+  mapping:
+    name:
+      type: str
+      req: True
