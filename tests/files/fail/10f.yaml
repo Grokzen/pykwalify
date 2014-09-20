@@ -1,0 +1,10 @@
+data:
+  - 1337
+  - 3.14159
+  - abc
+schema:
+  type: seq
+  sequence:
+    - type: number
+errors:
+  - "Value: abc is not of type 'number' : /2"

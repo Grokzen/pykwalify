@@ -15,8 +15,8 @@ class TestCLI(object):
         Test that when passing in certain arguments from commandline they
         are handled correctly by docopt and correct args structure is returned.
         """
-        input = tmpdir.join("1a.yaml")
-        schema_file = tmpdir.join("1b.yaml")
+        input = tmpdir.join("cli/1a.yaml")
+        schema_file = tmpdir.join("cli/1b.yaml")
 
         sys.argv = [
             'scripts/pykwalify',
@@ -50,8 +50,8 @@ class TestCLI(object):
         """
         This should test that running the cli still works as expected
         """
-        input = self.f("1a.yaml")
-        schema_file = self.f("1b.yaml")
+        input = self.f("cli/1a.yaml")
+        schema_file = self.f("cli/1b.yaml")
 
         sys.argv = [
             'scripts/pykwalify',

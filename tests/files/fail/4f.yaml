@@ -1,0 +1,13 @@
+data:
+  - foo
+  - bar
+  - foobar
+schema:
+  type: seq
+  sequence:
+    - type: str
+      range:
+        max: 5
+        min: 1
+errors:
+ - 'scalar.range.toolarge : 5 < 6 : /2'

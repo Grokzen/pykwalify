@@ -1,0 +1,12 @@
+data:
+  - abc
+  - 123
+  - 3.14159
+schema:
+  type: seq
+  sequence:
+    - type: text
+parsed-struct:
+  type: seq
+  sequence:
+    - type: text

@@ -1,8 +1,0 @@
-- mic:
-  - input
-    foo
-  - output
-    bar
-- media: 1
-- foobar:
-    opa: True

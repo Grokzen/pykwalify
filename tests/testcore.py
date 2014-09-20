@@ -4,16 +4,16 @@
 
 # python std lib
 import os
-import logging
 
 # 3rd party imports
+import yaml
 import pytest
-from testfixtures import compare, LogCapture
+from testfixtures import compare
 
 # pyKwalify imports
 import pykwalify
 from pykwalify.core import Core
-from pykwalify.errors import SchemaError, CoreError, RuleError
+from pykwalify.errors import SchemaError, CoreError
 
 
 class TestCore(object):
@@ -169,7 +169,7 @@ class TestCore(object):
 
         Currently file 2a.yaml & 2b.yaml is designed to cause exception.
         """
-        c = Core(source_file=self.f("2a.yaml"), schema_files=[self.f("2b.yaml")])
+        c = Core(source_file=self.f("cli", "2a.yaml"), schema_files=[self.f("cli", "2b.yaml")])
         c.validate(raise_exception=False)
 
         assert c.validation_errors == ["Value: 1 is not of type 'str' : /0", "Value: 2 is not of type 'str' : /1", "Value: 3 is not of type 'str' : /2"]
@@ -213,16 +213,16 @@ class TestCore(object):
         """
         pass_tests = [
             # Test that include directive can be used at top level of the schema
-            ([self.f("33a.yaml"), self.f("33b.yaml")], self.f("33c.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'}),
+            ([self.f("partial_schemas", "1s-schema.yaml"), self.f("partial_schemas", "1s-partials.yaml")], self.f("partial_schemas", "1s-data.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'}),
             # # This test that include directive works inside sequence
             # ([self.f("33a.yaml"), self.f("33b.yaml")], self.f("33c.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'}),
             # This test recursive schemas
-            ([self.f("35a.yaml"), self.f("35b.yaml")], self.f("35c.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'})
+            ([self.f("partial_schemas", "2s-schema.yaml"), self.f("partial_schemas", "2s-partials.yaml")], self.f("partial_schemas", "2s-data.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'})
         ]
 
         failing_tests = [
             # Test include inside partial schema
-            ([self.f("34a.yaml"), self.f("34b.yaml")], self.f("34c.yaml"), SchemaError, ['No partial schema found for name : fooonez : Existing partial schemas: fooone, foothree, footwo'])
+            ([self.f("partial_schemas", "1f-schema.yaml"), self.f("partial_schemas", "1f-partials.yaml")], self.f("partial_schemas", "1f-data.yaml"), SchemaError, ['No partial schema found for name : fooonez : Existing partial schemas: fooone, foothree, footwo'])
         ]
 
         for passing_test in pass_tests:
@@ -251,115 +251,112 @@ class TestCore(object):
         # These tests should pass with no exception raised
         pass_tests = [
             # Test sequence with only string values
-            ("1a.yaml", "1b.yaml", {'sequence': [{'type': 'str'}], 'type': 'seq'}),
+            "1s.yaml",
             # Test sequence where the only valid items is integers
-            ("3a.yaml", "3b.yaml", {'sequence': [{'type': 'int'}], 'type': 'seq'}),
+            "2s.yaml",
             # Test sequence with only booleans
-            ("4a.yaml", "4b.yaml", {'sequence': [{'type': 'bool'}], 'type': 'seq'}),
+            "3s.yaml",
             # Test mapping with different types of data and some extra conditions
-            ("8a.yaml", "8b.yaml", {'mapping': {'age': {'type': 'int'}, 'birth': {'type': 'str'}, 'email': {'pattern': '.+@.+', 'type': 'str'}, 'name': {'required': True, 'type': 'str'}}, 'type': 'map'}),
+            "4s.yaml",
             # Test sequence with mapping with valid mapping
-            ("10a.yaml", "10b.yaml", {'sequence': [{'mapping': {'email': {'type': 'str'}, 'name': {'required': True, 'type': 'str'}}, 'type': 'map'}], 'type': 'seq'}),
+            "5s.yaml",
             # Test mapping with sequence with mapping and valid data
-            ("12a.yaml", "12b.yaml", {'mapping': {'company': {'required': True, 'type': 'str'}, 'email': {'type': 'str'}, 'employees': {'sequence': [{'mapping': {'code': {'required': True, 'type': 'int'}, 'email': {'type': 'str'}, 'name': {'required': True, 'type': 'str'}}, 'type': 'map'}], 'type': 'seq'}}, 'type': 'map'}),
+            "6s.yaml",
             # Test most of the implemented functions
-            ("14a.yaml", "14b.yaml", {'sequence': [{'mapping': {'age': {'range': {'max-ex': 30, 'min-ex': 18}, 'type': 'int'}, 'birth': {'type': 'str'}, 'blood': {'enum': ['A', 'B', 'O', 'AB'], 'type': 'str'}, 'deleted': {'type': 'bool'}, 'email': {'pattern': '.+@.+', 'required': True, 'type': 'str'}, 'memo': {'type': 'any'}, 'name': {'required': True, 'type': 'str'}, 'password': {'range': {'max': 16, 'min': 8}, 'type': 'str'}}, 'type': 'map'}], 'type': 'seq'}),
+            "7s.yaml",
             # This will test the unique constraint
-            ("16a.yaml", "16b.yaml", {'sequence': [{'mapping': {'email': {'type': 'str'}, 'groups': {'sequence': [{'type': 'str', 'unique': True}], 'type': 'seq'}, 'name': {'required': True, 'type': 'str', 'unique': True}}, 'required': True, 'type': 'map'}], 'type': 'seq'}),
+            "8s.yaml",
             #
-            ("18a.yaml", "18b.yaml", {'mapping': {'datasources': {'allowempty': True, 'type': 'map'}}, 'type': 'map'}),
+            "9s.yaml",
             #
-            ("19a.yaml", "19b.yaml", {'mapping': {'datasources': {'allowempty': True, 'mapping': {'test1': {'type': 'str'}}, 'type': 'map'}}, 'type': 'map'}),
+            "10s.yaml",
             #
-            ("20a.yaml", "20b.yaml", {'type': 'float'}),
+            "11s.yaml",
             # This tests number validation rule
-            ("21a.yaml", "21b.yaml", {'sequence': [{'type': 'number'}], 'type': 'seq'}),
+            "12s.yaml",
             # This test the text validation rule
-            ("23a.yaml", "23b.yaml", {'sequence': [{'type': 'text'}], 'type': 'seq'}),
-            # This test the text validation rule
-            ("24a.yaml", "25b.yaml", {'sequence': [{'type': 'any'}], 'type': 'seq'}),
+            "13s.yaml",
+            # This test the any validation rule
+            "14s.yaml",
             #
-            ("26a.yaml", "26b.yaml", {'type': 'any'}),
+            "15s.yaml",
             #
-            ("30a.yaml", "30b.yaml", {'sequence': [{'mapping': {'foobar': {'mapping': {'opa': {'type': 'bool'}}, 'type': 'map'}, 'media': {'type': 'int'}, 'regex;[mi.+]': {'sequence': [{'type': 'str'}], 'type': 'seq'}, 'regex;[mo.+]': {'sequence': [{'type': 'bool'}], 'type': 'seq'}}, 'matching-rule': 'any', 'type': 'map'}], 'type': 'seq'}),
+            "16s.yaml",
             # This test that a regex that will compile
-            ("31a.yaml", "31b.yaml", {'mapping': {'regex;mi.+': {'sequence': [{'type': 'str'}], 'type': 'seq'}}, 'matching-rule': 'any', 'type': 'map'}),
+            "17s.yaml",
             # Test that type can be set to 'None' and it will validate ok
-            ("37a.yaml", "37b.yaml", {'mapping': {'streams': {'required': True, 'sequence': [{'mapping': {'name': {'required': True, 'type': 'none'}, 'sampleRateMultiple': {'required': True, 'type': 'int'}}, 'type': 'map'}], 'type': 'seq'}}, 'type': 'map'}),
+            "18s.yaml",
             # Test that range validates with map
-            ("40a.yaml", "40b.yaml", {'mapping': {'foo': {'type': 'str'}, 'streams': {'type': 'str'}}, 'range': {'max': 3, 'min': 1}, 'type': 'map'}),
+            "19s.yaml",
             # Test that range validates with seq
-            ("41a.yaml", "41b.yaml", {'range': {'max': 3, 'min': 1}, 'sequence': [{'type': 'str'}], 'type': 'seq'}),
+            "20s.yaml",
         ]
 
-        # These tests are designed to fail with some exception raised
-        fail_tests = [
+        _fail_tests = [
             # Test sequence with defined string content type but data only has integers
-            ("2a.yaml", "2b.yaml", SchemaError, ["Value: 1 is not of type 'str' : /0",
-                                                 "Value: 2 is not of type 'str' : /1",
-                                                 "Value: 3 is not of type 'str' : /2"]),
+            ("1f.yaml", SchemaError),
             # Test sequence with defined string content type but data only has booleans
-            ("5a.yaml", "5b.yaml", SchemaError, ["Value: True is not of type 'str' : /0",
-                                                 "Value: False is not of type 'str' : /1"]),
+            ("2f.yaml", SchemaError),
             # Test sequence with defined booleans but with one integer
-            ("6a.yaml", "6b.yaml", SchemaError, ["Value: 1 is not of type 'bool' : /2"]),
+            ("3f.yaml", SchemaError),
             # Test sequence with strings and and lenght on each string
-            ("7a.yaml", "7b.yaml", SchemaError, ['scalar.range.toolarge : 5 < 6 : /2']),
+            ("4f.yaml", SchemaError),
             # Test mapping that do not work
-            ("9a.yaml", "8b.yaml", SchemaError, ["Value: twnty is not of type 'int' : /age",
-                                                 'pattern.unmatch : .+@.+ --> foo(at)mail.com : /email']),
+            ("5f.yaml", SchemaError),
             # Test sequence with mapping with missing required key
-            ("11a.yaml", "10b.yaml", SchemaError, ['required.nokey : name : /1',
-                                                   'key.undefined : naem : /1',
-                                                   'key.undefined : mail : /2']),
+            ("6f.yaml", SchemaError),
             # Test mapping with sequence with mapping and invalid data
-            ("13a.yaml", "12b.yaml", SchemaError, ["Value: A101 is not of type 'int' : /employees/0/code",
-                                                   'key.undefined : mail : /employees/1']),
-            # TODO: write
-            ("15a.yaml", "15b.yaml", SchemaError, ["Value: twenty is not of type 'int' : /0/age",
-                                                   'pattern.unmatch : .+@.+ --> foo(at)mail.com : /0/email',
-                                                   'enum.notexists : a : /0/blood',
-                                                   'required.nokey : name : /1',
-                                                   'key.undefined : given-name : /1',
-                                                   'key.undefined : family-name : /1',
-                                                   'scalar.range.toosmall-ex : 18 >= 15 : /1/age',
-                                                   'scalar.range.toosmall-ex : 18 >= 6 : /0/age',
-                                                   'scalar.range.toosmall : 8 > 6 : /0/password',
-                                                   'scalar.range.tolarge-ex : 19 <= 20 : /2/age',
-                                                   ]),
+            ("7f.yaml", SchemaError),
+            #
+            ("8f.yaml", SchemaError),
             # TODO: The reverse unique do not currently work proper # This will test the unique constraint but should fail
-            ("17a.yaml", "16b.yaml", SchemaError, ['value.notunique :: value: foo : /0/groups/3 : /0/groups/0']),
+            ("9f.yaml", SchemaError),
             # This tests number validation rule with wrong data
-            ("22a.yaml", "22b.yaml", SchemaError, ["Value: abc is not of type 'number' : /2"]),
+            ("10f.yaml", SchemaError),
             # This test the text validation rule with wrong data
-            ("24a.yaml", "24b.yaml", SchemaError, ["Value: True is not of type 'text' : /3"]),
+            ("11f.yaml", SchemaError),
             # This test that typechecking works when value in map is None
-            ("36a.yaml", "36b.yaml", SchemaError, ["Value: None is not of type 'str' : /streams/0/name"]),
+            ("12f.yaml", SchemaError),
             # Test that range validates on 'map' raise correct error
-            ("38a.yaml", "38b.yaml", SchemaError, ['map.range.toosmall : 2 > 1 : /streams']),
+            ("13f.yaml", SchemaError),
             # Test that range validates on 'seq' raise correct error
-            ("39a.yaml", "39b.yaml", SchemaError, ['seq.range.toolarge : 2 < 3 : ']),
+            ("14f.yaml", SchemaError),
         ]
 
-        for passing_test in pass_tests:
+        for passing_test_file in pass_tests:
+            f = self.f(os.path.join("success", passing_test_file))
+            with open(f, "r") as stream:
+                yaml_data = yaml.load(stream)
+                data = yaml_data["data"]
+                schema = yaml_data["schema"]
+
             try:
-                c = Core(source_file=self.f(passing_test[0]), schema_files=[self.f(passing_test[1])])
+                print("Running test files: {}".format(f))
+                c = Core(source_data=data, schema_data=schema)
                 c.validate()
                 compare(c.validation_errors, [], prefix="No validation errors should exist...")
             except Exception as e:
-                print("ERROR RUNNING FILES: {} : {}".format(passing_test[0], passing_test[1]))
+                print("ERROR RUNNING FILES: {}".format(f))
                 raise e
 
             # This serve as an extra schema validation that tests more complex structures then testrule.py do
-            compare(c.root_rule._schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed... files : {} : {}".format(passing_test[0], passing_test[1]))
+            compare(c.root_rule._schema_str, schema, prefix="Parsed rules is not correct, something have changed... files : {}".format(f))
 
-        for failing_test in fail_tests:
+        for failing_test, exception_type in _fail_tests:
+            f = self.f(os.path.join("fail", failing_test))
+            with open(f, "r") as stream:
+                yaml_data = yaml.load(stream)
+                data = yaml_data["data"]
+                schema = yaml_data["schema"]
+                errors = yaml_data["errors"]
+
             try:
-                c = Core(source_file=self.f(failing_test[0]), schema_files=[self.f(failing_test[1])])
+                print("Running test files: {}".format(f))
+                c = Core(source_data=data, schema_data=schema)
                 c.validate()
-            except failing_test[2]:
+            except exception_type:
                 pass  # OK
             else:
-                raise AssertionError("Exception {} not raised as expected... FILES: {} : {}".format(failing_test[2], failing_test[0], failing_test[1]))
+                raise AssertionError("Exception {} not raised as expected... FILES: {} : {}".format(exception_type, exception_type))
 
-            compare(sorted(c.validation_errors), sorted(failing_test[3]), prefix="Wrong validation errors when parsing files : {} : {}".format(failing_test[0], failing_test[1]))
+            compare(sorted(c.validation_errors), sorted(errors), prefix="Wrong validation errors when parsing files : {}".format(f))

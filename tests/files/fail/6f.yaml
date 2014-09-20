@@ -1,0 +1,21 @@
+data:
+  - name: foo
+    email: foo@mail.com
+  - naem: bar
+    email: bar@mail.net
+  - name: baz
+    mail: baz@mail.org
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+        name:
+          type: str
+          required: True
+        email:
+          type: str
+errors:
+  - 'required.nokey : name : /1'
+  - 'key.undefined : naem : /1'
+  - 'key.undefined : mail : /2'

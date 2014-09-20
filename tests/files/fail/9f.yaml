@@ -1,0 +1,36 @@
+data:
+  - name: foo
+    email: admin@mail.com
+    groups:
+      - foo
+      - users
+      - admin
+      - foo
+  - name: bar
+    email: admin@mail.com
+    groups:
+      - admin
+      - users
+  - name: bar
+    email: baz@mail.com
+    groups:
+      - users
+schema:
+  type: seq
+  sequence:
+    - type: map
+      required: True
+      mapping:
+        name: 
+          type: str
+          required: True
+          unique: True
+        email:
+          type: str
+        groups:
+          type: seq
+          sequence:
+            - type: str
+              unique: True
+errors:
+  - 'value.notunique :: value: foo : /0/groups/3 : /0/groups/0'

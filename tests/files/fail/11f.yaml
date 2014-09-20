@@ -1,0 +1,11 @@
+data:
+  - abc
+  - 123
+  - 3.14159
+  - True
+schema:
+  type: seq
+  sequence:
+    - type: text
+errors:
+  - "Value: True is not of type 'text' : /3"

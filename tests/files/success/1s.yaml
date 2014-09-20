@@ -1,0 +1,12 @@
+data:
+  - foo
+  - bar
+  - baz
+schema:
+  type: seq
+  sequence:
+    - type: str
+parsed-struct:
+  type: seq
+  sequence:
+    - type: str

@@ -1,0 +1,13 @@
+data:
+  - foobar
+  - barfoo
+  - opa
+schema:
+  type: seq
+  range:
+    min: 1
+    max: 2
+  sequence:
+    - type: str
+errors:
+  - "seq.range.toolarge : 2 < 3 : "

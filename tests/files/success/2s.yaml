@@ -1,0 +1,14 @@
+data:
+  - 1
+  - 2
+  - 3
+  - True
+  - False
+schema:
+  type: seq
+  sequence:
+    - type: int
+parsed-struct:
+  type: seq
+  sequence:
+    - type: int

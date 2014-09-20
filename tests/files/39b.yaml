@@ -1,6 +1,0 @@
-type: seq
-range:
-  min: 1
-  max: 2
-sequence:
-  - type: str

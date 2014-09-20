@@ -1,0 +1,34 @@
+data:
+  streams:
+    - name:
+      sampleRateMultiple: 1
+schema:
+  type: map
+  mapping:
+    streams:
+      type: seq
+      required: True
+      sequence:
+        - type: map
+          mapping:
+            name:
+              type: none
+              required: True
+            sampleRateMultiple:
+              type: int
+              required: True
+parsed-struct:
+  type: map
+  mapping:
+    streams:
+      type: seq
+      required: True
+      sequence:
+        - type: map
+          mapping:
+            name:
+              type: none
+              required: True
+            sampleRateMultiple:
+              type: int
+              required: True

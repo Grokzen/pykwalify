@@ -1,0 +1,11 @@
+data:
+  - 1337
+  - 3.14159
+schema:
+  type: seq
+  sequence:
+    - type: number
+parsed-struct:
+  type: seq
+  sequence:
+    - type: number

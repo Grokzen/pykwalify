@@ -1,0 +1,25 @@
+data:
+  streams:
+    - name:
+      sampleRateMultiple: 1
+    - name: media
+      sampleRateMultiple: 2
+schema:
+  type: map
+  mapping:
+    streams:
+      type: seq
+      required: True
+      sequence:
+        - type: map
+          mapping:
+            name:
+              type: str
+              range:
+                min: 1
+              required: True
+            sampleRateMultiple:
+              type: int
+              required: True
+errors:
+  - "Value: None is not of type 'str' : /streams/0/name"

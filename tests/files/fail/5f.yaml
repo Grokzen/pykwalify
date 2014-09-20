@@ -1,0 +1,21 @@
+data:
+  name: foo
+  email: foo(at)mail.com
+  age: twnty
+  birth: "jun 01, 1985"
+schema:
+  type: map
+  mapping:
+    name:
+      type: str
+      required: True
+    email:
+      type: str
+      pattern: .+@.+
+    age:
+      type: int
+    birth:
+      type: str
+errors:
+  - "Value: twnty is not of type 'int' : /age"
+  - "pattern.unmatch : .+@.+ --> foo(at)mail.com : /email"

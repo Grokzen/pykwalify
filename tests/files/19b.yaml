@@ -1,8 +1,0 @@
-type: map
-mapping:
-  datasources:
-    type: map
-    allowempty: True
-    mapping:
-      test1:
-        type: str

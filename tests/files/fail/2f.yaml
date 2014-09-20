@@ -1,0 +1,10 @@
+data:
+  - True
+  - False
+schema:
+  type: seq
+  sequence:
+    - type: str
+errors:
+  - "Value: True is not of type 'str' : /0"
+  - "Value: False is not of type 'str' : /1"

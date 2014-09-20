@@ -1,0 +1,31 @@
+data:
+  name: foo
+  email: foo@mail.com
+  age: 20
+  birth: "1985-01-01"
+schema:
+  type: map
+  mapping:
+    name:
+      type: str
+      required: True
+    email:
+      type: str
+      pattern: .+@.+
+    age:
+      type: int
+    birth:
+      type: str
+parsed-struct:
+  type: map
+  mapping:
+    age:
+      type: int
+    birth:
+      type: str
+    email:
+      pattern: .+@.+
+      type: str
+    name: 
+      required: true
+      type: str

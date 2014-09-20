@@ -1,0 +1,6 @@
+data:
+  3.14159
+schema:
+  type: float
+parsed-struct:
+  type: float
