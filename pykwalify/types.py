@@ -5,28 +5,31 @@
 __author__ = 'Grokzen <grokzen@gmail.com>'
 
 # python std lib
-import os
-import sys
 import datetime
 
 DEFAULT_TYPE = "str"
 
-_types = {"str": str,
-          "int": int,
-          "float": float,
-          "number": None,
-          "bool": bool,
-          "map": dict,
-          "seq": list,
-          "timestamp": datetime.datetime,
-          "date": datetime.datetime,
-          "symbol": str,
-          "scalar": None,
-          "text": None,
-          "any": object,
-          "enum": str,
-          "none": None
-          }
+_types = {
+    "str": str,
+    "int": int,
+    "float": float,
+    "number": None,
+    "bool": bool,
+    "map": dict,
+    "seq": list,
+    "timestamp": datetime.datetime,
+    "date": datetime.datetime,
+    "symbol": str,
+    "scalar": None,
+    "text": None,
+    "any": object,
+    "enum": str,
+    "none": None
+}
+
+
+sequence_aliases = ["sequence", "seq"]
+mapping_aliases = ["map", "mapping"]
 
 
 def typeClass(type):
@@ -93,24 +96,22 @@ def isNone(obj):
     return obj is None
 
 
-tt = {"str": isString,
-      "int": isInt,
-      "bool": isBool,
-      "float": isFloat,
-      "number": isNumber,
-      "text": isText,
-      "any": isAny,
-      "enum": isEnum,
-      "none": isNone
-      }
-
-sequence_aliases = ["sequence", "seq"]
-mapping_aliases = ["map", "mapping"]
-
-
 def is_sequence_alias(alias):
     return alias in sequence_aliases
 
 
 def is_mapping_alias(alias):
     return alias in mapping_aliases
+
+
+tt = {
+    "str": isString,
+    "int": isInt,
+    "bool": isBool,
+    "float": isFloat,
+    "number": isNumber,
+    "text": isText,
+    "any": isAny,
+    "enum": isEnum,
+    "none": isNone
+}
