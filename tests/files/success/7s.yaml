@@ -41,34 +41,3 @@ schema:
           type: any
         deleted:
           type: bool
-parsed-struct:
-  type: seq
-  sequence:
-    - type: map
-      mapping:
-        age:
-          range:
-            max-ex: 30
-            min-ex: 18
-          type: int
-        birth:
-          type: str
-        blood:
-          enum: [A, B, O, AB]
-          type: str
-        deleted:
-          type: bool
-        email:
-          pattern: .+@.+
-          required: true
-          type: str
-        memo:
-          type: any
-        name:
-          required: true
-          type: str
-        password:
-          range:
-            max: 16
-            min: 8
-          type: str

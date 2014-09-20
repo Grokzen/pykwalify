@@ -28,24 +28,3 @@ schema:
           mapping:
             opa:
               type: bool
-parsed-struct:
-  type: seq
-  sequence:
-    - type: map
-      matching-rule: "any"
-      mapping:
-        regex;[mi.+]:
-          type: seq
-          sequence:
-            - type: str
-        regex;[mo.+]:
-          type: seq
-          sequence:
-            - type: bool
-        media:
-          type: int
-        foobar:
-          type: map
-          mapping:
-            opa:
-              type: bool

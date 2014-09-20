@@ -29,24 +29,3 @@ schema:
               required: True
             email:
               type: str
-parsed-struct:
-  type: map
-  mapping:
-    company:
-      required: true
-      type: str
-    email:
-      type: str
-    employees:
-      type: seq
-      sequence:
-        - type: map
-          mapping:
-            code: 
-              required: true
-              type: int
-            email:
-              type: str
-            name:
-              required: true
-              type: str

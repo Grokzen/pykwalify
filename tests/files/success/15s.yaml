@@ -4,5 +4,3 @@ data:
       opa: 1337
 schema:
   type: any
-parsed-struct:
-  type: any

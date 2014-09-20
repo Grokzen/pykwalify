@@ -6,7 +6,3 @@ schema:
   type: seq
   sequence:
     - type: str
-parsed-struct:
-  type: seq
-  sequence:
-    - type: str

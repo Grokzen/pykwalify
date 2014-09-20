@@ -12,11 +12,3 @@ schema:
       type: seq
       sequence:
         - type: str
-parsed-struct:
-  type: map
-  matching-rule: "any"
-  mapping:
-    regex;mi.+:
-      type: seq
-      sequence:
-        - type: str

@@ -31,20 +31,3 @@ schema:
           sequence:
             - type: str
               unique: True
-parsed-struct:
-  type: seq
-  sequence:
-    - type: map
-      mapping:
-        email:
-          type: str
-        groups:
-          type: seq
-          sequence:
-            - type: str
-              unique: true
-        name:
-          required: true
-          type: str
-          unique: true
-      required: true

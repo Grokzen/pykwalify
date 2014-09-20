@@ -11,12 +11,3 @@ schema:
       mapping:
         test1:
           type: str
-parsed-struct:
-  type: map
-  mapping:
-    datasources:
-      type: map
-      allowempty: true
-      mapping:
-        test1:
-          type: str

@@ -8,9 +8,3 @@ schema:
     datasources:
       type: map
       allowempty: True
-parsed-struct:
-  type: map
-  mapping:
-    datasources:
-      allowempty: true
-      type: map

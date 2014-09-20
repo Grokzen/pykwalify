@@ -16,16 +16,3 @@ schema:
       type: int
     birth:
       type: str
-parsed-struct:
-  type: map
-  mapping:
-    age: 
-      type: int
-    birth: 
-      type: str
-    email: 
-      pattern: .+@.+
-      type: str
-    name:
-      required: true
-      type: str

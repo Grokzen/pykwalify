@@ -5,7 +5,3 @@ schema:
   type: seq
   sequence:
     - type: bool
-parsed-struct:
-  type: seq
-  sequence:
-    - type: bool
