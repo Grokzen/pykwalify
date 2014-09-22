@@ -64,21 +64,31 @@ class Rule(object):
             self._include_name = include
             return
 
+        t = None
+        rule = self
+
         if schema is not None:
             if "type" not in schema:
-                raise RuleError("key 'type' not found in schema rule : {}".format(path))
+                # Mapping and sequence do not need explicit type defenitions
+                if any([sa in schema for sa in sequence_aliases]):
+                    t = "seq"
+                    self.initTypeValue(t, rule, path)
+                elif any([ma in schema for ma in mapping_aliases]):
+                    t = "map"
+                    self.initTypeValue(t, rule, path)
+                else:
+                    raise RuleError("key 'type' not found in schema rule : {}".format(path))
             else:
                 if not isinstance(schema["type"], str):
                     raise RuleError("key 'type' in schema rule is not a string type : {}".format(path))
 
                 self._type = schema["type"]
 
-        rule = self
-
         self._schema_str = schema
 
-        t = schema["type"]
-        self.initTypeValue(t, rule, path)
+        if not t:
+            t = schema["type"]
+            self.initTypeValue(t, rule, path)
 
         func_mapping = {
             "type": lambda x, y, z: (),
@@ -312,6 +322,10 @@ class Rule(object):
         return rule
 
     def initMappingValue(self, v, rule, path):
+        # Check for duplicate use of 'map' and 'mapping'
+        if self._mapping:
+            raise RuleError("mapping.multiple-use : {}".format(path))
+
         Log.debug("Init mapping value : {}".format(path))
 
         if v is not None and not isinstance(v, dict):
@@ -379,7 +393,6 @@ class Rule(object):
                 raise SchemaConflict("seq.conflict :: mapping: {}".format(path))
         elif self._type == "map":
             if all([ma not in schema for ma in mapping_aliases]) and not self._allowempty_map:
-            # if "mapping" not in schema and not self._allowempty_map:
                 raise SchemaConflict("map.nomapping")
             if self._enum is not None:
                 raise SchemaConflict("map.conflict :: enum:")

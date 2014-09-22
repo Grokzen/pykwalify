@@ -13,7 +13,7 @@ from testfixtures import compare
 # pyKwalify imports
 import pykwalify
 from pykwalify.core import Core
-from pykwalify.errors import SchemaError, CoreError
+from pykwalify.errors import SchemaError, CoreError, RuleError
 
 
 class TestCore(object):
@@ -298,6 +298,8 @@ class TestCore(object):
             "23s.yaml",
             # Test that 'req' can be used instead of 'required'
             "24s.yaml",
+            # Test that there is no need to specify 'type: seq' or 'type: map'
+            "25s.yaml",
         ]
 
         _fail_tests = [

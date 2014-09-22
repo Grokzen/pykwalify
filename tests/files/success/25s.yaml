@@ -1,0 +1,16 @@
+data:
+  streams:
+    - name:
+      sampleRateMultiple: 1
+schema:
+  mapping:
+    streams:
+      required: True
+      sequence:
+        - mapping:
+            name:
+              type: none
+              required: True
+            sampleRateMultiple:
+              type: int
+              required: True

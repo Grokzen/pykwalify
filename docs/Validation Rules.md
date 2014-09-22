@@ -27,6 +27,16 @@ The followings are available:
  - regex or re
 
 
+## sequence or seq
+
+Sequence of values. Specifying 'type: seq' is optional when 'sequence' or 'seq' in found in the schema.
+
+
+## mapping or map
+
+Mapping of values (dict). Specifying 'type: map' is optional when 'mapping' or 'map' is found in the schema.
+
+
 ## required or req
 
 Value is required when true (Default is false). This is similar to not-null constraint in RDBMS.

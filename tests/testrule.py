@@ -182,3 +182,8 @@ class TestRule(unittest.TestCase):
         with pytest.raises(RuleError) as ex:
             Rule(schema={"type": "str", "enum": True})
         assert ex.value.msg.startswith("enum.notseq")
+
+        # Test that 'map' and 'mapping' can't be at the same level
+        with pytest.raises(RuleError) as ex:
+            Rule(schema={"map": {"stream": {"type": "any"}}, "mapping": {"seams": {"type": "any"}}})
+        assert ex.value.msg.startswith("mapping.multiple-use")
