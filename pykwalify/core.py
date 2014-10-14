@@ -47,7 +47,7 @@ class Core(object):
                         self.source = json.load(stream)
                     except Exception as e:
                         raise CoreError("Unable to load any data from source json file")
-                elif source_file.endswith(".yaml"):
+                elif source_file.endswith(".yaml") or source_file.endswith('.yml'):
                     try:
                         self.source = yaml.load(stream)
                     except Exception as e:
