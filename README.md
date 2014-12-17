@@ -100,7 +100,7 @@ $ tox
 
 # Documentation
 
-[Implemented valudation rules](docs/Validation Rules.md)
+[Implemented validation rules](docs/Validation Rules.md)
 
 
 # Licensing
