@@ -56,8 +56,19 @@ Pattern no longer works in map. Use ``regex;(regex-pattern)`` as keys in ``mappi
 
 ## regex;(regex-pattern) or re;(regex-pattern)
 
-This is only implemented in map where a key inside the mapping keyword can implement this ``regex;(regex-pattern)`` pattern and all keys will be matched against the pattern.
+This is only implemented in map where a key inside the mapping keyword can implement this ``regex;(regex-pattern)`` pattern and all keys will be matched against the pattern. Please note that the regex should be wrapped with `( )` and they will be removed during runtime.
 If a match is found then it will parsed the subrules on that key. A single key can be matched against multiple regex rules and the normal map rules.
+When defining a regex, matching-rule should allways be set to configure the behaviour when using multiple regex:s.
+
+
+## matching-rule
+
+Only applies to map. This enables more finegrained control over how the matching rule should behave when validation keys inside mappings.
+
+Currently supported rules is
+
+ - `any` `1 to all` number of regex must match.
+ - `all` All defined regex must match each key.
 
 
 ## range
@@ -94,17 +105,6 @@ Description is not used for validation.
 NOTE: Experimental feature!
 
 Only applies to map. It enables a dict to have items in it that is not validated. It can be combined with mapping to check for some fixed properties but still validate if any random properties exists. See example testfile 18a, 18b, 19a, 19b.
-
-
-## matching-rule
-
-NOTE: Experimental feature!
-
-Only applies to map. This enables more finegrained control over how the matching rule should behave when validation keys inside mappings.
-
-Currently supported rules is
-
- - any [This will match any number of hits, 0 to n number of hits will be allowed]
 
 
 ## schema;(schema-name)

@@ -8,7 +8,7 @@ schema:
   type: map
   matching-rule: "any"
   mapping:
-    regex;mi.+:
+    regex;(mi.+):
       type: seq
       sequence:
         - type: str

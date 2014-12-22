@@ -2,6 +2,11 @@
 Release Notes
 =============
 
+v14.12
+======
+
+ - Fixed broken regex matching on map keys.
+
 v14.08
 ======
 

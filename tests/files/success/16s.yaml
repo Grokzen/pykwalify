@@ -13,11 +13,11 @@ schema:
     - type: map
       matching-rule: "any"
       mapping:
-        regex;[mi.+]:
+        regex;(mi.+):
           type: seq
           sequence:
             - type: str
-        regex;[mo.+]:
+        regex;(me.+):
           type: seq
           sequence:
             - type: bool

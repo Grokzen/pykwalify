@@ -10,11 +10,11 @@ schema:
     - type: map
       matching-rule: "any"
       mapping:
-        re;[mi.+]:
+        re;(mi.+):
           type: seq
           sequence:
             - type: str
-        regex;[mo.+]:
+        regex;(mo.+):
           type: seq
           sequence:
             - type: bool

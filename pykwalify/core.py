@@ -307,11 +307,31 @@ class Core(object):
             Log.debug(" + Mapping Regex matches: {}".format(regex_mappings))
 
             if any(regex_mappings):
+                sub_regex_result = []
+
                 # Found atleast one that matches a mapping regex
                 for mm in regex_mappings:
                     if mm[1]:
                         Log.debug(" + Matching regex patter: {}".format(mm[0]))
                         self._validate(v, mm[0], "{}/{}".format(path, k), errors, done)
+                        sub_regex_result.append(True)
+                    else:
+                        sub_regex_result.append(False)
+
+                if rule._matching_rule == "any":
+                    if any(sub_regex_result):
+                        Log.debug("Matched atleast one regex")
+                    else:
+                        Log.debug("No regex matched")
+                        errors.append("key.regex.nomatch.any : {} : {}".format(k, "  ".join([mm[0]._map_regex_rule for mm in regex_mappings])))
+                elif rule._matching_rule == "all":
+                    if all(sub_regex_result):
+                        Log.debug("Matched all regex rules")
+                    else:
+                        Log.debug("Did not match all regex rules")
+                        errors.append("key.regex.nomatch.all : {} : {}".format(k, "  ".join([mm[0]._map_regex_rule for mm in regex_mappings])))
+                else:
+                    Log.debug("No mapping rule defined")
             elif r is None:
                 if not rule._allowempty_map:
                     errors.append("key.undefined : {} : {}".format(k, path))
