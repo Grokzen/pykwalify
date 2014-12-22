@@ -6,6 +6,13 @@ v14.12
 ======
 
  - Fixed broken regex matching on map keys.
+ - Source files with file ending `.yml` can now be loaded
+ - Added aliases to some directives to make it easier/faster to write
+    * `sequence` --> `seq` 
+    * `mapping` --> `map` 
+    * `required` --> `req`
+    * `regex` --> `re`
+ - Reworked all testing files to reduce number of files
 
 v14.08
 ======
