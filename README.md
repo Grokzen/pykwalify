@@ -65,7 +65,7 @@ If validation fails then exception will be raised.
 
 ## Runtime Dependencies
 
- - docopt 0.6.1
+ - docopt 0.6.2
  - PyYaml 3.11
 
 
