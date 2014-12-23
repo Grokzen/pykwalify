@@ -61,7 +61,7 @@ If a match is found then it will parsed the subrules on that key. A single key c
 When defining a regex, matching-rule should allways be set to configure the behaviour when using multiple regex:s.
 
 
-## matching-rule
+## matching-rule [Default: any]
 
 Only applies to map. This enables more finegrained control over how the matching rule should behave when validation keys inside mappings.
 

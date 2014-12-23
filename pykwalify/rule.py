@@ -38,7 +38,7 @@ class Rule(object):
         self._unique = None
         self._default = None
         self._allowempty_map = None
-        self._matching_rule = None
+        self._matching_rule = "any"
         self._map_regex_rule = None
         self._regex_mappings = None
         self._include_name = None
