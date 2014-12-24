@@ -32,67 +32,67 @@ sequence_aliases = ["sequence", "seq"]
 mapping_aliases = ["map", "mapping"]
 
 
-def typeClass(type):
+def type_class(type):
     return _types[type]
 
 
-def isBuiltinType(type):
+def is_builtin_type(type):
     return type in _types
 
 
-def isCollectionType(type):
+def is_collection_type(type):
     return type.lower().strip() == "map" or type.lower().strip() == "seq"
 
 
-def isScalarType(type):
-    return not isCollectionType(type)
+def is_scalar_type(type):
+    return not is_collection_type(type)
 
 
-def isCollection(obj):
+def is_collection(obj):
     return isinstance(obj, dict) or isinstance(obj, list)
 
 
-def isScalar(obj):
-    return not isCollection(obj)
+def is_scalar(obj):
+    return not is_collection(obj)
 
 
-def isCorrectType(obj, type):
+def is_correct_type(obj, type):
     return isinstance(obj, type)
 
 
-def isString(obj):
+def is_string(obj):
     return isinstance(obj, str)
 
 
-def isInt(obj):
+def is_int(obj):
     return isinstance(obj, int)
 
 
-def isBool(obj):
+def is_bool(obj):
     return isinstance(obj, bool)
 
 
-def isFloat(obj):
+def is_float(obj):
     return isinstance(obj, float)
 
 
-def isNumber(obj):
-    return isInt(obj) or isFloat(obj)
+def is_number(obj):
+    return is_int(obj) or is_float(obj)
 
 
-def isText(obj):
-    return (isString(obj) or isNumber(obj)) and isBool(obj) is False
+def is_text(obj):
+    return (is_string(obj) or is_number(obj)) and is_bool(obj) is False
 
 
-def isAny(obj):
-    return isString(obj) or isInt(obj) or isBool(obj) or isFloat(obj) or isNumber(obj) or isText(obj) or isCollection(obj)
+def is_any(obj):
+    return is_string(obj) or is_int(obj) or is_bool(obj) or is_float(obj) or is_number(obj) or is_text(obj) or is_collection(obj)
 
 
-def isEnum(obj):
+def is_enum(obj):
     return isinstance(obj, str)
 
 
-def isNone(obj):
+def is_none(obj):
     return obj is None
 
 
@@ -105,13 +105,13 @@ def is_mapping_alias(alias):
 
 
 tt = {
-    "str": isString,
-    "int": isInt,
-    "bool": isBool,
-    "float": isFloat,
-    "number": isNumber,
-    "text": isText,
-    "any": isAny,
-    "enum": isEnum,
-    "none": isNone
+    "str": is_string,
+    "int": is_int,
+    "bool": is_bool,
+    "float": is_float,
+    "number": is_number,
+    "text": is_text,
+    "any": is_any,
+    "enum": is_enum,
+    "none": is_none
 }

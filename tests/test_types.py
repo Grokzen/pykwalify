@@ -20,61 +20,61 @@ class TestTypes(unittest.TestCase):
         """
         Test that all type helper methods works correctly
         """
-        assert types.typeClass("str") == str
+        assert types.type_class("str") == str
 
-        assert types.isBuiltinType("str")
+        assert types.is_builtin_type("str")
 
-        assert types.isCollectionType("map")
-        assert types.isCollectionType("seq")
-        assert not types.isCollectionType("str")
+        assert types.is_collection_type("map")
+        assert types.is_collection_type("seq")
+        assert not types.is_collection_type("str")
 
-        assert types.isScalarType("str")
-        assert not types.isScalarType("seq")
-        assert not types.isScalarType("map")
+        assert types.is_scalar_type("str")
+        assert not types.is_scalar_type("seq")
+        assert not types.is_scalar_type("map")
 
-        assert types.isCollection([])
-        assert types.isCollection({})
-        assert not types.isCollection("foo")
+        assert types.is_collection([])
+        assert types.is_collection({})
+        assert not types.is_collection("foo")
 
-        assert types.isScalar("")
-        assert types.isScalar(True)
-        assert not types.isScalar([])
+        assert types.is_scalar("")
+        assert types.is_scalar(True)
+        assert not types.is_scalar([])
 
-        assert types.isCorrectType("", str)
-        assert types.isCorrectType({}, dict)
+        assert types.is_correct_type("", str)
+        assert types.is_correct_type({}, dict)
 
-        assert types.isString("foo")
-        assert not types.isString([])
+        assert types.is_string("foo")
+        assert not types.is_string([])
 
-        assert types.isInt(1)
-        assert not types.isInt("foo")
+        assert types.is_int(1)
+        assert not types.is_int("foo")
 
-        assert types.isBool(True)
-        assert not types.isBool(1)
-        assert not types.isBool("true")
+        assert types.is_bool(True)
+        assert not types.is_bool(1)
+        assert not types.is_bool("true")
 
-        assert types.isFloat(1.0)
-        assert not types.isFloat("foo")
+        assert types.is_float(1.0)
+        assert not types.is_float("foo")
 
-        assert types.isNumber(1)
-        assert types.isNumber(1.0)
-        assert not types.isNumber("foo")
+        assert types.is_number(1)
+        assert types.is_number(1.0)
+        assert not types.is_number("foo")
 
-        assert types.isText("foo")
-        assert types.isText(1)
-        assert types.isText(1.0)
-        assert not types.isText([])
-        assert not types.isText(True)
+        assert types.is_text("foo")
+        assert types.is_text(1)
+        assert types.is_text(1.0)
+        assert not types.is_text([])
+        assert not types.is_text(True)
 
-        assert types.isAny("foo")
-        assert types.isAny(True)
-        assert types.isAny(1)
-        assert types.isAny(1.0)
-        assert types.isAny({})
-        assert types.isAny([])
+        assert types.is_any("foo")
+        assert types.is_any(True)
+        assert types.is_any(1)
+        assert types.is_any(1.0)
+        assert types.is_any({})
+        assert types.is_any([])
 
-        assert types.isEnum("foo")
-        assert not types.isEnum(1)
+        assert types.is_enum("foo")
+        assert not types.is_enum(1)
 
-        assert types.isNone(None)
-        assert not types.isNone("foo")
+        assert types.is_none(None)
+        assert not types.is_none("foo")

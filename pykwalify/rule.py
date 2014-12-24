@@ -13,7 +13,16 @@ import logging
 Log = logging.getLogger(__name__)
 
 # pyKwalify imports
-from pykwalify.types import DEFAULT_TYPE, typeClass, isBuiltinType, isCollectionType, isInt, isBool, sequence_aliases, mapping_aliases
+from pykwalify.types import (
+    DEFAULT_TYPE,
+    type_class,
+    is_builtin_type,
+    is_collection_type,
+    is_int,
+    is_bool,
+    sequence_aliases,
+    mapping_aliases,
+)
 from pykwalify.errors import SchemaConflict, RuleError
 
 
@@ -72,10 +81,10 @@ class Rule(object):
                 # Mapping and sequence do not need explicit type defenitions
                 if any([sa in schema for sa in sequence_aliases]):
                     t = "seq"
-                    self.initTypeValue(t, rule, path)
+                    self.init_type_value(t, rule, path)
                 elif any([ma in schema for ma in mapping_aliases]):
                     t = "map"
-                    self.initTypeValue(t, rule, path)
+                    self.init_type_value(t, rule, path)
                 else:
                     raise RuleError("key 'type' not found in schema rule : {}".format(path))
             else:
@@ -88,27 +97,27 @@ class Rule(object):
 
         if not t:
             t = schema["type"]
-            self.initTypeValue(t, rule, path)
+            self.init_type_value(t, rule, path)
 
         func_mapping = {
             "type": lambda x, y, z: (),
-            "name": self.initNameValue,
-            "desc": self.initDescValue,
-            "required": self.initRequiredValue,
-            "req": self.initRequiredValue,
-            "pattern": self.initPatternValue,
-            "enum": self.initEnumValue,
-            "assert": self.initAssertValue,
-            "range": self.initRangeValue,
-            "ident": self.initIdentValue,
-            "unique": self.initUniqueValue,
-            "allowempty": self.initAllowEmptyMap,
-            "default": self.initDefaultValue,
-            "sequence": self.initSequenceValue,
-            "seq": self.initSequenceValue,
-            "mapping": self.initMappingValue,
-            "map": self.initMappingValue,
-            "matching-rule": self.initMatchingRule,
+            "name": self.init_name_value,
+            "desc": self.init_desc_value,
+            "required": self.init_required_value,
+            "req": self.init_required_value,
+            "pattern": self.init_pattern_value,
+            "enum": self.init_enum_value,
+            "assert": self.init_assert_value,
+            "range": self.init_range_value,
+            "ident": self.init_ident_value,
+            "unique": self.init_unique_value,
+            "allowempty": self.init_allow_empty_map,
+            "default": self.init_default_value,
+            "sequence": self.init_sequence_value,
+            "seq": self.init_sequence_value,
+            "mapping": self.init_mapping_value,
+            "map": self.init_mapping_value,
+            "matching-rule": self.init_matching_rule,
         }
 
         for k, v in schema.items():
@@ -120,9 +129,9 @@ class Rule(object):
             else:
                 raise RuleError("Unknown key: {} found : {}".format(k, path))
 
-        self.checkConfliction(schema, rule, path)
+        self.check_conflicts(schema, rule, path)
 
-    def initMatchingRule(self, v, rule, path):
+    def init_matching_rule(self, v, rule, path):
         Log.debug("Init matching-rule: {}".format(path))
         Log.debug("{} {}".format(v, rule))
 
@@ -134,13 +143,13 @@ class Rule(object):
         else:
             self._matching_rule = v
 
-    def initAllowEmptyMap(self, v, rule, path):
+    def init_allow_empty_map(self, v, rule, path):
         Log.debug("Init allow empty value: {}".format(path))
         Log.debug("Type: {} : {}".format(v, rule))
 
         self._allowempty_map = v
 
-    def initTypeValue(self, v, rule, path):
+    def init_type_value(self, v, rule, path):
         Log.debug("Init type value : {}".format(path))
         Log.debug("Type: {} {}".format(v, rule))
 
@@ -148,29 +157,29 @@ class Rule(object):
             v = DEFAULT_TYPE
 
         self._type = v
-        self._type_class = typeClass(v)
+        self._type_class = type_class(v)
 
-        if not isBuiltinType(self._type):
+        if not is_builtin_type(self._type):
             raise RuleError("type.unknown : {} : {}".format(self._type, path))
 
-    def initNameValue(self, v, rule, path):
+    def init_name_value(self, v, rule, path):
         Log.debug("Init name value : {}".format(path))
 
         self._name = str(v)
 
-    def initDescValue(self, v, rule, path):
+    def init_desc_value(self, v, rule, path):
         Log.debug("Init descr value : {}".format(path))
 
         self._desc = str(v)
 
-    def initRequiredValue(self, v, rule, path):
+    def init_required_value(self, v, rule, path):
         Log.debug("Init required value : {}".format(path))
 
         if not isinstance(v, bool):
             raise RuleError("required.notbool : {} : {}".format(v, path))
         self._required = v
 
-    def initPatternValue(self, v, rule, path):
+    def init_pattern_value(self, v, rule, path):
         Log.debug("Init pattern value : {}".format(path))
 
         if not isinstance(v, str):
@@ -188,14 +197,14 @@ class Rule(object):
         except Exception:
             raise RuleError("pattern.syntaxerr : {} --> {} : {}".format(self._pattern_regexp, self._pattern_regexp, path))
 
-    def initEnumValue(self, v, rule, path):
+    def init_enum_value(self, v, rule, path):
         Log.debug("Init enum value : {}".format(path))
 
         if not isinstance(v, list):
             raise RuleError("enum.notseq")
         self._enum = v
 
-        if isCollectionType(self._type):
+        if is_collection_type(self._type):
             raise RuleError("enum.notscalar")
 
         lookup = set()
@@ -208,7 +217,7 @@ class Rule(object):
 
             lookup.add(item)
 
-    def initAssertValue(self, v, rule, path):
+    def init_assert_value(self, v, rule, path):
         Log.debug("Init assert value : {}".format(path))
 
         if not isinstance(v, str):
@@ -218,7 +227,7 @@ class Rule(object):
 
         raise RuleError("assert.NYI-Error : {}".format(path))
 
-    def initRangeValue(self, v, rule, path):
+    def init_range_value(self, v, rule, path):
         Log.debug("Init range value : {}".format(path))
 
         if not isinstance(v, dict):
@@ -243,16 +252,16 @@ class Rule(object):
         max_ex = self._range.get("max-ex", None)
         min_ex = self._range.get("min-ex", None)
 
-        if max is not None and not isInt(max) or isBool(max):
+        if max is not None and not is_int(max) or is_bool(max):
             raise RuleError("range.max.notint : {} : {}".format(max, path))
 
-        if min is not None and not isInt(min) or isBool(min):
+        if min is not None and not is_int(min) or is_bool(min):
             raise RuleError("range.min.notint : {} : {}".format(min, path))
 
-        if max_ex is not None and not isInt(max_ex) or isBool(max_ex):
+        if max_ex is not None and not is_int(max_ex) or is_bool(max_ex):
             raise RuleError("range.max_ex.notint : {} : {}".format(max_ex, path))
 
-        if min_ex is not None and not isInt(min_ex) or isBool(min_ex):
+        if min_ex is not None and not is_int(min_ex) or is_bool(min_ex):
             raise RuleError("range.min_ex.notint : {} : {}".format(min_ex, path))
 
         if max is not None:
@@ -266,7 +275,7 @@ class Rule(object):
             elif min_ex is not None and max_ex <= min_ex:
                 raise RuleError("range.maxexleminex : {} <= {} : {}".format(max_ex, min_ex, path))
 
-    def initIdentValue(self, v, rule, path):
+    def init_ident_value(self, v, rule, path):
         Log.debug("Init ident value : {}".format(path))
 
         if v is None or isinstance(v, bool):
@@ -275,14 +284,14 @@ class Rule(object):
         self._ident = bool(v)
         self._required = True
 
-        if isCollectionType(self._type):
+        if is_collection_type(self._type):
             raise RuleError("ident.notscalar : {} : {}".format(self._type, path))
         if path == "":
             raise RuleError("ident.onroot")
         if self._parent is None or not self._parent._type == "map":
             raise RuleError("ident.notmap : {}".format(path))
 
-    def initUniqueValue(self, v, rule, path):
+    def init_unique_value(self, v, rule, path):
         Log.debug("Init unique value : {}".format(path))
 
         if not isinstance(v, bool):
@@ -290,12 +299,12 @@ class Rule(object):
 
         self._unique = v
 
-        if isCollectionType(self._type):
+        if is_collection_type(self._type):
             raise RuleError("unique.notscalar : {} : {}".format(self._type, path))
         if path == "":
             raise RuleError("unique.onroot")
 
-    def initSequenceValue(self, v, rule, path):
+    def init_sequence_value(self, v, rule, path):
         Log.debug("Init sequence value : {}".format(path))
 
         if v is not None and not isinstance(v, list):
@@ -321,7 +330,7 @@ class Rule(object):
         self._sequence.append(rule)
         return rule
 
-    def initMappingValue(self, v, rule, path):
+    def init_mapping_value(self, v, rule, path):
         # Check for duplicate use of 'map' and 'mapping'
         if self._mapping:
             raise RuleError("mapping.multiple-use : {}".format(path))
@@ -366,11 +375,11 @@ class Rule(object):
 
         return rule
 
-    def initDefaultValue(self, v, rule, path):
+    def init_default_value(self, v, rule, path):
         Log.debug("Init default value : {}".format(path))
         self._default = v
 
-        if isCollectionType(self._type):
+        if is_collection_type(self._type):
             raise RuleError("default.notscalar : {} : {} : {}".format(rule, path, v))
 
         if self._type == "map" or self._type == "seq":
@@ -379,7 +388,7 @@ class Rule(object):
         if not isinstance(v, self._type_class):
             raise RuleError("default.type.unmatch : {} --> {} : {}".format(v, self._type_class, path))
 
-    def checkConfliction(self, schema, rule, path):
+    def check_conflicts(self, schema, rule, path):
         Log.debug("Checking for conflicts : {}".format(path))
 
         if self._type == "seq":

@@ -16,7 +16,7 @@ Log = logging.getLogger(__name__)
 # pyKwalify imports
 import pykwalify
 from pykwalify.rule import Rule
-from pykwalify.types import isScalar, tt
+from pykwalify.types import is_scalar, tt
 from pykwalify.errors import CoreError, SchemaError
 
 # 3rd party imports
@@ -45,12 +45,12 @@ class Core(object):
                 if source_file.endswith(".json"):
                     try:
                         self.source = json.load(stream)
-                    except Exception as e:
+                    except Exception:
                         raise CoreError("Unable to load any data from source json file")
                 elif source_file.endswith(".yaml") or source_file.endswith('.yml'):
                     try:
                         self.source = yaml.load(stream)
-                    except Exception as e:
+                    except Exception:
                         raise CoreError("Unable to load any data from source yaml file")
                 else:
                     raise CoreError("Unable to load source_file. Unknown file format of specified file path: {}".format(source_file))
@@ -69,7 +69,7 @@ class Core(object):
                     if f.endswith(".json"):
                         try:
                             data = json.load(stream)
-                        except Exception as e:
+                        except Exception:
                             raise CoreError("No data loaded from file : {}".format(f))
                     elif f.endswith(".yaml") or f.endswith(".yml"):
                         data = yaml.load(stream)
@@ -217,14 +217,16 @@ class Core(object):
         if rule._range is not None:
             rr = rule._range
 
-            self._validate_range(rr.get("max", None),
-                                 rr.get("min", None),
-                                 rr.get("max-ex", None),
-                                 rr.get("min-ex", None),
-                                 errors,
-                                 len(value),
-                                 path,
-                                 "seq")
+            self._validate_range(
+                rr.get("max", None),
+                rr.get("min", None),
+                rr.get("max-ex", None),
+                rr.get("min-ex", None),
+                errors,
+                len(value),
+                path,
+                "seq",
+            )
 
         if r._type == "map":
             Log.debug("Found map inside sequence")
@@ -282,14 +284,16 @@ class Core(object):
         if rule._range is not None:
             r = rule._range
 
-            self._validate_range(r.get("max", None),
-                                 r.get("min", None),
-                                 r.get("max-ex", None),
-                                 r.get("min-ex", None),
-                                 errors,
-                                 len(value),
-                                 path,
-                                 "map")
+            self._validate_range(
+                r.get("max", None),
+                r.get("min", None),
+                r.get("max-ex", None),
+                r.get("min-ex", None),
+                errors,
+                len(value),
+                path,
+                "map",
+            )
 
         for k, rr in m.items():
             if rr._required and k not in value:
@@ -369,7 +373,7 @@ class Core(object):
                 errors.append("pattern.unmatch : {} --> {} : {}".format(rule._pattern, value, path))
 
         if rule._range is not None:
-            if not isScalar(value):
+            if not is_scalar(value):
                 raise CoreError("value is not a valid scalar")
 
             r = rule._range
@@ -380,21 +384,32 @@ class Core(object):
             except Exception:
                 pass
 
-            self._validate_range(r.get("max", None),
-                                 r.get("min", None),
-                                 r.get("max-ex", None),
-                                 r.get("min-ex", None),
-                                 errors,
-                                 value,
-                                 path,
-                                 "scalar")
+            self._validate_range(
+                r.get("max", None),
+                r.get("min", None),
+                r.get("max-ex", None),
+                r.get("min-ex", None),
+                errors,
+                value,
+                path,
+                "scalar",
+            )
 
     def _validate_range(self, max_, min_, max_ex, min_ex, errors, value, path, prefix):
         """
         Validate that value is within range values.
         """
 
-        Log.debug("Validate range : {} : {} : {} : {} : {} : {}".format(max_, min_, max_ex, min_ex, value, path))
+        Log.debug(
+            "Validate range : {} : {} : {} : {} : {} : {}".format(
+                max_,
+                min_,
+                max_ex,
+                min_ex,
+                value,
+                path,
+            )
+        )
 
         if max_ is not None:
             if max_ < value:
