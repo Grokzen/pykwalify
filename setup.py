@@ -10,7 +10,7 @@ with open('ReleaseNotes.rst') as f:
 
 setup(
     name="pykwalify",
-    version="14.08",
+    version="14.12",
     description='Python lib/cli for JSON/YAML schema validation',
     long_description=readme + '\n\n' + history,
     author="Johan Andersson",
