@@ -248,9 +248,12 @@ class Core(object):
                         if val is None:
                             continue
                         if val in table:
-                            curr_path = "{}/{}/{}".format(path, j, k)
-                            prev_path = "{}/{}/{}".format(path, table[val], k)
-                            errors.append("value.notunique :: value: {} : {}".format(k, path))
+                            curr_path = "{}/{}/{}".format(path, j, v)
+                            prev_path = "{}/{}/{}".format(path, table[val], v)
+                            errors.append("value.notunique :: value: {} : {}".format(curr_path, prev_path))
+			else:
+			    table[val] = j
+			j += 1
         elif r._unique:
             Log.debug("Found unique value in sequence")
             table = {}
