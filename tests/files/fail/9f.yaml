@@ -33,4 +33,5 @@ schema:
             - type: str
               unique: True
 errors:
+  - 'value.notunique :: value: bar : /2/name : /1/name'
   - 'value.notunique :: value: foo : /0/groups/3 : /0/groups/0'
