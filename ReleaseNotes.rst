@@ -2,6 +2,11 @@
 Release Notes
 =============
 
+v15.01
+======
+
+ - Fixed a bug in unique validation for mapping keys [See: PR-12] (Gonditeniz)
+
 v14.12
 ======
 
