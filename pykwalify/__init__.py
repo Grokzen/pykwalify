@@ -4,7 +4,7 @@
 
 __author__ = 'Grokzen <Grokzen@gmail.com>'
 # __version__ = '.'.join(map(str, __version_info__))
-__foobar__ = "14.12"
+__foobar__ = "15.01"
 
 # Set to True to have revision from Version Control System in version string
 __devel__ = True
