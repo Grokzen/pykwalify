@@ -2,6 +2,11 @@
 Release Notes
 =============
 
+1.0.0
+=====
+
+Switched back to semantic version numbering for this lib. See *README.md* section *Important notes on version schema changes* on how to fix any issues with this change.
+
 15.01
 =====
 
