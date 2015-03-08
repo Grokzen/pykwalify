@@ -4,13 +4,7 @@
 
 import unittest
 
-# 3rd party imports
-import pytest
-
 # pyKwalify imports
-import pykwalify
-from pykwalify.rule import Rule
-from pykwalify.errors import RuleError, SchemaError, SchemaConflict
 from pykwalify import types
 
 

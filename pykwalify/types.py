@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-""" pyKwalify - Rule.py """
-
-__author__ = 'Grokzen <grokzen@gmail.com>'
+""" pyKwalify - types.py """
 
 # python std lib
 import datetime

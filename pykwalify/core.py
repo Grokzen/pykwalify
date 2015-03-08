@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-""" pyKwalify - Core.py """
-
-__author__ = 'Grokzen <grokzen@gmail.com>'
+""" pyKwalify - core.py """
 
 # python std lib
 import os
@@ -11,7 +9,6 @@ import json
 
 # python std logging
 import logging
-Log = logging.getLogger(__name__)
 
 # pyKwalify imports
 import pykwalify
@@ -21,6 +18,8 @@ from pykwalify.errors import CoreError, SchemaError
 
 # 3rd party imports
 import yaml
+
+Log = logging.getLogger(__name__)
 
 
 class Core(object):

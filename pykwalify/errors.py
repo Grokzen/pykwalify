@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__author__ = 'Grokzen <Grokzen@gmail.com>'
+""" pyKwalify - errors.py """
 
 retcodes = {
     # PyKwalifyExit

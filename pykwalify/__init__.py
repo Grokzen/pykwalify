@@ -2,19 +2,19 @@
 
 """ pykwalify """
 
-__author__ = 'Grokzen <Grokzen@gmail.com>'
-# __version__ = '.'.join(map(str, __version_info__))
-__foobar__ = "15.01"
-
-# Set to True to have revision from Version Control System in version string
-__devel__ = True
-
 # import sys
 import os
 
 # init python std logging
 import logging
 import logging.config
+
+__author__ = 'Grokzen <Grokzen@gmail.com>'
+# __version__ = '.'.join(map(str, __version_info__))
+__foobar__ = "15.01"
+
+# Set to True to have revision from Version Control System in version string
+__devel__ = True
 
 
 PACKAGE_NAME = "pykwalify"

@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# python std lib
-import os
-import sys
-
 # pykwalify package imports
 from pykwalify import errors
 

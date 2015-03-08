@@ -1,19 +1,12 @@
 # -*- coding: utf-8 -*-
 
-""" pyKwalify - cli for pykwalify """
-
-__author__ = 'Grokzen <grokzen@gmail.com>'
+""" pyKwalify - cli.py """
 
 # python std library
-import os
-import sys
-import json
 import logging
 import logging.config
-from io import StringIO
 
 # 3rd party imports
-import yaml
 from docopt import docopt
 
 
@@ -53,10 +46,6 @@ optional arguments:
 
     pykwalify.init_logging(1 if args["--quiet"] else args["--verbose"])
     Log = logging.getLogger(__name__)
-
-    # pykwalify importrs
-    from .errors import retnames
-    from .core import Core
 
     #
     # 2. validate arguments only, dont go into other code/logic

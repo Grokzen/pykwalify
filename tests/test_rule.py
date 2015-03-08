@@ -10,7 +10,7 @@ import pytest
 # pyKwalify imports
 import pykwalify
 from pykwalify.rule import Rule
-from pykwalify.errors import RuleError, SchemaError, SchemaConflict
+from pykwalify.errors import RuleError, SchemaConflict
 
 
 class TestRule(unittest.TestCase):

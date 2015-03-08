@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
-""" pyKwalify - Rule.py """
-
-__author__ = 'Grokzen <grokzen@gmail.com>'
+""" pyKwalify - rule.py """
 
 # python std lib
 import os
@@ -10,20 +8,21 @@ import re
 
 # python std logging
 import logging
-Log = logging.getLogger(__name__)
 
 # pyKwalify imports
 from pykwalify.types import (
     DEFAULT_TYPE,
-    type_class,
+    is_bool,
     is_builtin_type,
     is_collection_type,
     is_int,
-    is_bool,
-    sequence_aliases,
     mapping_aliases,
+    sequence_aliases,
+    type_class,
 )
 from pykwalify.errors import SchemaConflict, RuleError
+
+Log = logging.getLogger(__name__)
 
 
 class Rule(object):

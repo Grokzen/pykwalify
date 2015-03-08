@@ -13,7 +13,7 @@ from testfixtures import compare
 # pyKwalify imports
 import pykwalify
 from pykwalify.core import Core
-from pykwalify.errors import SchemaError, CoreError, RuleError
+from pykwalify.errors import SchemaError, CoreError
 
 
 class TestCore(object):

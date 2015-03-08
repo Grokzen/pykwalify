@@ -3,8 +3,6 @@
 
 """ pykwalify - script entry point """
 
-__author__ = 'Grokzen <grokzen@gmail.com>'
-
 import os
 import sys
 
