@@ -2,13 +2,13 @@
 Release Notes
 =============
 
-v15.01
-======
+15.01
+=====
 
  - Fixed a bug in unique validation for mapping keys [See: PR-12] (Gonditeniz)
 
-v14.12
-======
+14.12
+=====
 
  - Fixed broken regex matching on map keys.
  - Source files with file ending `.yml` can now be loaded
@@ -19,8 +19,8 @@ v14.12
     * `regex` --> `re`
  - Reworked all testing files to reduce number of files
 
-v14.08
-======
+14.08
+=====
 
  - First version to be uploaded to pypi
  - Keyword 'range' can now be applied to map & seq types.
@@ -29,8 +29,8 @@ v14.08
  - Keyword 'range' now correctly checks the internal keys to be integers
  - Major update to testing and increased coverage.
 
-v14.06.1
-========
+14.06.1
+=======
 
  - New feature "partial schema". Define a small schema with a ID that can be reused at other places in the schema. See readme for details.
  - New directive "include" that is used to include a partial schema at the specefied location.
@@ -39,8 +39,8 @@ v14.06.1
  - 'none' can now be used as a type
  - Many more tests added
 
-v14.06
-======
+14.06
+=====
 
  - New version scheme [YY.MM(.Minor-Release)]
  - Added TravisCI support
@@ -57,8 +57,8 @@ v14.06
  - Refactored alot of exceptions to be more specific (SchemaError and RuleError for example) and not a generic Exception
  - Parsed rules is now stored correctly in Core() so it can be tested from the outside
 
-v0.1.2
-======
+0.1.2
+=====
 
  - Added new and experimental validation rule allowempty. (See README for more info)
  - Added TODO tracking file.
@@ -70,8 +70,8 @@ v0.1.2
  - Alot more test files and now tests source_data and schema_data input arguments to core.py
  - Alot of cleanup in the test suit
 
-v0.1.1
-======
+0.1.1
+=====
 
  - Reworked the structure of the project to be more clean and easy to find stuff.
  - lib/ folder is now removed and all contents is placed in the root of the project
@@ -80,8 +80,8 @@ v0.1.1
  - Fixed path bugs in Makefile
  - Fixed path bugs in Manifest
 
-v0.1.0
-======
+0.1.0
+=====
 
  - Initial stable release of pyKwalify.
  - All functions is not currently implemented but the cli/lib can be used but probably with some bugs.
