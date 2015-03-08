@@ -19,8 +19,12 @@ setup(
     maintainer_email='Grokzen@gmail.com',
     license='MIT',
     packages=['pykwalify'],
-    scripts=['scripts/pykwalify'],
     url='http://github.com/grokzen/pykwalify',
+    entry_points={
+        'console_scripts': [
+            'pykwalify = pykwalify.cli:cli_entrypoint',
+        ],
+    },
     install_requires=[
         'docopt==0.6.2',
         'PyYAML==3.11',

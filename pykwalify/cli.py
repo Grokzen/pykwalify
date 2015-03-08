@@ -5,6 +5,7 @@
 # python std library
 import logging
 import logging.config
+import sys
 
 # 3rd party imports
 from docopt import docopt
@@ -42,7 +43,7 @@ optional arguments:
     # Import pykwalify package
     import pykwalify
 
-    args = docopt(__docopt__, version=pykwalify.__foobar__)
+    args = docopt(__docopt__, version=pykwalify.__version__)
 
     pykwalify.init_logging(1 if args["--quiet"] else args["--verbose"])
     Log = logging.getLogger(__name__)
@@ -68,3 +69,15 @@ def run(cli_args):
     c = Core(source_file=cli_args["--data-file"], schema_files=cli_args["--schema-file"])
     c.validate()
     return c
+
+
+def cli_entrypoint():
+    """
+    Main entrypoint for script. Used by setup.py to automatically
+    create a cli script
+    """
+    # Check minimum version of Python
+    if sys.version_info < (2, 7, 0):
+        sys.stderr.write("WARNING: pykwalify: It is recommended to run pykwalify on python version 2.7.x or later...\n\n")
+
+    run(parse_cli())
