@@ -46,14 +46,14 @@ optional arguments:
     args = docopt(__docopt__, version=pykwalify.__version__)
 
     pykwalify.init_logging(1 if args["--quiet"] else args["--verbose"])
-    Log = logging.getLogger(__name__)
+    log = logging.getLogger(__name__)
 
     #
     # 2. validate arguments only, dont go into other code/logic
     #
 
-    Log.debug("Setting verbose level: {}".format(args["--verbose"]))
-    Log.debug("Arguments from CLI: {}".format(args))
+    log.debug("Setting verbose level: {}".format(args["--verbose"]))
+    log.debug("Arguments from CLI: {}".format(args))
 
     return args
 

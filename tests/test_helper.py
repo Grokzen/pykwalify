@@ -4,7 +4,7 @@
 import logging
 import logging.config
 
-Log = logging.getLogger()
+log = logging.getLogger()
 
 
 # Set the root logger to be silent so all code that uses the python logger
@@ -15,13 +15,13 @@ def _set_log_lv(level=1337, loggers=None):
     """
     if loggers is None:
         # If no additional loggers is specified then only apply to root logger
-        Log.setLevel(level)
-        for handler in Log.handlers:
+        log.setLevel(level)
+        for handler in log.handlers:
             handler.level = level
     else:
         # If we have other logging instances specified apply to root logger and them
-        if Log not in loggers:
-            loggers.append(Log)
+        if log not in loggers:
+            loggers.append(log)
 
         for log_instance in loggers:
             log_instance.setLevel(level)
