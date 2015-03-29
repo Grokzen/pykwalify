@@ -25,19 +25,15 @@ def parse_cli():
     #
 
     __docopt__ = """
-usage: pykwalify -d DATAFILE -s SCHEMAFILE ... [-q] [-v ...]
-       pykwalify -h | --help
-       pykwalify -V | --version
-
-pyKwalify - cli for pykwalify
+usage: pykwalify -d DATAFILE -s SCHEMAFILE ... [-v ...] [-q]
 
 optional arguments:
-  -d DATAFILE, --data-file DATAFILE        schema definition file
-  -s SCHEMAFILE, --schema-file SCHEMAFILE  the file to be tested
-  -q, --quiet                              suppress terminal output
-  -v, --verbose                            verbose terminal output (multiple -v increases verbosity)
-  -V, --version                            display the version number and exit
-  -h, --help                               show this help message and exit
+  -d DATAFILE, --data-file DATAFILE          schema definition file
+  -h, --help                                 show this help message and exit
+  -q, --quiet                                suppress terminal output
+  -s SCHEMAFILE, --schema-file SCHEMAFILE    the file to be tested
+  -v, --verbose                              verbose terminal output (multiple -v increases verbosity)
+  --version                                  display the version number and exit
 """
 
     # Import pykwalify package

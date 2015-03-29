@@ -2,6 +2,11 @@
 Release Notes
 =============
 
+1.0.2
+=====
+
+ - Rework cli string that docopt uses. Removed redundant flags that docopt provides [--version & --help]
+
 1.0.1
 =====
 
