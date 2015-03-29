@@ -28,10 +28,8 @@ class TestCLI(object):
         expected = {
             '--data-file': str(input),
             '--schema-file': [str(schema_file)],
-            '--help': False,
             '--quiet': False,
             '--verbose': 1,
-            '--version': False
         }
 
         cli_args = cli.parse_cli()
