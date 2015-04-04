@@ -213,16 +213,44 @@ class TestCore(object):
         """
         pass_tests = [
             # Test that include directive can be used at top level of the schema
-            ([self.f("partial_schemas", "1s-schema.yaml"), self.f("partial_schemas", "1s-partials.yaml")], self.f("partial_schemas", "1s-data.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'}),
+            (
+                [
+                    self.f("partial_schemas", "1s-schema.yaml"),
+                    self.f("partial_schemas", "1s-partials.yaml"),
+                ],
+                self.f("partial_schemas", "1s-data.yaml"),
+                {
+                    'sequence': [{'include': 'fooone'}],
+                    'type': 'seq',
+                }
+            ),
             # # This test that include directive works inside sequence
             # ([self.f("33a.yaml"), self.f("33b.yaml")], self.f("33c.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'}),
             # This test recursive schemas
-            ([self.f("partial_schemas", "2s-schema.yaml"), self.f("partial_schemas", "2s-partials.yaml")], self.f("partial_schemas", "2s-data.yaml"), {'sequence': [{'include': 'fooone'}], 'type': 'seq'})
+            (
+                [
+                    self.f("partial_schemas", "2s-schema.yaml"),
+                    self.f("partial_schemas", "2s-partials.yaml"),
+                ],
+                self.f("partial_schemas", "2s-data.yaml"),
+                {
+                    'sequence': [{'include': 'fooone'}],
+                    'type': 'seq',
+                }
+            )
         ]
 
         failing_tests = [
             # Test include inside partial schema
-            ([self.f("partial_schemas", "1f-schema.yaml"), self.f("partial_schemas", "1f-partials.yaml")], self.f("partial_schemas", "1f-data.yaml"), SchemaError, ['No partial schema found for name : fooonez : Existing partial schemas: fooone, foothree, footwo'])
+            (
+                [
+                    self.f("partial_schemas", "1f-schema.yaml"),
+                    self.f("partial_schemas", "1f-partials.yaml")
+                ],
+                self.f("partial_schemas", "1f-data.yaml"),
+                SchemaError,
+                ['No partial schema found for name : fooonez : Existing partial schemas: fooone, foothree, footwo']
+            )
         ]
 
         for passing_test in pass_tests:
@@ -245,7 +273,14 @@ class TestCore(object):
             if not c.validation_errors:
                 raise AssertionError("No validation_errors was raised...")
 
-            compare(sorted(c.validation_errors), sorted(failing_test[3]), prefix="Wrong validation errors when parsing files : {} : {}".format(failing_test[0], failing_test[1]))
+            compare(
+                sorted(c.validation_errors),
+                sorted(failing_test[3]),
+                prefix="Wrong validation errors when parsing files : {} : {}".format(
+                    failing_test[0],
+                    failing_test[1],
+                ),
+            )
 
     def test_core_files(self):
         # These tests should pass with no exception raised

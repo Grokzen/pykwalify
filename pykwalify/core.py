@@ -185,7 +185,10 @@ class Core(object):
         include_name = rule._include_name
         partial_schema_rule = pykwalify.partial_schemas.get(include_name, None)
         if not partial_schema_rule:
-            errors.append("No partial schema found for name : {} : Existing partial schemas: {}".format(include_name, ", ".join(sorted(pykwalify.partial_schemas.keys()))))
+            errors.append("No partial schema found for name : {} : Existing partial schemas: {}".format(
+                include_name,
+                ", ".join(sorted(pykwalify.partial_schemas.keys()))),
+            )
             return
 
         self._validate(value, partial_schema_rule, path, errors, done)

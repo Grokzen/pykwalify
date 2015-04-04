@@ -6,6 +6,7 @@ import unittest
 
 # 3rd party imports
 import pytest
+from testfixtures import compare
 
 # pyKwalify imports
 import pykwalify
@@ -17,51 +18,6 @@ class TestRule(unittest.TestCase):
 
     def setUp(self):
         pykwalify.partial_schemas = {}
-
-    def test_schema_conflicts(self):
-        # TODO: Each exception must be checked what key is raised withiin it...
-
-        # Test error is raised when sequence key is missing
-        with pytest.raises(SchemaConflict) as ex:
-            r = Rule(schema={"type": "seq"})
-        assert ex.value.msg.startswith("seq.nosequence"), "Wrong exception was raised"
-
-        # TODO: This do not work and enum schema conflict is not raised... RuleError: <RuleError: error code 4: enum.notscalar>
-        # with pytest.raises(SchemaConflict) as ex:
-        #     r = Rule(schema={"type": "seq", "sequence": [{"type": "str"}], "enum": [1, 2, 3]})
-        # assert ex.value.msg.startswith("seq.conflict :: enum"), "Wrong exception was raised"
-
-        with pytest.raises(SchemaConflict) as ex:
-            r = Rule(schema={"type": "seq", "sequence": [{"type": "str"}], "pattern": "..."})
-        assert ex.value.msg.startswith("seq.conflict :: pattern"), "Wrong exception was raised"
-
-        with pytest.raises(SchemaConflict) as ex:
-            r = Rule(schema={"type": "seq", "sequence": [{"type": "str"}], "mapping": {"name": {"type": "str", "pattern": ".+@.+"}}})
-        assert ex.value.msg.startswith("seq.conflict :: mapping"), "Wrong exception was raised"
-
-        with pytest.raises(SchemaConflict) as ex:
-            r = Rule(schema={"type": "map"})
-        assert ex.value.msg.startswith("map.nomapping"), "Wrong exception was raised"
-
-        # TODO: This do not work because it currently raises RuleError: <RuleError: error code 4: enum.notscalar>
-        # with pytest.raises(SchemaConflict):
-        #     r = Rule(schema={"type": "map", "enum": [1, 2, 3]})
-
-        with pytest.raises(SchemaConflict) as ex:
-            r = Rule(schema={"type": "map", "mapping": {"foo": {"type": "str"}}, "sequence": [{"type": "str"}]})
-        assert ex.value.msg.startswith("map.conflict :: mapping"), "Wrong exception was raised"
-
-        with pytest.raises(SchemaConflict) as ex:
-            r = Rule(schema={"type": "int", "sequence": [{"type": "str"}]})
-        assert ex.value.msg.startswith("scalar.conflict :: sequence"), "Wrong exception was raised"
-
-        with pytest.raises(SchemaConflict) as ex:
-            r = Rule(schema={"type": "int", "mapping": {"foo": {"type": "str"}}})
-        assert ex.value.msg.startswith("scalar.conflict :: mapping"), "Wrong exception was raised"
-
-        with pytest.raises(SchemaConflict) as ex:
-            r = Rule(schema={"type": "int", "enum": [1, 2, 3], "range": {"max": 10, "min": 1}})
-        assert ex.value.msg.startswith("enum.conflict :: range"), "Wrong exception was raised"
 
     def testRuleClass(self):
         # this tests seq type with a internal type of str
@@ -75,25 +31,13 @@ class TestRule(unittest.TestCase):
         with self.assertRaises(RuleError):
             Rule(schema={"type": 1}, parent=None)
 
-        # Test the name value
-        r = Rule(schema={"type": "seq", "sequence": [{"type": "str"}]})
-        self.assertTrue(r._sequence[0]._type == "str", msg="first item in sequences type is not str")
-
-        # This tests mapping with a nested type and pattern
-        r = Rule(schema={"type": "map", "mapping": {"name": {"type": "str", "pattern": ".+@.+"}}})
-        self.assertTrue(r._type == "map", msg="rule type is not map")
-        self.assertTrue(isinstance(r._mapping, dict), msg="mapping is not dict")
-        self.assertTrue(r._mapping["name"]._type == "str", msg="nested mapping is not of string type")
-        self.assertTrue(r._mapping["name"]._pattern is not None, msg="nested mapping has no pattern var set")
-        self.assertTrue(r._mapping["name"]._pattern == ".+@.+", msg="pattern is not set to correct value")
-
         # this tests a invalid regexp pattern
         with self.assertRaises(RuleError):
             Rule(schema={"type": "str", "pattern": "/@/\\"})
 
         # this tests the various valid enum types
-        r = Rule(schema={"type": "int", "enum": [1, 2, 3]})
-        r = Rule(schema={"type": "bool", "enum": [True, False]})
+        Rule(schema={"type": "int", "enum": [1, 2, 3]})
+        Rule(schema={"type": "bool", "enum": [True, False]})
         r = Rule(schema={"type": "str", "enum": ["a", "b", "c"]})
         self.assertTrue(r._enum is not None, msg="enum var is not set proper")
         self.assertTrue(isinstance(r._enum, list), msg="enum is not set to a list")
@@ -187,3 +131,124 @@ class TestRule(unittest.TestCase):
         with pytest.raises(RuleError) as ex:
             Rule(schema={"map": {"stream": {"type": "any"}}, "mapping": {"seams": {"type": "any"}}})
         assert ex.value.msg.startswith("mapping.multiple-use")
+
+    def test_matching_rule(self):
+        pass
+
+    def test_allow_empty_map(self):
+        pass
+
+    def test_type_value(self):
+        pass
+
+    def test_name_value(self):
+        pass
+
+    def test_desc_value(self):
+        pass
+
+    def test_required_value(self):
+        pass
+
+    def test_pattern_value(self):
+        pass
+
+    def test_enum_value(self):
+        pass
+
+    def test_assert_value(self):
+        pass
+
+    def test_range_value(self):
+        pass
+
+    def test_ident_value(self):
+        pass
+
+    def test_unique_value(self):
+        pass
+
+    def test_sequence(self):
+        # Test basic sequence rule
+        r = Rule(schema={"type": "seq", "sequence": [{"type": "str"}]})
+        compare(r._type, "seq")
+        self.assertTrue(isinstance(r._sequence, list))
+        self.assertTrue(isinstance(r._sequence[0], Rule))
+        compare(r._sequence[0]._type, "str")
+
+        # Test sequence without explicit type
+        r = Rule(schema={"sequence": [{"type": "str"}]})
+        compare(r._type, "seq")
+        self.assertTrue(isinstance(r._sequence, list))
+        self.assertTrue(isinstance(r._sequence[0], Rule))
+        compare(r._sequence[0]._type, "str")
+
+        # Test short name 'seq'
+        r = Rule(schema={"seq": [{"type": "str"}]})
+        compare(r._type, "seq")
+        self.assertTrue(isinstance(r._sequence, list))
+        self.assertTrue(isinstance(r._sequence[0], Rule))
+        compare(r._sequence[0]._type, "str")
+
+        # Test error is raised when sequence key is missing
+        with pytest.raises(SchemaConflict) as ex:
+            Rule(schema={"type": "seq"})
+        self.assertTrue(ex.value.msg.startswith("seq.nosequence"), msg="Wrong exception was raised")
+
+        # sequence and pattern can't be used at same time
+        with pytest.raises(SchemaConflict) as ex:
+            Rule(schema={"type": "seq", "sequence": [{"type": "str"}], "pattern": "..."})
+        self.assertTrue(ex.value.msg.startswith("seq.conflict :: pattern"), msg="Wrong exception was raised")
+
+    def test_mapping(self):
+        # This tests mapping with a nested type and pattern
+        r = Rule(schema={"type": "map", "mapping": {"name": {"type": "str", "pattern": ".+@.+"}}})
+        self.assertTrue(r._type == "map", msg="rule type is not map")
+        self.assertTrue(isinstance(r._mapping, dict), msg="mapping is not dict")
+        self.assertTrue(r._mapping["name"]._type == "str", msg="nested mapping is not of string type")
+        self.assertTrue(r._mapping["name"]._pattern is not None, msg="nested mapping has no pattern var set")
+        self.assertTrue(r._mapping["name"]._pattern == ".+@.+", msg="pattern is not set to correct value")
+
+        # when type is specefied, 'mapping' key must be present
+        with pytest.raises(SchemaConflict) as ex:
+            Rule(schema={"type": "map"})
+        assert ex.value.msg.startswith("map.nomapping"), "Wrong exception was raised"
+
+        # 'map' and 'enum' can't be used at same time
+        # TODO: This do not work because it currently raises RuleError: <RuleError: error code 4: enum.notscalar>
+        # with pytest.raises(SchemaConflict):
+        #     r = Rule(schema={"type": "map", "enum": [1, 2, 3]})
+
+    def test_default_value(self):
+        pass
+
+    def test_check_conflicts(self):
+        # TODO: This do not work and enum schema conflict is not raised... RuleError: <RuleError: error code 4: enum.notscalar>
+        # with pytest.raises(SchemaConflict) as ex:
+        #     r = Rule(schema={"type": "seq", "sequence": [{"type": "str"}], "enum": [1, 2, 3]})
+        # assert ex.value.msg.startswith("seq.conflict :: enum"), "Wrong exception was raised"
+
+        # Test sequence and mapping can't be used at same level
+        with pytest.raises(SchemaConflict) as ex:
+            Rule(schema={"type": "seq", "sequence": [{"type": "str"}], "mapping": {"name": {"type": "str", "pattern": ".+@.+"}}})
+        assert ex.value.msg.startswith("seq.conflict :: mapping"), "Wrong exception was raised"
+
+        # Mapping and sequence can't used at same time
+        with pytest.raises(SchemaConflict) as ex:
+            Rule(schema={"type": "map", "mapping": {"foo": {"type": "str"}}, "sequence": [{"type": "str"}]})
+        assert ex.value.msg.startswith("map.conflict :: mapping"), "Wrong exception was raised"
+
+        # scalar type and sequence can't be used at same time
+        with pytest.raises(SchemaConflict) as ex:
+            Rule(schema={"type": "int", "sequence": [{"type": "str"}]})
+        assert ex.value.msg.startswith("scalar.conflict :: sequence"), "Wrong exception was raised"
+
+        # scalar type and mapping can't be used at same time
+        with pytest.raises(SchemaConflict) as ex:
+            Rule(schema={"type": "int", "mapping": {"foo": {"type": "str"}}})
+        assert ex.value.msg.startswith("scalar.conflict :: mapping"), "Wrong exception was raised"
+
+        # scalar type and enum can't be used at same time
+        with pytest.raises(SchemaConflict) as ex:
+            Rule(schema={"type": "int", "enum": [1, 2, 3], "range": {"max": 10, "min": 1}})
+        assert ex.value.msg.startswith("enum.conflict :: range"), "Wrong exception was raised"
