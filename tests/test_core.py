@@ -247,7 +247,7 @@ class TestCore(object):
 
             compare(sorted(c.validation_errors), sorted(failing_test[3]), prefix="Wrong validation errors when parsing files : {} : {}".format(failing_test[0], failing_test[1]))
 
-    def testCore(self):
+    def test_core_files(self):
         # These tests should pass with no exception raised
         pass_tests = [
             # Test sequence with only string values
@@ -301,6 +301,8 @@ class TestCore(object):
             "24s.yaml",
             # Test that there is no need to specify 'type: seq' or 'type: map'
             "25s.yaml",
+            # Test that the different types of timestamps can be validated
+            "26s.yaml",
         ]
 
         _fail_tests = [
@@ -332,6 +334,8 @@ class TestCore(object):
             ("13f.yaml", SchemaError),
             # Test that range validates on 'seq' raise correct error
             ("14f.yaml", SchemaError),
+            # Test timestamps that should throw errors
+            ("15f.yaml", SchemaError),
         ]
 
         for passing_test_file in pass_tests:

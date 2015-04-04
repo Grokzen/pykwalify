@@ -3,7 +3,7 @@
 """ pyKwalify - types.py """
 
 # python std lib
-import datetime
+from datetime import datetime
 
 DEFAULT_TYPE = "str"
 
@@ -15,8 +15,8 @@ _types = {
     "bool": bool,
     "map": dict,
     "seq": list,
-    "timestamp": datetime.datetime,
-    "date": datetime.datetime,
+    "timestamp": datetime,
+    "date": datetime,
     "symbol": str,
     "scalar": None,
     "text": None,
@@ -102,6 +102,14 @@ def is_mapping_alias(alias):
     return alias in mapping_aliases
 
 
+def is_timestamp(obj):
+    """
+    Yaml either have automatically converted it to a datetime object
+    or it is a string that will be validated later.
+    """
+    return isinstance(obj, datetime) or isinstance(obj, str)
+
+
 tt = {
     "str": is_string,
     "int": is_int,
@@ -111,5 +119,6 @@ tt = {
     "text": is_text,
     "any": is_any,
     "enum": is_enum,
-    "none": is_none
+    "none": is_none,
+    "timestamp": is_timestamp,
 }

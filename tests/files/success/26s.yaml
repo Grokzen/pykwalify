@@ -1,0 +1,16 @@
+data:
+  d1: "2015-03-29T18:45:00+00:00"
+  d2: "2015-03-29T18:45:00"
+  d3: "2015-03-29T11:45:00 -0700"
+  d4: "2015-03-29"
+schema:
+  type: map
+  mapping:
+    d1:
+      type: timestamp
+    d2:
+      type: timestamp
+    d3:
+      type: timestamp
+    d4:
+      type: timestamp

@@ -18,6 +18,7 @@ from pykwalify.errors import CoreError, SchemaError
 
 # 3rd party imports
 import yaml
+from dateutil.parser import parse
 
 log = logging.getLogger(__name__)
 
@@ -396,6 +397,21 @@ class Core(object):
                 path,
                 "scalar",
             )
+
+        # Validate timestamp
+        if rule._type == "timestamp":
+            v = value.strip()
+
+            # parse("") will give a valid date but it should not be
+            # considered a valid timestamp
+            if v == "":
+                errors.append("timestamp.empty : {} : {}".format(value, path))
+            else:
+                try:
+                    parse(value)
+                    # If it can be parsed then it is valid
+                except Exception:
+                    errors.append("timestamp.invalid : {} : {}".format(value, path))
 
     def _validate_range(self, max_, min_, max_ex, min_ex, errors, value, path, prefix):
         """

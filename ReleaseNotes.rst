@@ -6,6 +6,8 @@ Release Notes
 =====
 
  - Rework cli string that docopt uses. Removed redundant flags that docopt provides [--version & --help]
+ - Add support for timestamp validation
+ - Add new runtime dependency 'python-dateutil' that is used to validate timestamps
 
 1.0.1
 =====

@@ -18,7 +18,7 @@ The followings are available:
  - text (str or number)
  - date [NYI]
  - time [NYI]
- - timestamp [NYI]
+ - timestamp
  - sequence or seq
  - mapping or map
  - none
@@ -98,6 +98,11 @@ Name of schema.
 ## desc
 
 Description is not used for validation.
+
+
+## timestamp
+
+Parse a string to determine if it is a valid timestamp. Parsing is done with `python-dateutil` lib and see all valid formats at `https://dateutil.readthedocs.org/en/latest/examples.html#parse-examples`.
 
 
 ## allowempty
