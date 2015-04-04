@@ -7,102 +7,280 @@ This document will describe all implemented validation rules.
 
 ## type
 
-Type of value. 
+Type of the value.
+
 The followings are available:
 
- - str
- - int
- - float
- - bool
- - number (int or float)
- - text (str or number)
- - date [NYI]
- - time [NYI]
- - timestamp
- - sequence or seq
- - mapping or map
- - none
- - scalar (all but seq and map)
- - any (means any implemented type of data)
- - regex or re
+ - `any` (means any implemented type of data)
+ - `bool`
+ - `date` [NYI]
+ - `float`
+ - `int`
+ - `mapping` or `map`
+ - `none`
+ - `number` (`int` or `float`)
+ - `regex` or `re`
+ - `scalar` (all but `seq` and `map`)
+ - `sequence` or `seq`
+ - `str`
+ - `text` (`str` or `number`)
+ - `time` [NYI]
+ - `timestamp`
+
+Example:
+
+```yaml
+# Schema
+type: str
+
+# Data
+'Foobar'
+```
 
 
 ## sequence or seq
 
-Sequence of values. Specifying 'type: seq' is optional when 'sequence' or 'seq' in found in the schema.
+Sequence of values. Specifying `type: seq` is optional when `sequence` or `seq` in found in the schema.
+
+Example:
+
+```yaml
+# Schema
+type: seq
+sequence:
+  - type: str
+```
 
 
 ## mapping or map
 
-Mapping of values (dict). Specifying 'type: map' is optional when 'mapping' or 'map' is found in the schema.
+Mapping of values (dict). Specifying `type: map` is optional when `mapping` or `map` is found in the schema.
+
+Example:
+
+```yaml
+# Schema
+type: map
+mapping:
+  key_one:
+    type: str
+```
 
 
 ## required or req
 
 Value is required when true (Default is false). This is similar to not-null constraint in RDBMS.
 
+Example:
+
+```yaml
+# Schema
+type: map
+mapping:
+  key_one:
+    type: str
+    required: True
+
+# Data
+key_one: foobar
+```
+
 
 ## enum
 
-List of available values.
+Value must be one of the specified values.
+
+Example:
+
+```yaml
+# Schema
+type: map
+mapping:
+  blood:
+    type: str
+    enum: ['A', 'B', 'O', 'AB']
+
+# Data
+blood: AB
+```
 
 
 ## pattern
 
-Specifies regular expression pattern of value. Uses ``re.match()``
-Pattern also works on all scalar types.
-Pattern no longer works in map. Use ``regex;(regex-pattern)`` as keys in ``mapping``
+Specifies regular expression pattern of value. Uses `re.match()` internally.
+
+Pattern works on all scalar types.
+
+Note: Pattern no longer works in map. Use `regex;(regex-pattern)` as keys in `mapping`
+
+Example:
+
+```yaml
+# Schema
+type: map
+mapping:
+  email:
+    type: str
+    pattern: .+@.+
+
+# Data
+email: foo@mail.com
+```
 
 
 ## regex;(regex-pattern) or re;(regex-pattern)
 
-This is only implemented in map where a key inside the mapping keyword can implement this ``regex;(regex-pattern)`` pattern and all keys will be matched against the pattern. Please note that the regex should be wrapped with `( )` and they will be removed during runtime.
+This is only implemented in map where a key inside the mapping keyword can implement this `regex;(regex-pattern)` pattern and all keys will be matched against the pattern. 
+
+Please note that the regex should be wrapped with `( )`and they will be removed during runtime.
+
 If a match is found then it will parsed the subrules on that key. A single key can be matched against multiple regex rules and the normal map rules.
-When defining a regex, matching-rule should allways be set to configure the behaviour when using multiple regex:s.
+
+When defining a regex, `matching-rule` should allways be set to configure the behaviour when using multiple regex:s.
+
+Example:
+
+```yaml
+# Schema
+type: seq
+sequence:
+  - type: map
+    matching-rule: 'any'
+    mapping:
+      regex;(mi.+):
+        type: seq
+        sequence:
+          - type: str
+      regex;(me.+):
+        type: seq
+        sequence:
+          - type: bool
+
+# Data
+- mic:
+  - input
+    foo
+  - output
+    bar
+- media: 1
+- foobar:
+    opa: True
+```
 
 
 ## matching-rule [Default: any]
 
-Only applies to map. This enables more finegrained control over how the matching rule should behave when validation keys inside mappings.
+Only applies to map. This enables more finegrained control over how the matching rule should behave when validation regex keys inside mappings.
 
 Currently supported rules is
 
  - `any` `1 to all` number of regex must match.
  - `all` All defined regex must match each key.
 
+Example:
+
+```yaml
+# Schema
+type: map
+matching-rule: 'any'
+mapping: ...
+```
+
 
 ## range
 
 Range of value between ``max / max-ex`` and ``min / min-ex``.
 
- - ``max`` means 'max-inclusive'. (a >= b)
- - ``min`` means 'min-inclusive'. (a <= b)
- - ``max-ex`` means 'max-exclusive'. (a > b)
- - ``min-ex`` means 'min-exclusive'. (a < b)
+ - `max` means `max-inclusive`. (a >= b)
+ - `min` means `min-inclusive`. (a <= b)
+ - `max-ex` means `max-exclusive`. (a > b)
+ - `min-ex` means `min-exclusive`. (a < b)
 
-This works with ``map, seq, str, int``
-Type bool and any are not available with range
+This works with `map` `seq` `str` `int`. When used on non number types it will use `len()` on the value.
+
+Type bool and any are not available with range.
+
+Example:
+
+```yaml
+# Schema
+type: map
+mapping:
+  password:
+    type: str
+    range:
+      max: 16
+      min: 8
+  age:
+    type: int
+    range: 
+      max-ex: 19
+      min-ex: 18
+
+# Data
+password: xxx123
+age: 15
+```
 
 
 ## unique
 
-Value is unique for mapping or sequence. 
-This is similar to unique constraint of RDBMS.
+Value is unique for mapping or sequence.
+
+Example:
+
+```yaml
+# Schema
+type: seq
+sequence:
+  - type: str
+    unique: True
+
+# Data
+- users
+- foo
+- admin
+```
 
 
 ## name
 
-Name of schema.
+Name of schema. This have no effect on the parsing.
+
+```yaml
+# Schema
+name: foobar schema
+```
 
 
 ## desc
 
-Description is not used for validation.
+Description is not used for validation. This have no effect on the parsing.
+
+Example:
+
+```yaml
+# Schema
+desc: This schema is very foobar
+```
 
 
 ## timestamp
 
 Parse a string to determine if it is a valid timestamp. Parsing is done with `python-dateutil` lib and see all valid formats at `https://dateutil.readthedocs.org/en/latest/examples.html#parse-examples`.
+
+Example:
+
+```yaml
+# Schema
+type: map
+mapping:
+  d1:
+    type: timestamp
+
+# Data
+d1: "2015-03-29T18:45:00+00:00"
+```
 
 
 ## allowempty
@@ -111,30 +289,68 @@ NOTE: Experimental feature!
 
 Only applies to map. It enables a dict to have items in it that is not validated. It can be combined with mapping to check for some fixed properties but still validate if any random properties exists. See example testfile 18a, 18b, 19a, 19b.
 
+```yaml
+# Schema
+type: map
+mapping:
+  datasources:
+    type: map
+    allowempty: True
+
+# Data
+datasources:
+  test1: test1.py
+  test2: test2.py
+```
+
 
 ## schema;(schema-name)
 
-See ``Partial schemas`` section
+See `Partial schemas` section for details.
+
+Names must be globally unique.
+
+Example:
+
+```yaml
+# Schema
+schema;fooone:
+  ...
+
+schema;footwo:
+ ...
+```
 
 
 ## include
 
-See ``Partial schemas`` section
+See `Partial schemas` section. Includes is lazy loaded during parsing/validation.
+
+Example:
+
+```yaml
+# Schema
+include: footwo
+
+schema;footwo:
+  type: str
+```
 
 
 # Partial schemas
 
 It is possible to create small partial schemas that can be included in other schemas. This feature do not use any built-in YAML or JSON linking.
 
-To define a partial schema use the keyword ``schema;(schema-id):``. ``(schema-id)`` must be globally unique for the loaded schema partials. If collisions is detected then error will be raised.
+To define a partial schema use the keyword `schema;(schema-id):`. `(schema-id)` must be globally unique for the loaded schema partials. If collisions is detected then error will be raised.
 
-To use a partial schema use the keyword ``include: (schema-id):``. This will work at any place you can specify the keyword ``type``. Include directive do not currently work inside a partial schema.
+To use a partial schema use the keyword `include: (schema-id):`. This will work at any place you can specify the keyword `type`. Include directive do not currently work inside a partial schema.
 
 It is possible to define any number of partial schemas in any schema file as long as they are defined at top level of the schema.
 
 For example, this schema contains one partial and the regular schema.
 
 ```yaml
+# Schema
 schema;fooone:
   type: map
   mapping:
@@ -144,10 +360,7 @@ schema;fooone:
 type: seq
 sequence:
   - include: fooone
-```
 
-And it can be used to validate the following data
-
-```yaml
+# Data
 - foo: opa
 ```
