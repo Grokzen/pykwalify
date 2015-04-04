@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# python std logging
+# python std lib
 import logging
 import logging.config
 

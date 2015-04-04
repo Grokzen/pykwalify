@@ -2,6 +2,7 @@
 
 """ Unit test for pyKwalify - Rule """
 
+# python std lib
 import unittest
 
 # 3rd party imports
@@ -10,8 +11,8 @@ from testfixtures import compare
 
 # pyKwalify imports
 import pykwalify
-from pykwalify.rule import Rule
 from pykwalify.errors import RuleError, SchemaConflict
+from pykwalify.rule import Rule
 
 
 class TestRule(unittest.TestCase):

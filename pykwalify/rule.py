@@ -3,13 +3,12 @@
 """ pyKwalify - rule.py """
 
 # python std lib
+import logging
 import os
 import re
 
-# python std logging
-import logging
-
-# pyKwalify imports
+# pykwalify imports
+from pykwalify.errors import SchemaConflict, RuleError
 from pykwalify.types import (
     DEFAULT_TYPE,
     is_bool,
@@ -20,7 +19,6 @@ from pykwalify.types import (
     sequence_aliases,
     type_class,
 )
-from pykwalify.errors import SchemaConflict, RuleError
 
 log = logging.getLogger(__name__)
 

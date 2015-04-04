@@ -3,18 +3,16 @@
 """ pyKwalify - core.py """
 
 # python std lib
+import json
+import logging
 import os
 import re
-import json
-
-# python std logging
-import logging
 
 # pyKwalify imports
 import pykwalify
+from pykwalify.errors import CoreError, SchemaError
 from pykwalify.rule import Rule
 from pykwalify.types import is_scalar, tt
-from pykwalify.errors import CoreError, SchemaError
 
 # 3rd party imports
 import yaml

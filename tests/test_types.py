@@ -2,9 +2,10 @@
 
 """ Unit test for pyKwalify - Rule """
 
+# python std lib
 import unittest
 
-# pyKwalify imports
+# pykwalify imports
 from pykwalify import types
 
 

@@ -5,15 +5,15 @@
 # python std lib
 import os
 
-# 3rd party imports
-import yaml
-import pytest
-from testfixtures import compare
-
-# pyKwalify imports
+# pykwalify imports
 import pykwalify
 from pykwalify.core import Core
 from pykwalify.errors import SchemaError, CoreError
+
+# 3rd party imports
+import pytest
+import yaml
+from testfixtures import compare
 
 
 class TestCore(object):

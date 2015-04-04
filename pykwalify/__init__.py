@@ -2,12 +2,10 @@
 
 """ pykwalify """
 
-# import sys
-import os
-
-# init python std logging
+# python stdlib
 import logging
 import logging.config
+import os
 
 __author__ = 'Grokzen <Grokzen@gmail.com>'
 __version_info__ = (1, 1, 0)

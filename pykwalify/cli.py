@@ -2,7 +2,7 @@
 
 """ pyKwalify - cli.py """
 
-# python std library
+# python std lib
 import logging
 import logging.config
 import sys

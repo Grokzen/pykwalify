@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# pykwalify package imports
+# pykwalify imports
 from pykwalify import errors
 
 
