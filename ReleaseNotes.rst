@@ -2,6 +2,7 @@
 Release Notes
 =============
 
+
 1.0.2
 =====
 
@@ -10,15 +11,21 @@ Release Notes
  - Add new runtime dependency 'python-dateutil' that is used to validate timestamps
  - Change how 'any' keyword is implemented to now accept anything and not just the implemented types. (See Upgrade Instructions document for migration details)
 
+
+
 1.0.1
 =====
 
 Switched back to semantic version numbering for this lib. See *README.md* section *Important notes on version schema changes* on how to fix any issues with this change.
 
+
+
 15.01
 =====
 
  - Fixed a bug in unique validation for mapping keys [See: PR-12] (Gonditeniz)
+
+
 
 14.12
 =====
@@ -32,6 +39,8 @@ Switched back to semantic version numbering for this lib. See *README.md* sectio
     * `regex` --> `re`
  - Reworked all testing files to reduce number of files
 
+
+
 14.08
 =====
 
@@ -42,6 +51,8 @@ Switched back to semantic version numbering for this lib. See *README.md* sectio
  - Keyword 'range' now correctly checks the internal keys to be integers
  - Major update to testing and increased coverage.
 
+
+
 14.06.1
 =======
 
@@ -51,6 +62,8 @@ Switched back to semantic version numbering for this lib. See *README.md* sectio
  - Directive "pattern" can no longer be used with map to validate all keys against that regex. Use "regex;" inside "mapping:"
  - 'none' can now be used as a type
  - Many more tests added
+
+
 
 14.06
 =====
@@ -70,6 +83,8 @@ Switched back to semantic version numbering for this lib. See *README.md* sectio
  - Refactored alot of exceptions to be more specific (SchemaError and RuleError for example) and not a generic Exception
  - Parsed rules is now stored correctly in Core() so it can be tested from the outside
 
+
+
 0.1.2
 =====
 
@@ -83,6 +98,8 @@ Switched back to semantic version numbering for this lib. See *README.md* sectio
  - Alot more test files and now tests source_data and schema_data input arguments to core.py
  - Alot of cleanup in the test suit
 
+
+
 0.1.1
 =====
 
@@ -92,6 +109,8 @@ Switched back to semantic version numbering for this lib. See *README.md* sectio
  - New make target 'cleanegg'
  - Fixed path bugs in Makefile
  - Fixed path bugs in Manifest
+
+
 
 0.1.0
 =====
