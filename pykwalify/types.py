@@ -83,7 +83,7 @@ def is_text(obj):
 
 
 def is_any(obj):
-    return is_string(obj) or is_int(obj) or is_bool(obj) or is_float(obj) or is_number(obj) or is_text(obj) or is_collection(obj)
+    return True
 
 
 def is_enum(obj):

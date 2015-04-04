@@ -186,6 +186,12 @@ class TestCore(object):
         Core(source_data="foobar", schema_data={"type": "text"}).validate()
         Core(source_data="foobar", schema_data={"type": "any"}).validate()
 
+        # Test that 'any' allows types that is not even implemented
+        def foo():
+            pass
+        Core(source_data=foo, schema_data={"type": "any"}).validate()
+        Core(source_data=lambda x: x, schema_data={"type": "any"}).validate()
+
         with pytest.raises(SchemaError):
             Core(source_data="abc", schema_data={"type": "number"}).validate()
 
@@ -203,9 +209,6 @@ class TestCore(object):
 
         with pytest.raises(SchemaError):
             Core(source_data=True, schema_data={"type": "text"}).validate()
-
-        with pytest.raises(SchemaError):
-            Core(source_data=dict, schema_data={"type": "any"}).validate()
 
     def test_multi_file_support(self):
         """

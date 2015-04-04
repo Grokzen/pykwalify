@@ -11,7 +11,7 @@ Type of the value.
 
 The followings are available:
 
- - `any` (means any implemented type of data)
+ - `any` (Will allways be true no matter what the value is, even non implemented types like `lambda` or `functions`)
  - `bool`
  - `date` [NYI]
  - `float`
