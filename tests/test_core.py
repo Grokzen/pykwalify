@@ -349,6 +349,8 @@ class TestCore(object):
             "29s.yaml",
             # Test that multiple sequence values with nested data structures work
             "30s.yaml",
+            # Test that multiple sequence vlaues with nested lists works
+            "31s.yaml",
         ]
 
         _fail_tests = [

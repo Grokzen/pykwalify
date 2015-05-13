@@ -213,6 +213,9 @@ class Core(object):
         ok_values = []
         error_tracker = []
 
+        unique_errors = set([])
+        map_unique_errors = set([])
+
         for i, item in enumerate(value):
             processed = []
 
@@ -232,22 +235,67 @@ class Core(object):
 
                 processed.append(tmp_errors)
 
+                if r._type == "map":
+                    log.debug("Found map inside sequence")
+                    unique_keys = []
+
+                    for k, _rule in r._mapping.items():
+                        log.debug("Key: {}".format(k))
+                        log.debug("Rule: {}".format(_rule))
+
+                        if _rule._unique or _rule._ident:
+                            unique_keys.append(k)
+
+                    if len(unique_keys) > 0:
+                        for v in unique_keys:
+                            table = {}
+                            for j, V in enumerate(value):
+                                val = V[v]
+                                if val is None:
+                                    continue
+                                if val in table:
+                                    curr_path = "{}/{}/{}".format(path, j, v)
+                                    prev_path = "{}/{}/{}".format(path, table[val], v)
+                                    map_unique_errors.add("value.notunique :: value: {} : {} : {}".format(val, curr_path, prev_path))
+                                else:
+                                    table[val] = j
+                elif r._unique:
+                    log.debug("Found unique value in sequence")
+                    table = {}
+
+                    for j, val in enumerate(value):
+                        if val is None:
+                            continue
+
+                        if val in table:
+                            curr_path = "{}/{}".format(path, j)
+                            prev_path = "{}/{}".format(path, table[val])
+                            unique_errors.add("value.notunique :: value: {} : {} : {}".format(val, curr_path, prev_path))
+                        else:
+                            table[val] = j
+
             error_tracker.append(processed)
             no_errors = []
             for _errors in processed:
                 no_errors.append(len(_errors) == 0)
 
             if rule._matching == "any":
-                log.debug("any rule", True in no_errors)
+                log.debug("any rule {}".format(True in no_errors))
                 ok_values.append(True in no_errors)
             elif rule._matching == "all":
-                log.debug("all rule", all(no_errors))
+                log.debug("all rule".format(all(no_errors)))
                 ok_values.append(all(no_errors))
             elif rule._matching == "*":
                 log.debug("star rule", "...")
                 ok_values.append(True)
 
-        log.debug("ok", ok_values)
+        for _error in unique_errors:
+            errors.append(_error)
+
+        for _error in map_unique_errors:
+            errors.append(_error)
+
+        log.debug("ok : {}".format(ok_values))
 
         # All values must pass the validation, otherwise add the parsed errors
         # to the global error list and throw up some error.
@@ -278,46 +326,6 @@ class Core(object):
                 path,
                 "seq",
             )
-
-        if r._type == "map":
-            log.debug("Found map inside sequence")
-            mapping = r._mapping
-            unique_keys = []
-            for k, rule in mapping.items():
-                log.debug("Key: {}".format(k))
-                log.debug("Rule: {}".format(rule))
-
-                if rule._unique or rule._ident:
-                    unique_keys.append(k)
-
-            if len(unique_keys) > 0:
-                for v in unique_keys:
-                    table = {}
-                    j = 0
-                    for V in value:
-                        val = V[v]
-                        if val is None:
-                            continue
-                        if val in table:
-                            curr_path = "{}/{}/{}".format(path, j, v)
-                            prev_path = "{}/{}/{}".format(path, table[val], v)
-                            errors.append("value.notunique :: value: {} : {} : {}".format(val, curr_path, prev_path))
-                        else:
-                            table[val] = j
-                        j += 1
-        elif r._unique:
-            log.debug("Found unique value in sequence")
-            table = {}
-            for j, val in enumerate(value):
-                if val is None:
-                    continue
-
-                if val in table:
-                    curr_path = "{}/{}".format(path, j)
-                    prev_path = "{}/{}".format(path, table[val])
-                    errors.append("value.notunique :: value: {} : {} : {}".format(val, curr_path, prev_path))
-                else:
-                    table[val] = j
 
     def _validate_mapping(self, value, rule, path, errors, done=None):
         log.debug("Validate mapping")
