@@ -49,6 +49,9 @@ class Rule(object):
         self._regex_mappings = None
         self._include_name = None
 
+        # Possible values: [any, all, *]
+        self._matching = "any"
+
         self._parent = parent
         self._schema = schema
         self._schema_str = schema
@@ -115,6 +118,7 @@ class Rule(object):
             "mapping": self.init_mapping_value,
             "map": self.init_mapping_value,
             "matching-rule": self.init_matching_rule,
+            "matching": self.init_matching,
         }
 
         for k, v in schema.items():
@@ -158,6 +162,16 @@ class Rule(object):
 
         if not is_builtin_type(self._type):
             raise RuleError("type.unknown : {} : {}".format(self._type, path))
+
+    def init_matching(self, v, rule, path):
+        log.debug("Init matching rule : {}".format(path))
+
+        valid_values = ["any", "all", "*"]
+
+        if str(v) not in valid_values:
+            raise RuleError("matching value: {} is not one of {}".format(str(v), valid_values))
+
+        self._matching = str(v)
 
     def init_name_value(self, v, rule, path):
         log.debug("Init name value : {}".format(path))
@@ -311,20 +325,23 @@ class Rule(object):
 
         if self._sequence is None or len(self._sequence) == 0:
             raise RuleError("sequence.noelem : {} : {}".format(self._sequence, path))
-        if len(self._sequence) > 1:
-            raise RuleError("sequence.toomany : {} : {}".format(self._sequence, path))
+        # if len(self._sequence) > 1:
+        #     raise RuleError("sequence.toomany : {} : {}".format(self._sequence, path))
 
-        elem = self._sequence[0]
-        if elem is None:
-            elem = {}
+        tmp_seq = []
 
-        i = 0
+        for i, e in enumerate(self._sequence):
+            elem = e or {}
 
-        rule = Rule(None, self)
-        rule.init(elem, "{}/sequence/{}".format(path, i))
+            rule = Rule(None, self)
+            rule.init(elem, "{}/sequence/{}".format(path, i))
 
-        self._sequence = []
-        self._sequence.append(rule)
+            # self._sequence = []
+            # self._sequence.append(rule)
+            tmp_seq.append(rule)
+
+        self._sequence = tmp_seq
+
         return rule
 
     def init_mapping_value(self, v, rule, path):

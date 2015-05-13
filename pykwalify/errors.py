@@ -24,6 +24,14 @@ retcodes = {
     # SchemaConflict
     # e.g. when a schema conflict occurs
     5: 'schemaconflict',
+
+    # NotMappingError
+    # e.g. when a value is not a mapping when it was expected it should be
+    6: 'notmaperror',
+
+    # NotSequenceError
+    # e.g. when a value is not a sequence when it was expected it should be
+    7: 'notsequenceerror',
 }
 
 
@@ -123,8 +131,7 @@ class UnknownError(PyKwalifyException):
         """
         """
         assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super(UnknownError, self).__init__(retcode=retnames['unknownerror'],
-                                           *args, **kwargs)
+        super(self.__class__, self).__init__(retcode=retnames['unknownerror'], *args, **kwargs)
 
 
 class SchemaError(PyKwalifyException):
@@ -134,8 +141,7 @@ class SchemaError(PyKwalifyException):
         """
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
-        super(SchemaError, self).__init__(retcode=retnames["schemaerror"],
-                                          *args, **kwargs)
+        super(self.__class__, self).__init__(retcode=retnames["schemaerror"], *args, **kwargs)
 
 
 class CoreError(PyKwalifyException):
@@ -145,8 +151,27 @@ class CoreError(PyKwalifyException):
         """
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
-        super(CoreError, self).__init__(retcode=retnames["coreerror"],
-                                        *args, **kwargs)
+        super(self.__class__, self).__init__(retcode=retnames["coreerror"], *args, **kwargs)
+
+
+class NotMappingError(PyKwalifyException):
+    """
+    """
+    def __init__(self, *args, **kwargs):
+        """
+        """
+        assert "retcode" not in kwargs, "keyword retcode implicitly defined"
+        super(self.__class__, self).__init__(retcode=retnames['notmaperror'], *args, **kwargs)
+
+
+class NotSequenceError(PyKwalifyException):
+    """
+    """
+    def __init__(self, *args, **kwargs):
+        """
+        """
+        assert "retcode" not in kwargs, "keyword retcode implicitly defined"
+        super(self.__class__, self).__init__(retcode=retnames['notsequenceerror'], *args, **kwargs)
 
 
 class RuleError(PyKwalifyException):
@@ -156,8 +181,7 @@ class RuleError(PyKwalifyException):
         """
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
-        super(RuleError, self).__init__(retcode=retnames["ruleerror"],
-                                        *args, **kwargs)
+        super(self.__class__, self).__init__(retcode=retnames["ruleerror"], *args, **kwargs)
 
 
 class SchemaConflict(PyKwalifyException):
@@ -167,5 +191,4 @@ class SchemaConflict(PyKwalifyException):
         """
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
-        super(SchemaConflict, self).__init__(retcode=retnames["schemaconflict"],
-                                             *args, **kwargs)
+        super(self.__class__, self).__init__(retcode=retnames["schemaconflict"], *args, **kwargs)

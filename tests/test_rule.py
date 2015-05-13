@@ -201,6 +201,32 @@ class TestRule(unittest.TestCase):
             Rule(schema={"type": "seq", "sequence": [{"type": "str"}], "pattern": "..."})
         self.assertTrue(ex.value.msg.startswith("seq.conflict :: pattern"), msg="Wrong exception was raised")
 
+    def test_build_sequence_multiple_values(self):
+        """
+        Test with multiple values.
+        """
+        # Test basic sequence rule
+        r = Rule(schema={'type': 'seq', 'sequence': [{'type': 'str'}, {'type': 'int'}]})
+        assert r._type == "seq"
+        assert r._matching == "any"
+        assert len(r._sequence) == 2
+        assert isinstance(r._sequence, list)
+        assert all([isinstance(r._sequence[i], Rule) for i in range(len(r._sequence))])
+        assert r._sequence[0]._type == "str"
+        assert r._sequence[1]._type == "int"
+
+        # Test sequence without explicit type
+        r = Rule(schema={'sequence': [{'type': 'str'}, {'type': 'int'}]})
+        assert r._type == "seq"
+        assert r._matching == "any"
+        assert len(r._sequence) == 2
+        assert isinstance(r._sequence, list)
+        assert all([isinstance(r._sequence[i], Rule) for i in range(len(r._sequence))])
+        assert r._sequence[0]._type == "str"
+        assert r._sequence[1]._type == "int"
+
+        # Test adding matchin rules
+
     def test_mapping(self):
         # This tests mapping with a nested type and pattern
         r = Rule(schema={"type": "map", "mapping": {"name": {"type": "str", "pattern": ".+@.+"}}})

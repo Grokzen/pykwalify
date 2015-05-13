@@ -1,0 +1,9 @@
+data:
+  - "foo"
+  - "123"
+schema:
+  type: seq
+  matching: "all"
+  seq:
+    - type: str
+    - type: str

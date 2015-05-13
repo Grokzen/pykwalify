@@ -51,6 +51,31 @@ sequence:
   - type: str
 ```
 
+Multiple values is allowed in the `sequence` block. It can also be nested to any depth.
+
+A new value has been introduced to the `sequence` block `matching` that can be set to either:
+
+ - `any` this mean that one or more sequence blocks has to be valid for the value in the sequence to be valid.
+ - `all` this mean that all sequence blocks has to be valid for each value to be valid.
+ - `*` this mean that zero to all blocks has to be valid for each value to be valid.
+
+```yaml
+# Data
+- - 123
+- "foobar"
+```
+
+```yaml
+# Schema
+type: seq
+matching: "any"
+seq:
+  - type: str
+  - type: seq
+    sequence:
+      - type: int
+```
+
 
 ## mapping or map
 
@@ -130,7 +155,7 @@ email: foo@mail.com
 
 ## regex;(regex-pattern) or re;(regex-pattern)
 
-This is only implemented in map where a key inside the mapping keyword can implement this `regex;(regex-pattern)` pattern and all keys will be matched against the pattern. 
+This is only implemented in map where a key inside the mapping keyword can implement this `regex;(regex-pattern)` pattern and all keys will be matched against the pattern.
 
 Please note that the regex should be wrapped with `( )`and they will be removed during runtime.
 
@@ -213,7 +238,7 @@ mapping:
       min: 8
   age:
     type: int
-    range: 
+    range:
       max-ex: 19
       min-ex: 18
 

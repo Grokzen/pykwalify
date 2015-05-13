@@ -1,0 +1,12 @@
+data:
+  - foo: 123
+  - "foobar"
+schema:
+  type: seq
+  matching: "any"
+  seq:
+    - type: str
+    - type: map
+      mapping:
+        foo:
+          type: int

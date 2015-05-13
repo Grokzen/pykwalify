@@ -10,7 +10,7 @@ import re
 
 # pyKwalify imports
 import pykwalify
-from pykwalify.errors import CoreError, SchemaError
+from pykwalify.errors import CoreError, SchemaError, NotMappingError, NotSequenceError
 from pykwalify.rule import Rule
 from pykwalify.types import is_scalar, tt
 
@@ -174,7 +174,7 @@ class Core(object):
         if len(errors) != n:
             return
 
-    def _validate_include(self, value, rule, path, errors=[], done=None):
+    def _validate_include(self, value, rule, path, errors, done=None):
         # TODO: It is difficult to get a good test case to trigger this if case
         if rule._include_name is None:
             errors.append("Include name not valid : {} : {}".format(path, value))
@@ -191,7 +191,7 @@ class Core(object):
 
         self._validate(value, partial_schema_rule, path, errors, done)
 
-    def _validate_sequence(self, value, rule, path, errors=[], done=None):
+    def _validate_sequence(self, value, rule, path, errors, done=None):
         log.debug("Core Validate sequence")
         log.debug(" * Data: {}".format(value))
         log.debug(" * Rule: {}".format(rule))
@@ -200,18 +200,66 @@ class Core(object):
         log.debug(" * Seq: {}".format(rule._sequence))
         log.debug(" * Map: {}".format(rule._mapping))
 
-        if not len(rule._sequence) == 1:
-            raise CoreError("only 1 item allowed in sequence rule : {}".format(path))
+        if len(rule._sequence) <= 0:
+            raise CoreError("Sequence must contains atleast one item : {}".format(path))
 
         if value is None:
             log.debug("Core seq: sequence data is None")
             return
 
-        r = rule._sequence[0]
+        if not isinstance(value, list):
+            raise NotSequenceError("Value: {} is not of a sequence type".format(value))
+
+        ok_values = []
+        error_tracker = []
+
         for i, item in enumerate(value):
-            # Validate recursivley
-            log.debug("Core seq: validating recursivley: {}".format(r))
-            self._validate(item, r, "{}/{}".format(path, i), errors, done)
+            processed = []
+
+            for r in rule._sequence:
+                tmp_errors = []
+
+                try:
+                    self._validate(item, r, "{}/{}".format(path, i), tmp_errors, done)
+                except NotMappingError:
+                    # For example: If one type was specified as 'map' but data
+                    # was 'str' a exception will be thrown but we should ignore it
+                    pass
+                except NotSequenceError:
+                    # For example: If one type was specified as 'seq' but data
+                    # was 'str' a exception will be thrown but we shold ignore it
+                    pass
+
+                processed.append(tmp_errors)
+
+            error_tracker.append(processed)
+            no_errors = [len(errors) == 0 for errors in processed]
+
+            if rule._matching == "any":
+                log.debug("any rule", True in no_errors)
+                ok_values.append(True in no_errors)
+            elif rule._matching == "all":
+                log.debug("all rule", all(no_errors))
+                ok_values.append(all(no_errors))
+            elif rule._matching == "*":
+                log.debug("star rule", "...")
+                ok_values.append(True)
+
+        log.debug("ok", ok_values)
+
+        # All values must pass the validation, otherwise add the parsed errors
+        # to the global error list and throw up some error.
+        if not all(ok_values):
+            # Ignore checking for '*' type because it should allways go through
+            if rule._matching == "any":
+                log.debug("Value: {0} did not validate against one or more sequence schemas".format(value))
+            elif rule._matching == "all":
+                log.debug("Value: {0} did not validate against all possible sequence schemas".format(value))
+
+            for i in range(len(ok_values)):
+                for error in error_tracker[i]:
+                    for e in error:
+                        errors.append(e)
 
         log.debug("Core seq: validation recursivley done...")
 
@@ -269,7 +317,7 @@ class Core(object):
                 else:
                     table[val] = j
 
-    def _validate_mapping(self, value, rule, path, errors=[], done=None):
+    def _validate_mapping(self, value, rule, path, errors, done=None):
         log.debug("Validate mapping")
         log.debug(" + Data: {}".format(value))
         log.debug(" + Rule: {}".format(rule))
@@ -284,6 +332,9 @@ class Core(object):
 
         m = rule._mapping
         log.debug(" + RuleMapping: {}".format(m))
+
+        if not isinstance(value, dict):
+            raise NotMappingError("Value: {} is not of a mapping type".format(value))
 
         if rule._range is not None:
             r = rule._range
@@ -351,7 +402,7 @@ class Core(object):
                 else:
                     print(" * Something is ignored Oo : {}".format(r))
 
-    def _validate_scalar(self, value, rule, path, errors=[], done=None):
+    def _validate_scalar(self, value, rule, path, errors, done=None):
         log.debug("Validate scalar")
         log.debug(" # {}".format(value))
         log.debug(" # {}".format(rule))

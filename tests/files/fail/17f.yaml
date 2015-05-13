@@ -1,0 +1,11 @@
+data:
+  - "foo"
+schema:
+  type: seq
+  matching: "all"
+  seq:
+    - type: str
+    - type: int
+errors:
+  - "Value: foo is not of type 'int' : /0"
+

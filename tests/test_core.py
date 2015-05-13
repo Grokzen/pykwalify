@@ -341,6 +341,14 @@ class TestCore(object):
             "25s.yaml",
             # Test that the different types of timestamps can be validated
             "26s.yaml",
+            # Test that multiple sequence values is supported
+            "27s.yaml",
+            # Test that multiple sequence values with matching 'all' is supported
+            "28s.yaml",
+            # Test that multiple sequence values with matching '*' is supported
+            "29s.yaml",
+            # Test that multiple sequence values with nested data structures work
+            "30s.yaml",
         ]
 
         _fail_tests = [
@@ -374,7 +382,21 @@ class TestCore(object):
             ("14f.yaml", SchemaError),
             # Test timestamps that should throw errors
             ("15f.yaml", SchemaError),
+            # Test multiple sequence values with wrong sub type and 'any' matching rule
+            ("16f.yaml", SchemaError),
+            # Test multiple sequence values with wrong sub type and 'all' matching rule
+            ("17f.yaml", SchemaError),
+            # Test multiple nested sequence values with error in level 2 with 'any' matching rule
+            ("18f.yaml", SchemaError),
         ]
+
+        # Add override magic to make it easier to test a specific file
+        if "S" in os.environ:
+            pass_tests = [os.environ["S"]]
+            _fail_tests = []
+        elif "F" in os.environ:
+            pass_tests = []
+            _fail_tests = [(os.environ["F"], SchemaError)]
 
         for passing_test_file in pass_tests:
             f = self.f(os.path.join("success", passing_test_file))

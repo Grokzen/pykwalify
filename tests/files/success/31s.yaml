@@ -1,0 +1,11 @@
+data:
+  - - 123
+  - "foobar"
+schema:
+  type: seq
+  matching: "any"
+  seq:
+    - type: str
+    - type: seq
+      sequence:
+        - type: int

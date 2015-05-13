@@ -1,0 +1,8 @@
+data:
+  - "foo"
+schema:
+  type: seq
+  matching: "*"
+  seq:
+    - type: bool
+    - type: int

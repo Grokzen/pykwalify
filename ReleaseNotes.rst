@@ -2,6 +2,16 @@
 Release Notes
 =============
 
+1.2.0
+=====
+
+ - Experimental/Unstable new feature: Implemented support for multiple values inside in a sequence.
+   This will allow the defenition of 2 valid types of data inside the sequence or you can require each
+   value to be validated in 2 different ways. This feature is new and experimental and should be used with
+   care. Tests show that it still maintains backward compatibility with all old schemas but it can't be 
+   guarantee. If you find a regression in this release please file a bug report so it can be fixed ASAP.
+
+
 
 1.1.0
 =====
