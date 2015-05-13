@@ -233,7 +233,9 @@ class Core(object):
                 processed.append(tmp_errors)
 
             error_tracker.append(processed)
-            no_errors = [len(errors) == 0 for errors in processed]
+            no_errors = []
+            for _errors in processed:
+                no_errors.append(len(_errors) == 0)
 
             if rule._matching == "any":
                 log.debug("any rule", True in no_errors)
