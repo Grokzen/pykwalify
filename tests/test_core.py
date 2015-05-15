@@ -351,6 +351,8 @@ class TestCore(object):
             "30s.yaml",
             # Test that multiple sequence vlaues with nested lists works
             "31s.yaml",
+            # Test Complex tree with many different structures
+            "32s.yaml",
         ]
 
         _fail_tests = [

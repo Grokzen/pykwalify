@@ -1,0 +1,69 @@
+data:
+  name:
+    source: download
+    build_args:
+      project: foobar
+      repository: barfoo
+      package: nginx
+      arch: x86
+      in_project: true
+    files:
+      - folder: nginx
+        file: nginx-x86
+      - folder: nginx
+        file: nginx-x64
+    root:
+      - Core
+    destination:
+      - Generic
+
+schema:
+  type: map
+  map:
+    regex;(.+):
+      type: map
+      map:
+        source:
+          type: str
+        build_args:
+          type: map
+          map:
+            repo:
+              type: str
+            rev:
+              type: str
+            project:
+              type: str
+            repository:
+              type: str
+            package:
+              type: str
+            arch:
+              type: str
+            timeout:
+              type: int
+            requirements:
+              type: str
+            in_project:
+              type: bool
+            files:
+              type: seq
+              seq:
+                - type: str
+        files:
+          type: seq
+          seq:
+            - type: map
+              mapping:
+                folder:
+                  type: str
+                file:
+                  type: str
+        root:
+          type: seq
+          sequence:
+            - type: str
+        destination:
+          type: seq
+          sequence:
+            - type: str
