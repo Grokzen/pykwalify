@@ -29,7 +29,7 @@ $ python setup.py install
 
 ## Important notes on version schema changes
 
-After the release of `15.01` the version schema was changed back from the <year>.<month> style version schema back to semantic version names. One big problem with this change is that `pypi` can't handle the change back to semantic names very well and because of this i had to remove the old releases from pypi and replace it with a single version `1.0.1`. 
+After the release of `15.01` the version schema was changed back from the <year>.<month> style version schema back to semantic version names. One big problem with this change is that `pypi` can't handle the change back to semantic names very well and because of this i had to remove the old releases from pypi and replace it with a single version `1.0.1`.
 
 No matter what version you was using you should consider upgrade to `1.0.1`. The difference between the affected versions is very small and contains mostly bugfixes and added improvments. (See ReleaseNotes.rst for details)
 
@@ -115,8 +115,9 @@ $ tox
 
 # Documentation
 
-[Implemented validation rules](docs/Validation Rules.md)
-[Upgrade instructions](docs/Upgrade Instructions.md)
+ - [Implemented validation rules](docs/Validation Rules.md)
+ - [Upgrade instructions](docs/Upgrade Instructions.md)
+ - [Release notes](ReleaseNotes.rst)
 
 
 # Licensing
