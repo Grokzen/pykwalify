@@ -325,8 +325,6 @@ class Rule(object):
 
         if self._sequence is None or len(self._sequence) == 0:
             raise RuleError("sequence.noelem : {} : {}".format(self._sequence, path))
-        # if len(self._sequence) > 1:
-        #     raise RuleError("sequence.toomany : {} : {}".format(self._sequence, path))
 
         tmp_seq = []
 
@@ -336,8 +334,6 @@ class Rule(object):
             rule = Rule(None, self)
             rule.init(elem, "{}/sequence/{}".format(path, i))
 
-            # self._sequence = []
-            # self._sequence.append(rule)
             tmp_seq.append(rule)
 
         self._sequence = tmp_seq
