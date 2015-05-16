@@ -7,6 +7,7 @@ data:
       package: nginx
       arch: x86
       in_project: true
+      timeout: 1234
     files:
       - folder: nginx
         file: nginx-x86
@@ -25,6 +26,7 @@ schema:
       map:
         source:
           type: str
+          enum: ['download', 'ftp']
         build_args:
           type: map
           map:
@@ -40,8 +42,12 @@ schema:
               type: str
             arch:
               type: str
+              enum: ['x86', 'x64']
             timeout:
               type: int
+              range:
+                min: 0
+                max: 3600
             requirements:
               type: str
             in_project:
@@ -59,6 +65,7 @@ schema:
                   type: str
                 file:
                   type: str
+                  unique: true
         root:
           type: seq
           sequence:
