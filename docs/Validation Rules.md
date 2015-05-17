@@ -49,7 +49,13 @@ Example:
 type: seq
 sequence:
   - type: str
+
+# Data
+- 'Foobar'
+- 'Barfoo'
 ```
+
+Note: The following feature is considered experimental in release `1.2.0` and above.
 
 Multiple values is allowed in the `sequence` block. It can also be nested to any depth.
 
@@ -60,20 +66,18 @@ A new value has been introduced to the `sequence` block `matching` that can be s
  - `*` this mean that zero to all blocks has to be valid for each value to be valid.
 
 ```yaml
-# Data
-- - 123
-- "foobar"
-```
-
-```yaml
 # Schema
 type: seq
 matching: "any"
-seq:
+sequence:
   - type: str
   - type: seq
     sequence:
       - type: int
+
+# Data
+- - 123
+- "foobar"
 ```
 
 
@@ -89,12 +93,17 @@ type: map
 mapping:
   key_one:
     type: str
+
+# This is also valid
+map:
+  key_one:
+    type: str
 ```
 
 
 ## required or req
 
-Value is required when true (Default is false). This is similar to not-null constraint in RDBMS.
+Value is required when true (Default is false). If the key is not present a validation error will be raised.
 
 Example:
 
@@ -113,7 +122,7 @@ key_one: foobar
 
 ## enum
 
-Value must be one of the specified values.
+Value must be one of the specified values. Currently only exact case matching is implemented. If you need complex validation you should use `pattern` (See next section)
 
 Example:
 
@@ -132,9 +141,7 @@ blood: AB
 
 ## pattern
 
-Specifies regular expression pattern of value. Uses `re.match()` internally.
-
-Pattern works on all scalar types.
+Specifies regular expression pattern of value. Uses `re.match()` internally. Pattern works on all scalar types.
 
 Note: Pattern no longer works in map. Use `regex;(regex-pattern)` as keys in `mapping`
 
@@ -310,9 +317,7 @@ d1: "2015-03-29T18:45:00+00:00"
 
 ## allowempty
 
-NOTE: Experimental feature!
-
-Only applies to map. It enables a dict to have items in it that is not validated. It can be combined with mapping to check for some fixed properties but still validate if any random properties exists. See example testfile 18a, 18b, 19a, 19b.
+Only applies to map. It enables a dict to have items in it that is not validated. It can be combined with mapping to check for some fixed properties but still validate if any random properties exists.
 
 ```yaml
 # Schema
@@ -329,38 +334,6 @@ datasources:
 ```
 
 
-## schema;(schema-name)
-
-See `Partial schemas` section for details.
-
-Names must be globally unique.
-
-Example:
-
-```yaml
-# Schema
-schema;fooone:
-  ...
-
-schema;footwo:
- ...
-```
-
-
-## include
-
-See `Partial schemas` section. Includes is lazy loaded during parsing/validation.
-
-Example:
-
-```yaml
-# Schema
-include: footwo
-
-schema;footwo:
-  type: str
-```
-
 
 # Partial schemas
 
@@ -376,7 +349,7 @@ For example, this schema contains one partial and the regular schema.
 
 ```yaml
 # Schema
-schema;fooone:
+schema;map_str:
   type: map
   mapping:
     foo:
@@ -384,8 +357,49 @@ schema;fooone:
 
 type: seq
 sequence:
-  - include: fooone
+  - include: map_str
 
 # Data
 - foo: opa
+```
+
+
+
+## schema;(schema-name)
+
+See `Partial schemas` section for details.
+
+Names must be globally unique.
+
+Example:
+
+```yaml
+# Schema
+schema;list_str:
+  type: seq
+  sequence:
+    - type: str
+
+schema;list_int:
+ type: seq
+ sequence:
+   - type: int
+```
+
+
+## include
+
+Used in `partial schema` system. Includes is lazy loaded during parsing/validation.
+
+Example:
+
+```yaml
+# Schema file one
+include: list_str
+
+# Schema file two
+schema;list_str:
+  type: seq
+  sequence:
+    - type: str
 ```
