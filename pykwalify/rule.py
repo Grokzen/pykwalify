@@ -48,6 +48,8 @@ class Rule(object):
         self._map_regex_rule = None
         self._regex_mappings = None
         self._include_name = None
+        self._extensions = None
+        self._func = None
 
         # Possible values: [any, all, *]
         self._matching = "any"
@@ -119,6 +121,8 @@ class Rule(object):
             "map": self.init_mapping_value,
             "matching-rule": self.init_matching_rule,
             "matching": self.init_matching,
+            "extensions": self.init_extensions,
+            "func": self.init_func,
         }
 
         for k, v in schema.items():
@@ -131,6 +135,24 @@ class Rule(object):
                 raise RuleError("Unknown key: {} found : {}".format(k, path))
 
         self.check_conflicts(schema, rule, path)
+
+    def init_func(self, v, rule, path):
+        """
+        """
+        if not isinstance(v, str):
+            raise RuleError("value for func keyword must be a string : {} : {}".format(v, path))
+
+        self._func = v
+
+    def init_extensions(self, v, rule, path):
+        """
+        """
+        if not isinstance(v, list):
+            raise RuleError("Extension defenition should be a list : {} : {}".format(v, path))
+
+        # TODO: Add limitation that this keyword can only be used at the top level of the file
+
+        self._extensions = v
 
     def init_matching_rule(self, v, rule, path):
         log.debug("Init matching-rule: {}".format(path))

@@ -3,6 +3,7 @@
 """ pyKwalify - core.py """
 
 # python std lib
+import imp
 import json
 import logging
 import os
@@ -24,16 +25,25 @@ log = logging.getLogger(__name__)
 class Core(object):
     """ Core class of pyKwalify """
 
-    def __init__(self, source_file=None, schema_files=[], source_data=None, schema_data=None):
+    def __init__(self, source_file=None, schema_files=[], source_data=None, schema_data=None, extensions=[]):
+        """
+        :param extensions:
+            List of paths to python files that should be imported and available via 'func' keywork.
+            This list of extensions can be set manually or they should be provided by the `--extension`
+            flag from the cli. This list should not contain files specified by the `extensions` list keyword
+            that can be defined at the top level of the schema.
+        """
         log.debug("source_file: {}".format(source_file))
         log.debug("schema_file: {}".format(schema_files))
         log.debug("source_data: {}".format(source_data))
         log.debug("schema_data: {}".format(schema_data))
+        log.debug("extension files: {}".format(extensions))
 
         self.source = None
         self.schema = None
         self.validation_errors = None
         self.root_rule = None
+        self.extensions = extensions
 
         if source_file is not None:
             if not os.path.exists(source_file):
@@ -98,7 +108,34 @@ class Core(object):
         if self.schema is None:
             raise CoreError("No schema file/data was loaded")
 
-        # Everything now is valid loaded
+        # Merge any extensions defined in the schema with the provided list of extensions from the cli
+        for f in self.schema.get('extensions', []):
+            self.extensions.append(f)
+
+        if not isinstance(self.extensions, list) and all([isinstance(e, str) for e in self.extensions]):
+            raise CoreError("Specified extensions must be a list of file paths")
+
+        self._load_extensions()
+
+    def _load_extensions(self):
+        """
+        Load all extension files into the namespace pykwalify.ext
+        """
+        log.debug("loading all extensions", self.extensions)
+
+        self.loaded_extensions = []
+
+        for f in self.extensions:
+            if not os.path.isabs(f):
+                f = os.path.abspath(f)
+
+            if not os.path.exists(f):
+                raise CoreError("Extension file: {} not found on disk".format(f))
+
+            self.loaded_extensions.append(imp.load_source("", f))
+
+        log.debug(self.loaded_extensions)
+        log.debug([dir(m) for m in self.loaded_extensions])
 
     def validate(self, raise_exception=True):
         log.debug("starting core")
@@ -161,7 +198,6 @@ class Core(object):
             raise CoreError("required.novalue : {}".format(path))
 
         log.debug(" ? ValidateRule: {}".format(rule))
-        n = len(errors)
         if rule._include_name is not None:
             self._validate_include(value, rule, path, errors, done=None)
         elif rule._sequence is not None:
@@ -171,8 +207,37 @@ class Core(object):
         else:
             self._validate_scalar(value, rule, path, errors, done=None)
 
-        if len(errors) != n:
+    def _handle_func(self, value, rule, path, errors, done=None):
+        """
+        Helper function that should check if func is specified for this rule and
+        then handle it for all cases in a generic way.
+        """
+        func = rule._func
+
+        # func keyword is not defined so nothing to do
+        if not func:
             return
+
+        found_method = False
+
+        for extension in self.loaded_extensions:
+            method = getattr(extension, func, None)
+            if method:
+                found_method = True
+
+                # No exception will should be caught. If one is raised it should bubble up all the way.
+                ret = method(value, rule, path)
+
+                # If False or None or some other object that is interpreted as False
+                if not ret:
+                    raise CoreError("Error when running extension function : {}".format(func))
+
+                # Only run the first matched function. Sinc loading order is determined
+                # it should be easy to determine which file is used before others
+                break
+
+        if not found_method:
+            raise CoreError("Did not find method '{}' in any loaded extension file".format(func))
 
     def _validate_include(self, value, rule, path, errors, done=None):
         # TODO: It is difficult to get a good test case to trigger this if case
@@ -209,6 +274,9 @@ class Core(object):
 
         if not isinstance(value, list):
             raise NotSequenceError("Value: {} is not of a sequence type".format(value))
+
+        # Handle 'func' argument on this sequence
+        self._handle_func(value, rule, path, errors, done)
 
         ok_values = []
         error_tracker = []
@@ -340,6 +408,9 @@ class Core(object):
             log.debug(" + No rule to apply, prolly because of allowempty: True")
             return
 
+        # Handle 'func' argument on this mapping
+        self._handle_func(value, rule, path, errors, done)
+
         m = rule._mapping
         log.debug(" + RuleMapping: {}".format(m))
 
@@ -418,6 +489,9 @@ class Core(object):
         log.debug(" # {}".format(rule))
         log.debug(" # {}".format(rule._type))
         log.debug(" # {}".format(path))
+
+        # Handle 'func' argument on this scalar
+        self._handle_func(value, rule, path, errors, done)
 
         if rule._enum is not None:
             if value not in rule._enum:

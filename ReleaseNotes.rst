@@ -10,7 +10,13 @@ Release Notes
    value to be validated in 2 different ways. This feature is new and experimental and should be used with
    care. Tests show that it still maintains backward compatibility with all old schemas but it can't be 
    guarantee. If you find a regression in this release please file a bug report so it can be fixed ASAP.
-
+ - Experimental/Unstable new feature: Added possibility to define python files that can be used to have
+   custom python code/functions that can be called on all types so that custom/extra validation can be done
+   on all data structures.
+ - Add new keyword 'func' that is a string and is used to point to a function loaded via the extension system.
+ - Add new keyword 'extensions' that can only be used on the top level of the schema. It is should be a list
+   with strings of files that should be loaded by the extension system. Paths can be relative or absolute.
+ - New cli option '-e FILE' or '--extension FILE' that can be used to load extension files from cli.
 
 
 1.1.0

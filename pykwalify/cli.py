@@ -25,15 +25,16 @@ def parse_cli():
     #
 
     __docopt__ = """
-usage: pykwalify -d DATAFILE -s SCHEMAFILE ... [-v ...] [-q]
+usage: pykwalify -d FILE -s FILE ... [-e FILE ...] [-v ...] [-q]
 
 optional arguments:
-  -d DATAFILE, --data-file DATAFILE          schema definition file
-  -h, --help                                 show this help message and exit
-  -q, --quiet                                suppress terminal output
-  -s SCHEMAFILE, --schema-file SCHEMAFILE    the file to be tested
-  -v, --verbose                              verbose terminal output (multiple -v increases verbosity)
-  --version                                  display the version number and exit
+  -d FILE, --data-file FILE            schema definition file
+  -e FILE, --extension FILE            file containing python extension
+  -h, --help                           show this help message and exit
+  -q, --quiet                          suppress terminal output
+  -s FILE, --schema-file FILE          the file to be tested
+  -v, --verbose                        verbose terminal output (multiple -v increases verbosity)
+  --version                            display the version number and exit
 """
 
     # Import pykwalify package
@@ -62,7 +63,11 @@ def run(cli_args):
     """
     from .core import Core
 
-    c = Core(source_file=cli_args["--data-file"], schema_files=cli_args["--schema-file"])
+    c = Core(
+        source_file=cli_args["--data-file"],
+        schema_files=cli_args["--schema-file"],
+        extensions=cli_args['--extension'],
+    )
     c.validate()
     return c
 
