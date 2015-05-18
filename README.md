@@ -116,6 +116,7 @@ $ tox
 # Documentation
 
  - [Implemented validation rules](docs/Validation Rules.md)
+ - [Extensions](docs/Extensions.md)
  - [Upgrade instructions](docs/Upgrade Instructions.md)
  - [Release notes](ReleaseNotes.rst)
 
