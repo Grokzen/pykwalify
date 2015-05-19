@@ -17,6 +17,9 @@ Release Notes
  - Add new keyword 'extensions' that can only be used on the top level of the schema. It is should be a list
    with strings of files that should be loaded by the extension system. Paths can be relative or absolute.
  - New cli option '-e FILE' or '--extension FILE' that can be used to load extension files from cli.
+ - Fixed a bug where types did not raise exceptions properly. If schema said it should be a map but data was
+   a sequence, no validation error was raised in earlier versions but now it raises a 'NotSequenceError' or 
+   'NotMappingError'.
 
 
 1.1.0
