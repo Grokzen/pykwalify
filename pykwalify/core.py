@@ -121,7 +121,7 @@ class Core(object):
         """
         Load all extension files into the namespace pykwalify.ext
         """
-        log.debug("loading all extensions", self.extensions)
+        log.debug("loading all extensions : {}".format(self.extensions))
 
         self.loaded_extensions = []
 
