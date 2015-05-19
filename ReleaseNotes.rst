@@ -5,14 +5,15 @@ Release Notes
 1.2.0
 =====
 
- - Experimental/Unstable new feature: Implemented support for multiple values inside in a sequence.
-   This will allow the defenition of 2 valid types of data inside the sequence or you can require each
-   value to be validated in 2 different ways. This feature is new and experimental and should be used with
-   care. Tests show that it still maintains backward compatibility with all old schemas but it can't be 
-   guarantee. If you find a regression in this release please file a bug report so it can be fixed ASAP.
- - Experimental/Unstable new feature: Added possibility to define python files that can be used to have
-   custom python code/functions that can be called on all types so that custom/extra validation can be done
-   on all data structures.
+ - This feature is NEW and EXPERIMENTAL.
+   Implemented support for multiple values inside in a sequence.
+   This will allow the defenition of different types that one sequence can contain. You can either require
+   each value in the sequence to be valid against one to all of the different possibilities.
+   Tests show that it still maintains backward compatibility with all old schemas but it can't be guarantee.
+   If you find a regression in this release please file a bug report so it can be fixed ASAP.
+ - This feature is NEW and EXPERIMENTAL.
+   Added ability to define python files that can be used to have custom python code/functions that can be
+   called on all types so that custom/extra validation can be done on all data structures.
  - Add new keyword 'func' that is a string and is used to point to a function loaded via the extension system.
  - Add new keyword 'extensions' that can only be used on the top level of the schema. It is should be a list
    with strings of files that should be loaded by the extension system. Paths can be relative or absolute.
