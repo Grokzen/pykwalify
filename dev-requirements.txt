@@ -1,9 +1,9 @@
 -r requirements.txt
 
-testfixtures==4.1.1
-pytest==2.6.4
-tox==1.8.1
-coveralls==0.5
-flake8==2.3.0
+testfixtures
+pytest
+tox
+coveralls
+flake8
 ptpdb
 ptpython
