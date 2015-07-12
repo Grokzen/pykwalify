@@ -27,19 +27,6 @@ $ python setup.py install
 ```
 
 
-## Important notes on version schema changes
-
-After the release of `15.01` the version schema was changed back from the <year>.<month> style version schema back to semantic version names. One big problem with this change is that `pypi` can't handle the change back to semantic names very well and because of this i had to remove the old releases from pypi and replace it with a single version `1.0.1`.
-
-No matter what version you was using you should consider upgrade to `1.0.1`. The difference between the affected versions is very small and contains mostly bugfixes and added improvments. (See ReleaseNotes.rst for details)
-
-The old releases can still be obtained from `github.com` and if you rellay need the old version you can add the download url to your `requirements.txt` file.
-
-The download links are
-
- - `15.01` - https://github.com/Grokzen/pykwalify/releases/download/15.01/pykwalify-15.01.tar.gz
- - `14.12` - https://github.com/Grokzen/pykwalify/releases/download/14.12/pykwalify-14.12.tar.gz
- - `14.08` - https://github.com/Grokzen/pykwalify/releases/download/14.08/pykwalify-14.08.tar.gz
 
 # Usage
 
