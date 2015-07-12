@@ -1,6 +1,6 @@
 # pyKwalify
 
-[![Build Status](https://travis-ci.org/Grokzen/pykwalify.svg?branch=master)](https://travis-ci.org/Grokzen/pykwalify) [![Coverage Status](https://coveralls.io/repos/Grokzen/pykwalify/badge.png?branch=master)](https://coveralls.io/r/Grokzen/pykwalify) [![Latest Version](https://pypip.in/version/pykwalify/badge.svg)](https://pypi.python.org/pypi/pykwalify/) [![Downloads](https://pypip.in/download/pykwalify/badge.svg)](https://pypi.python.org/pypi/pykwalify/) [![Supported Python versions](https://pypip.in/py_versions/pykwalify/badge.svg)](https://pypi.python.org/pypi/pykwalify/) [![Development Status](https://pypip.in/status/pykwalify/badge.svg)](https://pypi.python.org/pypi/pykwalify/) [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Grokzen/pykwalify?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://travis-ci.org/Grokzen/pykwalify.svg?branch=master)](https://travis-ci.org/Grokzen/pykwalify) [![Coverage Status](https://coveralls.io/repos/Grokzen/pykwalify/badge.png?branch=master)](https://coveralls.io/r/Grokzen/pykwalify)  [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Grokzen/pykwalify?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
 YAML/JSON validation library
