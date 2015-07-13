@@ -10,4 +10,4 @@ schema:
   sequence:
     - type: str
 errors:
-  - "seq.range.toolarge : 2 < 3 : "
+  - "Type 'seq' has size of '3', greater than max limit '2'. Path: ''"

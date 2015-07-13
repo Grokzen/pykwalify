@@ -33,5 +33,5 @@ schema:
             - type: str
               unique: True
 errors:
-  - 'value.notunique :: value: bar : /2/name : /1/name'
-  - 'value.notunique :: value: foo : /0/groups/3 : /0/groups/0'
+  - "Value 'bar' is not unique. Previous path: '/1/name'. Path: '/2/name'"
+  - "Value 'foo' is not unique. Previous path: '/0/groups/0'. Path: '/0/groups/3'"

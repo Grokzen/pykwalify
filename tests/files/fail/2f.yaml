@@ -6,5 +6,5 @@ schema:
   sequence:
     - type: str
 errors:
-  - "Value: True is not of type 'str' : /0"
-  - "Value: False is not of type 'str' : /1"
+  - "Value 'True' is not of type 'str'. Path: '/0'"
+  - "Value 'False' is not of type 'str'. Path: '/1'"

@@ -8,4 +8,4 @@ schema:
   sequence:
     - type: text
 errors:
-  - "Value: True is not of type 'text' : /3"
+  - "Value 'True' is not of type 'text'. Path: '/3'"

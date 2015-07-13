@@ -22,4 +22,4 @@ schema:
               type: int
               required: True
 errors:
-  - "Value: None is not of type 'str' : /streams/0/name"
+  - "Value 'None' is not of type 'str'. Path: '/streams/0/name'"

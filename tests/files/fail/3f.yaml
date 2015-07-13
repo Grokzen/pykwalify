@@ -7,4 +7,4 @@ schema:
   sequence:
     - type: bool
 errors:
-  - "Value: 1 is not of type 'bool' : /2"
+  - "Value '1' is not of type 'bool'. Path: '/2'"

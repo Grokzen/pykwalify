@@ -172,7 +172,9 @@ class TestCore(object):
         c = Core(source_file=self.f("cli", "2a.yaml"), schema_files=[self.f("cli", "2b.yaml")])
         c.validate(raise_exception=False)
 
-        assert c.validation_errors == ["Value: 1 is not of type 'str' : /0", "Value: 2 is not of type 'str' : /1", "Value: 3 is not of type 'str' : /2"]
+        assert c.validation_errors == [
+            "Value '1' is not of type 'str'. Path: '/0'", "Value '2' is not of type 'str'. Path: '/1'", "Value '3' is not of type 'str'. Path: '/2'"
+        ]
 
         # TODO: Fix this issue...
         # assert ('pykwalify.core', 'ERROR', 'Errors found but will not raise exception...') in l.actual()
@@ -252,7 +254,7 @@ class TestCore(object):
                 ],
                 self.f("partial_schemas", "1f-data.yaml"),
                 SchemaError,
-                ['No partial schema found for name : fooonez : Existing partial schemas: fooone, foothree, footwo']
+                ["Cannot find partial schema with name 'fooonez'. Existing partial schemas: 'fooone, foothree, footwo'. Path: '/0'"]
             )
         ]
 

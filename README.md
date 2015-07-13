@@ -27,7 +27,6 @@ $ python setup.py install
 ```
 
 
-
 # Usage
 
 Create a data file. Json and yaml formats are both supported.

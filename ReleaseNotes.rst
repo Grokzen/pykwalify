@@ -2,6 +2,16 @@
 Release Notes
 =============
 
+1.3.0
+=====
+
+ - Rewrote most of the error messages to be more human readable. See `docs/Upgrade Instructions.md`
+   for more details.
+ - It is now possible to use the exceptions that was raised for each validation error. It can be
+   found in the variable `c.validation_errors_exceptions`. They contain more detailed information
+   about the error.
+
+
 1.2.0
 =====
 

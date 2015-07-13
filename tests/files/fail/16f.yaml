@@ -8,6 +8,6 @@ schema:
     - type: float
     - type: int
 errors:
-  - "Value: foo is not of type 'bool' : /0"
-  - "Value: foo is not of type 'float' : /0"
-  - "Value: foo is not of type 'int' : /0"
+  - "Value 'foo' is not of type 'bool'. Path: '/0'"
+  - "Value 'foo' is not of type 'float'. Path: '/0'"
+  - "Value 'foo' is not of type 'int'. Path: '/0'"

@@ -14,4 +14,4 @@ schema:
           type: int
           required: True
 errors:
-  - "map.range.toosmall : 2 > 1 : /streams"
+  - "Type 'map' has size of '1', less than min limit '2'. Path: '/streams'"

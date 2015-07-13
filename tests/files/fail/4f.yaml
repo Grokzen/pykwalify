@@ -10,4 +10,4 @@ schema:
         max: 5
         min: 1
 errors:
- - 'scalar.range.toolarge : 5 < 6 : /2'
+ - "Type 'scalar' has size of '6', greater than max limit '5'. Path: '/2'"

@@ -137,6 +137,21 @@ class UnknownError(PyKwalifyException):
 class SchemaError(PyKwalifyException):
     """
     """
+    class SchemaErrorEntry(object):
+        """
+        """
+        def __init__(self, msg, path, value, **kwargs):
+            """
+            """
+            self.msg = msg
+            self.path = path
+            self.value = value
+            for key, value in kwargs.items():
+                self.__setattr__(key, value)
+
+        def __repr__(self):
+            return self.msg.format(**self.__dict__)
+
     def __init__(self, *args, **kwargs):
         """
         """

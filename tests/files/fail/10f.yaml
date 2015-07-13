@@ -7,4 +7,4 @@ schema:
   sequence:
     - type: number
 errors:
-  - "Value: abc is not of type 'number' : /2"
+  - "Value 'abc' is not of type 'number'. Path: '/2'"

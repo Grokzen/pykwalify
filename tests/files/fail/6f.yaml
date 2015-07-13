@@ -16,6 +16,6 @@ schema:
         email:
           type: str
 errors:
-  - 'required.nokey : name : /1'
-  - 'key.undefined : naem : /1'
-  - 'key.undefined : mail : /2'
+  - "Cannot find required key 'name'. Path: '/1'"
+  - "Key 'naem' was not defined. Path: '/1'"
+  - "Key 'mail' was not defined. Path: '/2'"

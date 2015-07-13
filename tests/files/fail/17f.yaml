@@ -7,5 +7,5 @@ schema:
     - type: str
     - type: int
 errors:
-  - "Value: foo is not of type 'int' : /0"
+  - "Value 'foo' is not of type 'int'. Path: '/0'"
 

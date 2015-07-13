@@ -52,13 +52,13 @@ schema:
         deleted:
           type: bool
 errors:
-  - "Value: twenty is not of type 'int' : /0/age"
-  - "pattern.unmatch : .+@.+ --> foo(at)mail.com : /0/email"
-  - "enum.notexists : a : /0/blood"
-  - "required.nokey : name : /1"
-  - "key.undefined : given-name : /1"
-  - "key.undefined : family-name : /1"
-  - "scalar.range.toosmall-ex : 18 >= 15 : /1/age"
-  - "scalar.range.toosmall-ex : 18 >= 6 : /0/age"
-  - "scalar.range.toosmall : 8 > 6 : /0/password"
-  - "scalar.range.tolarge-ex : 19 <= 20 : /2/age"
+  - "Value 'twenty' is not of type 'int'. Path: '/0/age'"
+  - "Value 'foo(at)mail.com' does not match pattern '.+@.+'. Path: '/0/email'"
+  - "Enum 'a' does not exist. Path: '/0/blood'"
+  - "Cannot find required key 'name'. Path: '/1'"
+  - "Key 'given-name' was not defined. Path: '/1'"
+  - "Key 'family-name' was not defined. Path: '/1'"
+  - "Type 'scalar' has size of '15', less than or equals to min limit(exclusive) '18'. Path: '/1/age'"
+  - "Type 'scalar' has size of '6', less than or equals to min limit(exclusive) '18'. Path: '/0/age'"
+  - "Type 'scalar' has size of '6', less than min limit '8'. Path: '/0/password'"
+  - "Type 'scalar' has size of '20', greater than or equals to max limit(exclusive) '19'. Path: '/2/age'"

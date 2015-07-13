@@ -11,5 +11,5 @@ schema:
       sequence:
         - type: str
 errors:
-  - "Value: 123 is not of type 'str' : /0/0"
-  - "Value: [123] is not of type 'str' : /0"
+  - "Value '123' is not of type 'str'. Path: '/0/0'"
+  - "Value '[123]' is not of type 'str'. Path: '/0'"

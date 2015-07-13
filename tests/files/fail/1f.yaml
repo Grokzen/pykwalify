@@ -7,6 +7,6 @@ schema:
   sequence:
     - type: str
 errors:
-  - "Value: 1 is not of type 'str' : /0"
-  - "Value: 2 is not of type 'str' : /1"
-  - "Value: 3 is not of type 'str' : /2"
+  - "Value '1' is not of type 'str'. Path: '/0'"
+  - "Value '2' is not of type 'str'. Path: '/1'"
+  - "Value '3' is not of type 'str'. Path: '/2'"

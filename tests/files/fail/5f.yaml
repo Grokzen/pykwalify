@@ -17,5 +17,5 @@ schema:
     birth:
       type: str
 errors:
-  - "Value: twnty is not of type 'int' : /age"
-  - "pattern.unmatch : .+@.+ --> foo(at)mail.com : /email"
+  - "Value 'twnty' is not of type 'int'. Path: '/age'"
+  - "Value 'foo(at)mail.com' does not match pattern '.+@.+'. Path: '/email'"

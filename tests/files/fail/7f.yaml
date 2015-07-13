@@ -30,5 +30,5 @@ schema:
             email:
               type: str
 errors:
- - "Value: A101 is not of type 'int' : /employees/0/code"
- - 'key.undefined : mail : /employees/1'
+ - "Value 'A101' is not of type 'int'. Path: '/employees/0/code'"
+ - "Key 'mail' was not defined. Path: '/employees/1'"
