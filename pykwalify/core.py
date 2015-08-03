@@ -558,8 +558,6 @@ class Core(object):
                     msg=u"Value '{value}' does not match pattern '{pattern}'. Path: '{path}'",
                     path=path,
                     value=nativestr(value),
-                    # value=value.encode('unicode_escape'),
-                    # value=value,
                     pattern=rule._pattern))
 
         if rule._range is not None:
