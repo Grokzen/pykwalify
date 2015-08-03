@@ -45,16 +45,18 @@ class PyKwalifyException(RuntimeError):
     """
     """
 
-    def __init__(self, msg="", retcode=retnames['unknownerror']):
+    def __init__(self, msg=None, error_key=None, retcode=None, path=None):
         """
-
         Arguments:
         - `msg`: a string
+        - `error_key`: a unique string that makes it easier to identify what error it is
         - `retcode`: an integer, defined in PyKwalify.errors.retcodes
         """
-        self.msg = msg
-        self.retcode = retcode
+        self.msg = msg or ""
+        self.retcode = retcode or retnames['unknownerror']
         self.retname = retcodes[retcode]
+        self.error_key = error_key
+        self.path = path or "/"
 
     def __str__(self):
         """
@@ -77,6 +79,8 @@ class PyKwalifyException(RuntimeError):
             kwargs.append(self.msg)
         if kwargs:
             kwargs.insert(0, '')
+        if self.path:
+            kwargs.append("Path: '{}'".format(self.path))
         return "<{}{}>".format(self.__class__.__name__, ': '.join(kwargs))
 
     def __repr__(self):
@@ -134,7 +138,10 @@ class UnknownError(PyKwalifyException):
         """
         """
         assert 'retcode' not in kwargs, "keyword retcode implicitly defined"
-        super(self.__class__, self).__init__(retcode=retnames['unknownerror'], *args, **kwargs)
+        super(self.__class__, self).__init__(
+            retcode=retnames['unknownerror'],
+            *args, **kwargs
+        )
 
 
 class SchemaError(PyKwalifyException):
@@ -159,7 +166,10 @@ class SchemaError(PyKwalifyException):
         """
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
-        super(self.__class__, self).__init__(retcode=retnames["schemaerror"], *args, **kwargs)
+        super(self.__class__, self).__init__(
+            retcode=retnames["schemaerror"],
+            *args, **kwargs
+        )
 
 
 class CoreError(PyKwalifyException):
@@ -169,7 +179,10 @@ class CoreError(PyKwalifyException):
         """
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
-        super(self.__class__, self).__init__(retcode=retnames["coreerror"], *args, **kwargs)
+        super(self.__class__, self).__init__(
+            retcode=retnames["coreerror"],
+            *args, **kwargs
+        )
 
 
 class NotMappingError(PyKwalifyException):
@@ -179,7 +192,10 @@ class NotMappingError(PyKwalifyException):
         """
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
-        super(self.__class__, self).__init__(retcode=retnames['notmaperror'], *args, **kwargs)
+        super(self.__class__, self).__init__(
+            retcode=retnames['notmaperror'],
+            *args, **kwargs
+        )
 
 
 class NotSequenceError(PyKwalifyException):
@@ -189,7 +205,10 @@ class NotSequenceError(PyKwalifyException):
         """
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
-        super(self.__class__, self).__init__(retcode=retnames['notsequenceerror'], *args, **kwargs)
+        super(self.__class__, self).__init__(
+            retcode=retnames['notsequenceerror'],
+            *args, **kwargs
+        )
 
 
 class RuleError(PyKwalifyException):
@@ -199,7 +218,10 @@ class RuleError(PyKwalifyException):
         """
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
-        super(self.__class__, self).__init__(retcode=retnames["ruleerror"], *args, **kwargs)
+        super(self.__class__, self).__init__(
+            retcode=retnames["ruleerror"],
+            *args, **kwargs
+        )
 
 
 class SchemaConflict(PyKwalifyException):
@@ -209,4 +231,7 @@ class SchemaConflict(PyKwalifyException):
         """
         """
         assert "retcode" not in kwargs, "keyword retcode implicitly defined"
-        super(self.__class__, self).__init__(retcode=retnames["schemaconflict"], *args, **kwargs)
+        super(self.__class__, self).__init__(
+            retcode=retnames["schemaconflict"],
+            *args, **kwargs
+        )

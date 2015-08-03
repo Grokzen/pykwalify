@@ -19,7 +19,7 @@ class TestRule(unittest.TestCase):
     def setUp(self):
         pykwalify.partial_schemas = {}
 
-    def testRuleClass(self):
+    def test_rule_class(self):
         # this tests seq type with a internal type of str
         r = Rule(schema={"type": "seq", "sequence": [{"type": "str"}]})
         assert r._type is not None, "rule not contain type var"
@@ -28,12 +28,16 @@ class TestRule(unittest.TestCase):
         assert isinstance(r._sequence, list), "rule is not a list"
 
         # this tests that the type key must be a string
-        with pytest.raises(RuleError):
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": 1}, parent=None)
+        assert str(r.value) == "<RuleError: error code 4: Key 'type' in schema rule is not a string type: Path: '/'>"
+        assert r.value.error_key == 'type.not_string'
 
         # this tests a invalid regexp pattern
-        with pytest.raises(RuleError):
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "str", "pattern": "/@/\\"})
+        assert str(r.value) == "<RuleError: error code 4: Syntax error when compiling regex pattern: None: Path: '/'>"
+        assert r.value.error_key == 'pattern.syntax_error'
 
         # this tests the various valid enum types
         Rule(schema={"type": "int", "enum": [1, 2, 3]})
@@ -44,93 +48,127 @@ class TestRule(unittest.TestCase):
         assert len(r._enum) == 3, "invalid length of enum entries"
 
         # this tests the missmatch between the type and the data inside a enum
-        with pytest.raises(RuleError):
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "str", "enum": [1, 2, 3]})
+        assert str(r.value).startswith("<RuleError: error code 4: Item: '1' in enum is not of correct class type:")
+        assert r.value.error_key == 'enum.type.unmatch'
 
         # this test the NYI exception for the assert key
-        with pytest.raises(RuleError):
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "seq", "sequence": [{"type": "str", "assert": "foobar"}]})
+        assert str(r.value) == "<RuleError: error code 4: Keyword assert is not yet implemented: Path: '/sequence/0'>"
+        assert r.value.error_key == 'assert.NotYetImplemented'
 
         r = Rule(schema={"type": "int", "range": {"max": 10, "min": 1}})
         self.assertTrue(r._range is not None, msg="range var not set proper")
         self.assertTrue(isinstance(r._range, dict), msg="range var is not of dict type")
 
         # this tests that the range key must be a dict
-        with pytest.raises(RuleError):
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "int", "range": []})
+        assert str(r.value) == "<RuleError: error code 4: Range value is not a dict type: '[]': Path: '/'>"
+        assert r.value.error_key == 'range.not_map'
 
-        with pytest.raises(RuleError):
-            Rule(schema={"type": "str", "range": {"max": "z", "min": "a"}})
+        with pytest.raises(RuleError) as r:
+            Rule(schema={"type": "str", "range": {"max": "z"}})
+        assert str(r.value) == "<RuleError: error code 4: Value: 'z' for 'max' keyword is not a integer: Path: '/'>"
+        assert r.value.error_key == 'range.max.not_int'
 
         # this tests that min is bigger then max that should not be possible
-        with pytest.raises(RuleError):
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "int", "range": {"max": 10, "min": 11}})
+        assert str(r.value) == "<RuleError: error code 4: Value for 'max' can't be less then value for 'min'. 10 < 11: Path: '/'>"
+        assert r.value.error_key == 'range.max_lt_min'
 
         # test that min-ex is bigger then max-ex, that should not be possible
-        with pytest.raises(RuleError):
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "int", "range": {"max-ex": 10, "min-ex": 11}})
+        assert str(r.value) == "<RuleError: error code 4: Value for 'max-ex' can't be less then value for 'min-ex'. 10 <= 11: Path: '/'>"
+        assert r.value.error_key == 'range.max-ex_le_min-ex'
 
         # this tests that this cannot be used in the root level
-        with pytest.raises(RuleError):
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "str", "unique": True})
+        assert str(r.value) == "<RuleError: error code 4: Keyword 'unique' can't be on root level of schema: Path: '/'>"
+        assert r.value.error_key == 'unique.not_on_root_level'
 
         # this tests that unique cannot be used at root level
-        with pytest.raises(RuleError):
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "seq", "unique": True})
+        assert str(r.value) == "<RuleError: error code 4: Type of the value: 'seq' for 'unique' keyword is not a scalar type: Path: '/'>"
+        assert r.value.error_key == 'unique.not_scalar'
 
         # this tests map/dict but with no elements
-        with pytest.raises(RuleError):
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "map", "mapping": {}})
+        assert str(r.value) == "<RuleError: error code 4: Mapping do not contain any elements: Path: '/'>"
+        assert r.value.error_key == 'mapping.no_elements'
 
         # This will test that a invalid regex will throw error when parsing rules
-        with pytest.raises(RuleError):
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "map", "matching-rule": "any", "mapping": {"regex;(+": {"type": "seq", "sequence": [{"type": "str"}]}}})
+        assert str(r.value) == "<RuleError: error code 4: Unable to compile regex '(+': Path: '/'>"
+        assert r.value.error_key == 'mapping.regex.compile_error'
 
         # Test that pattern keyword is not allowed when using a map
-        with self.assertRaisesRegexp(RuleError, ".+map\.pattern.+"):
+        # with self.assertRaisesRegexp(RuleError, ".+map\.pattern.+"):
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "map", "pattern": "^[a-z]+$", "allowempty": True, "mapping": {"name": {"type": "str"}}})
+        assert str(r.value) == "<RuleError: error code 4: Keyword pattern is not allowed inside map: Path: '/'>"
+        assert r.value.error_key == 'pattern.not_allowed_in_map'
 
         # Test that when only having a schema; rule it should throw error
-        with pytest.raises(RuleError):
+        with pytest.raises(RuleError) as r:
             Rule(schema={"schema;fooone": {"type": "map", "mapping": {"foo": {"type": "str"}}}})
+        assert str(r.value) == "<RuleError: error code 4: Key 'type' not found in schema rule: Path: '/'>"
+        assert r.value.error_key == 'type.missing'
 
         # Test that when using both schema; and include tag that it throw an error because schema; tags should be parsed via Core()
-        with pytest.raises(RuleError):
+        with pytest.raises(RuleError) as r:
             Rule(schema={"schema;str": {"type": "map", "mapping": {"foo": {"type": "str"}}}, "type": "map", "mapping": {"foo": {"include": "str"}}})
+        assert str(r.value) == "<RuleError: error code 4: Schema is only allowed on top level of schema file: Path: '/'>"
+        assert r.value.error_key == 'schema.not.toplevel'
 
         # Test that exception is raised when a invalid matching rule is used
-        with pytest.raises(RuleError) as ex:
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "map", "matching-rule": "foobar", "mapping": {"regex;.+": {"type": "seq", "sequence": [{"type": "str"}]}}})
-        assert ex.value.msg.startswith("Specefied rule in key : foobar is not part of allowed rule set")
+        assert str(r.value) == "<RuleError: error code 4: Specified rule in key: foobar is not part of allowed rule set : ['any']: Path: '/'>"
+        assert r.value.error_key == 'matching_rule.not_allowed'
 
         # Test that providing an unknown key raises exception
-        with pytest.raises(RuleError) as ex:
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "str", "foobar": True})
-        assert ex.value.msg.startswith("Unknown key: foobar found")
+        assert str(r.value) == "<RuleError: error code 4: Unknown key: foobar found: Path: '/'>"
+        assert r.value.error_key == 'key.unknown'
 
         # Test that type key must be string otherwise exception is raised
-        with pytest.raises(RuleError) as ex:
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": 1})
-        assert ex.value.msg.startswith("key 'type' in schema rule is not a string type")
+        assert str(r.value) == "<RuleError: error code 4: Key 'type' in schema rule is not a string type: Path: '/'>"
+        assert r.value.error_key == 'type.not_string'
 
         # Test that required value must be bool otherwise exception is raised
-        with pytest.raises(RuleError) as ex:
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "str", "required": "foobar"})
-        assert ex.value.msg.startswith("required.notbool : foobar")
+        assert str(r.value) == "<RuleError: error code 4: Value: 'foobar' for required keyword must be a boolean: Path: '/'>"
+        assert r.value.error_key == 'required.not_bool'
 
         # Test that pattern value must be string otherwise exception is raised
-        with pytest.raises(RuleError) as ex:
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "str", "pattern": 1})
-        assert ex.value.msg.startswith("pattern.notstr : 1 :")
+        assert str(r.value) == "<RuleError: error code 4: Value of pattern keyword: '1' is not a string: Path: '/'>"
+        assert r.value.error_key == 'pattern.not_string'
 
-        with pytest.raises(RuleError) as ex:
+        with pytest.raises(RuleError) as r:
             Rule(schema={"type": "str", "enum": True})
-        assert ex.value.msg.startswith("enum.notseq")
+        assert str(r.value) == "<RuleError: error code 4: Enum is not a sequence: Path: '/'>"
+        assert r.value.error_key == 'enum.not_seq'
 
         # Test that 'map' and 'mapping' can't be at the same level
-        with pytest.raises(RuleError) as ex:
+        with pytest.raises(RuleError) as r:
             Rule(schema={"map": {"stream": {"type": "any"}}, "mapping": {"seams": {"type": "any"}}})
-        assert ex.value.msg.startswith("mapping.multiple-use")
+        assert str(r.value) == "<RuleError: error code 4: Keywords 'map' and 'mapping' can't be used on the same level: Path: '/'>"
+        assert r.value.error_key == 'mapping.duplicate_keywords'
 
     def test_matching_rule(self):
         pass

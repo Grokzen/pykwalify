@@ -7,6 +7,9 @@ Release Notes
 
 - Dropped support for python 3.2 becuase of unicode literals do not exists in python 3.2.
 - Fixed logging & raised exceptions when using unicode characters inside schemas/data/filenames.
+- Reworked all RuleError exceptions to now have better exception messages.
+- RuleError exceptions now have a unique 'error_key' that can make it easier to identify what error it is.
+- Paths for RuleErrors have been moved inside the exception as a variable.
 
 
 1.3.0
