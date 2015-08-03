@@ -590,13 +590,21 @@ class Core(object):
             # parse("") will give a valid date but it should not be
             # considered a valid timestamp
             if v == "":
-                errors.append(u"timestamp.empty : {} : {}".format(nativestr(value), path))
+                errors.append(SchemaError.SchemaErrorEntry(
+                    msg=u"Timestamp value is empty. Path: '{path}'",
+                    path=path,
+                    value=nativestr(value),
+                    timestamp=nativestr(value)))
             else:
                 try:
                     parse(value)
                     # If it can be parsed then it is valid
                 except Exception:
-                    errors.append(u"timestamp.invalid : {} : {}".format(nativestr(value), path))
+                    errors.append(SchemaError.SchemaErrorEntry(
+                        msg=u"Timestamp: '{timestamp}'' is invalid. Path: '{path}'",
+                        path=path,
+                        value=nativestr(value),
+                        timestamp=nativestr(value)))
 
     def _validate_range(self, max_, min_, max_ex, min_ex, errors, value, path, prefix):
         """

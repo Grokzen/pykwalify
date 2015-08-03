@@ -9,5 +9,5 @@ schema:
     d2:
       type: timestamp
 errors:
-  - 'timestamp.empty :  : /d1'
-  - 'timestamp.invalid : 1427650980 : /d2'
+  - "Timestamp value is empty. Path: '/d1'"
+  - "Timestamp: '1427650980'' is invalid. Path: '/d2'"
