@@ -2,6 +2,9 @@
 
 """ pyKwalify - errors.py """
 
+# python stdlib
+from pykwalify.compat import basestring
+
 retcodes = {
     # PyKwalifyExit
     0: 'noerror',
@@ -91,7 +94,7 @@ class PyKwalifyException(RuntimeError):
             return self._msg
 
         def fset(self, value):
-            assert isinstance(value, str), "argument is not string"
+            assert isinstance(value, basestring), "argument is not string"
             self._msg = value
 
         return locals()

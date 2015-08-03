@@ -73,7 +73,6 @@ If validation fails then exception will be raised.
 ## Supported python version
 
  - Python 2.7
- - Python 3.2
  - Python 3.3
  - Python 3.4
 

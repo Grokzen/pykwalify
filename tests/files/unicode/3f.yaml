@@ -1,0 +1,10 @@
+schema:
+  type: seq
+  sequence:
+    - type: int
+data:
+  - foobar
+  - åäö
+errors:
+  - "Value 'foobar' is not of type 'int'. Path: '/0'"
+  - "Value 'åäö' is not of type 'int'. Path: '/1'"

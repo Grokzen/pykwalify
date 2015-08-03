@@ -1,0 +1,10 @@
+schema:
+  type: map
+  mapping:
+    msg:
+      type: str
+    Alô:
+      type: str
+data:
+  msg: "Alô do Brasil!!"
+  Alô: "Brasil!!"

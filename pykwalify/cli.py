@@ -49,8 +49,8 @@ optional arguments:
     # 2. validate arguments only, dont go into other code/logic
     #
 
-    log.debug("Setting verbose level: {}".format(args["--verbose"]))
-    log.debug("Arguments from CLI: {}".format(args))
+    log.debug("Setting verbose level: {0}".format(args["--verbose"]))
+    log.debug("Arguments from CLI: {0}".format(args))
 
     return args
 
@@ -79,6 +79,6 @@ def cli_entrypoint():
     """
     # Check minimum version of Python
     if sys.version_info < (2, 7, 0):
-        sys.stderr.write("WARNING: pykwalify: It is recommended to run pykwalify on python version 2.7.x or later...\n\n")
+        sys.stderr.write(u"WARNING: pykwalify: It is recommended to run pykwalify on python version 2.7.x or later...\n\n")
 
     run(parse_cli())

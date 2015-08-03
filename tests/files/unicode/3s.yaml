@@ -1,0 +1,7 @@
+schema:
+  type: seq
+  sequence:
+    - type: str
+data:
+  - foobar
+  - åäö

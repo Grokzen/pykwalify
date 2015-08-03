@@ -2,6 +2,13 @@
 Release Notes
 =============
 
+1.4.0
+=====
+
+ - Dropped support for python 3.2 becuase of unicode literals do not exists in python 3.2.
+ - Fixed logging & raised exceptions when using unicode characters inside schemas/data/filenames.
+
+
 1.3.0
 =====
 

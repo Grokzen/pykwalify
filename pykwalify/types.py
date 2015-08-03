@@ -2,8 +2,9 @@
 
 """ pyKwalify - types.py """
 
-# python std lib
+# python stdlib
 from datetime import datetime
+from pykwalify.compat import basestring
 
 DEFAULT_TYPE = "str"
 
@@ -59,7 +60,7 @@ def is_correct_type(obj, type):
 
 
 def is_string(obj):
-    return isinstance(obj, str)
+    return isinstance(obj, basestring)
 
 
 def is_int(obj):
@@ -87,7 +88,7 @@ def is_any(obj):
 
 
 def is_enum(obj):
-    return isinstance(obj, str)
+    return isinstance(obj, basestring)
 
 
 def is_none(obj):
@@ -107,7 +108,7 @@ def is_timestamp(obj):
     Yaml either have automatically converted it to a datetime object
     or it is a string that will be validated later.
     """
-    return isinstance(obj, datetime) or isinstance(obj, str)
+    return isinstance(obj, datetime) or isinstance(obj, basestring)
 
 
 tt = {
