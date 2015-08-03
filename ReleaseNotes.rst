@@ -5,39 +5,39 @@ Release Notes
 1.4.0
 =====
 
- - Dropped support for python 3.2 becuase of unicode literals do not exists in python 3.2.
- - Fixed logging & raised exceptions when using unicode characters inside schemas/data/filenames.
+- Dropped support for python 3.2 becuase of unicode literals do not exists in python 3.2.
+- Fixed logging & raised exceptions when using unicode characters inside schemas/data/filenames.
 
 
 1.3.0
 =====
 
- - Rewrote most of the error messages to be more human readable. See `docs/Upgrade Instructions.md`
-   for more details.
- - It is now possible to use the exceptions that was raised for each validation error. It can be
-   found in the variable `c.validation_errors_exceptions`. They contain more detailed information
-   about the error.
+- Rewrote most of the error messages to be more human readable. See `docs/Upgrade Instructions.md`
+  for more details.
+- It is now possible to use the exceptions that was raised for each validation error. It can be
+  found in the variable `c.validation_errors_exceptions`. They contain more detailed information
+  about the error.
 
 
 1.2.0
 =====
 
- - This feature is NEW and EXPERIMENTAL.
-   Implemented support for multiple values inside in a sequence.
-   This will allow the defenition of different types that one sequence can contain. You can either require
-   each value in the sequence to be valid against one to all of the different possibilities.
-   Tests show that it still maintains backward compatibility with all old schemas but it can't be guarantee.
-   If you find a regression in this release please file a bug report so it can be fixed ASAP.
- - This feature is NEW and EXPERIMENTAL.
-   Added ability to define python files that can be used to have custom python code/functions that can be
-   called on all types so that custom/extra validation can be done on all data structures.
- - Add new keyword 'func' that is a string and is used to point to a function loaded via the extension system.
- - Add new keyword 'extensions' that can only be used on the top level of the schema. It is should be a list
-   with strings of files that should be loaded by the extension system. Paths can be relative or absolute.
- - New cli option '-e FILE' or '--extension FILE' that can be used to load extension files from cli.
- - Fixed a bug where types did not raise exceptions properly. If schema said it should be a map but data was
-   a sequence, no validation error was raised in earlier versions but now it raises a 'NotSequenceError' or 
-   'NotMappingError'.
+- This feature is NEW and EXPERIMENTAL.
+  Implemented support for multiple values inside in a sequence.
+  This will allow the defenition of different types that one sequence can contain. You can either require
+  each value in the sequence to be valid against one to all of the different possibilities.
+  Tests show that it still maintains backward compatibility with all old schemas but it can't be guarantee.
+  If you find a regression in this release please file a bug report so it can be fixed ASAP.
+- This feature is NEW and EXPERIMENTAL.
+  Added ability to define python files that can be used to have custom python code/functions that can be
+  called on all types so that custom/extra validation can be done on all data structures.
+- Add new keyword 'func' that is a string and is used to point to a function loaded via the extension system.
+- Add new keyword 'extensions' that can only be used on the top level of the schema. It is should be a list
+  with strings of files that should be loaded by the extension system. Paths can be relative or absolute.
+- New cli option '-e FILE' or '--extension FILE' that can be used to load extension files from cli.
+- Fixed a bug where types did not raise exceptions properly. If schema said it should be a map but data was
+  a sequence, no validation error was raised in earlier versions but now it raises a 'NotSequenceError' or 
+  'NotMappingError'.
 
 
 1.1.0
