@@ -628,25 +628,72 @@ class Rule(object):
 
         if self._type == "seq":
             if all([sa not in schema for sa in sequence_aliases]):
-                raise SchemaConflict(u"seq.nosequence")
+                raise SchemaConflict(
+                    msg="Type is sequence but no sequence alias found on same level",
+                    error_key=u"seq.no_sequence",
+                    path=path,
+                )
+
             if self._enum is not None:
-                raise SchemaConflict(u"seq.conflict :: enum: {}".format(path))
+                raise SchemaConflict(
+                    msg="Sequence and enum can't be on the same level in the schema",
+                    error_key=u"seq.conflict.enum",
+                    path=path,
+                )
+
             if self._pattern is not None:
-                raise SchemaConflict(u"seq.conflict :: pattern: {}".format(path))
+                raise SchemaConflict(
+                    msg="Sequence and pattern can't be on the same level in the schema",
+                    error_key=u"seq.conflict.pattern",
+                    path=path,
+                )
+
             if self._mapping is not None:
-                raise SchemaConflict(u"seq.conflict :: mapping: {}".format(path))
+                raise SchemaConflict(
+                    msg="Sequence and mapping can't be on the same level in the schema",
+                    error_key=u"seq.conflict.mapping",
+                    path=path,
+                )
         elif self._type == "map":
             if all([ma not in schema for ma in mapping_aliases]) and not self._allowempty_map:
-                raise SchemaConflict(u"map.nomapping")
+                raise SchemaConflict(
+                    msg="Type is mapping but no mapping alias found on same level",
+                    error_key=u"map.no_mapping",
+                    path=path,
+                )
+
             if self._enum is not None:
-                raise SchemaConflict(u"map.conflict :: enum:")
+                raise SchemaConflict(
+                    msg="Mapping and enum can't be on the same level in the schema",
+                    error_key=u"map.conflict.enum",
+                    path=path,
+                )
+
             if self._sequence is not None:
-                raise SchemaConflict(u"map.conflict :: mapping: {}".format(path))
+                raise SchemaConflict(
+                    msg="Mapping and sequence can't be on the same level in the schema",
+                    error_key=u"map.conflict.sequence",
+                    path=path,
+                )
         else:
             if self._sequence is not None:
-                raise SchemaConflict(u"scalar.conflict :: sequence: {}".format(path))
+                raise SchemaConflict(
+                    msg="Scalar and sequence can't be on the same level in the schema",
+                    error_key=u"scalar.conflict.sequence",
+                    path=path,
+                )
+
             if self._mapping is not None:
-                raise SchemaConflict(u"scalar.conflict :: mapping: {}".format(path))
+                raise SchemaConflict(
+                    msg="Scalar and mapping can't be on the same level in the schema",
+                    error_key=u"scalar.conflict.mapping",
+                    path=path,
+                )
+
             if self._enum is not None:
                 if self._range is not None:
-                    raise SchemaConflict(u"enum.conflict :: range: {}".format(path))
+                    raise SchemaConflict(
+                        msg="Enum and range can't be on the same level in the schema",
+                        error_key=u"enum.conflict.range",
+                        path=path,
+                    )

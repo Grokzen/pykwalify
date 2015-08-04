@@ -9,6 +9,10 @@ Python 3.2 support have been dropped. It was going to be dropped when python 3.5
 
 All logging and exception messages have been fixed to work with unicode characters in schema and data files. If you use this in lib mode then you should test your code to ensure it is still compatible.
 
+If you use `RuleError` in your code, you must update to use the new `msg` and `error_key` variables.
+
+If you use `SchemaConflict` in your code, you must update to use the new `msg` and `error_key` variables.
+
 
 ## 1.2.0 --> 1.3.0
 

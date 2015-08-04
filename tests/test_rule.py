@@ -231,12 +231,12 @@ class TestRule(unittest.TestCase):
         # Test error is raised when sequence key is missing
         with pytest.raises(SchemaConflict) as ex:
             Rule(schema={"type": "seq"})
-        assert ex.value.msg.startswith("seq.nosequence"), "Wrong exception was raised"
+        assert str(ex.value) == "<SchemaConflict: error code 5: Type is sequence but no sequence alias found on same level: Path: '/'>"
 
         # sequence and pattern can't be used at same time
         with pytest.raises(SchemaConflict) as ex:
             Rule(schema={"type": "seq", "sequence": [{"type": "str"}], "pattern": "..."})
-        assert ex.value.msg.startswith("seq.conflict :: pattern"), "Wrong exception was raised"
+        assert str(ex.value) == "<SchemaConflict: error code 5: Sequence and pattern can't be on the same level in the schema: Path: '/'>"
 
     def test_build_sequence_multiple_values(self):
         """
@@ -276,7 +276,7 @@ class TestRule(unittest.TestCase):
         # when type is specefied, 'mapping' key must be present
         with pytest.raises(SchemaConflict) as ex:
             Rule(schema={"type": "map"})
-        assert ex.value.msg.startswith("map.nomapping"), "Wrong exception was raised"
+        assert str(ex.value) == "<SchemaConflict: error code 5: Type is mapping but no mapping alias found on same level: Path: '/'>"
 
         # 'map' and 'enum' can't be used at same time
         # TODO: This do not work because it currently raises RuleError: <RuleError: error code 4: enum.notscalar>
@@ -295,24 +295,29 @@ class TestRule(unittest.TestCase):
         # Test sequence and mapping can't be used at same level
         with pytest.raises(SchemaConflict) as ex:
             Rule(schema={"type": "seq", "sequence": [{"type": "str"}], "mapping": {"name": {"type": "str", "pattern": ".+@.+"}}})
-        assert ex.value.msg.startswith("seq.conflict :: mapping"), "Wrong exception was raised"
+        assert str(ex.value) == "<SchemaConflict: error code 5: Sequence and mapping can't be on the same level in the schema: Path: '/'>"
+        assert ex.value.error_key == 'seq.conflict.mapping'
 
         # Mapping and sequence can't used at same time
         with pytest.raises(SchemaConflict) as ex:
             Rule(schema={"type": "map", "mapping": {"foo": {"type": "str"}}, "sequence": [{"type": "str"}]})
-        assert ex.value.msg.startswith("map.conflict :: mapping"), "Wrong exception was raised"
+        assert str(ex.value) == "<SchemaConflict: error code 5: Mapping and sequence can't be on the same level in the schema: Path: '/'>"
+        assert ex.value.error_key == 'map.conflict.sequence'
 
         # scalar type and sequence can't be used at same time
         with pytest.raises(SchemaConflict) as ex:
             Rule(schema={"type": "int", "sequence": [{"type": "str"}]})
-        assert ex.value.msg.startswith("scalar.conflict :: sequence"), "Wrong exception was raised"
+        assert str(ex.value) == "<SchemaConflict: error code 5: Scalar and sequence can't be on the same level in the schema: Path: '/'>"
+        assert ex.value.error_key == 'scalar.conflict.sequence'
 
         # scalar type and mapping can't be used at same time
         with pytest.raises(SchemaConflict) as ex:
             Rule(schema={"type": "int", "mapping": {"foo": {"type": "str"}}})
-        assert ex.value.msg.startswith("scalar.conflict :: mapping"), "Wrong exception was raised"
+        assert str(ex.value) == "<SchemaConflict: error code 5: Scalar and mapping can't be on the same level in the schema: Path: '/'>"
+        assert ex.value.error_key == 'scalar.conflict.mapping'
 
         # scalar type and enum can't be used at same time
         with pytest.raises(SchemaConflict) as ex:
             Rule(schema={"type": "int", "enum": [1, 2, 3], "range": {"max": 10, "min": 1}})
-        assert ex.value.msg.startswith("enum.conflict :: range"), "Wrong exception was raised"
+        assert str(ex.value) == "<SchemaConflict: error code 5: Enum and range can't be on the same level in the schema: Path: '/'>"
+        assert ex.value.error_key == 'enum.conflict.range'

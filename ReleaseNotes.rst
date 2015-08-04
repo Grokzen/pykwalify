@@ -10,6 +10,7 @@ Release Notes
 - Reworked all RuleError exceptions to now have better exception messages.
 - RuleError exceptions now have a unique 'error_key' that can make it easier to identify what error it is.
 - Paths for RuleErrors have been moved inside the exception as a variable.
+- Rewrote all SchemaConflict exceptions to be more human readable.
 
 
 1.3.0
