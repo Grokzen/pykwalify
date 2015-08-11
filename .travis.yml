@@ -1,14 +1,17 @@
 sudo: false
 language: python
 python:
+  - "2.7"
+  - "3.3"
   - "3.4"
+  - "3.5-dev"
 
 install: 
   - pip install -r dev-requirements.txt
 
-script: 
+script:
   - coverage erase
-  - tox
+  - coverage run --source pykwalify -p -m py.test -v
 
 after_success:
   - coverage combine
