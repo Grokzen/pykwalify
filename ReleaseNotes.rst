@@ -2,6 +2,12 @@
 Release Notes
 =============
 
+1.4.1
+=====
+
+- Added tests to sdist to enable downstream packaging to run tests. No code changes in this release.
+
+
 1.4.0
 =====
 
