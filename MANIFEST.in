@@ -4,3 +4,6 @@ include docs/License.txt
 include ReleaseNotes.rst
 include setup.py
 include README.md
+exclude __pycache__
+recursive-include tests *
+recursive-exclude tests *.pyc
