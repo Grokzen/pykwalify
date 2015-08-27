@@ -68,7 +68,7 @@ class Core(object):
         if not isinstance(schema_files, list):
             raise CoreError(u"schema_files must be of list type")
 
-        # Merge all schema files into one signel file for easy parsing
+        # Merge all schema files into one single file for easy parsing
         if len(schema_files) > 0:
             schema_data = {}
             for f in schema_files:
