@@ -228,9 +228,11 @@ Range of value between ``max / max-ex`` and ``min / min-ex``.
  - `max-ex` means `max-exclusive`. (a > b)
  - `min-ex` means `min-exclusive`. (a < b)
 
-This works with `map` `seq` `str` `int`. When used on non number types it will use `len()` on the value.
+This works with `map` `seq` `str` `int` `float` `number`. When used on non number types it will use `len()` on the value.
 
 Type bool and any are not available with range.
+
+Non number types require non negative values for the boundaries.
 
 Example:
 

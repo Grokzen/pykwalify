@@ -355,6 +355,10 @@ class TestCore(object):
             "31s.yaml",
             # Test Complex tree with many different structures
             "32s.yaml",
+            # Test float range
+            "33s.yaml",
+            # Test float range with negative boundary
+            "34s.yaml",
         ]
 
         _fail_tests = [
@@ -394,6 +398,10 @@ class TestCore(object):
             ("17f.yaml", SchemaError),
             # Test multiple nested sequence values with error in level 2 with 'any' matching rule
             ("18f.yaml", SchemaError),
+            # Test float range value out of range
+            ("19f.yaml", SchemaError),
+            # Test float range value out of range (min-ex)
+            ("20f.yaml", SchemaError),
         ]
 
         # Add override magic to make it easier to test a specific file

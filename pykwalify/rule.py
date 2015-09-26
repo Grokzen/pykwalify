@@ -13,7 +13,7 @@ from pykwalify.types import (
     is_bool,
     is_builtin_type,
     is_collection_type,
-    is_int,
+    is_number,
     mapping_aliases,
     sequence_aliases,
     type_class,
@@ -338,7 +338,7 @@ class Rule(object):
     def init_range_value(self, v, rule, path):
         log.debug(u"Init range value : {}".format(path))
 
-        supported_types = ["str", "int", "map", "seq"]
+        supported_types = ["str", "int", "float", "number", "map", "seq"]
 
         if not isinstance(v, dict):
             raise RuleError(
@@ -385,33 +385,61 @@ class Rule(object):
         max_ex = self._range.get("max-ex", None)
         min_ex = self._range.get("min-ex", None)
 
-        if max is not None and not is_int(max) or is_bool(max):
+        if max is not None and not is_number(max) or is_bool(max):
             raise RuleError(
-                msg=u"Value: '{}' for 'max' keyword is not a integer".format(v),
-                error_key=u"range.max.not_int",
+                msg=u"Value: '{}' for 'max' keyword is not a number".format(v),
+                error_key=u"range.max.not_number",
                 path=path,
             )
 
-        if min is not None and not is_int(min) or is_bool(min):
+        if min is not None and not is_number(min) or is_bool(min):
             raise RuleError(
-                msg=u"Value: '{}' for 'min' keyword is not a integer".format(v),
-                error_key=u"range.min.not_int",
+                msg=u"Value: '{}' for 'min' keyword is not a number".format(v),
+                error_key=u"range.min.not_number",
                 path=path,
             )
 
-        if max_ex is not None and not is_int(max_ex) or is_bool(max_ex):
+        if max_ex is not None and not is_number(max_ex) or is_bool(max_ex):
             raise RuleError(
-                msg=u"Value: '{}' for 'max-ex' keyword is not a integer".format(v),
-                error_key=u"range.max_ex.not_int",
+                msg=u"Value: '{}' for 'max-ex' keyword is not a number".format(v),
+                error_key=u"range.max_ex.not_number",
                 path=path,
             )
 
-        if min_ex is not None and not is_int(min_ex) or is_bool(min_ex):
+        if min_ex is not None and not is_number(min_ex) or is_bool(min_ex):
             raise RuleError(
-                msg=u"Value: '{}' for 'min-ex' keyword is not a integer".format(v),
-                error_key=u"range.min_ex.not_int",
+                msg=u"Value: '{}' for 'min-ex' keyword is not a number".format(v),
+                error_key=u"range.min_ex.not_number",
                 path=path,
             )
+
+        # only numbers allow negative ranges
+        # string, map and seq require non negative ranges
+        if self._type not in ["int", "float", "number"]:
+            if min is not None and min < 0:
+                raise RuleError(
+                    msg=u"Value for 'min' can't be negative in case of type {}.".format(self._type),
+                    error_key=u"range.min_negative",
+                    path=path,
+                )
+            elif min_ex is not None and min_ex < 0:
+                raise RuleError(
+                    msg=u"Value for 'min-ex' can't be negative in case of type {}.".format(self._type),
+                    error_key=u"range.min-ex_negative",
+                    path=path,
+                )
+            if max is not None and max < 0:
+                raise RuleError(
+                    msg=u"Value for 'max' can't be negative in case of type {}.".format(self._type),
+                    error_key=u"range.max_negative",
+                    path=path,
+                )
+            elif max_ex is not None and max_ex < 0:
+                raise RuleError(
+                    msg=u"Value for 'max-ex' can't be negative in case of type {}.".format(self._type),
+                    error_key=u"range.max-ex_negative",
+                    path=path,
+                )
 
         if max is not None:
             if min is not None and max < min:
