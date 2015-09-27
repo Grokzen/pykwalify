@@ -1,0 +1,11 @@
+data:
+  foobar1: 1
+  foobar2: 2
+  foobar3: 3
+schema:
+  type: map
+  mapping:
+    regex;(^foobar[1-2]$):
+      type: int
+errors:
+  - "Key 'foobar3' does not match any regex '^foobar[1-2]$'. Path: ''"

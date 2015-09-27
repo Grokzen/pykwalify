@@ -402,6 +402,12 @@ class TestCore(object):
             ("19f.yaml", SchemaError),
             # Test float range value out of range (min-ex)
             ("20f.yaml", SchemaError),
+            # Test keyword regex using default matching-rule 'any'
+            ("21f.yaml", SchemaError),
+            # Test keyword regex using declared matching-rule 'any'
+            ("22f.yaml", SchemaError),
+            # Test keyword regex using declared matching-rule 'all'
+            ("23f.yaml", SchemaError),
         ]
 
         # Add override magic to make it easier to test a specific file

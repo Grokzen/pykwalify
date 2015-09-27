@@ -182,7 +182,7 @@ class Rule(object):
         log.debug(u"{} {}".format(v, rule))
 
         # Verify that the provided rule is part of one of the allowed one
-        allowed = ["any"]
+        allowed = ["any", "all"]
         # ["none", "one", "all"] Is currently awaiting proper implementation
         if v not in allowed:
             raise RuleError(
