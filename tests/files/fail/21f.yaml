@@ -4,11 +4,8 @@ data:
   foobar3: 3
 schema:
   type: map
-  matching-rule: 'all'
   mapping:
-    regex;(^foobar.*$):
-      type: int
-    regex;(^.*[1-2]$):
+    regex;(^foobar[1-2]$):
       type: int
 errors:
-  - "Key 'foobar3' does not match all regex '^.*[1-2]$' and '^foobar.*$'. Path: ''"
+  - "Key 'foobar3' does not match any regex '^foobar[1-2]$'. Path: ''"
