@@ -1,0 +1,13 @@
+data:
+  the_float: 1.2
+schema:
+  type: map
+  mapping:
+    the_float:
+      type: float
+      required: True
+      range:
+        min: 2.1
+        max: 3.2
+errors:
+  - "Type 'scalar' has size of '1.2', less than min limit '2.1'. Path: '/the_float'"

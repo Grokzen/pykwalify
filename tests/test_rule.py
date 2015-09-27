@@ -136,8 +136,8 @@ class TestRule(unittest.TestCase):
 
         with pytest.raises(RuleError) as r:
             Rule(schema={"type": "str", "range": {"max": "z"}})
-        assert str(r.value) == "<RuleError: error code 4: Value: 'z' for 'max' keyword is not a integer: Path: '/'>"
-        assert r.value.error_key == 'range.max.not_int'
+        assert str(r.value) == "<RuleError: error code 4: Value: 'z' for 'max' keyword is not a number: Path: '/'>"
+        assert r.value.error_key == 'range.max.not_number'
 
         # this tests that min is bigger then max that should not be possible
         with pytest.raises(RuleError) as r:
@@ -150,6 +150,18 @@ class TestRule(unittest.TestCase):
             Rule(schema={"type": "int", "range": {"max-ex": 10, "min-ex": 11}})
         assert str(r.value) == "<RuleError: error code 4: Value for 'max-ex' can't be less then value for 'min-ex'. 10 <= 11: Path: '/'>"
         assert r.value.error_key == 'range.max-ex_le_min-ex'
+
+        # test that a string has non negative boundaries
+        with pytest.raises(RuleError) as r:
+            Rule(schema={"type": "str", "range": {"max": -1, "min": -2}})
+        assert str(r.value) == "<RuleError: error code 4: Value for 'min' can't be negative in case of type str.: Path: '/'>"
+        assert r.value.error_key == 'range.min_negative'
+
+        # test that a seq has non negative boundaries
+        with pytest.raises(RuleError) as r:
+            Rule(schema={"type": "seq", "range": {"max": 3, "min": -2}})
+        assert str(r.value) == "<RuleError: error code 4: Value for 'min' can't be negative in case of type seq.: Path: '/'>"
+        assert r.value.error_key == 'range.min_negative'
 
     def test_ident_value(self):
         pass
