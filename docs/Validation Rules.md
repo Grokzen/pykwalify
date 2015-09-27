@@ -206,7 +206,7 @@ Only applies to map. This enables more finegrained control over how the matching
 
 Currently supported rules is
 
- - `any` ``1 to all`` number of regex must match.
+ - `any` One or more of the regex must match.
  - `all` All defined regex must match each key.
 
 Example:
