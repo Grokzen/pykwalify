@@ -37,7 +37,7 @@ class TestRule(unittest.TestCase):
         # Test that exception is raised when a invalid matching rule is used
         with pytest.raises(RuleError) as r:
             Rule(schema={"type": "map", "matching-rule": "foobar", "mapping": {"regex;.+": {"type": "seq", "sequence": [{"type": "str"}]}}})
-        assert str(r.value) == "<RuleError: error code 4: Specified rule in key: foobar is not part of allowed rule set : ['any']: Path: '/'>"
+        assert str(r.value) == "<RuleError: error code 4: Specified rule in key: foobar is not part of allowed rule set : ['any', 'all']: Path: '/'>"
         assert r.value.error_key == 'matching_rule.not_allowed'
 
     def test_allow_empty_map(self):

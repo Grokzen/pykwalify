@@ -476,7 +476,7 @@ class Core(object):
             if any(regex_mappings):
                 sub_regex_result = []
 
-                # Found atleast one that matches a mapping regex
+                # Found at least one that matches a mapping regex
                 for mm in regex_mappings:
                     if mm[1]:
                         log.debug(u" + Matching regex patter: {}".format(mm[0]))
@@ -486,16 +486,17 @@ class Core(object):
                         sub_regex_result.append(False)
 
                 if rule._matching_rule == "any":
+
                     if any(sub_regex_result):
-                        log.debug(u" + Matched atleast one regex")
+                        log.debug(u" + Matched at least one regex")
                     else:
                         log.debug(u"No regex matched")
                         errors.append(SchemaError.SchemaErrorEntry(
                             msg=u"Key '{key}' does not match any regex '{regex}'. Path: '{path}'",
                             path=path,
-                            value=value.encode('unicode_escape'),
+                            value=value,
                             key=k,
-                            regex="  ".join([mm[0]._map_regex_rule for mm in regex_mappings])))
+                            regex="' or '".join([mm[0]._map_regex_rule for mm in regex_mappings])))
                 elif rule._matching_rule == "all":
                     if all(sub_regex_result):
                         log.debug(u" + Matched all regex rules")
@@ -504,9 +505,9 @@ class Core(object):
                         errors.append(SchemaError.SchemaErrorEntry(
                             msg=u"Key '{key}' does not match all regex '{regex}'. Path: '{path}'",
                             path=path,
-                            value=value.encode('unicode_escape'),
+                            value=value,
                             key=k,
-                            regex="  ".join([mm[0]._map_regex_rule for mm in regex_mappings])))
+                            regex="' and '".join([mm[0]._map_regex_rule for mm in regex_mappings])))
                 else:
                     log.debug(u" + No mapping rule defined")
             elif r is None:

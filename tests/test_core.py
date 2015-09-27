@@ -394,6 +394,12 @@ class TestCore(object):
             ("17f.yaml", SchemaError),
             # Test multiple nested sequence values with error in level 2 with 'any' matching rule
             ("18f.yaml", SchemaError),
+            # Test keyword regex using default matching-rule 'any'
+            ("21f.yaml", SchemaError),
+            # Test keyword regex using declared matching-rule 'any'
+            ("22f.yaml", SchemaError),
+            # Test keyword regex using declared matching-rule 'all'
+            ("23f.yaml", SchemaError),
         ]
 
         # Add override magic to make it easier to test a specific file
