@@ -183,7 +183,7 @@ class Rule(object):
 
         # Verify that the provided rule is part of one of the allowed one
         allowed = ["any", "all"]
-        # ["none", "one", "all"] Is currently awaiting proper implementation
+        # ["none", "one"] Is currently awaiting proper implementation
         if v not in allowed:
             raise RuleError(
                 msg=u"Specified rule in key: {} is not part of allowed rule set : {}".format(v, allowed),

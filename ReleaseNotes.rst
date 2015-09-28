@@ -7,7 +7,9 @@ Next Release
 
 - float / number type now support range restrictions
 - ranges on non number types (e.g. seq, string) now need to be non negative.
-- Fixed regex issue #22 and added regex unit tests.
+- Fixed encoding bug triggered when both regex matching-rule 'any' and 'all' found keyword that failed regex match.
+  Added failure unit tests to cover regex matching-rule 'any' and 'all' during failed regex match.
+  Updated allowed rule list to include matching-rule 'all'.
 
 
 1.4.1
