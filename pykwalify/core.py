@@ -496,7 +496,7 @@ class Core(object):
                             path=path,
                             value=value,
                             key=k,
-                            regex="' or '".join([mm[0]._map_regex_rule for mm in regex_mappings])))
+                            regex="' or '".join(sorted([mm[0]._map_regex_rule for mm in regex_mappings]))))
                 elif rule._matching_rule == "all":
                     if all(sub_regex_result):
                         log.debug(u" + Matched all regex rules")
@@ -507,7 +507,7 @@ class Core(object):
                             path=path,
                             value=value,
                             key=k,
-                            regex="' and '".join([mm[0]._map_regex_rule for mm in regex_mappings])))
+                            regex="' and '".join(sorted([mm[0]._map_regex_rule for mm in regex_mappings]))))
                 else:
                     log.debug(u" + No mapping rule defined")
             elif r is None:

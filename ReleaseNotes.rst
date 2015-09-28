@@ -7,6 +7,7 @@ Next Release
 
 - float / number type now support range restrictions
 - ranges on non number types (e.g. seq, string) now need to be non negative.
+- Fixed regex issue #22 and added regex unit tests.
 
 
 1.4.1

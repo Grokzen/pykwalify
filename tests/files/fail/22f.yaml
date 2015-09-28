@@ -11,4 +11,4 @@ schema:
     regex;([1-2]$):
       type: int
 errors:
-  - "Key 'bar3' does not match any regex '^foobar' or '[1-2]$'. Path: ''"
+  - "Key 'bar3' does not match any regex '[1-2]$' or '^foobar'. Path: ''"
