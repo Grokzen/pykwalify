@@ -2,8 +2,8 @@
 Release Notes
 =============
 
-Next Release
-============
+1.5.0
+=====
 
 - float / number type now support range restrictions
 - ranges on non number types (e.g. seq, string) now need to be non negative.
