@@ -3,6 +3,11 @@
 This document will describe any major changes that has been done to the existing API:s that can cause existing schemas to break. If new types was added it will not be described in here because it will not break existing schemas.
 
 
+## 1.4.x --> 1.5.0
+
+Regex recieved some fixes so make sure your schema files is still compatible and do not produce any new errors.
+
+
 ## 1.3.0 --> 1.4.0
 
 Python 3.2 support have been dropped. It was going to be dropped when python 3.5 was released but this make supporting python 2 & 3 at the same time easier now when fixing unicode support.
