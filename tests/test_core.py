@@ -359,6 +359,12 @@ class TestCore(object):
             "33s.yaml",
             # Test float range with negative boundary
             "34s.yaml",
+            # Test keyword regex default matching-rule any
+            "35s.yaml",
+            # Test keyword regex declared matching-rule any
+            "36s.yaml",
+            # Test keyword regex declared matching-rule all
+            "37s.yaml",
         ]
 
         _fail_tests = [

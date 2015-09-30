@@ -470,7 +470,7 @@ class Core(object):
             log.debug(u" + : {} {}".format(k, v))
             log.debug(u" + : {}".format(r))
 
-            regex_mappings = [(regex_rule, re.match(regex_rule._map_regex_rule, str(k))) for regex_rule in rule._regex_mappings]
+            regex_mappings = [(regex_rule, re.search(regex_rule._map_regex_rule, str(k))) for regex_rule in rule._regex_mappings]
             log.debug(u" + Mapping Regex matches: {}".format(regex_mappings))
 
             if any(regex_mappings):
