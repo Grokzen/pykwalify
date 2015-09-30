@@ -182,8 +182,8 @@ class Rule(object):
         log.debug(u"{} {}".format(v, rule))
 
         # Verify that the provided rule is part of one of the allowed one
-        allowed = ["any"]
-        # ["none", "one", "all"] Is currently awaiting proper implementation
+        allowed = ["any", "all"]
+        # ["none", "one"] Is currently awaiting proper implementation
         if v not in allowed:
             raise RuleError(
                 msg=u"Specified rule in key: {} is not part of allowed rule set : {}".format(v, allowed),

@@ -1,0 +1,11 @@
+data:
+  foobar1: 1
+  foobar2: 2
+  bar2: 3
+schema:
+  type: map
+  mapping:
+    regex;([1-2]$):
+      type: int
+    regex;(^foobar):
+      type: int
