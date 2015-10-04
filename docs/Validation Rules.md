@@ -1,13 +1,11 @@
 # Implemented validation rules
 
-This document will describe all implemented validation rules.
-
-[NYI] means Not Yet Implemented
+This document describes all implemented validation rules.
 
 
 ## type
 
-Type of the value.
+The following types are available:
 
  - `any` (Will always be true no matter what the value is, even unimplemented types like `lambda` or `functions`)
  - `bool`
@@ -24,6 +22,8 @@ Type of the value.
  - `text` (`str` or `number`)
  - `time` [NYI]
  - `timestamp`
+ 
+[NYI] means Not Yet Implemented
 
 Example:
 
@@ -57,7 +57,7 @@ Note: The following feature is considered experimental in release `1.2.0` and ab
 
 Multiple values are allowed in the `sequence` block. It can also be nested to any depth.
 
-A new value has been introduced to the `sequence` block `matching` that can be set to either:
+The value `matching` has been introduced to the `sequence` block that can be set to either:
 
  - `any` this mean that one or more sequence blocks has to be valid for the value in the sequence to be valid.
  - `all` this mean that all sequence blocks has to be valid for each value to be valid.
@@ -249,7 +249,9 @@ age: 15
 
 ## unique
 
-Value is unique for mapping or sequence.
+The unique property can be set for sequences and mappings.
+
+If unique is set to `true`, then the sequence/mapping cannot contain any repeated entries.
 
 Example:
 
