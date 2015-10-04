@@ -184,9 +184,7 @@ sequence:
         sequence:
           - type: str
       regex;(me.+):
-        type: seq
-        sequence:
-          - type: bool
+        type: number
 
 # Data
 - mic:
@@ -195,8 +193,6 @@ sequence:
   - output
     bar
 - media: 1
-- foobar:
-    opa: True
 ```
 
 
