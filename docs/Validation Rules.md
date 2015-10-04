@@ -234,17 +234,17 @@ mapping:
   password:
     type: str
     range:
-      max: 16
       min: 8
+      max: 16
   age:
     type: int
     range:
-      max-ex: 19
-      min-ex: 18
+      min: 18
+      max-ex: 30
 
 # Data
-password: xxx123
-age: 15
+password: foobar123
+age: 25
 ```
 
 
