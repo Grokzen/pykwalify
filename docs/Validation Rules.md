@@ -36,7 +36,7 @@ type: str
 ```
 
 
-## sequence or seq
+### sequence or seq
 
 Sequence of values. Specifying `type: seq` is optional when `sequence` or `seq` in found in the schema.
 
@@ -79,7 +79,7 @@ sequence:
 ```
 
 
-## mapping or map
+### mapping or map
 
 Mapping of values (dict). Specifying `type: map` is optional when `mapping` or `map` is found in the schema.
 
