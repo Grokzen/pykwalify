@@ -117,7 +117,7 @@ d1: "2015-03-29T18:45:00+00:00"
 ```
 
 
-## required or req
+## required or req [Default: `false`]
 
 Value is required when true (default is false). If the key is not present a validation error will be raised.
 
@@ -237,7 +237,7 @@ desc: This schema is very foobar
 ```
 
 
-## unique
+## unique [Default: `false`]
 
 The unique property can be set for sequences and mappings.
 
