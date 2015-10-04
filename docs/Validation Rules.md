@@ -30,7 +30,8 @@ Example:
 ```yaml
 # Schema
 type: str
-
+```
+```yaml
 # Data
 'Foobar'
 ```
@@ -47,7 +48,8 @@ Example:
 type: seq
 sequence:
   - type: str
-
+```
+```yaml
 # Data
 - 'Foobar'
 - 'Barfoo'
@@ -72,7 +74,8 @@ sequence:
   - type: seq
     sequence:
       - type: int
-
+```
+```yaml
 # Data
 - - 123
 - "foobar"
@@ -111,7 +114,8 @@ type: map
 mapping:
   d1:
     type: timestamp
-
+```
+```yaml
 # Data
 d1: "2015-03-29T18:45:00+00:00"
 ```
@@ -130,7 +134,8 @@ mapping:
   key_one:
     type: str
     required: True
-
+```
+```yaml
 # Data
 key_one: foobar
 ```
@@ -149,7 +154,8 @@ mapping:
   blood:
     type: str
     enum: ['A', 'B', 'O', 'AB']
-
+```
+```yaml
 # Data
 blood: AB
 ```
@@ -170,7 +176,8 @@ mapping:
   email:
     type: str
     pattern: .+@.+
-
+```
+```yaml
 # Data
 email: foo@mail.com
 ```
@@ -208,7 +215,8 @@ mapping:
     range:
       min: 18
       max-ex: 30
-
+```
+```yaml
 # Data
 password: foobar123
 age: 25
@@ -251,7 +259,8 @@ type: seq
 sequence:
   - type: str
     unique: True
-
+```
+```yaml
 # Data
 - users
 - foo
@@ -301,7 +310,8 @@ mapping:
       - type: str
   regex;(me.+):
     type: number
-
+```
+```yaml
 # Data
 mic:
   - foo
@@ -321,7 +331,8 @@ mapping:
   datasources:
     type: map
     allowempty: True
-
+```
+```yaml
 # Data
 datasources:
   test1: test1.py
@@ -353,7 +364,8 @@ schema;map_str:
 type: seq
 sequence:
   - include: map_str
-
+```
+```yaml
 # Data
 - foo: opa
 ```
