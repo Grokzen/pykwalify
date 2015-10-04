@@ -211,18 +211,19 @@ mapping: ...
 
 ## range
 
-Range of value between ``max / max-ex`` and ``min / min-ex``.
+Range of value between `min` or `min-ex` and `max` or `max-ex`.
 
- - `max` means `max-inclusive`. (a >= b)
- - `min` means `min-inclusive`. (a <= b)
- - `max-ex` means `max-exclusive`. (a > b)
- - `min-ex` means `min-exclusive`. (a < b)
+For numeric types (`int`, `float` and `number`), the value must be within the specified range, and for non-numeric types (`map`, `seq` and `str`) the length of the dict/list/string as given by `len()` must be within the range.
 
-This works with `map` `seq` `str` `int` `float` `number`. When used on non number types it will use `len()` on the value.
+For the data value (or length), `x`, the range can be specified to test for the following:
+ - `min` provides an inclusive lower bound, `a <= x`
+ - `max` provides an inclusive upper bound, `x <= b`
+ - `min-ex` provides an exclusive lower bound, `a < x`
+ - `max-ex` provieds an exclusive upper bound, `x < b`
 
-Type bool and any are not available with range.
+Non-numeric types require non-negative values for the boundaries, since length can not be negative.
 
-Non number types require non negative values for the boundaries.
+Types `bool` and `any` are not compatible with `range`.
 
 Example:
 
