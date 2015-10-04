@@ -174,25 +174,21 @@ Example:
 
 ```yaml
 # Schema
-type: seq
-sequence:
-  - type: map
-    matching-rule: 'any'
-    mapping:
-      regex;(mi.+):
-        type: seq
-        sequence:
-          - type: str
-      regex;(me.+):
-        type: number
+type: map
+matching-rule: 'any'
+mapping:
+  regex;(mi.+):
+    type: seq
+    sequence:
+      - type: str
+  regex;(me.+):
+    type: number
 
 # Data
-- mic:
-  - input
-    foo
-  - output
-    bar
-- media: 1
+mic:
+  - foo
+  - bar
+media: 1
 ```
 
 
