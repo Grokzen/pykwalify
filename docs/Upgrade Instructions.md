@@ -1,6 +1,7 @@
 # Upgrading instructions
 
-This document will describe any major changes that has been done to the existing API:s that can cause existing schemas to break. If new types was added it will not be described in here because it will not break existing schemas.
+This document describes all major changes to the API that could cause existing schemas to break.
+If new types were added, they will not be described here because it will not break existing schemas.
 
 
 ## 1.4.x --> 1.5.0
@@ -23,7 +24,7 @@ If you use `SchemaConflict` in your code, you must update to use the new `msg` a
 
 Almost all validation error messages have been updated. If you are dependent on the error messages that is located in the variable `c.validation_errors` you must check if your code must be updated to use the new error messages.
 
-If you are parsing the error messages yourself you now have access to the exceptions and more detailed variables containing the `msg`, `path`, `key`, `regex` and `value` for each validation error.
+When parsing the error messages yourself, you now have access to the exceptions and more detailed variables containing the `msg`, `path`, `key`, `regex` and `value` for each validation error.
 
 
 ## 1.1.0 --> 1.2.0
