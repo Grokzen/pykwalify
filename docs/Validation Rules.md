@@ -9,9 +9,7 @@ This document will describe all implemented validation rules.
 
 Type of the value.
 
-The followings are available:
-
- - `any` (Will allways be true no matter what the value is, even non implemented types like `lambda` or `functions`)
+ - `any` (Will always be true no matter what the value is, even unimplemented types like `lambda` or `functions`)
  - `bool`
  - `date` [NYI]
  - `float`
