@@ -101,7 +101,7 @@ map:
 
 ### timestamp
 
-Parse a string to determine if it is a valid timestamp. Parsing is done with `python-dateutil` lib and see all valid formats at `https://dateutil.readthedocs.org/en/latest/examples.html#parse-examples`.
+Parse a string to determine if it is a valid timestamp. Parsing is done with `python-dateutil` lib and see all valid formats at https://dateutil.readthedocs.org/en/latest/examples.html#parse-examples.
 
 Example:
 
