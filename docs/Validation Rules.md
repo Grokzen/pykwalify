@@ -99,6 +99,24 @@ map:
 ```
 
 
+### timestamp
+
+Parse a string to determine if it is a valid timestamp. Parsing is done with `python-dateutil` lib and see all valid formats at `https://dateutil.readthedocs.org/en/latest/examples.html#parse-examples`.
+
+Example:
+
+```yaml
+# Schema
+type: map
+mapping:
+  d1:
+    type: timestamp
+
+# Data
+d1: "2015-03-29T18:45:00+00:00"
+```
+
+
 ## required or req
 
 Value is required when true (default is false). If the key is not present a validation error will be raised.
@@ -158,57 +176,6 @@ email: foo@mail.com
 ```
 
 
-## regex;(regex-pattern) or re;(regex-pattern)
-
-This is only implemented in map where a key inside the mapping keyword can implement this `regex;(regex-pattern)` pattern and all keys will be matched against the pattern.
-
-Please note that the regex should be wrapped with `( )`and they will be removed during runtime.
-
-If a match is found then it will parsed the subrules on that key. A single key can be matched against multiple regex rules and the normal map rules.
-
-When defining a regex, `matching-rule` should allways be set to configure the behaviour when using multiple regex:s.
-
-Example:
-
-```yaml
-# Schema
-type: map
-matching-rule: 'any'
-mapping:
-  regex;(mi.+):
-    type: seq
-    sequence:
-      - type: str
-  regex;(me.+):
-    type: number
-
-# Data
-mic:
-  - foo
-  - bar
-media: 1
-```
-
-
-## matching-rule [Default: any]
-
-Only applies to map. This enables more finegrained control over how the matching rule should behave when validation regex keys inside mappings.
-
-Currently supported rules is
-
- - `any` One or more of the regex must match.
- - `all` All defined regex must match each key.
-
-Example:
-
-```yaml
-# Schema
-type: map
-matching-rule: 'any'
-mapping: ...
-```
-
-
 ## range
 
 Range of value between `min` or `min-ex` and `max` or `max-ex`.
@@ -248,28 +215,6 @@ age: 25
 ```
 
 
-## unique
-
-The unique property can be set for sequences and mappings.
-
-If unique is set to `true`, then the sequence/mapping cannot contain any repeated entries.
-
-Example:
-
-```yaml
-# Schema
-type: seq
-sequence:
-  - type: str
-    unique: True
-
-# Data
-- users
-- foo
-- admin
-```
-
-
 ## name
 
 Name of schema. This have no effect on the parsing.
@@ -292,21 +237,76 @@ desc: This schema is very foobar
 ```
 
 
-## timestamp
+## unique
 
-Parse a string to determine if it is a valid timestamp. Parsing is done with `python-dateutil` lib and see all valid formats at `https://dateutil.readthedocs.org/en/latest/examples.html#parse-examples`.
+The unique property can be set for sequences and mappings.
+
+If unique is set to `true`, then the sequence/mapping cannot contain any repeated entries.
+
+Example:
+
+```yaml
+# Schema
+type: seq
+sequence:
+  - type: str
+    unique: True
+
+# Data
+- users
+- foo
+- admin
+```
+
+
+## matching-rule [Default: `any`]
+
+Only applies to map. This enables more finegrained control over how the matching rule should behave when validation regex keys inside mappings.
+
+Currently supported rules are:
+
+ - `any` One or more of the regex must match.
+ - `all` All defined regex must match each key.
 
 Example:
 
 ```yaml
 # Schema
 type: map
+matching-rule: 'any'
+mapping: ...
+```
+
+
+## regex;(regex-pattern) or re;(regex-pattern)
+
+This is only implemented in map where a key inside the mapping keyword can implement this `regex;(regex-pattern)` pattern and all keys will be matched against the pattern.
+
+Please note that the regex should be wrapped with `( )` and these parentheses will be removed at runtime.
+
+If a match is found then it will parsed the subrules on that key. A single key can be matched against multiple regex rules and the normal map rules.
+
+When defining a regex, `matching-rule` should always be set to configure the behaviour when using multiple regexes.
+
+Example:
+
+```yaml
+# Schema
+type: map
+matching-rule: 'any'
 mapping:
-  d1:
-    type: timestamp
+  regex;(mi.+):
+    type: seq
+    sequence:
+      - type: str
+  regex;(me.+):
+    type: number
 
 # Data
-d1: "2015-03-29T18:45:00+00:00"
+mic:
+  - foo
+  - bar
+media: 1
 ```
 
 
