@@ -57,7 +57,7 @@ sequence:
 
 Note: The following feature is considered experimental in release `1.2.0` and above.
 
-Multiple values is allowed in the `sequence` block. It can also be nested to any depth.
+Multiple values are allowed in the `sequence` block. It can also be nested to any depth.
 
 A new value has been introduced to the `sequence` block `matching` that can be set to either:
 
@@ -103,7 +103,7 @@ map:
 
 ## required or req
 
-Value is required when true (Default is false). If the key is not present a validation error will be raised.
+Value is required when true (default is false). If the key is not present a validation error will be raised.
 
 Example:
 

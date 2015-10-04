@@ -5,12 +5,12 @@ This document will describe any major changes that has been done to the existing
 
 ## 1.4.x --> 1.5.0
 
-Regex recieved some fixes so make sure your schema files is still compatible and do not produce any new errors.
+Regex received some fixes, so make sure your schema files are still compatible and do not produce any new errors.
 
 
 ## 1.3.0 --> 1.4.0
 
-Python 3.2 support have been dropped. It was going to be dropped when python 3.5 was released but this make supporting python 2 & 3 at the same time easier now when fixing unicode support.
+Python 3.2 support has been dropped. It was going to be dropped when python 3.5 was released, but this made supporting python 2 & 3 at the same time easier now when fixing unicode support.
 
 All logging and exception messages have been fixed to work with unicode characters in schema and data files. If you use this in lib mode then you should test your code to ensure it is still compatible.
 

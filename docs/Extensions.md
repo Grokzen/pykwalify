@@ -8,7 +8,7 @@ Extensions can be used to do more complex validation that is not supported by th
 
 ## Specifying what extensions to use.
 
-There is 2 ways to load extensions into a schema.
+There are 2 ways to load extensions into a schema.
 
 First you can specify any `*.py` file via the cli via the `-e FILE` or `--extension FILE` flag. If you would do this when using pykwalify as a library you should pass in a list of files to the `extensions` variable to the `Core` class.
 
