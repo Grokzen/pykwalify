@@ -100,6 +100,10 @@ map:
   key_one:
     type: str
 ```
+```yaml
+# Data
+key_one: 'bar'
+```
 
 
 ### timestamp
