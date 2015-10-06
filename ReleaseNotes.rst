@@ -2,6 +2,13 @@
 Release Notes
 =============
 
+
+Next Release
+============
+
+- Improvements to documentation (scottclowe).
+
+
 1.5.0
 =====
 
