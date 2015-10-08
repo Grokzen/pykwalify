@@ -125,9 +125,9 @@ d1: "2015-03-29T18:45:00+00:00"
 ```
 
 
-## required or req [Default: `false`]
+## required or req [Default: `False`]
 
-Value is required when true (default is false). If the key is not present a validation error will be raised.
+Value is required when `True` (default is `False`). If the key is not present a validation error will be raised.
 
 #### Example:
 
@@ -249,11 +249,11 @@ desc: This schema is very foobar
 ```
 
 
-## unique [Default: `false`]
+## unique [Default: `False`]
 
 The unique property can be set for sequences and mappings.
 
-If unique is set to `true`, then the sequence/mapping cannot contain any repeated entries.
+If unique is set to `True`, then the sequence/mapping cannot contain any repeated entries.
 
 #### Example:
 
@@ -272,7 +272,7 @@ sequence:
 ```
 
 
-## allowempty [Default: `false`]
+## allowempty [Default: `False`]
 
 Only applies to map.
 If `True`, the map can have keys which are not present in the schema, and these can map to anything.
@@ -329,7 +329,7 @@ media: 1
 ```
 
 
-## matching-rule [Default: `any`]
+## matching-rule [Default: `'any'`]
 
 Only applies to map. This enables more finegrained control over how the matching rule should behave when validation regex keys inside mappings.
 
