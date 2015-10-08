@@ -25,7 +25,7 @@ The following types are available:
  
 [NYI] means Not Yet Implemented
 
-Example:
+#### Example:
 
 ```yaml
 # Schema
@@ -41,7 +41,7 @@ type: str
 
 Sequence of values. Specifying `type: seq` is optional when `sequence` or `seq` in found in the schema.
 
-Example:
+#### Example:
 
 ```yaml
 # Schema
@@ -86,7 +86,7 @@ sequence:
 
 Mapping of values (dict). Specifying `type: map` is optional when `mapping` or `map` is found in the schema.
 
-Example:
+#### Example:
 
 ```yaml
 # Schema
@@ -110,7 +110,7 @@ key_one: 'bar'
 
 Parse a string to determine if it is a valid timestamp. Parsing is done with `python-dateutil` lib and see all valid formats at https://dateutil.readthedocs.org/en/latest/examples.html#parse-examples.
 
-Example:
+#### Example:
 
 ```yaml
 # Schema
@@ -129,7 +129,7 @@ d1: "2015-03-29T18:45:00+00:00"
 
 Value is required when true (default is false). If the key is not present a validation error will be raised.
 
-Example:
+#### Example:
 
 ```yaml
 # Schema
@@ -149,7 +149,7 @@ key_one: foobar
 
 Value must be one of the specified values. Currently only exact case matching is implemented. If you need complex validation you should use `pattern` (See next section)
 
-Example:
+#### Example:
 
 ```yaml
 # Schema
@@ -171,7 +171,7 @@ Specifies regular expression pattern of value. Uses `re.match()` internally. Pat
 
 Note: Pattern no longer works in map. Use `regex;(regex-pattern)` as keys in `mapping`
 
-Example:
+#### Example:
 
 ```yaml
 # Schema
@@ -203,7 +203,7 @@ Non-numeric types require non-negative values for the boundaries, since length c
 
 Types `bool` and `any` are not compatible with `range`.
 
-Example:
+#### Example:
 
 ```yaml
 # Schema
@@ -241,7 +241,7 @@ name: foobar schema
 
 Description is not used for validation. This have no effect on the parsing.
 
-Example:
+#### Example:
 
 ```yaml
 # Schema
@@ -255,7 +255,7 @@ The unique property can be set for sequences and mappings.
 
 If unique is set to `true`, then the sequence/mapping cannot contain any repeated entries.
 
-Example:
+#### Example:
 
 ```yaml
 # Schema
@@ -278,7 +278,7 @@ Only applies to map.
 If `True`, the map can have keys which are not present in the schema, and these can map to anything.
 Any keys which _are_ specified in the schema must have values which conform to their corresponding rules, if they are present.
 
-Example:
+#### Example:
 
 ```yaml
 # Schema
@@ -306,7 +306,7 @@ If a match is found then it will parsed the subrules on that key. A single key c
 
 When defining a regex, `matching-rule` should always be set to configure the behaviour when using multiple regexes.
 
-Example:
+#### Example:
 
 ```yaml
 # Schema
@@ -338,7 +338,7 @@ Currently supported rules are:
  - `any` One or more of the regex must match.
  - `all` All defined regex must match each key.
 
-Example:
+#### Example:
 
 ```yaml
 # Schema
@@ -385,7 +385,7 @@ See `Partial schemas` section for details.
 
 Names must be globally unique.
 
-Example:
+#### Example:
 
 ```yaml
 # Schema
@@ -405,7 +405,7 @@ schema;list_int:
 
 Used in `partial schema` system. Includes is lazy loaded during parsing/validation.
 
-Example:
+#### Example:
 
 ```yaml
 # Schema file one
