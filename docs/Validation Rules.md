@@ -272,9 +272,13 @@ sequence:
 ```
 
 
-## allowempty
+## allowempty [Default: `false`]
 
-Only applies to map. It enables a dict to have items in it that is not validated. It can be combined with mapping to check for some fixed properties but still validate if any random properties exists.
+Only applies to map.
+If `True`, the map can have keys which are not present in the schema, and these can map to anything.
+Any keys which _are_ specified in the schema must have values which conform to their corresponding rules, if they are present.
+
+Example:
 
 ```yaml
 # Schema
