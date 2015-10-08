@@ -272,22 +272,23 @@ sequence:
 ```
 
 
-## matching-rule [Default: `any`]
+## allowempty
 
-Only applies to map. This enables more finegrained control over how the matching rule should behave when validation regex keys inside mappings.
-
-Currently supported rules are:
-
- - `any` One or more of the regex must match.
- - `all` All defined regex must match each key.
-
-Example:
+Only applies to map. It enables a dict to have items in it that is not validated. It can be combined with mapping to check for some fixed properties but still validate if any random properties exists.
 
 ```yaml
 # Schema
 type: map
-matching-rule: 'any'
-mapping: ...
+mapping:
+  datasources:
+    type: map
+    allowempty: True
+```
+```yaml
+# Data
+datasources:
+  test1: test1.py
+  test2: test2.py
 ```
 
 
@@ -324,23 +325,22 @@ media: 1
 ```
 
 
-## allowempty
+## matching-rule [Default: `any`]
 
-Only applies to map. It enables a dict to have items in it that is not validated. It can be combined with mapping to check for some fixed properties but still validate if any random properties exists.
+Only applies to map. This enables more finegrained control over how the matching rule should behave when validation regex keys inside mappings.
+
+Currently supported rules are:
+
+ - `any` One or more of the regex must match.
+ - `all` All defined regex must match each key.
+
+Example:
 
 ```yaml
 # Schema
 type: map
-mapping:
-  datasources:
-    type: map
-    allowempty: True
-```
-```yaml
-# Data
-datasources:
-  test1: test1.py
-  test2: test2.py
+matching-rule: 'any'
+mapping: ...
 ```
 
 
@@ -373,7 +373,6 @@ sequence:
 # Data
 - foo: opa
 ```
-
 
 
 ## schema;(schema-name)
