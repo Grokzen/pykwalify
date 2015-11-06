@@ -25,7 +25,7 @@ The following types are available:
  
 [NYI] means Not Yet Implemented
 
-#### Example:
+##### Example
 
 ```yaml
 # Schema
@@ -43,7 +43,7 @@ Sequence of values (list).
 
 The sequence type is implicitly assumed when `sequence` or its alias `seq` is present in the rule.
 
-#### Example:
+##### Example
 
 ```yaml
 # Schema
@@ -67,7 +67,7 @@ The `matching` constraint can be used when the type is `sequence` to control how
 - `all` each list item must satisfy every subrule
 - `*` at least one list item must satisfy at least one subrule
 
-#### Example:
+##### Example
 
 This data file satisfies the following schema.
 
@@ -105,7 +105,7 @@ Mapping of values (dict).
 
 The map type is implicitly assumed when `mapping` or its alias `map` is present in the rule.
 
-#### Example:
+##### Example
 
 ```yaml
 # Schema
@@ -140,7 +140,7 @@ Parse a string to determine if it is a valid timestamp.
 
 Parsing is done with [dateutil](https://pypi.python.org/pypi/python-dateutil). You can see all valid formats in [the relevant dateutil documentation](https://dateutil.readthedocs.org/en/latest/examples.html#parse-examples).
 
-#### Example:
+##### Example
 
 ```yaml
 # Schema
@@ -161,7 +161,7 @@ If the `required` constraint is set to `True`, the key and its value must be pre
 
 Default is `False`. Alias is `req`.
 
-#### Example:
+##### Example
 
 ```yaml
 # Schema
@@ -183,7 +183,7 @@ Set of possible elements; the value must be a member of this set.
 
 Currently only exact case matching is implemented. If you need complex validation you should use [pattern](#pattern).
 
-#### Example:
+##### Example
 
 ```yaml
 # Schema
@@ -207,7 +207,7 @@ Uses [re.match()](https://docs.python.org/3/library/re.html#re.match) internally
 
 Note: For using regex to define possible key names in mapping, see [regex;(regex-pattern)](#regex;(regex-pattern)) instead.
 
-#### Example:
+##### Example
 
 ```yaml
 # Schema
@@ -239,7 +239,7 @@ Non-numeric types require non-negative values for the boundaries, since length c
 
 Types [bool](#type) and [any]](#type) are not compatible with `range`.
 
-#### Example:
+##### Example
 
 ```yaml
 # Schema
@@ -281,7 +281,7 @@ Description of schema.
 
 This have no effect on the parsing, but is useful for humans to read.
 
-#### Example:
+##### Example
 
 ```yaml
 # Schema
@@ -297,7 +297,7 @@ The unique constraint can only be set when the type is `sequence` or `map`.
 
 Default is `False`.
 
-#### Example:
+##### Example
 
 ```yaml
 # Schema
@@ -322,7 +322,7 @@ Any keys which *are* specified in the schema must have values which conform to t
 
 Default is `False`.
 
-#### Example:
+##### Example
 
 ```yaml
 # Schema
@@ -352,7 +352,7 @@ If a match is found then it will be parsed against the subrules on that key. A s
 
 When defining a regex key, [matching-rule](#matching-rule) should also be set to configure the behaviour when using multiple regexes.
 
-#### Example:
+##### Example
 
 ```yaml
 # Schema
@@ -385,7 +385,7 @@ Currently supported constraint settings are:
 
 Default is `any`.
 
-#### Example:
+##### Example
 
 The following dataset will raise an error because the key `bar2` does not fit all of the regex.
 If the constraint was instead `matching-rule: all`, the same data would be valid because all the keys in the data match one of the regex formats and associated constraints in the schema.
@@ -445,7 +445,7 @@ See the [Partial schemas](#partial-schemas) section for details.
 
 Names must be globally unique.
 
-#### Example:
+##### Example
 
 ```yaml
 # Schema
@@ -465,7 +465,7 @@ schema;list_int:
 
 Used in [partial schema](#partial-schemas) system. Includes are lazy and are loaded during parsing/validation.
 
-#### Example:
+##### Example
 
 ```yaml
 # Schema file one
