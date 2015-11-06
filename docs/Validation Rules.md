@@ -121,7 +121,7 @@ key_one: 'bar'
 
 The schema below sets the map type implicitly, and is also a valid schema.
 
-```
+```yaml
 # Schema
 map:
   key_one:
