@@ -84,7 +84,8 @@ sequence:
 
 ### mapping or map
 
-Mapping of values (dict). Specifying `type: map` is optional when `mapping` or `map` is found in the schema.
+Mapping of values (dict).
+The map type is implicitly assumed when `mapping` or `map` is present in the rule of a schema.
 
 #### Example:
 
@@ -94,16 +95,25 @@ type: map
 mapping:
   key_one:
     type: str
-
-# This is also valid
-map:
-  key_one:
-    type: str
 ```
 ```yaml
 # Data
 key_one: 'bar'
 ```
+
+The schema below sets the map type implicitly, and is also a valid schema.
+
+```
+# Schema
+map:
+  key_one:
+    type: str
+```
+
+There are some constraints which are available only for the map type, and expand its functionality.
+See the `allowempty`, `regex;(regex-pattern)` and `matching-rule` sections below for details.
+
+By default, map keys specified in the map rule can be omitted unless they have the `required` constraint explictly set to `True`.
 
 
 ### timestamp
