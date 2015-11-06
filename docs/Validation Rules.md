@@ -39,7 +39,7 @@ type: str
 
 ### sequence
 
-Sequence of values.
+Sequence of values (list).
 
 The sequence type is implicitly assumed when `sequence` or its alias `seq` is present in the rule.
 
@@ -57,14 +57,19 @@ sequence:
 - 'Barfoo'
 ```
 
-Note: The following feature is considered experimental in release `1.2.0` and above.
+#### matching
 
-Multiple values are allowed in the `sequence` block. It can also be nested to any depth.
+Multiple subrules can be used within the `sequence` block. It can also be nested to any depth, with subrules constraining list items to be sequences of sequences.
 
-The value `matching` has been introduced to the `sequence` block that can be set to either:
-- `any` this mean that one or more sequence blocks has to be valid for the value in the sequence to be valid.
-- `all` this mean that all sequence blocks has to be valid for each value to be valid.
-- `*` this mean that zero to all blocks has to be valid for each value to be valid.
+The `matching` constraint can be used when the type is `sequence` to control how the parser handles a list of different subrules for the `sequence` block.
+
+- `any` each list item must satisfy at least one subrules
+- `all` each list item must satisfy every subrule
+- `*` at least one list item must satisfy at least one subrule
+
+#### Example:
+
+This data file satisfies the following schema.
 
 ```yaml
 # Schema
@@ -80,6 +85,17 @@ sequence:
 # Data
 - - 123
 - "foobar"
+```
+
+This schema file can never be satisfied, since items cannot both be strings and integers.
+
+```yaml
+# Schema
+type: seq
+matching: all
+sequence:
+  - type: str
+  - type: int
 ```
 
 
