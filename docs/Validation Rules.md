@@ -350,11 +350,24 @@ Currently supported constraint settings are:
 
 #### Example:
 
+The following dataset will raise an error because the key `bar2` does not fit all of the regex.
+If the constraint was instead `matching-rule: all`, the same data would be valid because all the keys in the data match one of the regex formats and associated constraints in the schema.
+
 ```yaml
 # Schema
 type: map
-matching-rule: 'any'
-mapping: ...
+matching-rule: all
+mapping:
+  regex;([1-2]$):
+    type: int
+  regex;(^foobar):
+    type: int
+```
+```yaml
+# Data
+foobar1: 1
+foobar2: 2
+bar2: 3
 ```
 
 
