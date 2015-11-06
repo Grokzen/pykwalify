@@ -39,7 +39,9 @@ type: str
 
 ### sequence or seq
 
-Sequence of values. Specifying `type: seq` is optional when `sequence` or `seq` in found in the schema.
+Sequence of values.
+
+Specifying `type: seq` is optional when `sequence` or `seq` is present in the rule.
 
 #### Example:
 
@@ -60,10 +62,9 @@ Note: The following feature is considered experimental in release `1.2.0` and ab
 Multiple values are allowed in the `sequence` block. It can also be nested to any depth.
 
 The value `matching` has been introduced to the `sequence` block that can be set to either:
-
- - `any` this mean that one or more sequence blocks has to be valid for the value in the sequence to be valid.
- - `all` this mean that all sequence blocks has to be valid for each value to be valid.
- - `*` this mean that zero to all blocks has to be valid for each value to be valid.
+- `any` this mean that one or more sequence blocks has to be valid for the value in the sequence to be valid.
+- `all` this mean that all sequence blocks has to be valid for each value to be valid.
+- `*` this mean that zero to all blocks has to be valid for each value to be valid.
 
 ```yaml
 # Schema
@@ -85,7 +86,8 @@ sequence:
 ### mapping or map
 
 Mapping of values (dict).
-The map type is implicitly assumed when `mapping` or `map` is present in the rule of a schema.
+
+The map type is implicitly assumed when `mapping` or `map` is present in the rule.
 
 #### Example:
 
@@ -118,7 +120,9 @@ By default, map keys specified in the map rule can be omitted unless they have t
 
 ### timestamp
 
-Parse a string to determine if it is a valid timestamp. Parsing is done with `python-dateutil` lib and see all valid formats at https://dateutil.readthedocs.org/en/latest/examples.html#parse-examples.
+Parse a string to determine if it is a valid timestamp.
+
+Parsing is done with [dateutil](https://pypi.python.org/pypi/python-dateutil). You can see all valid formats in [the relevant dateutil documentation](https://dateutil.readthedocs.org/en/latest/examples.html#parse-examples).
 
 #### Example:
 
@@ -157,7 +161,9 @@ key_one: foobar
 
 ## enum
 
-Value must be one of the specified values. Currently only exact case matching is implemented. If you need complex validation you should use `pattern` (See next section)
+Set of possible elements; the value must be a member of this set.
+
+Currently only exact case matching is implemented. If you need complex validation you should use `pattern`.
 
 #### Example:
 
@@ -177,9 +183,11 @@ blood: AB
 
 ## pattern
 
-Specifies regular expression pattern of value. Uses `re.match()` internally. Pattern works on all scalar types.
+Specifies a regular expression pattern which the value must satisfy.
 
-Note: Pattern no longer works in map. Use `regex;(regex-pattern)` as keys in `mapping`
+Uses [re.match()](https://docs.python.org/3/library/re.html#re.match) internally. Pattern works for all scalar types.
+
+Note: For using regex to define possible key names in mapping, see `regex;(regex-pattern)` instead.
 
 #### Example:
 
@@ -239,7 +247,9 @@ age: 25
 
 ## name
 
-Name of schema. This have no effect on the parsing.
+Name of schema.
+
+This have no effect on the parsing, but is useful for humans to read.
 
 ```yaml
 # Schema
@@ -249,7 +259,9 @@ name: foobar schema
 
 ## desc
 
-Description is not used for validation. This have no effect on the parsing.
+Description of schema.
+
+This have no effect on the parsing, but is useful for humans to read.
 
 #### Example:
 
@@ -261,9 +273,9 @@ desc: This schema is very foobar
 
 ## unique [Default: `False`]
 
-The unique property can be set for sequences and mappings.
-
 If unique is set to `True`, then the sequence/mapping cannot contain any repeated entries.
+
+The unique constraint can only be set when the type is `sequence` or `map`.
 
 #### Example:
 
@@ -308,13 +320,13 @@ datasources:
 
 ## regex;(regex-pattern) or re;(regex-pattern)
 
-This is only implemented in *map* where a key inside the mapping keyword can implement this `regex;(regex-pattern)` pattern and all keys will be matched against the pattern.
+Only applies to *map*. This is only implemented in *map* where a key inside the mapping keyword can implement this `regex;(regex-pattern)` pattern and all keys will be matched against the pattern.
 
 Please note that the regex should be wrapped with `( )` and these parentheses will be removed at runtime.
 
-If a match is found then it will parsed the subrules on that key. A single key can be matched against multiple regex rules and the normal map rules.
+If a match is found then it will be parsed against the subrules on that key. A single key can be matched against multiple regex rules and the normal map rules.
 
-When defining a regex, `matching-rule` should always be set to configure the behaviour when using multiple regexes.
+When defining a regex key, `matching-rule` should also be set to configure the behaviour when using multiple regexes.
 
 #### Example:
 
