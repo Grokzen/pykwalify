@@ -286,7 +286,7 @@ sequence:
 
 Only applies to *map*.
 If `True`, the map can have keys which are not present in the schema, and these can map to anything.
-Any keys which _are_ specified in the schema must have values which conform to their corresponding rules, if they are present.
+Any keys which *are* specified in the schema must have values which conform to their corresponding constraints, if they are present.
 
 #### Example:
 
@@ -343,7 +343,7 @@ media: 1
 
 Only applies to *map*. This enables more finegrained control over how the matching rule should behave when validation regex keys inside mappings.
 
-Currently supported rules are:
+Currently supported constraint settings are:
 
  - `any` One or more of the regex must match.
  - `all` All defined regex must match each key.
@@ -413,7 +413,7 @@ schema;list_int:
 
 ## include
 
-Used in `partial schema` system. Includes is lazy loaded during parsing/validation.
+Used in `partial schema` system. Includes are lazy and are loaded during parsing/validation.
 
 #### Example:
 
