@@ -558,7 +558,7 @@ class Core(object):
                 errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Value '{value}' does not match pattern '{pattern}'. Path: '{path}'",
                     path=path,
-                    value=nativestr(value),
+                    value=nativestr(str(value)),
                     pattern=rule._pattern))
 
         if rule._range is not None:
