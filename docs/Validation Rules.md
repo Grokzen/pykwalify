@@ -37,11 +37,11 @@ type: str
 ```
 
 
-### sequence or seq
+### sequence
 
 Sequence of values.
 
-Specifying `type: seq` is optional when `sequence` or `seq` is present in the rule.
+The sequence type is implicitly assumed when `sequence` or its alias `seq` is present in the rule.
 
 #### Example:
 
@@ -83,11 +83,11 @@ sequence:
 ```
 
 
-### mapping or map
+### mapping
 
 Mapping of values (dict).
 
-The map type is implicitly assumed when `mapping` or `map` is present in the rule.
+The map type is implicitly assumed when `mapping` or its alias `map` is present in the rule.
 
 #### Example:
 
@@ -113,9 +113,9 @@ map:
 ```
 
 There are some constraints which are available only for the map type, and expand its functionality.
-See the `allowempty`, `regex;(regex-pattern)` and `matching-rule` sections below for details.
+See the [allowempty](#allowempty), [regex;(regex-pattern)](#regex;(regex-pattern)) and [matching-rule](#matching-rule) sections below for details.
 
-By default, map keys specified in the map rule can be omitted unless they have the `required` constraint explictly set to `True`.
+By default, map keys specified in the map rule can be omitted unless they have the [required](#required) constraint explictly set to `True`.
 
 
 ### timestamp
@@ -139,9 +139,11 @@ d1: "2015-03-29T18:45:00+00:00"
 ```
 
 
-## required or req [Default: `False`]
+## required
 
-Value is required when `True` (default is `False`). If the key is not present a validation error will be raised.
+If the `required` constraint is set to `True`, the key and its value must be present, otherwise a validation error will be raised.
+
+Default is `False`. Alias is `req`.
 
 #### Example:
 
@@ -163,7 +165,7 @@ key_one: foobar
 
 Set of possible elements; the value must be a member of this set.
 
-Currently only exact case matching is implemented. If you need complex validation you should use `pattern`.
+Currently only exact case matching is implemented. If you need complex validation you should use [pattern](#pattern).
 
 #### Example:
 
@@ -187,7 +189,7 @@ Specifies a regular expression pattern which the value must satisfy.
 
 Uses [re.match()](https://docs.python.org/3/library/re.html#re.match) internally. Pattern works for all scalar types.
 
-Note: For using regex to define possible key names in mapping, see `regex;(regex-pattern)` instead.
+Note: For using regex to define possible key names in mapping, see [regex;(regex-pattern)](#regex;(regex-pattern)) instead.
 
 #### Example:
 
@@ -219,7 +221,7 @@ For the data value (or length), `x`, the range can be specified to test for the 
 
 Non-numeric types require non-negative values for the boundaries, since length can not be negative.
 
-Types `bool` and `any` are not compatible with `range`.
+Types [bool](#type) and [any]](#type) are not compatible with `range`.
 
 #### Example:
 
@@ -271,11 +273,13 @@ desc: This schema is very foobar
 ```
 
 
-## unique [Default: `False`]
+## unique
 
 If unique is set to `True`, then the sequence/mapping cannot contain any repeated entries.
 
 The unique constraint can only be set when the type is `sequence` or `map`.
+
+Default is `False`.
 
 #### Example:
 
@@ -294,11 +298,13 @@ sequence:
 ```
 
 
-## allowempty [Default: `False`]
+## allowempty
 
 Only applies to *map*.
 If `True`, the map can have keys which are not present in the schema, and these can map to anything.
 Any keys which *are* specified in the schema must have values which conform to their corresponding constraints, if they are present.
+
+Default is `False`.
 
 #### Example:
 
@@ -318,15 +324,17 @@ datasources:
 ```
 
 
-## regex;(regex-pattern) or re;(regex-pattern)
+## regex;(regex-pattern)
 
-Only applies to *map*. This is only implemented in *map* where a key inside the mapping keyword can implement this `regex;(regex-pattern)` pattern and all keys will be matched against the pattern.
+Only applies to *map*. Alias is `re;(regex-pattern)`.
+
+This is only implemented in *map* where a key inside the mapping keyword can implement this `regex;(regex-pattern)` pattern and all keys will be matched against the pattern.
 
 Please note that the regex should be wrapped with `( )` and these parentheses will be removed at runtime.
 
 If a match is found then it will be parsed against the subrules on that key. A single key can be matched against multiple regex rules and the normal map rules.
 
-When defining a regex key, `matching-rule` should also be set to configure the behaviour when using multiple regexes.
+When defining a regex key, [matching-rule](#matching-rule) should also be set to configure the behaviour when using multiple regexes.
 
 #### Example:
 
@@ -351,14 +359,15 @@ media: 1
 ```
 
 
-## matching-rule [Default: `'any'`]
+## matching-rule
 
 Only applies to *map*. This enables more finegrained control over how the matching rule should behave when validation regex keys inside mappings.
 
 Currently supported constraint settings are:
-
  - `any` One or more of the regex must match.
  - `all` All defined regex must match each key.
+
+Default is `any`.
 
 #### Example:
 
@@ -390,7 +399,7 @@ It is possible to create small partial schemas that can be included in other sch
 
 To define a partial schema use the keyword `schema;(schema-id):`. `(schema-id)` must be globally unique for the loaded schema partials. If collisions is detected then error will be raised.
 
-To use a partial schema use the keyword `include: (schema-id):`. This will work at any place you can specify the keyword `type`. Include directive do not currently work inside a partial schema.
+To use a partial schema use the keyword `include: (schema-id):`. This will work at any place you can specify the keyword [type](#type). Include directive do not currently work inside a partial schema.
 
 It is possible to define any number of partial schemas in any schema file as long as they are defined at top level of the schema.
 
@@ -416,7 +425,7 @@ sequence:
 
 ## schema;(schema-name)
 
-See `Partial schemas` section for details.
+See the [Partial schemas](#partial-schemas) section for details.
 
 Names must be globally unique.
 
@@ -438,7 +447,7 @@ schema;list_int:
 
 ## include
 
-Used in `partial schema` system. Includes are lazy and are loaded during parsing/validation.
+Used in [partial schema](#partial-schemas) system. Includes are lazy and are loaded during parsing/validation.
 
 #### Example:
 
