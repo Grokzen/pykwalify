@@ -6,3 +6,7 @@ Code:
 
 Testing:
  * Glenn Schmottlach (https://github.com/gschmottlach-xse)
+
+Documentation:
+ * Grokzen (https://github.com/Grokzen)
+ * Scott Lowe (https://github.com/scottclowe)

@@ -1,17 +1,13 @@
 # Implemented validation rules
 
-This document will describe all implemented validation rules.
-
-[NYI] means Not Yet Implemented
+This document describes all implemented validation rules.
 
 
 ## type
 
-Type of the value.
+The following types are available:
 
-The followings are available:
-
- - `any` (Will allways be true no matter what the value is, even non implemented types like `lambda` or `functions`)
+ - `any` (Will always be true no matter what the value is, even unimplemented types like `lambda` or `functions`)
  - `bool`
  - `date` [NYI]
  - `float`
@@ -26,44 +22,54 @@ The followings are available:
  - `text` (`str` or `number`)
  - `time` [NYI]
  - `timestamp`
+ 
+[NYI] means Not Yet Implemented
 
-Example:
+##### Example
 
 ```yaml
 # Schema
 type: str
-
+```
+```yaml
 # Data
 'Foobar'
 ```
 
 
-## sequence or seq
+### sequence
 
-Sequence of values. Specifying `type: seq` is optional when `sequence` or `seq` in found in the schema.
+Sequence of values (list).
 
-Example:
+The sequence type is implicitly assumed when `sequence` or its alias `seq` is present in the rule.
+
+##### Example
 
 ```yaml
 # Schema
 type: seq
 sequence:
   - type: str
-
+```
+```yaml
 # Data
 - 'Foobar'
 - 'Barfoo'
 ```
 
-Note: The following feature is considered experimental in release `1.2.0` and above.
+#### matching
 
-Multiple values is allowed in the `sequence` block. It can also be nested to any depth.
+Multiple subrules can be used within the `sequence` block. It can also be nested to any depth, with subrules constraining list items to be sequences of sequences.
 
-A new value has been introduced to the `sequence` block `matching` that can be set to either:
+The `matching` constraint can be used when the type is `sequence` to control how the parser handles a list of different subrules for the `sequence` block.
 
- - `any` this mean that one or more sequence blocks has to be valid for the value in the sequence to be valid.
- - `all` this mean that all sequence blocks has to be valid for each value to be valid.
- - `*` this mean that zero to all blocks has to be valid for each value to be valid.
+- `any` each list item must satisfy at least one subrules
+- `all` each list item must satisfy every subrule
+- `*` at least one list item must satisfy at least one subrule
+
+##### Example
+
+This data file satisfies the following schema.
 
 ```yaml
 # Schema
@@ -74,18 +80,32 @@ sequence:
   - type: seq
     sequence:
       - type: int
-
+```
+```yaml
 # Data
 - - 123
 - "foobar"
 ```
 
+This schema file can never be satisfied, since items cannot both be strings and integers.
 
-## mapping or map
+```yaml
+# Schema
+type: seq
+matching: all
+sequence:
+  - type: str
+  - type: int
+```
 
-Mapping of values (dict). Specifying `type: map` is optional when `mapping` or `map` is found in the schema.
 
-Example:
+### mapping
+
+Mapping of values (dict).
+
+The map type is implicitly assumed when `mapping` or its alias `map` is present in the rule.
+
+##### Example
 
 ```yaml
 # Schema
@@ -93,19 +113,55 @@ type: map
 mapping:
   key_one:
     type: str
+```
+```yaml
+# Data
+key_one: 'bar'
+```
 
-# This is also valid
+The schema below sets the map type implicitly, and is also a valid schema.
+
+```yaml
+# Schema
 map:
   key_one:
     type: str
 ```
 
+There are some constraints which are available only for the map type, and expand its functionality.
+See the [allowempty](#allowempty), [regex;(regex-pattern)](#regex;(regex-pattern)) and [matching-rule](#matching-rule) sections below for details.
 
-## required or req
+By default, map keys specified in the map rule can be omitted unless they have the [required](#required) constraint explictly set to `True`.
 
-Value is required when true (Default is false). If the key is not present a validation error will be raised.
 
-Example:
+### timestamp
+
+Parse a string to determine if it is a valid timestamp.
+
+Parsing is done with [dateutil](https://pypi.python.org/pypi/python-dateutil). You can see all valid formats in [the relevant dateutil documentation](https://dateutil.readthedocs.org/en/latest/examples.html#parse-examples).
+
+##### Example
+
+```yaml
+# Schema
+type: map
+mapping:
+  d1:
+    type: timestamp
+```
+```yaml
+# Data
+d1: "2015-03-29T18:45:00+00:00"
+```
+
+
+## required
+
+If the `required` constraint is set to `True`, the key and its value must be present, otherwise a validation error will be raised.
+
+Default is `False`. Alias is `req`.
+
+##### Example
 
 ```yaml
 # Schema
@@ -114,7 +170,8 @@ mapping:
   key_one:
     type: str
     required: True
-
+```
+```yaml
 # Data
 key_one: foobar
 ```
@@ -122,9 +179,11 @@ key_one: foobar
 
 ## enum
 
-Value must be one of the specified values. Currently only exact case matching is implemented. If you need complex validation you should use `pattern` (See next section)
+Set of possible elements; the value must be a member of this set.
 
-Example:
+Currently only exact case matching is implemented. If you need complex validation you should use [pattern](#pattern).
+
+##### Example
 
 ```yaml
 # Schema
@@ -133,7 +192,8 @@ mapping:
   blood:
     type: str
     enum: ['A', 'B', 'O', 'AB']
-
+```
+```yaml
 # Data
 blood: AB
 ```
@@ -141,11 +201,13 @@ blood: AB
 
 ## pattern
 
-Specifies regular expression pattern of value. Uses `re.match()` internally. Pattern works on all scalar types.
+Specifies a regular expression pattern which the value must satisfy.
 
-Note: Pattern no longer works in map. Use `regex;(regex-pattern)` as keys in `mapping`
+Uses [re.match()](https://docs.python.org/3/library/re.html#re.match) internally. Pattern works for all scalar types.
 
-Example:
+Note: For using regex to define possible key names in mapping, see [regex;(regex-pattern)](#regex;(regex-pattern)) instead.
+
+##### Example
 
 ```yaml
 # Schema
@@ -154,87 +216,30 @@ mapping:
   email:
     type: str
     pattern: .+@.+
-
+```
+```yaml
 # Data
 email: foo@mail.com
 ```
 
 
-## regex;(regex-pattern) or re;(regex-pattern)
-
-This is only implemented in map where a key inside the mapping keyword can implement this `regex;(regex-pattern)` pattern and all keys will be matched against the pattern.
-
-Please note that the regex should be wrapped with `( )`and they will be removed during runtime.
-
-If a match is found then it will parsed the subrules on that key. A single key can be matched against multiple regex rules and the normal map rules.
-
-When defining a regex, `matching-rule` should allways be set to configure the behaviour when using multiple regex:s.
-
-Example:
-
-```yaml
-# Schema
-type: seq
-sequence:
-  - type: map
-    matching-rule: 'any'
-    mapping:
-      regex;(mi.+):
-        type: seq
-        sequence:
-          - type: str
-      regex;(me.+):
-        type: seq
-        sequence:
-          - type: bool
-
-# Data
-- mic:
-  - input
-    foo
-  - output
-    bar
-- media: 1
-- foobar:
-    opa: True
-```
-
-
-## matching-rule [Default: any]
-
-Only applies to map. This enables more finegrained control over how the matching rule should behave when validation regex keys inside mappings.
-
-Currently supported rules is
-
- - `any` One or more of the regex must match.
- - `all` All defined regex must match each key.
-
-Example:
-
-```yaml
-# Schema
-type: map
-matching-rule: 'any'
-mapping: ...
-```
-
-
 ## range
 
-Range of value between ``max / max-ex`` and ``min / min-ex``.
+Range of value between `min` or `min-ex` and `max` or `max-ex`.
 
- - `max` means `max-inclusive`. (a >= b)
- - `min` means `min-inclusive`. (a <= b)
- - `max-ex` means `max-exclusive`. (a > b)
- - `min-ex` means `min-exclusive`. (a < b)
+For numeric types (`int`, `float` and `number`), the value must be within the specified range, and for non-numeric types (`map`, `seq` and `str`) the length of the dict/list/string as given by `len()` must be within the range.
 
-This works with `map` `seq` `str` `int` `float` `number`. When used on non number types it will use `len()` on the value.
+For the data value (or length), `x`, the range can be specified to test for the following:
+ - `min` provides an inclusive lower bound, `a <= x`
+ - `max` provides an inclusive upper bound, `x <= b`
+ - `min-ex` provides an exclusive lower bound, `a < x`
+ - `max-ex` provieds an exclusive upper bound, `x < b`
 
-Type bool and any are not available with range.
+Non-numeric types require non-negative values for the boundaries, since length can not be negative.
 
-Non number types require non negative values for the boundaries.
+Types [bool](#type) and [any]](#type) are not compatible with `range`.
 
-Example:
+##### Example
 
 ```yaml
 # Schema
@@ -243,43 +248,26 @@ mapping:
   password:
     type: str
     range:
-      max: 16
       min: 8
+      max: 16
   age:
     type: int
     range:
-      max-ex: 19
-      min-ex: 18
-
-# Data
-password: xxx123
-age: 15
+      min: 18
+      max-ex: 30
 ```
-
-
-## unique
-
-Value is unique for mapping or sequence.
-
-Example:
-
 ```yaml
-# Schema
-type: seq
-sequence:
-  - type: str
-    unique: True
-
 # Data
-- users
-- foo
-- admin
+password: foobar123
+age: 25
 ```
 
 
 ## name
 
-Name of schema. This have no effect on the parsing.
+Name of schema.
+
+This have no effect on the parsing, but is useful for humans to read.
 
 ```yaml
 # Schema
@@ -289,9 +277,11 @@ name: foobar schema
 
 ## desc
 
-Description is not used for validation. This have no effect on the parsing.
+Description of schema.
 
-Example:
+This have no effect on the parsing, but is useful for humans to read.
+
+##### Example
 
 ```yaml
 # Schema
@@ -299,27 +289,40 @@ desc: This schema is very foobar
 ```
 
 
-## timestamp
+## unique
 
-Parse a string to determine if it is a valid timestamp. Parsing is done with `python-dateutil` lib and see all valid formats at `https://dateutil.readthedocs.org/en/latest/examples.html#parse-examples`.
+If unique is set to `True`, then the sequence/mapping cannot contain any repeated entries.
 
-Example:
+The unique constraint can only be set when the type is `sequence` or `map`.
+
+Default is `False`.
+
+##### Example
 
 ```yaml
 # Schema
-type: map
-mapping:
-  d1:
-    type: timestamp
-
+type: seq
+sequence:
+  - type: str
+    unique: True
+```
+```yaml
 # Data
-d1: "2015-03-29T18:45:00+00:00"
+- users
+- foo
+- admin
 ```
 
 
 ## allowempty
 
-Only applies to map. It enables a dict to have items in it that is not validated. It can be combined with mapping to check for some fixed properties but still validate if any random properties exists.
+Only applies to [mapping](#mapping).
+If `True`, the map can have keys which are not present in the schema, and these can map to anything.
+Any keys which *are* specified in the schema must have values which conform to their corresponding constraints, if they are present.
+
+Default is `False`.
+
+##### Example
 
 ```yaml
 # Schema
@@ -328,11 +331,80 @@ mapping:
   datasources:
     type: map
     allowempty: True
-
+```
+```yaml
 # Data
 datasources:
   test1: test1.py
   test2: test2.py
+```
+
+
+## regex;(regex-pattern)
+
+Only applies to [mapping](#mapping). Alias is `re;(regex-pattern)`.
+
+This is only implemented in [mapping](#mapping) where a key inside the mapping keyword can implement this `regex;(regex-pattern)` pattern and all keys will be matched against the pattern.
+
+Please note that the regex should be wrapped with `( )` and these parentheses will be removed at runtime.
+
+If a match is found then it will be parsed against the subrules on that key. A single key can be matched against multiple regex rules and the normal map rules.
+
+When defining a regex key, [matching-rule](#matching-rule) should also be set to configure the behaviour when using multiple regexes.
+
+##### Example
+
+```yaml
+# Schema
+type: map
+matching-rule: 'any'
+mapping:
+  regex;(mi.+):
+    type: seq
+    sequence:
+      - type: str
+  regex;(me.+):
+    type: number
+```
+```yaml
+# Data
+mic:
+  - foo
+  - bar
+media: 1
+```
+
+
+## matching-rule
+
+Only applies to [mapping](#mapping). This enables more finegrained control over how the matching rule should behave when validation regex keys inside mappings.
+
+Currently supported constraint settings are:
+ - `any` One or more of the regex must match.
+ - `all` All defined regex must match each key.
+
+Default is `any`.
+
+##### Example
+
+The following dataset will raise an error because the key `bar2` does not fit all of the regex.
+If the constraint was instead `matching-rule: all`, the same data would be valid because all the keys in the data match one of the regex formats and associated constraints in the schema.
+
+```yaml
+# Schema
+type: map
+matching-rule: all
+mapping:
+  regex;([1-2]$):
+    type: int
+  regex;(^foobar):
+    type: int
+```
+```yaml
+# Data
+foobar1: 1
+foobar2: 2
+bar2: 3
 ```
 
 
@@ -343,7 +415,7 @@ It is possible to create small partial schemas that can be included in other sch
 
 To define a partial schema use the keyword `schema;(schema-id):`. `(schema-id)` must be globally unique for the loaded schema partials. If collisions is detected then error will be raised.
 
-To use a partial schema use the keyword `include: (schema-id):`. This will work at any place you can specify the keyword `type`. Include directive do not currently work inside a partial schema.
+To use a partial schema use the keyword `include: (schema-id):`. This will work at any place you can specify the keyword [type](#type). Include directive do not currently work inside a partial schema.
 
 It is possible to define any number of partial schemas in any schema file as long as they are defined at top level of the schema.
 
@@ -360,20 +432,20 @@ schema;map_str:
 type: seq
 sequence:
   - include: map_str
-
+```
+```yaml
 # Data
 - foo: opa
 ```
 
 
-
 ## schema;(schema-name)
 
-See `Partial schemas` section for details.
+See the [Partial schemas](#partial-schemas) section for details.
 
 Names must be globally unique.
 
-Example:
+##### Example
 
 ```yaml
 # Schema
@@ -391,9 +463,9 @@ schema;list_int:
 
 ## include
 
-Used in `partial schema` system. Includes is lazy loaded during parsing/validation.
+Used in [partial schema](#partial-schemas) system. Includes are lazy and are loaded during parsing/validation.
 
-Example:
+##### Example
 
 ```yaml
 # Schema file one

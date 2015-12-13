@@ -2,6 +2,13 @@
 Release Notes
 =============
 
+
+Next Release
+============
+
+- Improvements to documentation (scottclowe).
+
+
 1.5.0
 =====
 
@@ -76,8 +83,11 @@ Release Notes
 1.0.1
 =====
 
-Switched back to semantic version numbering for this lib. See *README.md* section *Important notes on version schema changes* on how to fix any issues with this change.
+Switched back to semantic version numbering for this lib.
 
+- After the release of `15.01` the version schema was changed back from the <year>.<month> style version schema back to semantic version names. One big problem with this change is that `pypi` can't handle the change back to semantic names very well and because of this I had to remove the old releases from pypi and replace it with a single version `1.0.1`.
+- No matter what version you were using you should consider upgrading to `1.0.1`. The difference between the two versions is very small and contains mostly bugfixes and added improvements.
+- The old releases can still be obtained from `github.com` and if you really need the old version you can add the download url to your `requirements.txt` file.
 
 
 15.01
