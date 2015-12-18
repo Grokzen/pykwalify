@@ -64,7 +64,7 @@ class Rule(object):
         return "Rule: {}".format(str(self._schema_str))
 
     def init(self, schema, path):
-        log.debug(u"Init schema: {}".format(schema))
+        log.debug(u"Init schema: %s", schema)
 
         include = schema.get("include", None)
 
@@ -178,8 +178,8 @@ class Rule(object):
         self._extensions = v
 
     def init_matching_rule(self, v, rule, path):
-        log.debug(u"Init matching-rule: {}".format(path))
-        log.debug(u"{} {}".format(v, rule))
+        log.debug(u"Init matching-rule: %s", path)
+        log.debug(u"%s %s", v, rule)
 
         # Verify that the provided rule is part of one of the allowed one
         allowed = ["any", "all"]
@@ -194,14 +194,14 @@ class Rule(object):
             self._matching_rule = v
 
     def init_allow_empty_map(self, v, rule, path):
-        log.debug(u"Init allow empty value: {}".format(path))
-        log.debug(u"Type: {} : {}".format(v, rule))
+        log.debug(u"Init allow empty value: %s", path)
+        log.debug(u"Type: %s : %s", v, rule)
 
         self._allowempty_map = v
 
     def init_type_value(self, v, rule, path):
-        log.debug(u"Init type value : {}".format(path))
-        log.debug(u"Type: {} {}".format(v, rule))
+        log.debug(u"Init type value : %s", path)
+        log.debug(u"Type: %s %s", v, rule)
 
         if v is None:
             v = DEFAULT_TYPE
@@ -217,7 +217,7 @@ class Rule(object):
             )
 
     def init_matching(self, v, rule, path):
-        log.debug(u"Init matching rule : {}".format(path))
+        log.debug(u"Init matching rule : %s", path)
 
         valid_values = ["any", "all", "*"]
 
@@ -231,17 +231,17 @@ class Rule(object):
         self._matching = str(v)
 
     def init_name_value(self, v, rule, path):
-        log.debug(u"Init name value : {}".format(path))
+        log.debug(u"Init name value : %s", path)
 
         self._name = str(v)
 
     def init_desc_value(self, v, rule, path):
-        log.debug(u"Init descr value : {}".format(path))
+        log.debug(u"Init descr value : %s", path)
 
         self._desc = str(v)
 
     def init_required_value(self, v, rule, path):
-        log.debug(u"Init required value : {}".format(path))
+        log.debug(u"Init required value : %s", path)
 
         if not isinstance(v, bool):
             raise RuleError(
@@ -252,7 +252,7 @@ class Rule(object):
         self._required = v
 
     def init_pattern_value(self, v, rule, path):
-        log.debug(u"Init pattern value : {}".format(path))
+        log.debug(u"Init pattern value : %s", path)
 
         if not isinstance(v, str):
             raise RuleError(
@@ -282,7 +282,7 @@ class Rule(object):
             )
 
     def init_enum_value(self, v, rule, path):
-        log.debug(u"Init enum value : {}".format(path))
+        log.debug(u"Init enum value : %s", path)
 
         if not isinstance(v, list):
             raise RuleError(
@@ -318,7 +318,7 @@ class Rule(object):
             lookup.add(item)
 
     def init_assert_value(self, v, rule, path):
-        log.debug(u"Init assert value : {}".format(path))
+        log.debug(u"Init assert value : %s", path)
 
         if not isinstance(v, str):
             raise RuleError(
@@ -336,7 +336,7 @@ class Rule(object):
         )
 
     def init_range_value(self, v, rule, path):
-        log.debug(u"Init range value : {}".format(path))
+        log.debug(u"Init range value : %s", path)
 
         supported_types = ["str", "int", "float", "number", "map", "seq"]
 
@@ -469,7 +469,7 @@ class Rule(object):
                 )
 
     def init_ident_value(self, v, rule, path):
-        log.debug(u"Init ident value : {}".format(path))
+        log.debug(u"Init ident value : %s", path)
 
         if v is None or isinstance(v, bool):
             raise RuleError(
@@ -503,7 +503,7 @@ class Rule(object):
             )
 
     def init_unique_value(self, v, rule, path):
-        log.debug(u"Init unique value : {}".format(path))
+        log.debug(u"Init unique value : %s", path)
 
         if not isinstance(v, bool):
             raise RuleError(
@@ -528,7 +528,7 @@ class Rule(object):
             )
 
     def init_sequence_value(self, v, rule, path):
-        log.debug(u"Init sequence value : {}".format(path))
+        log.debug(u"Init sequence value : %s", path)
 
         if v is not None and not isinstance(v, list):
             raise RuleError(
@@ -569,7 +569,7 @@ class Rule(object):
                 path=path,
             )
 
-        log.debug(u"Init mapping value : {}".format(path))
+        log.debug(u"Init mapping value : %s", path)
 
         if v is not None and not isinstance(v, dict):
             raise RuleError(
@@ -627,7 +627,7 @@ class Rule(object):
         return rule
 
     def init_default_value(self, v, rule, path):
-        log.debug(u"Init default value : {}".format(path))
+        log.debug(u"Init default value : %s", path)
         self._default = v
 
         if is_collection_type(self._type):
@@ -652,7 +652,7 @@ class Rule(object):
             )
 
     def check_conflicts(self, schema, rule, path):
-        log.debug(u"Checking for conflicts : {}".format(path))
+        log.debug(u"Checking for conflicts : %s", path)
 
         if self._type == "seq":
             if all([sa not in schema for sa in sequence_aliases]):

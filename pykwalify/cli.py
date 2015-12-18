@@ -49,8 +49,8 @@ optional arguments:
     # 2. validate arguments only, dont go into other code/logic
     #
 
-    log.debug("Setting verbose level: {0}".format(args["--verbose"]))
-    log.debug("Arguments from CLI: {0}".format(args))
+    log.debug("Setting verbose level: %s", args["--verbose"])
+    log.debug("Arguments from CLI: %s", args)
 
     return args
 

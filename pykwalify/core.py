@@ -34,11 +34,11 @@ class Core(object):
             flag from the cli. This list should not contain files specified by the `extensions` list keyword
             that can be defined at the top level of the schema.
         """
-        log.debug(u"source_file: {}".format(source_file))
-        log.debug(u"schema_file: {}".format(schema_files))
-        log.debug(u"source_data: {}".format(source_data))
-        log.debug(u"schema_data: {}".format(schema_data))
-        log.debug(u"extension files: {}".format(extensions))
+        log.debug(u"source_file: %s", source_file)
+        log.debug(u"schema_file: %s", schema_files)
+        log.debug(u"source_data: %s", source_data)
+        log.debug(u"schema_data: %s", schema_data)
+        log.debug(u"extension files: %s", extensions)
 
         self.source = None
         self.schema = None
@@ -123,7 +123,7 @@ class Core(object):
         """
         Load all extension files into the namespace pykwalify.ext
         """
-        log.debug(u"loading all extensions : {}".format(self.extensions))
+        log.debug(u"loading all extensions : %s", self.extensions)
 
         self.loaded_extensions = []
 
@@ -171,9 +171,9 @@ class Core(object):
         # Look for schema; tags so they can be parsed before the root rule is parsed
         for k, v in self.schema.items():
             if k.startswith("schema;"):
-                log.debug(u"Found partial schema; : {}".format(v))
+                log.debug(u"Found partial schema; : %s", v)
                 r = Rule(schema=v)
-                log.debug(u" Partial schema : {}".format(r))
+                log.debug(u" Partial schema : %s", r)
                 pykwalify.partial_schemas[k.split(";", 1)[1]] = r
             else:
                 # readd all items that is not schema; so they can be parsed
@@ -185,7 +185,7 @@ class Core(object):
         root_rule = Rule(schema=self.schema)
         self.root_rule = root_rule
         log.debug(u"Done building root rule")
-        log.debug(u"Root rule: {}".format(self.root_rule))
+        log.debug(u"Root rule: %s", self.root_rule)
 
         self._validate(value, root_rule, path, errors, done)
 
@@ -193,15 +193,15 @@ class Core(object):
 
     def _validate(self, value, rule, path, errors, done):
         log.debug(u"Core validate")
-        log.debug(u" ? Rule: {}".format(rule))
-        log.debug(u" ? Rule_type: {}".format(rule._type))
-        log.debug(u" ? Seq: {}".format(rule._sequence))
-        log.debug(u" ? Map: {}".format(rule._mapping))
+        log.debug(u" ? Rule: %s", rule)
+        log.debug(u" ? Rule_type: %s", rule._type)
+        log.debug(u" ? Seq: %s", rule._sequence)
+        log.debug(u" ? Map: %s", rule._mapping)
 
         if rule._required and self.source is None:
             raise CoreError(u"required.novalue : {}".format(path))
 
-        log.debug(u" ? ValidateRule: {}".format(rule))
+        log.debug(u" ? ValidateRule: %s", rule)
         if rule._include_name is not None:
             self._validate_include(value, rule, path, errors, done=None)
         elif rule._sequence is not None:
@@ -267,12 +267,12 @@ class Core(object):
 
     def _validate_sequence(self, value, rule, path, errors, done=None):
         log.debug(u"Core Validate sequence")
-        log.debug(u" * Data: {}".format(value))
-        log.debug(u" * Rule: {}".format(rule))
-        log.debug(u" * RuleType: {}".format(rule._type))
-        log.debug(u" * Path: {}".format(path))
-        log.debug(u" * Seq: {}".format(rule._sequence))
-        log.debug(u" * Map: {}".format(rule._mapping))
+        log.debug(u" * Data: %s", value)
+        log.debug(u" * Rule: %s", rule)
+        log.debug(u" * RuleType: %s", rule._type)
+        log.debug(u" * Path: %s", path)
+        log.debug(u" * Seq: %s", rule._sequence)
+        log.debug(u" * Map: %s", rule._mapping)
 
         if len(rule._sequence) <= 0:
             raise CoreError(u"Sequence must contains atleast one item : {}".format(path))
@@ -317,8 +317,8 @@ class Core(object):
                     unique_keys = []
 
                     for k, _rule in r._mapping.items():
-                        log.debug(u" * Key: {}".format(k))
-                        log.debug(u" * Rule: {}".format(_rule))
+                        log.debug(u" * Key: %s", k)
+                        log.debug(u" * Rule: %s", _rule)
 
                         if _rule._unique or _rule._ident:
                             unique_keys.append(k)
@@ -371,7 +371,7 @@ class Core(object):
                 no_errors.append(len(_errors) == 0)
 
             if rule._matching == "any":
-                log.debug(u" * any rule {}".format(True in no_errors))
+                log.debug(u" * any rule %s", True in no_errors)
                 ok_values.append(True in no_errors)
             elif rule._matching == "all":
                 log.debug(u" * all rule".format(all(no_errors)))
@@ -386,16 +386,16 @@ class Core(object):
         for _error in map_unique_errors:
             errors.append(_error)
 
-        log.debug(u" * ok : {}".format(ok_values))
+        log.debug(u" * ok : %s", ok_values)
 
         # All values must pass the validation, otherwise add the parsed errors
         # to the global error list and throw up some error.
         if not all(ok_values):
             # Ignore checking for '*' type because it should allways go through
             if rule._matching == "any":
-                log.debug(u" * Value: {0} did not validate against one or more sequence schemas".format(value))
+                log.debug(u" * Value: %s did not validate against one or more sequence schemas", value)
             elif rule._matching == "all":
-                log.debug(u" * Value: {0} did not validate against all possible sequence schemas".format(value))
+                log.debug(u" * Value: %s did not validate against all possible sequence schemas", value)
 
             for i in range(len(ok_values)):
                 for error in error_tracker[i]:
@@ -420,12 +420,12 @@ class Core(object):
 
     def _validate_mapping(self, value, rule, path, errors, done=None):
         log.debug(u"Validate mapping")
-        log.debug(u" + Data: {}".format(value))
-        log.debug(u" + Rule: {}".format(rule))
-        log.debug(u" + RuleType: {}".format(rule._type))
-        log.debug(u" + Path: {}".format(path))
-        log.debug(u" + Seq: {}".format(rule._sequence))
-        log.debug(u" + Map: {}".format(rule._mapping))
+        log.debug(u" + Data: %s", value)
+        log.debug(u" + Rule: %s", rule)
+        log.debug(u" + RuleType: %s", rule._type)
+        log.debug(u" + Path: %s", path)
+        log.debug(u" + Seq: %s", rule._sequence)
+        log.debug(u" + Map: %s", rule._mapping)
 
         if rule._mapping is None:
             log.debug(u" + No rule to apply, prolly because of allowempty: True")
@@ -435,7 +435,7 @@ class Core(object):
         self._handle_func(value, rule, path, errors, done)
 
         m = rule._mapping
-        log.debug(u" + RuleMapping: {}".format(m))
+        log.debug(u" + RuleMapping: %s", m)
 
         if not isinstance(value, dict):
             raise NotMappingError(u"Value: {} is not of a mapping type".format(value))
@@ -466,12 +466,12 @@ class Core(object):
 
         for k, v in value.items():
             r = m.get(k, None)
-            log.debug(u" + : {}".format(m))
-            log.debug(u" + : {} {}".format(k, v))
-            log.debug(u" + : {}".format(r))
+            log.debug(u" + : %s", m)
+            log.debug(u" + : %s %s", k, v)
+            log.debug(u" + : %s", r)
 
             regex_mappings = [(regex_rule, re.search(regex_rule._map_regex_rule, str(k))) for regex_rule in rule._regex_mappings]
-            log.debug(u" + Mapping Regex matches: {}".format(regex_mappings))
+            log.debug(u" + Mapping Regex matches: %s", regex_mappings)
 
             if any(regex_mappings):
                 sub_regex_result = []
@@ -479,7 +479,7 @@ class Core(object):
                 # Found at least one that matches a mapping regex
                 for mm in regex_mappings:
                     if mm[1]:
-                        log.debug(u" + Matching regex patter: {}".format(mm[0]))
+                        log.debug(u" + Matching regex patter: %s", mm[0])
                         self._validate(v, mm[0], "{}/{}".format(path, k), errors, done)
                         sub_regex_result.append(True)
                     else:
@@ -520,17 +520,17 @@ class Core(object):
             else:
                 if not r._schema:
                     # validate recursively
-                    log.debug(u" + Core Map: validate recursively: {}".format(r))
+                    log.debug(u" + Core Map: validate recursively: %s", r)
                     self._validate(v, r, u"{}/{}".format(path, k), errors, done)
                 else:
                     print(u" + Something is ignored Oo : {}".format(r))
 
     def _validate_scalar(self, value, rule, path, errors, done=None):
         log.debug(u"Validate scalar")
-        log.debug(u" # {}".format(value))
-        log.debug(u" # {}".format(rule))
-        log.debug(u" # {}".format(rule._type))
-        log.debug(u" # {}".format(path))
+        log.debug(u" # %s", value)
+        log.debug(u" # %s", rule)
+        log.debug(u" # %s", rule._type)
+        log.debug(u" # %s", path)
 
         # Handle 'func' argument on this scalar
         self._handle_func(value, rule, path, errors, done)
@@ -613,14 +613,13 @@ class Core(object):
         """
 
         log.debug(
-            u"Validate range : {} : {} : {} : {} : {} : {}".format(
-                max_,
-                min_,
-                max_ex,
-                min_ex,
-                value,
-                path,
-            )
+            u"Validate range : %s : %s : %s : %s : %s : %s",
+            max_,
+            min_,
+            max_ex,
+            min_ex,
+            value,
+            path,
         )
 
         if max_ is not None:
@@ -660,8 +659,8 @@ class Core(object):
                     min_ex=min_ex))
 
     def _validate_scalar_type(self, value, t, errors, path):
-        log.debug(u" # Core scalar: validating scalar type : {}".format(t))
-        log.debug(u" # Core scalar: scalar type: {}".format(type(value)))
+        log.debug(u" # Core scalar: validating scalar type : %s", t)
+        log.debug(u" # Core scalar: scalar type: %s", type(value))
 
         try:
             if not tt[t](value):
@@ -673,4 +672,4 @@ class Core(object):
         except Exception as e:
             # Type not found in map
             log.debug(e)
-            raise Exception(u"Unknown type check: {} : {} : {}".format(path, value, t))
+            raise Exception(u"Unknown type check: %s : %s : %s", path, value, t)
