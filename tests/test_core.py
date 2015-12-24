@@ -268,7 +268,7 @@ class TestCore(object):
                 raise e
 
             # This serve as an extra schema validation that tests more complex structures then testrule.py do
-            compare(c.root_rule._schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed...")
+            compare(c.root_rule.schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed...")
 
         for failing_test in failing_tests:
             with pytest.raises(failing_test[2], msg="Test files: {} : {}".format(", ".join(failing_test[0]), failing_test[1])):
@@ -441,7 +441,7 @@ class TestCore(object):
                 raise e
 
             # This serve as an extra schema validation that tests more complex structures then testrule.py do
-            compare(c.root_rule._schema_str, schema, prefix="Parsed rules is not correct, something have changed... files : {}".format(f))
+            compare(c.root_rule.schema_str, schema, prefix="Parsed rules is not correct, something have changed... files : {}".format(f))
 
         for failing_test, exception_type in _fail_tests:
             f = self.f(os.path.join("fail", failing_test))

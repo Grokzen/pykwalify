@@ -37,7 +37,7 @@ class Rule(object):
         self._enum = None
         self._sequence = None
         self._mapping = None
-        self._assert = None
+        self._assertion = None
         self._range = None
         self._ident = None
         self._unique = None
@@ -45,6 +45,7 @@ class Rule(object):
         self._allowempty_map = None
         self._matching_rule = "any"
         self._map_regex_rule = None
+
         self._regex_mappings = None
         self._include_name = None
         self._extensions = None
@@ -60,8 +61,216 @@ class Rule(object):
         if isinstance(schema, dict):
             self.init(schema, "")
 
+    @property
+    def matching(self):
+        return self._matching
+
+    @matching.setter
+    def matching(self, value):
+        self._matching = value
+
+    @property
+    def parent(self):
+        return self._parent
+
+    @parent.setter
+    def parent(self, value):
+        self._parent = value
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
+
+    @property
+    def desc(self):
+        return self._desc
+
+    @desc.setter
+    def desc(self, value):
+        self._desc = value
+
+    @property
+    def required(self):
+        return self._required
+
+    @required.setter
+    def required(self, value):
+        self._required = value
+
+    @property
+    def type(self):
+        return self._type
+
+    @type.setter
+    def type(self, value):
+        self._type = value
+
+    @property
+    def type_class(self):
+        return self._type_class
+
+    @type_class.setter
+    def type_class(self, value):
+        self._type_class = value
+
+    @property
+    def pattern(self):
+        return self._pattern
+
+    @pattern.setter
+    def pattern(self, value):
+        self._pattern = value
+
+    @property
+    def pattern_regexp(self):
+        return self._pattern_regexp
+
+    @pattern_regexp.setter
+    def pattern_regexp(self, value):
+        self._pattern_regexp = value
+
+    @property
+    def enum(self):
+        return self._enum
+
+    @enum.setter
+    def enum(self, value):
+        self._enum = value
+
+    @property
+    def sequence(self):
+        return self._sequence
+
+    @sequence.setter
+    def sequence(self, value):
+        self._sequence = value
+
+    @property
+    def mapping(self):
+        return self._mapping
+
+    @mapping.setter
+    def mapping(self, value):
+        self._mapping = value
+
+    @property
+    def assertion(self):
+        return self._assertion
+
+    @assertion.setter
+    def assertion(self, value):
+        self._assertion = value
+
+    @property
+    def range(self):
+        return self._range
+
+    @range.setter
+    def range(self, value):
+        self._range = value
+
+    @property
+    def ident(self):
+        return self._ident
+
+    @ident.setter
+    def ident(self, value):
+        self._ident = value
+
+    @property
+    def unique(self):
+        return self._unique
+
+    @property
+    def default(self):
+        return self._default
+
+    @default.setter
+    def default(self, value):
+        self._default = value
+
+    @unique.setter
+    def unique(self, value):
+        self._unique = value
+
+    @property
+    def allowempty_map(self):
+        return self._allowempty_map
+
+    @allowempty_map.setter
+    def allowempty_map(self, value):
+        self._allowempty_map = value
+
+    @property
+    def matching_rule(self):
+        return self._matching_rule
+
+    @matching_rule.setter
+    def matching_rule(self, value):
+        self._matching_rule = value
+
+    @property
+    def map_regex_rule(self):
+        return self._map_regex_rule
+
+    @map_regex_rule.setter
+    def map_regex_rule(self, value):
+        self._map_regex_rule = value
+
+    @property
+    def regex_mappings(self):
+        return self._regex_mappings
+
+    @regex_mappings.setter
+    def regex_mappings(self, value):
+        self._regex_mappings = value
+
+    @property
+    def include_name(self):
+        return self._include_name
+
+    @include_name.setter
+    def include_name(self, value):
+        self._include_name = value
+
+    @property
+    def extensions(self):
+        return self._extensions
+
+    @extensions.setter
+    def extensions(self, value):
+        self._extensions = value
+
+    @property
+    def func(self):
+        return self._func
+
+    @func.setter
+    def func(self, value):
+        self._func = value
+
+    @property
+    def schema(self):
+        return self._schema
+
+    @schema.setter
+    def schema(self, value):
+        self._schema = value
+
+    @property
+    def schema_str(self):
+        return self._schema_str
+
+    @schema_str.setter
+    def schema_str(self, value):
+        self._schema_str = value
+
     def __str__(self):
-        return "Rule: {}".format(str(self._schema_str))
+        return "Rule: {}".format(str(self.schema_str))
 
     def init(self, schema, path):
         log.debug(u"Init schema: %s", schema)
@@ -71,7 +280,7 @@ class Rule(object):
         # Check if this item is a include, overwrite schema with include schema and continue to parse
         if include:
             log.debug(u"Found include tag...")
-            self._include_name = include
+            self.include_name = include
             return
 
         t = None
@@ -100,9 +309,9 @@ class Rule(object):
                         path=path,
                     )
 
-                self._type = schema["type"]
+                self.type = schema["type"]
 
-        self._schema_str = schema
+        self.schema_str = schema
 
         if not t:
             t = schema["type"]
@@ -161,7 +370,7 @@ class Rule(object):
                 path=path,
             )
 
-        self._func = v
+        self.func = v
 
     def init_extensions(self, v, rule, path):
         """
@@ -175,7 +384,7 @@ class Rule(object):
 
         # TODO: Add limitation that this keyword can only be used at the top level of the file
 
-        self._extensions = v
+        self.extensions = v
 
     def init_matching_rule(self, v, rule, path):
         log.debug(u"Init matching-rule: %s", path)
@@ -191,13 +400,13 @@ class Rule(object):
                 path=path,
             )
         else:
-            self._matching_rule = v
+            self.matching_rule = v
 
     def init_allow_empty_map(self, v, rule, path):
         log.debug(u"Init allow empty value: %s", path)
         log.debug(u"Type: %s : %s", v, rule)
 
-        self._allowempty_map = v
+        self.allowempty_map = v
 
     def init_type_value(self, v, rule, path):
         log.debug(u"Init type value : %s", path)
@@ -206,12 +415,12 @@ class Rule(object):
         if v is None:
             v = DEFAULT_TYPE
 
-        self._type = v
-        self._type_class = type_class(v)
+        self.type = v
+        self.type_class = type_class(v)
 
-        if not is_builtin_type(self._type):
+        if not is_builtin_type(self.type):
             raise RuleError(
-                msg=u"Type: {} is not any of the known types".format(self._type),
+                msg=u"Type: {} is not any of the known types".format(self.type),
                 error_key=u"type.unknown",
                 path=path,
             )
@@ -228,17 +437,17 @@ class Rule(object):
                 path=path,
             )
 
-        self._matching = str(v)
+        self.matching = str(v)
 
     def init_name_value(self, v, rule, path):
         log.debug(u"Init name value : %s", path)
 
-        self._name = str(v)
+        self.name = str(v)
 
     def init_desc_value(self, v, rule, path):
         log.debug(u"Init descr value : %s", path)
 
-        self._desc = str(v)
+        self.desc = str(v)
 
     def init_required_value(self, v, rule, path):
         log.debug(u"Init required value : %s", path)
@@ -249,7 +458,7 @@ class Rule(object):
                 error_key=u"required.not_bool",
                 path=path,
             )
-        self._required = v
+        self.required = v
 
     def init_pattern_value(self, v, rule, path):
         log.debug(u"Init pattern value : %s", path)
@@ -261,9 +470,9 @@ class Rule(object):
                 path=path,
             )
 
-        self._pattern = v
+        self.pattern = v
 
-        if self._schema_str["type"] == "map":
+        if self.schema_str["type"] == "map":
             raise RuleError(
                 msg=u"Keyword pattern is not allowed inside map",
                 error_key=u"pattern.not_allowed_in_map",
@@ -273,10 +482,10 @@ class Rule(object):
         # TODO: Some form of validation of the regexp? it exists in the source
 
         try:
-            self._pattern_regexp = re.compile(self._pattern)
+            self.pattern_regexp = re.compile(self.pattern)
         except Exception:
             raise RuleError(
-                msg=u"Syntax error when compiling regex pattern: {}".format(self._pattern_regexp),
+                msg=u"Syntax error when compiling regex pattern: {}".format(self.pattern_regexp),
                 error_key=u"pattern.syntax_error",
                 path=path,
             )
@@ -290,9 +499,9 @@ class Rule(object):
                 error_key=u"enum.not_seq",
                 path=path,
             )
-        self._enum = v
+        self.enum = v
 
-        if is_collection_type(self._type):
+        if is_collection_type(self.type):
             raise RuleError(
                 msg=u"Enum is not a scalar",
                 error_key=u"enum.not_scalar",
@@ -301,9 +510,9 @@ class Rule(object):
 
         lookup = set()
         for item in v:
-            if not isinstance(item, self._type_class):
+            if not isinstance(item, self.type_class):
                 raise RuleError(
-                    msg=u"Item: '{}' in enum is not of correct class type: '{}'".format(item, self._type_class),
+                    msg=u"Item: '{}' in enum is not of correct class type: '{}'".format(item, self.type_class),
                     error_key=u"enum.type.unmatch",
                     path=path,
                 )
@@ -327,7 +536,7 @@ class Rule(object):
                 path=path,
             )
 
-        self._assert = v
+        self.assertion = v
 
         raise RuleError(
             msg=u"Keyword assert is not yet implemented",
@@ -347,18 +556,18 @@ class Rule(object):
                 path=path,
             )
 
-        if self._type not in supported_types:
+        if self.type not in supported_types:
             raise RuleError(
-                msg=u"Range value type: '{}' is not a supported type".format(self._type),
+                msg=u"Range value type: '{}' is not a supported type".format(self.type),
                 error_key=u"range.not_supported_type",
                 path=path,
             )
 
         # dict that should contain min, max, min-ex, max-ex keys
-        self._range = v
+        self.range = v
 
         # This should validate that only min, max, min-ex, max-ex exists in the dict
-        for k, v in self._range.items():
+        for k, v in self.range.items():
             if k not in ["max", "min", "max-ex", "min-ex"]:
                 raise RuleError(
                     msg=u"Unknown key: '{}' found in range keyword".format(k),
@@ -366,24 +575,24 @@ class Rule(object):
                     path=path,
                 )
 
-        if "max" in self._range and "max-ex" in self._range:
+        if "max" in self.range and "max-ex" in self.range:
             raise RuleError(
                 msg=u"'max' and 'max-ex' can't be used in the same range rule",
                 error_key=u"range.max_duplicate_keywords",
                 path=path,
             )
 
-        if "min" in self._range and "min-ex" in self._range:
+        if "min" in self.range and "min-ex" in self.range:
             raise RuleError(
                 msg=u"'min' and 'min-ex' can't be used in the same range rule",
                 error_key=u"range.min_duplicate_keywords",
                 path=path,
             )
 
-        max = self._range.get("max", None)
-        min = self._range.get("min", None)
-        max_ex = self._range.get("max-ex", None)
-        min_ex = self._range.get("min-ex", None)
+        max = self.range.get("max", None)
+        min = self.range.get("min", None)
+        max_ex = self.range.get("max-ex", None)
+        min_ex = self.range.get("min-ex", None)
 
         if max is not None and not is_number(max) or is_bool(max):
             raise RuleError(
@@ -415,28 +624,28 @@ class Rule(object):
 
         # only numbers allow negative ranges
         # string, map and seq require non negative ranges
-        if self._type not in ["int", "float", "number"]:
+        if self.type not in ["int", "float", "number"]:
             if min is not None and min < 0:
                 raise RuleError(
-                    msg=u"Value for 'min' can't be negative in case of type {}.".format(self._type),
+                    msg=u"Value for 'min' can't be negative in case of type {}.".format(self.type),
                     error_key=u"range.min_negative",
                     path=path,
                 )
             elif min_ex is not None and min_ex < 0:
                 raise RuleError(
-                    msg=u"Value for 'min-ex' can't be negative in case of type {}.".format(self._type),
+                    msg=u"Value for 'min-ex' can't be negative in case of type {}.".format(self.type),
                     error_key=u"range.min-ex_negative",
                     path=path,
                 )
             if max is not None and max < 0:
                 raise RuleError(
-                    msg=u"Value for 'max' can't be negative in case of type {}.".format(self._type),
+                    msg=u"Value for 'max' can't be negative in case of type {}.".format(self.type),
                     error_key=u"range.max_negative",
                     path=path,
                 )
             elif max_ex is not None and max_ex < 0:
                 raise RuleError(
-                    msg=u"Value for 'max-ex' can't be negative in case of type {}.".format(self._type),
+                    msg=u"Value for 'max-ex' can't be negative in case of type {}.".format(self.type),
                     error_key=u"range.max-ex_negative",
                     path=path,
                 )
@@ -478,10 +687,10 @@ class Rule(object):
                 path=path,
             )
 
-        self._ident = bool(v)
-        self._required = True
+        self.ident = bool(v)
+        self.required = True
 
-        if is_collection_type(self._type):
+        if is_collection_type(self.type):
             raise RuleError(
                 msg=u"Value: '{}' of 'ident' is not a scalar value".format(v),
                 error_key=u"ident.not_scalar",
@@ -495,7 +704,7 @@ class Rule(object):
                 path=path,
             )
 
-        if self._parent is None or not self._parent._type == "map":
+        if self.parent is None or not self.parent.type == "map":
             raise RuleError(
                 msg=u"Keword 'ident' can't be inside 'map'",
                 error_key=u"ident.not_in_map",
@@ -512,11 +721,11 @@ class Rule(object):
                 path=path,
             )
 
-        self._unique = v
+        self.unique = v
 
-        if is_collection_type(self._type):
+        if is_collection_type(self.type):
             raise RuleError(
-                msg=u"Type of the value: '{}' for 'unique' keyword is not a scalar type".format(self._type),
+                msg=u"Type of the value: '{}' for 'unique' keyword is not a scalar type".format(self.type),
                 error_key=u"unique.not_scalar",
                 path=path,
             )
@@ -537,9 +746,9 @@ class Rule(object):
                 path=path,
             )
 
-        self._sequence = v
+        self.sequence = v
 
-        if self._sequence is None or len(self._sequence) == 0:
+        if self.sequence is None or len(self.sequence) == 0:
             raise RuleError(
                 msg=u"Sequence contains 0 elements",
                 error_key=u"sequence.no_elements",
@@ -548,7 +757,7 @@ class Rule(object):
 
         tmp_seq = []
 
-        for i, e in enumerate(self._sequence):
+        for i, e in enumerate(self.sequence):
             elem = e or {}
 
             rule = Rule(None, self)
@@ -556,13 +765,13 @@ class Rule(object):
 
             tmp_seq.append(rule)
 
-        self._sequence = tmp_seq
+        self.sequence = tmp_seq
 
         return rule
 
     def init_mapping_value(self, v, rule, path):
         # Check for duplicate use of 'map' and 'mapping'
-        if self._mapping:
+        if self.mapping:
             raise RuleError(
                 msg=u"Keywords 'map' and 'mapping' can't be used on the same level",
                 error_key=u"mapping.duplicate_keywords",
@@ -585,8 +794,8 @@ class Rule(object):
                 path=path,
             )
 
-        self._mapping = {}
-        self._regex_mappings = []
+        self.mapping = {}
+        self.regex_mappings = []
 
         for k, v in v.items():
             if v is None:
@@ -616,37 +825,37 @@ class Rule(object):
 
                     regex_rule = Rule(None, self)
                     regex_rule.init(v, u"{}/mapping;regex/{}".format(path, regex[1:-1]))
-                    regex_rule._map_regex_rule = regex[1:-1]
-                    self._regex_mappings.append(regex_rule)
-                    self._mapping[k] = regex_rule
+                    regex_rule.map_regex_rule = regex[1:-1]
+                    self.regex_mappings.append(regex_rule)
+                    self.mapping[k] = regex_rule
             else:
                 rule = Rule(None, self)
                 rule.init(v, u"{}/mapping/{}".format(path, k))
-                self._mapping[k] = rule
+                self.mapping[k] = rule
 
         return rule
 
     def init_default_value(self, v, rule, path):
         log.debug(u"Init default value : %s", path)
-        self._default = v
+        self.default = v
 
-        if is_collection_type(self._type):
+        if is_collection_type(self.type):
             raise RuleError(
                 msg=u"Value: {} for keyword 'default' is not a scalar type".format(v),
                 error_key=u"default.not_scalar",
                 path=path,
             )
 
-        if self._type == "map" or self._type == "seq":
+        if self.type == "map" or self.type == "seq":
             raise RuleError(
                 msg=u"Value: {} for keyword 'default' is not a scalar type".format(v),
                 error_key=u"default.not_scalar",
                 path=path,
             )
 
-        if not isinstance(v, self._type_class):
+        if not isinstance(v, self.type_class):
             raise RuleError(
-                msg=u"Types do not match: '{}' --> '{}'".format(v, self._type_class),
+                msg=u"Types do not match: '{}' --> '{}'".format(v, self.type_class),
                 error_key=u"default.type.unmatch",
                 path=path,
             )
@@ -654,7 +863,7 @@ class Rule(object):
     def check_conflicts(self, schema, rule, path):
         log.debug(u"Checking for conflicts : %s", path)
 
-        if self._type == "seq":
+        if self.type == "seq":
             if all([sa not in schema for sa in sequence_aliases]):
                 raise SchemaConflict(
                     msg="Type is sequence but no sequence alias found on same level",
@@ -662,64 +871,64 @@ class Rule(object):
                     path=path,
                 )
 
-            if self._enum is not None:
+            if self.enum is not None:
                 raise SchemaConflict(
                     msg="Sequence and enum can't be on the same level in the schema",
                     error_key=u"seq.conflict.enum",
                     path=path,
                 )
 
-            if self._pattern is not None:
+            if self.pattern is not None:
                 raise SchemaConflict(
                     msg="Sequence and pattern can't be on the same level in the schema",
                     error_key=u"seq.conflict.pattern",
                     path=path,
                 )
 
-            if self._mapping is not None:
+            if self.mapping is not None:
                 raise SchemaConflict(
                     msg="Sequence and mapping can't be on the same level in the schema",
                     error_key=u"seq.conflict.mapping",
                     path=path,
                 )
-        elif self._type == "map":
-            if all([ma not in schema for ma in mapping_aliases]) and not self._allowempty_map:
+        elif self.type == "map":
+            if all([ma not in schema for ma in mapping_aliases]) and not self.allowempty_map:
                 raise SchemaConflict(
                     msg="Type is mapping but no mapping alias found on same level",
                     error_key=u"map.no_mapping",
                     path=path,
                 )
 
-            if self._enum is not None:
+            if self.enum is not None:
                 raise SchemaConflict(
                     msg="Mapping and enum can't be on the same level in the schema",
                     error_key=u"map.conflict.enum",
                     path=path,
                 )
 
-            if self._sequence is not None:
+            if self.sequence is not None:
                 raise SchemaConflict(
                     msg="Mapping and sequence can't be on the same level in the schema",
                     error_key=u"map.conflict.sequence",
                     path=path,
                 )
         else:
-            if self._sequence is not None:
+            if self.sequence is not None:
                 raise SchemaConflict(
                     msg="Scalar and sequence can't be on the same level in the schema",
                     error_key=u"scalar.conflict.sequence",
                     path=path,
                 )
 
-            if self._mapping is not None:
+            if self.mapping is not None:
                 raise SchemaConflict(
                     msg="Scalar and mapping can't be on the same level in the schema",
                     error_key=u"scalar.conflict.mapping",
                     path=path,
                 )
 
-            if self._enum is not None:
-                if self._range is not None:
+            if self.enum is not None:
+                if self.range is not None:
                     raise SchemaConflict(
                         msg="Enum and range can't be on the same level in the schema",
                         error_key=u"enum.conflict.range",

@@ -2,11 +2,14 @@
 Release Notes
 =============
 
-
 Next Release
 ============
 
 - Improvements to documentation (scottclowe).
+- Improved code linting by reworking private variables in Rule class to now be properties and updated
+  all code that used the old way.
+- Improved code linting by reworking all Log messages to render according to pep standard.
+  (By using %s and passing in variables as positional arguments)
 
 
 1.5.0

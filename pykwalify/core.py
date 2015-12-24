@@ -194,19 +194,20 @@ class Core(object):
     def _validate(self, value, rule, path, errors, done):
         log.debug(u"Core validate")
         log.debug(u" ? Rule: %s", rule)
-        log.debug(u" ? Rule_type: %s", rule._type)
-        log.debug(u" ? Seq: %s", rule._sequence)
-        log.debug(u" ? Map: %s", rule._mapping)
+        log.debug(u" ? Rule_type: %s", rule.type)
+        log.debug(u" ? Seq: %s", rule.sequence)
+        log.debug(u" ? Map: %s", rule.mapping)
+        log.debug(u" ? Done: %s", done)
 
-        if rule._required and self.source is None:
+        if rule.required and self.source is None:
             raise CoreError(u"required.novalue : {}".format(path))
 
         log.debug(u" ? ValidateRule: %s", rule)
-        if rule._include_name is not None:
+        if rule.include_name is not None:
             self._validate_include(value, rule, path, errors, done=None)
-        elif rule._sequence is not None:
+        elif rule.sequence is not None:
             self._validate_sequence(value, rule, path, errors, done=None)
-        elif rule._mapping is not None or rule._allowempty_map:
+        elif rule.mapping is not None or rule.allowempty_map:
             self._validate_mapping(value, rule, path, errors, done=None)
         else:
             self._validate_scalar(value, rule, path, errors, done=None)
@@ -216,7 +217,7 @@ class Core(object):
         Helper function that should check if func is specified for this rule and
         then handle it for all cases in a generic way.
         """
-        func = rule._func
+        func = rule.func
 
         # func keyword is not defined so nothing to do
         if not func:
@@ -245,14 +246,14 @@ class Core(object):
 
     def _validate_include(self, value, rule, path, errors, done=None):
         # TODO: It is difficult to get a good test case to trigger this if case
-        if rule._include_name is None:
+        if rule.include_name is None:
             errors.append(SchemaError.SchemaErrorEntry(
                 msg=u'Include name not valid',
                 path=path,
                 value=value.encode('unicode_escape')))
             return
 
-        include_name = rule._include_name
+        include_name = rule.include_name
         partial_schema_rule = pykwalify.partial_schemas.get(include_name, None)
         if not partial_schema_rule:
             errors.append(SchemaError.SchemaErrorEntry(
@@ -269,12 +270,12 @@ class Core(object):
         log.debug(u"Core Validate sequence")
         log.debug(u" * Data: %s", value)
         log.debug(u" * Rule: %s", rule)
-        log.debug(u" * RuleType: %s", rule._type)
+        log.debug(u" * RuleType: %s", rule.type)
         log.debug(u" * Path: %s", path)
-        log.debug(u" * Seq: %s", rule._sequence)
-        log.debug(u" * Map: %s", rule._mapping)
+        log.debug(u" * Seq: %s", rule.sequence)
+        log.debug(u" * Map: %s", rule.mapping)
 
-        if len(rule._sequence) <= 0:
+        if len(rule.sequence) <= 0:
             raise CoreError(u"Sequence must contains atleast one item : {}".format(path))
 
         if value is None:
@@ -296,7 +297,7 @@ class Core(object):
         for i, item in enumerate(value):
             processed = []
 
-            for r in rule._sequence:
+            for r in rule.sequence:
                 tmp_errors = []
 
                 try:
@@ -312,15 +313,15 @@ class Core(object):
 
                 processed.append(tmp_errors)
 
-                if r._type == "map":
+                if r.type == "map":
                     log.debug(u" * Found map inside sequence")
                     unique_keys = []
 
-                    for k, _rule in r._mapping.items():
+                    for k, _rule in r.mapping.items():
                         log.debug(u" * Key: %s", k)
                         log.debug(u" * Rule: %s", _rule)
 
-                        if _rule._unique or _rule._ident:
+                        if _rule.unique or _rule.ident:
                             unique_keys.append(k)
 
                     if len(unique_keys) > 0:
@@ -343,7 +344,7 @@ class Core(object):
                                     map_unique_errors[s.__repr__()] = s
                                 else:
                                     table[val] = j
-                elif r._unique:
+                elif r.unique:
                     log.debug(u" * Found unique value in sequence")
                     table = {}
 
@@ -370,13 +371,13 @@ class Core(object):
             for _errors in processed:
                 no_errors.append(len(_errors) == 0)
 
-            if rule._matching == "any":
+            if rule.matching == "any":
                 log.debug(u" * any rule %s", True in no_errors)
                 ok_values.append(True in no_errors)
-            elif rule._matching == "all":
+            elif rule.matching == "all":
                 log.debug(u" * all rule".format(all(no_errors)))
                 ok_values.append(all(no_errors))
-            elif rule._matching == "*":
+            elif rule.matching == "*":
                 log.debug(u" * star rule", "...")
                 ok_values.append(True)
 
@@ -392,9 +393,9 @@ class Core(object):
         # to the global error list and throw up some error.
         if not all(ok_values):
             # Ignore checking for '*' type because it should allways go through
-            if rule._matching == "any":
+            if rule.matching == "any":
                 log.debug(u" * Value: %s did not validate against one or more sequence schemas", value)
-            elif rule._matching == "all":
+            elif rule.matching == "all":
                 log.debug(u" * Value: %s did not validate against all possible sequence schemas", value)
 
             for i in range(len(ok_values)):
@@ -404,8 +405,8 @@ class Core(object):
 
         log.debug(u" * Core seq: validation recursivley done...")
 
-        if rule._range is not None:
-            rr = rule._range
+        if rule.range is not None:
+            rr = rule.range
 
             self._validate_range(
                 rr.get("max", None),
@@ -422,26 +423,26 @@ class Core(object):
         log.debug(u"Validate mapping")
         log.debug(u" + Data: %s", value)
         log.debug(u" + Rule: %s", rule)
-        log.debug(u" + RuleType: %s", rule._type)
+        log.debug(u" + RuleType: %s", rule.type)
         log.debug(u" + Path: %s", path)
-        log.debug(u" + Seq: %s", rule._sequence)
-        log.debug(u" + Map: %s", rule._mapping)
+        log.debug(u" + Seq: %s", rule.sequence)
+        log.debug(u" + Map: %s", rule.mapping)
 
-        if rule._mapping is None:
+        if rule.mapping is None:
             log.debug(u" + No rule to apply, prolly because of allowempty: True")
             return
 
         # Handle 'func' argument on this mapping
         self._handle_func(value, rule, path, errors, done)
 
-        m = rule._mapping
+        m = rule.mapping
         log.debug(u" + RuleMapping: %s", m)
 
         if not isinstance(value, dict):
             raise NotMappingError(u"Value: {} is not of a mapping type".format(value))
 
-        if rule._range is not None:
-            r = rule._range
+        if rule.range is not None:
+            r = rule.range
 
             self._validate_range(
                 r.get("max", None),
@@ -455,14 +456,14 @@ class Core(object):
             )
 
         for k, rr in m.items():
-            if rr._required and k not in value:
+            if rr.required and k not in value:
                 errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Cannot find required key '{key}'. Path: '{path}'",
                     path=path,
                     value=value,
                     key=k))
-            if k not in value and rr._default is not None:
-                value[k] = rr._default
+            if k not in value and rr.default is not None:
+                value[k] = rr.default
 
         for k, v in value.items():
             r = m.get(k, None)
@@ -470,7 +471,7 @@ class Core(object):
             log.debug(u" + : %s %s", k, v)
             log.debug(u" + : %s", r)
 
-            regex_mappings = [(regex_rule, re.search(regex_rule._map_regex_rule, str(k))) for regex_rule in rule._regex_mappings]
+            regex_mappings = [(regex_rule, re.search(regex_rule.map_regex_rule, str(k))) for regex_rule in rule.regex_mappings]
             log.debug(u" + Mapping Regex matches: %s", regex_mappings)
 
             if any(regex_mappings):
@@ -485,7 +486,7 @@ class Core(object):
                     else:
                         sub_regex_result.append(False)
 
-                if rule._matching_rule == "any":
+                if rule.matching_rule == "any":
 
                     if any(sub_regex_result):
                         log.debug(u" + Matched at least one regex")
@@ -496,8 +497,8 @@ class Core(object):
                             path=path,
                             value=value,
                             key=k,
-                            regex="' or '".join(sorted([mm[0]._map_regex_rule for mm in regex_mappings]))))
-                elif rule._matching_rule == "all":
+                            regex="' or '".join(sorted([mm[0].map_regex_rule for mm in regex_mappings]))))
+                elif rule.matching_rule == "all":
                     if all(sub_regex_result):
                         log.debug(u" + Matched all regex rules")
                     else:
@@ -507,18 +508,18 @@ class Core(object):
                             path=path,
                             value=value,
                             key=k,
-                            regex="' and '".join(sorted([mm[0]._map_regex_rule for mm in regex_mappings]))))
+                            regex="' and '".join(sorted([mm[0].map_regex_rule for mm in regex_mappings]))))
                 else:
                     log.debug(u" + No mapping rule defined")
             elif r is None:
-                if not rule._allowempty_map:
+                if not rule.allowempty_map:
                     errors.append(SchemaError.SchemaErrorEntry(
                         msg=u"Key '{key}' was not defined. Path: '{path}'",
                         path=path,
                         value=value,
                         key=k))
             else:
-                if not r._schema:
+                if not r.schema:
                     # validate recursively
                     log.debug(u" + Core Map: validate recursively: %s", r)
                     self._validate(v, r, u"{}/{}".format(path, k), errors, done)
@@ -529,14 +530,14 @@ class Core(object):
         log.debug(u"Validate scalar")
         log.debug(u" # %s", value)
         log.debug(u" # %s", rule)
-        log.debug(u" # %s", rule._type)
+        log.debug(u" # %s", rule.type)
         log.debug(u" # %s", path)
 
         # Handle 'func' argument on this scalar
         self._handle_func(value, rule, path, errors, done)
 
-        if rule._enum is not None:
-            if value not in rule._enum:
+        if rule.enum is not None:
+            if value not in rule.enum:
                 errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Enum '{value}' does not exist. Path: '{path}'",
                     path=path,
@@ -544,16 +545,16 @@ class Core(object):
                 ))
 
         # Set default value
-        if rule._default and value is None:
-            value = rule._default
+        if rule.default and value is None:
+            value = rule.default
 
-        self._validate_scalar_type(value, rule._type, errors, path)
+        self._validate_scalar_type(value, rule.type, errors, path)
 
         if value is None:
             return
 
-        if rule._pattern is not None:
-            res = re.match(rule._pattern, str(value))
+        if rule.pattern is not None:
+            res = re.match(rule.pattern, str(value))
             if res is None:  # Not matching
                 errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Value '{value}' does not match pattern '{pattern}'. Path: '{path}'",
@@ -561,11 +562,11 @@ class Core(object):
                     value=nativestr(str(value)),
                     pattern=rule._pattern))
 
-        if rule._range is not None:
+        if rule.range is not None:
             if not is_scalar(value):
                 raise CoreError(u"value is not a valid scalar")
 
-            r = rule._range
+            r = rule.range
 
             try:
                 v = len(value)
@@ -585,7 +586,7 @@ class Core(object):
             )
 
         # Validate timestamp
-        if rule._type == "timestamp":
+        if rule.type == "timestamp":
             v = value.strip()
 
             # parse("") will give a valid date but it should not be

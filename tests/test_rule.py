@@ -42,7 +42,7 @@ class TestRule(unittest.TestCase):
 
     def test_allow_empty_map(self):
         r = Rule(schema={"type": "map", "allowempty": True, "mapping": {"name": {"type": "str"}}})
-        assert r._allowempty_map is True
+        assert r.allowempty_map is True
 
     def test_type_value(self):
         # Test that when only having a schema; rule it should throw error
@@ -101,9 +101,9 @@ class TestRule(unittest.TestCase):
         Rule(schema={"type": "int", "enum": [1, 2, 3]})
         Rule(schema={"type": "bool", "enum": [True, False]})
         r = Rule(schema={"type": "str", "enum": ["a", "b", "c"]})
-        assert r._enum is not None, "enum var is not set proper"
-        assert isinstance(r._enum, list), "enum is not set to a list"
-        assert len(r._enum) == 3, "invalid length of enum entries"
+        assert r.enum is not None, "enum var is not set proper"
+        assert isinstance(r.enum, list), "enum is not set to a list"
+        assert len(r.enum) == 3, "invalid length of enum entries"
 
         # this tests the missmatch between the type and the data inside a enum
         with pytest.raises(RuleError) as r:
@@ -125,8 +125,8 @@ class TestRule(unittest.TestCase):
 
     def test_range_value(self):
         r = Rule(schema={"type": "int", "range": {"max": 10, "min": 1}})
-        assert r._range is not None, "range var not set proper"
-        assert isinstance(r._range, dict), "range var is not of dict type"
+        assert r.range is not None, "range var not set proper"
+        assert isinstance(r.range, dict), "range var is not of dict type"
 
         # this tests that the range key must be a dict
         with pytest.raises(RuleError) as r:
@@ -182,31 +182,31 @@ class TestRule(unittest.TestCase):
     def test_sequence(self):
         # this tests seq type with a internal type of str
         r = Rule(schema={"type": "seq", "sequence": [{"type": "str"}]})
-        assert r._type is not None, "rule not contain type var"
-        assert r._type == "seq", "type not 'seq'"
-        assert r._sequence is not None, "rule not contain sequence var"
-        assert isinstance(r._sequence, list), "rule is not a list"
+        assert r.type is not None, "rule not contain type var"
+        assert r.type == "seq", "type not 'seq'"
+        assert r.sequence is not None, "rule not contain sequence var"
+        assert isinstance(r.sequence, list), "rule is not a list"
 
         # Test basic sequence rule
         r = Rule(schema={"type": "seq", "sequence": [{"type": "str"}]})
-        assert r._type == "seq"
-        assert isinstance(r._sequence, list)
-        assert isinstance(r._sequence[0], Rule)
-        assert r._sequence[0]._type == "str"
+        assert r.type == "seq"
+        assert isinstance(r.sequence, list)
+        assert isinstance(r.sequence[0], Rule)
+        assert r.sequence[0].type == "str"
 
         # Test sequence without explicit type
         r = Rule(schema={"sequence": [{"type": "str"}]})
-        assert r._type == "seq"
-        assert isinstance(r._sequence, list)
-        assert isinstance(r._sequence[0], Rule)
-        assert r._sequence[0]._type == "str"
+        assert r.type == "seq"
+        assert isinstance(r.sequence, list)
+        assert isinstance(r.sequence[0], Rule)
+        assert r.sequence[0].type == "str"
 
         # Test short name 'seq'
         r = Rule(schema={"seq": [{"type": "str"}]})
-        assert r._type == "seq"
-        assert isinstance(r._sequence, list)
-        assert isinstance(r._sequence[0], Rule)
-        assert r._sequence[0]._type == "str"
+        assert r.type == "seq"
+        assert isinstance(r.sequence, list)
+        assert isinstance(r.sequence[0], Rule)
+        assert r.sequence[0].type == "str"
 
         # Test error is raised when sequence key is missing
         with pytest.raises(SchemaConflict) as ex:
@@ -224,34 +224,34 @@ class TestRule(unittest.TestCase):
         """
         # Test basic sequence rule
         r = Rule(schema={'type': 'seq', 'sequence': [{'type': 'str'}, {'type': 'int'}]})
-        assert r._type == "seq"
-        assert r._matching == "any"
-        assert len(r._sequence) == 2
-        assert isinstance(r._sequence, list)
-        assert all([isinstance(r._sequence[i], Rule) for i in range(len(r._sequence))])
-        assert r._sequence[0]._type == "str"
-        assert r._sequence[1]._type == "int"
+        assert r.type == "seq"
+        assert r.matching == "any"
+        assert len(r.sequence) == 2
+        assert isinstance(r.sequence, list)
+        assert all([isinstance(r.sequence[i], Rule) for i in range(len(r.sequence))])
+        assert r.sequence[0].type == "str"
+        assert r.sequence[1].type == "int"
 
         # Test sequence without explicit type
         r = Rule(schema={'sequence': [{'type': 'str'}, {'type': 'int'}]})
-        assert r._type == "seq"
-        assert r._matching == "any"
-        assert len(r._sequence) == 2
-        assert isinstance(r._sequence, list)
-        assert all([isinstance(r._sequence[i], Rule) for i in range(len(r._sequence))])
-        assert r._sequence[0]._type == "str"
-        assert r._sequence[1]._type == "int"
+        assert r.type == "seq"
+        assert r.matching == "any"
+        assert len(r.sequence) == 2
+        assert isinstance(r.sequence, list)
+        assert all([isinstance(r.sequence[i], Rule) for i in range(len(r.sequence))])
+        assert r.sequence[0].type == "str"
+        assert r.sequence[1].type == "int"
 
         # Test adding matchin rules
 
     def test_mapping(self):
         # This tests mapping with a nested type and pattern
         r = Rule(schema={"type": "map", "mapping": {"name": {"type": "str", "pattern": ".+@.+"}}})
-        assert r._type == "map", "rule type is not map"
-        assert isinstance(r._mapping, dict), "mapping is not dict"
-        assert r._mapping["name"]._type == "str", "nested mapping is not of string type"
-        assert r._mapping["name"]._pattern is not None, "nested mapping has no pattern var set"
-        assert r._mapping["name"]._pattern == ".+@.+", "pattern is not set to correct value"
+        assert r.type == "map", "rule type is not map"
+        assert isinstance(r.mapping, dict), "mapping is not dict"
+        assert r.mapping["name"].type == "str", "nested mapping is not of string type"
+        assert r.mapping["name"].pattern is not None, "nested mapping has no pattern var set"
+        assert r.mapping["name"].pattern == ".+@.+", "pattern is not set to correct value"
 
         # when type is specefied, 'mapping' key must be present
         with pytest.raises(SchemaConflict) as ex:

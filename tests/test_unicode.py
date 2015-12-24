@@ -55,7 +55,7 @@ class TestUnicode(object):
                 raise e
 
             # This serve as an extra schema validation that tests more complex structures then testrule.py do
-            compare(c.root_rule._schema_str, schema, prefix=u"Parsed rules is not correct, something have changed... files : {}".format(f))
+            compare(c.root_rule.schema_str, schema, prefix=u"Parsed rules is not correct, something have changed... files : {}".format(f))
 
     def test_files_with_unicode_content_failing(self):
         """
