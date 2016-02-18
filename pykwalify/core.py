@@ -282,7 +282,9 @@ class Core(object):
             return
 
         if not isinstance(value, list):
-            raise NotSequenceError(u"Value: {} is not of a sequence type".format(value.encode('unicode_escape')))
+            if isinstance(value, str):
+                value = value.encode('unicode_escape')
+            raise NotSequenceError(u"Value: {} is not of a sequence type".format(value))
 
         # Handle 'func' argument on this sequence
         self._handle_func(value, rule, path, errors, done)
