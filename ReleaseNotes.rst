@@ -10,6 +10,7 @@ Next Release
   all code that used the old way.
 - Improved code linting by reworking all Log messages to render according to pep standard.
   (By using %s and passing in variables as positional arguments)
+- Fix bug when validating sequence and value should only be unicode escaped when a string
 
 
 1.5.0
