@@ -22,7 +22,7 @@ The following types are available:
  - `text` (`str` or `number`)
  - `time` [NYI]
  - `timestamp`
- 
+
 [NYI] means Not Yet Implemented
 
 ##### Example
@@ -291,9 +291,9 @@ desc: This schema is very foobar
 
 ## unique
 
-If unique is set to `True`, then the sequence/mapping cannot contain any repeated entries.
+If unique is set to `True`, then the sequence cannot contain any repeated entries.
 
-The unique constraint can only be set when the type is `sequence` or `map`.
+The unique constraint can only be set when the type is `seq / sequence`. It has no effect when used with `map / mapping`.
 
 Default is `False`.
 
