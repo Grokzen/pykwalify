@@ -1,7 +1,7 @@
 -r requirements.txt
 
 testfixtures
--e git://github.com/pytest-dev/pytest.git@master#egg=pytest
+pytest
 tox
 coveralls
 flake8
