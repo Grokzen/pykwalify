@@ -12,7 +12,7 @@ from datetime import datetime
 
 # pyKwalify imports
 import pykwalify
-from pykwalify.compat import unicode, nativestr
+from pykwalify.compat import unicode, nativestr, basestring
 from pykwalify.errors import CoreError, SchemaError, NotMappingError, NotSequenceError
 from pykwalify.rule import Rule
 from pykwalify.types import is_scalar, tt
