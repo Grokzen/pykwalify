@@ -47,6 +47,7 @@ class Core(object):
         self.validation_errors_exceptions = None
         self.root_rule = None
         self.extensions = extensions
+        self.errors = []
 
         if source_file is not None:
             if not os.path.exists(source_file):
@@ -143,11 +144,11 @@ class Core(object):
     def validate(self, raise_exception=True):
         log.debug(u"starting core")
 
-        errors = self._start_validate(self.source)
-        self.validation_errors = [unicode(error) for error in errors]
-        self.validation_errors_exceptions = errors
+        self._start_validate(self.source)
+        self.validation_errors = [unicode(error) for error in self.errors]
+        self.validation_errors_exceptions = self.errors
 
-        if errors is None or len(errors) == 0:
+        if self.errors is None or len(self.errors) == 0:
             log.info(u"validation.valid")
         else:
             log.error(u"validation.invalid")
@@ -164,7 +165,7 @@ class Core(object):
 
     def _start_validate(self, value=None):
         path = ""
-        errors = []
+        self.errors = []
         done = []
 
         s = {}
@@ -188,11 +189,9 @@ class Core(object):
         log.debug(u"Done building root rule")
         log.debug(u"Root rule: %s", self.root_rule)
 
-        self._validate(value, root_rule, path, errors, done)
+        self._validate(value, root_rule, path, done)
 
-        return errors
-
-    def _validate(self, value, rule, path, errors, done):
+    def _validate(self, value, rule, path, done):
         log.debug(u"Core validate")
         log.debug(u" ? Rule: %s", rule)
         log.debug(u" ? Rule_type: %s", rule.type)
@@ -205,15 +204,15 @@ class Core(object):
 
         log.debug(u" ? ValidateRule: %s", rule)
         if rule.include_name is not None:
-            self._validate_include(value, rule, path, errors, done=None)
+            self._validate_include(value, rule, path, done=None)
         elif rule.sequence is not None:
-            self._validate_sequence(value, rule, path, errors, done=None)
+            self._validate_sequence(value, rule, path, done=None)
         elif rule.mapping is not None or rule.allowempty_map:
-            self._validate_mapping(value, rule, path, errors, done=None)
+            self._validate_mapping(value, rule, path, done=None)
         else:
-            self._validate_scalar(value, rule, path, errors, done=None)
+            self._validate_scalar(value, rule, path, done=None)
 
-    def _handle_func(self, value, rule, path, errors, done=None):
+    def _handle_func(self, value, rule, path, done=None):
         """
         Helper function that should check if func is specified for this rule and
         then handle it for all cases in a generic way.
@@ -245,10 +244,10 @@ class Core(object):
         if not found_method:
             raise CoreError(u"Did not find method '{}' in any loaded extension file".format(func))
 
-    def _validate_include(self, value, rule, path, errors, done=None):
+    def _validate_include(self, value, rule, path, done=None):
         # TODO: It is difficult to get a good test case to trigger this if case
         if rule.include_name is None:
-            errors.append(SchemaError.SchemaErrorEntry(
+            self.errors.append(SchemaError.SchemaErrorEntry(
                 msg=u'Include name not valid',
                 path=path,
                 value=value.encode('unicode_escape')))
@@ -257,7 +256,7 @@ class Core(object):
         include_name = rule.include_name
         partial_schema_rule = pykwalify.partial_schemas.get(include_name, None)
         if not partial_schema_rule:
-            errors.append(SchemaError.SchemaErrorEntry(
+            self.errors.append(SchemaError.SchemaErrorEntry(
                 msg=u"Cannot find partial schema with name '{include_name}'. Existing partial schemas: '{existing_schemas}'. Path: '{path}'",
                 path=path,
                 value=value,
@@ -265,9 +264,9 @@ class Core(object):
                 existing_schemas=", ".join(sorted(pykwalify.partial_schemas.keys()))))
             return
 
-        self._validate(value, partial_schema_rule, path, errors, done)
+        self._validate(value, partial_schema_rule, path, done)
 
-    def _validate_sequence(self, value, rule, path, errors, done=None):
+    def _validate_sequence(self, value, rule, path, done=None):
         log.debug(u"Core Validate sequence")
         log.debug(u" * Data: %s", value)
         log.debug(u" * Rule: %s", rule)
@@ -289,7 +288,7 @@ class Core(object):
             raise NotSequenceError(u"Value: {} is not of a sequence type".format(value))
 
         # Handle 'func' argument on this sequence
-        self._handle_func(value, rule, path, errors, done)
+        self._handle_func(value, rule, path, done)
 
         ok_values = []
         error_tracker = []
@@ -304,7 +303,11 @@ class Core(object):
                 tmp_errors = []
 
                 try:
-                    self._validate(item, r, "{}/{}".format(path, i), tmp_errors, done)
+                    # Create a sub core object to enable error tracking that do not
+                    #  collide with this Core objects errors
+                    tmp_core = Core(source_data={}, schema_data={})
+                    tmp_core._validate(item, r, "{}/{}".format(path, i), done)
+                    tmp_errors = tmp_core.errors
                 except NotMappingError:
                     # For example: If one type was specified as 'map' but data
                     # was 'str' a exception will be thrown but we should ignore it
@@ -385,10 +388,10 @@ class Core(object):
                 ok_values.append(True)
 
         for _error in unique_errors:
-            errors.append(_error)
+            self.errors.append(_error)
 
         for _error in map_unique_errors:
-            errors.append(_error)
+            self.errors.append(_error)
 
         log.debug(u" * ok : %s", ok_values)
 
@@ -404,7 +407,7 @@ class Core(object):
             for i in range(len(ok_values)):
                 for error in error_tracker[i]:
                     for e in error:
-                        errors.append(e)
+                        self.errors.append(e)
 
         log.debug(u" * Core seq: validation recursivley done...")
 
@@ -416,13 +419,12 @@ class Core(object):
                 rr.get("min", None),
                 rr.get("max-ex", None),
                 rr.get("min-ex", None),
-                errors,
                 len(value),
                 path,
                 "seq",
             )
 
-    def _validate_mapping(self, value, rule, path, errors, done=None):
+    def _validate_mapping(self, value, rule, path, done=None):
         log.debug(u"Validate mapping")
         log.debug(u" + Data: %s", value)
         log.debug(u" + Rule: %s", rule)
@@ -436,7 +438,7 @@ class Core(object):
             return
 
         # Handle 'func' argument on this mapping
-        self._handle_func(value, rule, path, errors, done)
+        self._handle_func(value, rule, path, done)
 
         m = rule.mapping
         log.debug(u" + RuleMapping: %s", m)
@@ -452,7 +454,6 @@ class Core(object):
                 r.get("min", None),
                 r.get("max-ex", None),
                 r.get("min-ex", None),
-                errors,
                 len(value),
                 path,
                 "map",
@@ -460,7 +461,7 @@ class Core(object):
 
         for k, rr in m.items():
             if rr.required and k not in value:
-                errors.append(SchemaError.SchemaErrorEntry(
+                self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Cannot find required key '{key}'. Path: '{path}'",
                     path=path,
                     value=value,
@@ -484,7 +485,7 @@ class Core(object):
                 for mm in regex_mappings:
                     if mm[1]:
                         log.debug(u" + Matching regex patter: %s", mm[0])
-                        self._validate(v, mm[0], "{}/{}".format(path, k), errors, done)
+                        self._validate(v, mm[0], "{}/{}".format(path, k), done)
                         sub_regex_result.append(True)
                     else:
                         sub_regex_result.append(False)
@@ -495,7 +496,7 @@ class Core(object):
                         log.debug(u" + Matched at least one regex")
                     else:
                         log.debug(u"No regex matched")
-                        errors.append(SchemaError.SchemaErrorEntry(
+                        self.errors.append(SchemaError.SchemaErrorEntry(
                             msg=u"Key '{key}' does not match any regex '{regex}'. Path: '{path}'",
                             path=path,
                             value=value,
@@ -506,7 +507,7 @@ class Core(object):
                         log.debug(u" + Matched all regex rules")
                     else:
                         log.debug(u"Did not match all regex rules")
-                        errors.append(SchemaError.SchemaErrorEntry(
+                        self.errors.append(SchemaError.SchemaErrorEntry(
                             msg=u"Key '{key}' does not match all regex '{regex}'. Path: '{path}'",
                             path=path,
                             value=value,
@@ -516,7 +517,7 @@ class Core(object):
                     log.debug(u" + No mapping rule defined")
             elif r is None:
                 if not rule.allowempty_map:
-                    errors.append(SchemaError.SchemaErrorEntry(
+                    self.errors.append(SchemaError.SchemaErrorEntry(
                         msg=u"Key '{key}' was not defined. Path: '{path}'",
                         path=path,
                         value=value,
@@ -525,11 +526,11 @@ class Core(object):
                 if not r.schema:
                     # validate recursively
                     log.debug(u" + Core Map: validate recursively: %s", r)
-                    self._validate(v, r, u"{}/{}".format(path, k), errors, done)
+                    self._validate(v, r, u"{}/{}".format(path, k), done)
                 else:
                     print(u" + Something is ignored Oo : {}".format(r))
 
-    def _validate_scalar(self, value, rule, path, errors, done=None):
+    def _validate_scalar(self, value, rule, path, done=None):
         log.debug(u"Validate scalar")
         log.debug(u" # %s", value)
         log.debug(u" # %s", rule)
@@ -537,11 +538,11 @@ class Core(object):
         log.debug(u" # %s", path)
 
         # Handle 'func' argument on this scalar
-        self._handle_func(value, rule, path, errors, done)
+        self._handle_func(value, rule, path, done)
 
         if rule.enum is not None:
             if value not in rule.enum:
-                errors.append(SchemaError.SchemaErrorEntry(
+                self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Enum '{value}' does not exist. Path: '{path}'",
                     path=path,
                     value=nativestr(value) if tt['str'](value) else value,
@@ -551,7 +552,7 @@ class Core(object):
         if rule.default and value is None:
             value = rule.default
 
-        self._validate_scalar_type(value, rule.type, errors, path)
+        self._validate_scalar_type(value, rule.type, path)
 
         if value is None:
             return
@@ -559,7 +560,7 @@ class Core(object):
         if rule.pattern is not None:
             res = re.match(rule.pattern, str(value))
             if res is None:  # Not matching
-                errors.append(SchemaError.SchemaErrorEntry(
+                self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Value '{value}' does not match pattern '{pattern}'. Path: '{path}'",
                     path=path,
                     value=nativestr(str(value)),
@@ -582,7 +583,6 @@ class Core(object):
                 r.get("min", None),
                 r.get("max-ex", None),
                 r.get("min-ex", None),
-                errors,
                 value,
                 path,
                 "scalar",
@@ -590,13 +590,13 @@ class Core(object):
 
         # Validate timestamp
         if rule.type == "timestamp":
-            self._validate_scalar_timestamp(value, errors, path)
+            self._validate_scalar_timestamp(value, path)
 
-    def _validate_scalar_timestamp(self, timestamp_value, errors, path):
+    def _validate_scalar_timestamp(self, timestamp_value, path):
         def _check_int_timestamp_boundaries(timestamp):
             if timestamp < 1:
                 # Timestamp integers can't be negative
-                errors.append(SchemaError.SchemaErrorEntry(
+                self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Integer value of timestamp can't be below 0",
                     path=path,
                     value=timestamp,
@@ -605,7 +605,7 @@ class Core(object):
             if timestamp > 2147483647:
                 # Timestamp integers can't be above the upper limit of
                 # 32 bit integers
-                errors.append(SchemaError.SchemaErrorEntry(
+                self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Integer value of timestamp can't be above 2147483647",
                     path=path,
                     value=timestamp,
@@ -624,7 +624,7 @@ class Core(object):
             # parse("") will give a valid date but it should not be
             # considered a valid timestamp
             if v == "":
-                errors.append(SchemaError.SchemaErrorEntry(
+                self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Timestamp value is empty. Path: '{path}'",
                     path=path,
                     value=nativestr(timestamp_value),
@@ -640,20 +640,20 @@ class Core(object):
                         parse(timestamp_value)
                         # If it can be parsed then it is valid
                     except Exception:
-                        errors.append(SchemaError.SchemaErrorEntry(
+                        self.errors.append(SchemaError.SchemaErrorEntry(
                             msg=u"Timestamp: '{timestamp}'' is invalid. Path: '{path}'",
                             path=path,
                             value=nativestr(timestamp_value),
                             timestamp=nativestr(timestamp_value)))
         else:
-            errors.append(SchemaError.SchemaErrorEntry(
+            self.errors.append(SchemaError.SchemaErrorEntry(
                 msg=u"Not a valid timestamp",
                 path=path,
                 value=timestamp_value,
                 timestamp=timestamp_value,
             ))
 
-    def _validate_range(self, max_, min_, max_ex, min_ex, errors, value, path, prefix):
+    def _validate_range(self, max_, min_, max_ex, min_ex, value, path, prefix):
         """
         Validate that value is within range values.
         """
@@ -670,7 +670,7 @@ class Core(object):
 
         if max_ is not None:
             if max_ < value:
-                errors.append(SchemaError.SchemaErrorEntry(
+                self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Type '{prefix}' has size of '{value}', greater than max limit '{max_}'. Path: '{path}'",
                     path=path,
                     value=nativestr(value) if tt['str'](value) else value,
@@ -679,7 +679,7 @@ class Core(object):
 
         if min_ is not None:
             if min_ > value:
-                errors.append(SchemaError.SchemaErrorEntry(
+                self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Type '{prefix}' has size of '{value}', less than min limit '{min_}'. Path: '{path}'",
                     path=path,
                     value=nativestr(value) if tt['str'](value) else value,
@@ -688,7 +688,7 @@ class Core(object):
 
         if max_ex is not None:
             if max_ex <= value:
-                errors.append(SchemaError.SchemaErrorEntry(
+                self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Type '{prefix}' has size of '{value}', greater than or equals to max limit(exclusive) '{max_ex}'. Path: '{path}'",
                     path=path,
                     value=nativestr(value) if tt['str'](value) else value,
@@ -697,20 +697,20 @@ class Core(object):
 
         if min_ex is not None:
             if min_ex >= value:
-                errors.append(SchemaError.SchemaErrorEntry(
+                self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Type '{prefix}' has size of '{value}', less than or equals to min limit(exclusive) '{min_ex}'. Path: '{path}'",
                     path=path,
                     value=nativestr(value) if tt['str'](value) else value,
                     prefix=prefix,
                     min_ex=min_ex))
 
-    def _validate_scalar_type(self, value, t, errors, path):
+    def _validate_scalar_type(self, value, t, path):
         log.debug(u" # Core scalar: validating scalar type : %s", t)
         log.debug(u" # Core scalar: scalar type: %s", type(value))
 
         try:
             if not tt[t](value):
-                errors.append(SchemaError.SchemaErrorEntry(
+                self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Value '{value}' is not of type '{scalar_type}'. Path: '{path}'",
                     path=path,
                     value=unicode(value) if tt['str'](value) else value,

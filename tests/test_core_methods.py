@@ -19,77 +19,78 @@ def test_validate_sequence():
         c._validate_sequence(123, Rule(sequence=['']), '', [])
 
 
+def ec():
+    # Return a empty core object
+    return Core(source_data={}, schema_data={})
+
+
 def test_validate_timestamp():
-    c = Core(source_data={}, schema_data={})
+    c = ec()
+    c._validate_scalar_timestamp("", '')
+    assert len(c.errors) == 1
 
-    errors = []
-    c._validate_scalar_timestamp("", errors, '')
-    assert len(errors) == 1
+    c = ec()
+    c._validate_scalar_timestamp("1234567", '')
+    assert len(c.errors) == 0
 
-    errors = []
-    c._validate_scalar_timestamp("1234567", errors, '')
-    assert len(errors) == 0
+    c = ec()
+    c._validate_scalar_timestamp("2016-01-01", '')
+    assert len(c.errors) == 0
 
-    errors = []
-    c._validate_scalar_timestamp("2016-01-01", errors, '')
-    assert len(errors) == 0
+    c = ec()
+    c._validate_scalar_timestamp("2016-01-01 15:01", '')
+    assert len(c.errors) == 0
 
-    errors = []
-    c._validate_scalar_timestamp("2016-01-01 15:01", errors, '')
-    assert len(errors) == 0
+    c = ec()
+    c._validate_scalar_timestamp(123, '')
+    assert len(c.errors) == 0
 
-    errors = []
-    c._validate_scalar_timestamp(123, errors, '')
-    assert len(errors) == 0
+    c = ec()
+    c._validate_scalar_timestamp(1.5, '')
+    assert len(c.errors) == 0
 
-    errors = []
-    c._validate_scalar_timestamp(1.5, errors, '')
-    assert len(errors) == 0
+    c = ec()
+    c._validate_scalar_timestamp(0, '')
+    assert len(c.errors) == 1
 
-    errors = []
-    c._validate_scalar_timestamp(0, errors, '')
-    assert len(errors) == 1
+    c = ec()
+    c._validate_scalar_timestamp(-1, '')
+    assert len(c.errors) == 1
 
-    errors = []
-    c._validate_scalar_timestamp(-1, errors, '')
-    assert len(errors) == 1
+    c = ec()
+    c._validate_scalar_timestamp(3147483647, '')
+    assert len(c.errors) == 1
 
-    errors = []
-    c._validate_scalar_timestamp(3147483647, errors, '')
-    assert len(errors) == 1
+    c = ec()
+    c._validate_scalar_timestamp([], '')
+    assert len(c.errors) == 1
 
-    errors = []
-    c._validate_scalar_timestamp([], errors, '')
-    assert len(errors) == 1
+    c = ec()
+    c._validate_scalar_timestamp(datetime.now(), '')
+    assert len(c.errors) == 0
 
-    errors = []
-    c._validate_scalar_timestamp(datetime.now(), errors, '')
-    assert len(errors) == 0
-
-    errors = []
-    c._validate_scalar_timestamp(datetime.today(), errors, '')
-    assert len(errors) == 0
+    c = ec()
+    c._validate_scalar_timestamp(datetime.today(), '')
+    assert len(c.errors) == 0
 
 
 def test_validate_scalar_type():
-    c = Core(source_data={}, schema_data={})
+    c = ec()
+    c._validate_scalar_type("1e-06", "float", '')
+    assert len(c.errors) == 0
 
-    errors = []
-    c._validate_scalar_type("1e-06", "float", errors, '')
-    assert len(errors) == 0
+    c = ec()
+    c._validate_scalar_type("1z-06", "float", '')
+    assert len(c.errors) == 1
 
-    errors = []
-    c._validate_scalar_type("1z-06", "float", errors, '')
-    assert len(errors) == 1
+    c = ec()
+    c._validate_scalar_type(1.5, "float", '')
+    assert len(c.errors) == 0
 
-    errors = []
-    c._validate_scalar_type(1.5, "float", errors, '')
-    assert len(errors) == 0
+    c = ec()
+    c._validate_scalar_type("abc", "float", '')
+    assert len(c.errors) == 1
 
-    errors = []
-    c._validate_scalar_type("abc", "float", errors, '')
-    assert len(errors) == 1
-
-    errors = []
-    c._validate_scalar_type(True, "float", errors, '')
-    assert len(errors) == 1
+    c = ec()
+    c._validate_scalar_type(True, "float", '')
+    assert len(c.errors) == 1
