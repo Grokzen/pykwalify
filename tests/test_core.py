@@ -181,7 +181,9 @@ class TestCore(object):
 
     def testCoreDataMode(self):
         Core(source_data=3.14159, schema_data={"type": "number"}).validate()
+        Core(source_data="1e-06", schema_data={"type": "float"}).validate()
         Core(source_data=3.14159, schema_data={"type": "float"}).validate()
+        Core(source_data=3, schema_data={"type": "float"}).validate()
         Core(source_data=3, schema_data={"type": "int"}).validate()
         Core(source_data=True, schema_data={"type": "bool"}).validate()
         Core(source_data="foobar", schema_data={"type": "str"}).validate()
@@ -195,10 +197,10 @@ class TestCore(object):
         Core(source_data=lambda x: x, schema_data={"type": "any"}).validate()
 
         with pytest.raises(SchemaError):
-            Core(source_data="abc", schema_data={"type": "number"}).validate()
+            Core(source_data="1z-06", schema_data={"type": "float"}).validate()
 
         with pytest.raises(SchemaError):
-            Core(source_data=3, schema_data={"type": "float"}).validate()
+            Core(source_data="abc", schema_data={"type": "number"}).validate()
 
         with pytest.raises(SchemaError):
             Core(source_data=3.14159, schema_data={"type": "int"}).validate()

@@ -69,3 +69,27 @@ def test_validate_timestamp():
     errors = []
     c._validate_scalar_timestamp(datetime.today(), errors, '')
     assert len(errors) == 0
+
+
+def test_validate_scalar_type():
+    c = Core(source_data={}, schema_data={})
+
+    errors = []
+    c._validate_scalar_type("1e-06", "float", errors, '')
+    assert len(errors) == 0
+
+    errors = []
+    c._validate_scalar_type("1z-06", "float", errors, '')
+    assert len(errors) == 1
+
+    errors = []
+    c._validate_scalar_type(1.5, "float", errors, '')
+    assert len(errors) == 0
+
+    errors = []
+    c._validate_scalar_type("abc", "float", errors, '')
+    assert len(errors) == 1
+
+    errors = []
+    c._validate_scalar_type(True, "float", errors, '')
+    assert len(errors) == 1

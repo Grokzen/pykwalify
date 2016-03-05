@@ -12,6 +12,7 @@ Next Release
   (By using %s and passing in variables as positional arguments)
 - Fix bug when validating sequence and value should only be unicode escaped when a string
 - Improve validation of timestamps.
+- Improve float validation to now accept strings that is valid ints that uses scientific notation, "1e-06" for example.
 
 
 1.5.0

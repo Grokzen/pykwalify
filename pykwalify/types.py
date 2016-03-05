@@ -72,7 +72,19 @@ def is_bool(obj):
 
 
 def is_float(obj):
-    return isinstance(obj, float)
+    """
+    Valid types are:
+     - objects of float type
+     - Strings that can be converted to float. For example '1e-06'
+    """
+    is_f = isinstance(obj, float)
+    if not is_f:
+        try:
+            float(obj)
+            is_f = True
+        except (ValueError, TypeError):
+            is_f = False
+    return is_f and not is_bool(obj)
 
 
 def is_number(obj):
