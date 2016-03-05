@@ -10,4 +10,3 @@ schema:
       type: timestamp
 errors:
   - "Timestamp value is empty. Path: '/d1'"
-  - "Timestamp: '1427650980'' is invalid. Path: '/d2'"

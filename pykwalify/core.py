@@ -8,6 +8,7 @@ import json
 import logging
 import os
 import re
+from datetime import datetime
 
 # pyKwalify imports
 import pykwalify
@@ -589,7 +590,36 @@ class Core(object):
 
         # Validate timestamp
         if rule.type == "timestamp":
-            v = value.strip()
+            self._validate_scalar_timestamp(value, errors, path)
+
+    def _validate_scalar_timestamp(self, timestamp_value, errors, path):
+        def _check_int_timestamp_boundaries(timestamp):
+            if timestamp < 1:
+                # Timestamp integers can't be negative
+                errors.append(SchemaError.SchemaErrorEntry(
+                    msg=u"Integer value of timestamp can't be below 0",
+                    path=path,
+                    value=timestamp,
+                    timestamp=str(timestamp),
+                ))
+            if timestamp > 2147483647:
+                # Timestamp integers can't be above the upper limit of
+                # 32 bit integers
+                errors.append(SchemaError.SchemaErrorEntry(
+                    msg=u"Integer value of timestamp can't be above 2147483647",
+                    path=path,
+                    value=timestamp,
+                    timestamp=str(timestamp),
+                ))
+
+        if isinstance(timestamp_value, int) or isinstance(timestamp_value, float):
+            _check_int_timestamp_boundaries(timestamp_value)
+        elif isinstance(timestamp_value, datetime):
+            # Datetime objects currently have nothing to validate.
+            # In the future, more options will be added to datetime validation
+            pass
+        elif isinstance(timestamp_value, basestring):
+            v = timestamp_value.strip()
 
             # parse("") will give a valid date but it should not be
             # considered a valid timestamp
@@ -597,18 +627,31 @@ class Core(object):
                 errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Timestamp value is empty. Path: '{path}'",
                     path=path,
-                    value=nativestr(value),
-                    timestamp=nativestr(value)))
+                    value=nativestr(timestamp_value),
+                    timestamp=nativestr(timestamp_value)))
             else:
+                # A string can contain a valid unit timestamp integer. Check if it is valid and validate it
                 try:
-                    parse(value)
-                    # If it can be parsed then it is valid
-                except Exception:
-                    errors.append(SchemaError.SchemaErrorEntry(
-                        msg=u"Timestamp: '{timestamp}'' is invalid. Path: '{path}'",
-                        path=path,
-                        value=nativestr(value),
-                        timestamp=nativestr(value)))
+                    int_v = int(v)
+                    _check_int_timestamp_boundaries(int_v)
+                except ValueError:
+                    # Just continue to parse it as a timestamp
+                    try:
+                        parse(timestamp_value)
+                        # If it can be parsed then it is valid
+                    except Exception:
+                        errors.append(SchemaError.SchemaErrorEntry(
+                            msg=u"Timestamp: '{timestamp}'' is invalid. Path: '{path}'",
+                            path=path,
+                            value=nativestr(timestamp_value),
+                            timestamp=nativestr(timestamp_value)))
+        else:
+            errors.append(SchemaError.SchemaErrorEntry(
+                msg=u"Not a valid timestamp",
+                path=path,
+                value=timestamp_value,
+                timestamp=timestamp_value,
+            ))
 
     def _validate_range(self, max_, min_, max_ex, min_ex, errors, value, path, prefix):
         """

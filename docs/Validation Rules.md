@@ -154,6 +154,27 @@ mapping:
 d1: "2015-03-29T18:45:00+00:00"
 ```
 
+A timestamp can also be a integer. It should be specefied as a unit timestamp. Timestamps must be above 1 and below 2147483647.
+
+##### Example
+
+```yaml
+# Schema
+type: map
+mapping:
+  d1:
+    type: timestamp
+```
+```yaml
+# Data
+d1: 2147483647
+```
+
+All `datetime` objects will validate as a valid timestamp.
+
+Note: PyYaml can sometimes automatically convert data to `datetime` objects.
+
+
 
 ## required
 

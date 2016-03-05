@@ -11,6 +11,7 @@ Next Release
 - Improved code linting by reworking all Log messages to render according to pep standard.
   (By using %s and passing in variables as positional arguments)
 - Fix bug when validating sequence and value should only be unicode escaped when a string
+- Improve validation of timestamps.
 
 
 1.5.0
