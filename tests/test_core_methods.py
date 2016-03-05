@@ -29,72 +29,37 @@ def ec():
 
 
 def test_validate_timestamp():
-    c = ec()
-    c._validate_scalar_timestamp("", '')
-    assert _remap_errors(c) == ["Timestamp value is empty. Path: ''"]
+    data_matrix = [
+        ("", ["Timestamp value is empty. Path: ''"]),
+        ("1234567", []),
+        ("2016-01-01", []),
+        ("2016-01-01 15:01", []),
+        (123, []),
+        (1.5, []),
+        (0, ["Integer value of timestamp can't be below 0"]),
+        (-1, ["Integer value of timestamp can't be below 0"]),
+        (3147483647, ["Integer value of timestamp can't be above 2147483647"]),
+        ([], ["Not a valid timestamp"]),
+        (datetime.now(), []),
+        (datetime.today(), []),
+    ]
 
-    c = ec()
-    c._validate_scalar_timestamp("1234567", '')
-    assert _remap_errors(c) == []
-
-    c = ec()
-    c._validate_scalar_timestamp("2016-01-01", '')
-    assert _remap_errors(c) == []
-
-    c = ec()
-    c._validate_scalar_timestamp("2016-01-01 15:01", '')
-    assert _remap_errors(c) == []
-
-    c = ec()
-    c._validate_scalar_timestamp(123, '')
-    assert _remap_errors(c) == []
-
-    c = ec()
-    c._validate_scalar_timestamp(1.5, '')
-    assert _remap_errors(c) == []
-
-    c = ec()
-    c._validate_scalar_timestamp(0, '')
-    assert _remap_errors(c) == ["Integer value of timestamp can't be below 0"]
-
-    c = ec()
-    c._validate_scalar_timestamp(-1, '')
-    assert _remap_errors(c) == ["Integer value of timestamp can't be below 0"]
-
-    c = ec()
-    c._validate_scalar_timestamp(3147483647, '')
-    assert _remap_errors(c) == ["Integer value of timestamp can't be above 2147483647"]
-
-    c = ec()
-    c._validate_scalar_timestamp([], '')
-    assert _remap_errors(c) == ['Not a valid timestamp']
-
-    c = ec()
-    c._validate_scalar_timestamp(datetime.now(), '')
-    assert _remap_errors(c) == []
-
-    c = ec()
-    c._validate_scalar_timestamp(datetime.today(), '')
-    assert _remap_errors(c) == []
+    for data in data_matrix:
+        c = ec()
+        c._validate_scalar_timestamp(data[0], '')
+        assert _remap_errors(c) == data[1]
 
 
 def test_validate_scalar_type():
-    c = ec()
-    c._validate_scalar_type("1e-06", "float", '')
-    assert _remap_errors(c) == []
+    data_matrix = [
+        ("1e-06", []),
+        ("1z-06", ["Value '1z-06' is not of type 'float'. Path: ''"]),
+        (1.5, []),
+        ("abc", ["Value 'abc' is not of type 'float'. Path: ''"]),
+        (True, ["Value 'True' is not of type 'float'. Path: ''"]),
+    ]
 
-    c = ec()
-    c._validate_scalar_type("1z-06", "float", '')
-    assert _remap_errors(c) == ["Value '1z-06' is not of type 'float'. Path: ''"]
-
-    c = ec()
-    c._validate_scalar_type(1.5, "float", '')
-    assert _remap_errors(c) == []
-
-    c = ec()
-    c._validate_scalar_type("abc", "float", '')
-    assert _remap_errors(c) == ["Value 'abc' is not of type 'float'. Path: ''"]
-
-    c = ec()
-    c._validate_scalar_type(True, "float", '')
-    assert _remap_errors(c) == ["Value 'True' is not of type 'float'. Path: ''"]
+    for data in data_matrix:
+        c = ec()
+        c._validate_scalar_type(data[0], 'float', '')
+        assert _remap_errors(c) == data[1]
