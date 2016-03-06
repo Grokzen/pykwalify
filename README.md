@@ -75,7 +75,8 @@ If validation fails then exception will be raised.
  - Python 2.7
  - Python 3.3
  - Python 3.4
- - Python 3.5 (Currently up to beta 4 release)
+ - Python 3.5
+ - Python 3.6 (Experimental, allowed to fail travis)
 
 
 # How to test
