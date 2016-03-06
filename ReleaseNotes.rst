@@ -13,6 +13,7 @@ Next Release
 - Fix bug when validating sequence and value should only be unicode escaped when a string
 - Improve validation of timestamps.
 - Improve float validation to now accept strings that is valid ints that uses scientific notation, "1e-06" for example.
+- Update travis to test against python 3.6
 
 
 1.5.0
