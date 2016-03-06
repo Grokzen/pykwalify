@@ -657,6 +657,8 @@ class Core(object):
         """
         Validate that value is within range values.
         """
+        if not isinstance(value, int) and not isinstance(value, float):
+            raise CoreError("Value must be a integer type")
 
         log.debug(
             u"Validate range : %s : %s : %s : %s : %s : %s",
