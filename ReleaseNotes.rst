@@ -2,8 +2,8 @@
 Release Notes
 =============
 
-Next Release
-============
+1.5.1
+=====
 
 - Improvements to documentation (scottclowe).
 - Improved code linting by reworking private variables in Rule class to now be properties and updated
