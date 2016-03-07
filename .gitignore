@@ -6,6 +6,9 @@
 # Packages
 *.egg
 *.egg-info
+docs/_build
+docs/_build_html
+.cache
 dist
 build
 eggs

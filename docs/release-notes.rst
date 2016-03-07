@@ -1,9 +1,14 @@
-=============
 Release Notes
 =============
 
-1.5.1
-=====
+Next release (??? ?, 2016)
+--------------------------
+
+- Convert all documentation to readthedocs
+
+
+1.5.1 (Mar 6, 2016)
+----------------
 
 - Improvements to documentation (scottclowe).
 - Improved code linting by reworking private variables in Rule class to now be properties and updated
@@ -16,8 +21,8 @@ Release Notes
 - Update travis to test against python 3.6
 
 
-1.5.0
-=====
+1.5.0 (Sep 30, 2015)
+--------------------
 
 - float / number type now support range restrictions
 - ranges on non number types (e.g. seq, string) now need to be non negative.
@@ -29,14 +34,14 @@ Release Notes
   and 'all' matching-rule.
 
 
-1.4.1
-=====
+1.4.1 (Aug 27, 2015)
+--------------------
 
 - Added tests to sdist to enable downstream packaging to run tests. No code changes in this release.
 
 
-1.4.0
-=====
+1.4.0 (Aug 4, 2015)
+-------------------
 
 - Dropped support for python 3.2 becuase of unicode literals do not exists in python 3.2.
 - Fixed logging & raised exceptions when using unicode characters inside schemas/data/filenames.
@@ -46,8 +51,8 @@ Release Notes
 - Rewrote all SchemaConflict exceptions to be more human readable.
 
 
-1.3.0
-=====
+1.3.0 (Jul 14, 2015)
+--------------------
 
 - Rewrote most of the error messages to be more human readable. See `docs/Upgrade Instructions.md`
   for more details.
@@ -56,8 +61,8 @@ Release Notes
   about the error.
 
 
-1.2.0
-=====
+1.2.0 (May 19, 2015)
+--------------------
 
 - This feature is NEW and EXPERIMENTAL.
   Implemented support for multiple values inside in a sequence.
@@ -77,8 +82,8 @@ Release Notes
   'NotMappingError'.
 
 
-1.1.0
-=====
+1.1.0 (Apr 4, 2015)
+-------------------
 
 - Rework cli string that docopt uses. Removed redundant flags that docopt provides [--version & --help]
 - Add support for timestamp validation
@@ -87,8 +92,8 @@ Release Notes
 
 
 
-1.0.1
-=====
+1.0.1 (Mar 8, 2015)
+-------------------
 
 Switched back to semantic version numbering for this lib.
 
@@ -97,15 +102,15 @@ Switched back to semantic version numbering for this lib.
 - The old releases can still be obtained from `github.com` and if you really need the old version you can add the download url to your `requirements.txt` file.
 
 
-15.01
-=====
+15.01 (Jan 17, 2015)
+--------------------
 
 - Fixed a bug in unique validation for mapping keys [See: PR-12] (Gonditeniz)
 
 
 
-14.12
-=====
+14.12 (Dec 24, 2014)
+--------------------
 
 - Fixed broken regex matching on map keys.
 - Source files with file ending `.yml` can now be loaded
@@ -118,8 +123,8 @@ Switched back to semantic version numbering for this lib.
 
 
 
-14.08
-=====
+14.08 (Aug 24, 2014)
+--------------------
 
 - First version to be uploaded to pypi
 - Keyword 'range' can now be applied to map & seq types.
@@ -130,8 +135,8 @@ Switched back to semantic version numbering for this lib.
 
 
 
-14.06.1
-=======
+14.06.1 (Jun 24, 2014)
+----------------------
 
 - New feature "partial schema". Define a small schema with a ID that can be reused at other places in the schema. See readme for details.
 - New directive "include" that is used to include a partial schema at the specefied location.
@@ -142,8 +147,8 @@ Switched back to semantic version numbering for this lib.
 
 
 
-14.06
-=====
+14.06 (Jun 7, 2014)
+-------------------
 
 - New version scheme [YY.MM(.Minor-Release)]
 - Added TravisCI support
@@ -162,8 +167,8 @@ Switched back to semantic version numbering for this lib.
 
 
 
-0.1.2
-=====
+0.1.2 (Jan 26, 2013)
+--------------------
 
 - Added new and experimental validation rule allowempty. (See README for more info)
 - Added TODO tracking file.
@@ -177,8 +182,8 @@ Switched back to semantic version numbering for this lib.
 
 
 
-0.1.1
-=====
+0.1.1 (Jan 21, 2013)
+--------------------
 
 - Reworked the structure of the project to be more clean and easy to find stuff.
 - lib/ folder is now removed and all contents is placed in the root of the project
@@ -189,8 +194,8 @@ Switched back to semantic version numbering for this lib.
 
 
 
-0.1.0
-=====
+0.1.0 (Jan 20, 2013)
+--------------------
 
 - Initial stable release of pyKwalify.
 - All functions is not currently implemented but the cli/lib can be used but probably with some bugs.

@@ -12,6 +12,15 @@ The source code can be found at: http://sourceforge.net/projects/kwalify/files/k
 The schema this library is base and extended from: http://www.kuwata-lab.com/kwalify/ruby/users-guide.01.html#schema
 
 
+
+# Documentation
+
+All documentation can be found at http://pykwalify.readthedocs.org/en/latest/
+
+This readme contains a reduced version of the full documentation.
+
+
+
 # Installation
 
 Latest stable release from pypi
@@ -20,16 +29,11 @@ Latest stable release from pypi
 $ pip install pykwalify
 ```
 
-or from source
-
-```
-$ python setup.py install
-```
 
 
 # Usage
 
-Create a data file. Json and yaml formats are both supported.
+Create a data file. `Json` and `Yaml` formats are both supported.
 
 ```yaml
 - foo
@@ -47,23 +51,12 @@ sequence:
 Run validation from cli.
 
 ```bash
-pykwalify --data-file data.yaml --schema-file schema.yaml
+pykwalify -d data.yaml -s schema.yaml
 ```
 
-If validation passes then return code from the invocation will be 0. If errors was found then 1.
-
-Run validation from code. Multiple schema files is possible to use when using partial schemas (See doc for details).
-
-```python
-from pykwalify.core import Core
-c = Core(source_file="data.yaml", schema_files=["schema.yaml"])
-c.validate(raise_exception=True)
-```
-
-If validation fails then exception will be raised.
 
 
-## Runtime Dependencies
+## Runtime dependencies
 
  - docopt >= 0.6.2
  - PyYaml >= 3.11
@@ -75,36 +68,9 @@ If validation fails then exception will be raised.
  - Python 2.7
  - Python 3.3
  - Python 3.4
- - Python 3.5 (Currently up to beta 4 release)
+ - Python 3.5
+ - Python 3.6 (Experimental, allowed to fail travis)
 
-
-# How to test
-
-Install test requirements with
-
-```
-$ pip install -r dev-requirements.txt
-```
-
-Run tests with
-
-```
-$ py.test
-```
-
-or if you want to test against all python versions and pep8
-
-```
-$ tox
-```
-
-
-# Documentation
-
- - [Implemented validation rules](docs/Validation Rules.md)
- - [Extensions](docs/Extensions.md)
- - [Upgrade instructions](docs/Upgrade Instructions.md)
- - [Release notes](ReleaseNotes.rst)
 
 
 # Licensing
