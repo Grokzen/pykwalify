@@ -1,3 +1,4 @@
+import os
 try:
     from setuptools import setup
 except ImportError:
@@ -5,7 +6,7 @@ except ImportError:
 
 with open('README.md') as f:
     readme = f.read()
-with open('ReleaseNotes.rst') as f:
+with open(os.path.join('docs', 'release-notes.rst')) as f:
     history = f.read()
 
 setup(
