@@ -125,6 +125,14 @@ def is_timestamp(obj):
     """
     return isinstance(obj, datetime) or is_string(obj) or is_int(obj) or is_float(obj)
 
+def is_date(obj):
+    """
+
+    :param obj:
+    :return:
+    """
+    return isinstance(obj, basestring)
+
 
 tt = {
     "str": is_string,
@@ -137,4 +145,5 @@ tt = {
     "enum": is_enum,
     "none": is_none,
     "timestamp": is_timestamp,
+    "date": is_date,
 }
