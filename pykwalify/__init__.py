@@ -26,7 +26,7 @@ def init_logging(log_level):
     """
     Init logging settings with default set to INFO
     """
-    l = log_level_to_string_map[log_level]
+    l = log_level_to_string_map[min(log_level, 5)]
 
     msg = "%(levelname)s - %(name)s:%(lineno)s - %(message)s" if l in os.environ else "%(levelname)s - %(message)s"
 
