@@ -593,7 +593,10 @@ class Core(object):
         if rule.type == "date":
             if not is_scalar(value):
                 raise CoreError(u"value is not a valid scalar")
-            date_format = rule.format
+            try:
+                date_format = rule.format
+            except AttributeError as err:
+                raise CoreError(u"a date is defined in schema without a format")
             self._validate_scalar_date(value, date_format, path)
 
 
