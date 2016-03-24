@@ -28,6 +28,7 @@ class Rule(object):
     def __init__(self, schema=None, parent=None):
         self._parent = None
         self._name = None
+        self._date = None
         self._desc = None
         self._required = False
         self._type = None
@@ -124,6 +125,14 @@ class Rule(object):
     @pattern.setter
     def pattern(self, value):
         self._pattern = value
+
+    @property
+    def date(self):
+        return self._date
+
+    @date.setter
+    def date(self, value):
+        self._date = value
 
     @property
     def pattern_regexp(self):
@@ -324,6 +333,7 @@ class Rule(object):
             "required": self.init_required_value,
             "req": self.init_required_value,
             "pattern": self.init_pattern_value,
+            "format" : self.init_format_value,
             "enum": self.init_enum_value,
             "assert": self.init_assert_value,
             "range": self.init_range_value,
@@ -859,6 +869,29 @@ class Rule(object):
                 error_key=u"default.type.unmatch",
                 path=path,
             )
+
+
+    def init_format_value(self, v, rule, path):
+        log.debug(u"Init format value : %s", path)
+
+        if not isinstance(v, str):
+            raise RuleError(
+                msg=u"Value of date keyword: '{}' is not a string".format(v),
+                error_key=u"date.not_string",
+                path=path,
+            )
+
+        self.format = v
+
+        if self.schema_str["type"] == "map":
+            raise RuleError(
+                msg=u"Keyword date is not allowed inside map",
+                error_key=u"date.not_allowed_in_map",
+                path=path,
+            )
+
+
+
 
     def check_conflicts(self, schema, rule, path):
         log.debug(u"Checking for conflicts : %s", path)
