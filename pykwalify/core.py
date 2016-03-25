@@ -8,7 +8,7 @@ import json
 import logging
 import os
 import re
-from datetime import datetime
+import datetime
 
 # pyKwalify imports
 import pykwalify
@@ -593,10 +593,7 @@ class Core(object):
         if rule.type == "date":
             if not is_scalar(value):
                 raise CoreError(u"value is not a valid scalar")
-            try:
-                date_format = rule.format
-            except AttributeError as err:
-                raise CoreError(u"a date is defined in schema without a format")
+            date_format = rule.format
             self._validate_scalar_date(value, date_format, path)
 
 
@@ -623,7 +620,7 @@ class Core(object):
 
         if isinstance(timestamp_value, int) or isinstance(timestamp_value, float):
             _check_int_timestamp_boundaries(timestamp_value)
-        elif isinstance(timestamp_value, datetime):
+        elif isinstance(timestamp_value, datetime.datetime):
             # Datetime objects currently have nothing to validate.
             # In the future, more options will be added to datetime validation
             pass
@@ -668,25 +665,32 @@ class Core(object):
                                                                           'format':date_format,
                                                                           'path': path})
 
-        if not isinstance(date_value, str):
+        if isinstance(date_value, str):
+            if date_format is None:
+                raise CoreError(u'If date does not match yaml date specification a format must be specify in grammar')
+            import time
+            try:
+                time.strptime(date_value, date_format)
+            except ValueError:
+                self.errors.append(SchemaError.SchemaErrorEntry(
+                    msg=u"Not a valid date: date={value} format= {format}. Path:'{path}'",
+                    path=path,
+                    value=date_value,
+                    format=date_format,
+                ))
+            return True
+        elif isinstance(date_value, datetime.date):
+            return True
+        else:
             self.errors.append(SchemaError.SchemaErrorEntry(
-                msg=u"Not a valid date: date={value} date must be a string not a '{type}'",
+                msg=u"Not a valid date: date={value} date must be a string or a datetime.date not a '{type}'",
                 path=path,
                 value=date_value,
                 type=type(date_value).__name__,
             ))
             return False
 
-        import time
-        try:
-            time.strptime(date_value, date_format)
-        except ValueError:
-            self.errors.append(SchemaError.SchemaErrorEntry(
-                msg=u"Not a valid date: date={value} format= {format}. Path:'{path}'",
-                path=path,
-                value=date_value,
-                format=date_format,
-            ))
+
 
 
     def _validate_range(self, max_, min_, max_ex, min_ex, value, path, prefix):

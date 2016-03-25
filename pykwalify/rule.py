@@ -29,6 +29,7 @@ class Rule(object):
         self._parent = None
         self._name = None
         self._date = None
+        self._format = None
         self._desc = None
         self._required = False
         self._type = None
@@ -133,6 +134,14 @@ class Rule(object):
     @date.setter
     def date(self, value):
         self._date = value
+
+    @property
+    def format(self):
+        return self._format
+
+    @format.setter
+    def format(self, value):
+        self._format = value
 
     @property
     def pattern_regexp(self):
@@ -881,7 +890,7 @@ class Rule(object):
                 path=path,
             )
 
-        self.format = v
+        self._format = v
 
         if self.schema_str["type"] == "map":
             raise RuleError(
