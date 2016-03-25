@@ -58,7 +58,6 @@ pykwalify -d data.yaml -s schema.yaml
 
 ## Runtime dependencies
 
- - docopt >= 0.6.2
  - PyYaml >= 3.11
  - python-dateutil >= 2.4.2
 
