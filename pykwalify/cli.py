@@ -6,53 +6,63 @@
 import logging
 import logging.config
 import sys
+import argparse
 
-# 3rd party imports
-from docopt import docopt
+import pykwalify
 
 
-def parse_cli():
+def argparse_cli():
     """
     The outline of this function needs to be like this:
 
     1. parse arguments
-    2. validate arguments only, dont go into other logic/code
+    2. validate arguments only, don't go into other logic/code
     3. run application logic
     """
 
-    #
-    # 1. parse cli arguments
-    #
+    parser = argparse.ArgumentParser()
 
-    __docopt__ = """
-usage: pykwalify -d FILE -s FILE ... [-e FILE ...] [-v ...] [-q]
+    parser.add_argument('-d', '--data-file',
+                        action='store',
+                        dest='data_file',
+                        required=True,
+                        help="the file to be tested")
+    parser.add_argument('-e', '--extension',
+                        nargs='*',
+                        action='store',
+                        dest='ext_file',
+                        default=[],
+                        help="file containing python extension")
+    parser.add_argument('-q', '--quiet',
+                        action='store_true',
+                        dest='quiet',
+                        help="suppress terminal output")
+    parser.add_argument('-s', '--schema-file',
+                        nargs='*',
+                        action='store',
+                        dest='schema_file',
+                        required=True,
+                        help="schema definition file")
+    parser.add_argument('-v', '--verbose',
+                        action='count',
+                        dest='verbosity',
+                        default=0,
+                        help="verbose terminal output (multiple -v increases verbosity)")
+    parser.add_argument('--version',
+                        action='version',
+                        version=pykwalify.__version__,
+                        help="display the version number and exit")
 
-optional arguments:
-  -d FILE, --data-file FILE            the file to be tested
-  -e FILE, --extension FILE            file containing python extension
-  -h, --help                           show this help message and exit
-  -q, --quiet                          suppress terminal output
-  -s FILE, --schema-file FILE          schema definition file
-  -v, --verbose                        verbose terminal output (multiple -v increases verbosity)
-  --version                            display the version number and exit
-"""
+    args = parser.parse_args()
 
-    # Import pykwalify package
-    import pykwalify
-
-    args = docopt(__docopt__, version=pykwalify.__version__)
-
-    pykwalify.init_logging(1 if args["--quiet"] else args["--verbose"])
+    pykwalify.init_logging(1 if args.quiet else args.verbosity)
     log = logging.getLogger(__name__)
 
-    #
-    # 2. validate arguments only, dont go into other code/logic
-    #
-
-    log.debug("Setting verbose level: %s", args["--verbose"])
+    log.debug("Setting verbose level: %s", args.verbosity)
     log.debug("Arguments from CLI: %s", args)
 
     return args
+
 
 
 def run(cli_args):
@@ -64,9 +74,9 @@ def run(cli_args):
     from .core import Core
 
     c = Core(
-        source_file=cli_args["--data-file"],
-        schema_files=cli_args["--schema-file"],
-        extensions=cli_args['--extension'],
+        source_file=cli_args.data_file,
+        schema_files=cli_args.schema_file,
+        extensions=cli_args.ext_file,
     )
     c.validate()
     return c
@@ -80,5 +90,5 @@ def cli_entrypoint():
     # Check minimum version of Python
     if sys.version_info < (2, 7, 0):
         sys.stderr.write(u"WARNING: pykwalify: It is recommended to run pykwalify on python version 2.7.x or later...\n\n")
-
-    run(parse_cli())
+    run(argparse_cli())
+    #run(parse_cli())
