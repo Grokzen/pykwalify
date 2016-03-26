@@ -3,7 +3,7 @@
 """ pyKwalify - types.py """
 
 # python stdlib
-from datetime import datetime
+import datetime
 from pykwalify.compat import basestring
 
 DEFAULT_TYPE = "str"
@@ -16,8 +16,8 @@ _types = {
     "bool": bool,
     "map": dict,
     "seq": list,
-    "timestamp": datetime,
-    "date": datetime,
+    "timestamp": datetime.datetime,
+    "date": datetime.date,
     "symbol": str,
     "scalar": None,
     "text": None,
@@ -122,6 +122,14 @@ def is_timestamp(obj):
     """
     return isinstance(obj, datetime) or isinstance(obj, basestring)
 
+def is_date(obj):
+    """
+
+    :param obj:
+    :return:
+    """
+    return isinstance(obj, basestring) or isinstance(obj, datetime.date)
+
 
 tt = {
     "str": is_string,
@@ -134,4 +142,5 @@ tt = {
     "enum": is_enum,
     "none": is_none,
     "timestamp": is_timestamp,
+    "date": is_date,
 }
