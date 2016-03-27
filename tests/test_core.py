@@ -416,6 +416,8 @@ class TestCore(object):
             ("22f.yaml", SchemaError),
             # Test keyword regex using declared matching-rule 'all'
             ("23f.yaml", SchemaError),
+            # Test that True/False is not valid integers
+            ("24f.yaml", SchemaError),
         ]
 
         # Add override magic to make it easier to test a specific file

@@ -1,0 +1,11 @@
+data:
+  - 1
+  - True
+  - False
+schema:
+  type: seq
+  sequence:
+    - type: int
+errors:
+ - "Value 'False' is not of type 'int'. Path: '/2'"
+ - "Value 'True' is not of type 'int'. Path: '/1'"

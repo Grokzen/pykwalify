@@ -64,7 +64,10 @@ def is_string(obj):
 
 
 def is_int(obj):
-    return isinstance(obj, int)
+    """
+    True & False is not considered valid integers even if python considers them 1 & 0 in some versions
+    """
+    return isinstance(obj, int) and not isinstance(obj, bool)
 
 
 def is_bool(obj):
@@ -120,7 +123,7 @@ def is_timestamp(obj):
     Yaml either have automatically converted it to a datetime object
     or it is a string that will be validated later.
     """
-    return isinstance(obj, datetime) or isinstance(obj, basestring)
+    return isinstance(obj, datetime) or is_string(obj) or is_int(obj) or is_float(obj)
 
 
 tt = {

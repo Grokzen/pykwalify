@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import pytest
 from datetime import datetime
 
@@ -93,15 +94,175 @@ def test_validate_timestamp():
 
 
 def test_validate_scalar_type():
-    data_matrix = [
-        ("1e-06", []),
-        ("1z-06", ["Value '1z-06' is not of type 'float'. Path: ''"]),
-        (1.5, []),
-        ("abc", ["Value 'abc' is not of type 'float'. Path: ''"]),
-        (True, ["Value 'True' is not of type 'float'. Path: ''"]),
+    # Test that when providing a scalar type that do not exists, it should raise an error
+    with pytest.raises(CoreError):
+        c = ec()
+        c._validate_scalar_type(True, True, '')
+
+    data_matrix = []
+
+    # Tests for str
+    data_matrix += [
+        ("", "str", []),
+        ("123", "str", []),
+        ("yes", "str", []),
+        ("no", "str", []),
+        (b"foobar", "str", []),
+        ("Néron", "str", []),
+        (b"Néron", "str", []),
+        (123, "str", ["Value '123' is not of type 'str'. Path: ''"]),
+        (None, "str", ["Value 'None' is not of type 'str'. Path: ''"]),
+        (3.14, "str", ["Value '3.14' is not of type 'str'. Path: ''"]),
+        (True, "str", ["Value 'True' is not of type 'str'. Path: ''"]),
+        ({'a': 'b'}, "str", ["Value '{'a': 'b'}' is not of type 'str'. Path: ''"]),
+        (['a', 'b'], "str", ["Value '['a', 'b']' is not of type 'str'. Path: ''"]),
+    ]
+
+    # Tests for int
+    data_matrix += [
+        (123, "int", []),
+        (3.14, "int", ["Value '3.14' is not of type 'int'. Path: ''"]),
+        ("", "int", ["Value '' is not of type 'int'. Path: ''"]),
+        ("123", "int", ["Value '123' is not of type 'int'. Path: ''"]),
+        # TODO: Currently broken with unicode data interpreted as ascii
+        # (u"Néron", "int", [u"Value 'Néron' is not of type 'int'. Path: ''"]),
+        # (b"Néron", "int", [b"Value 'Néron' is not of type 'int'. Path: ''"]),
+        (None, "int", ["Value 'None' is not of type 'int'. Path: ''"]),
+        (True, "int", ["Value 'True' is not of type 'int'. Path: ''"]),
+        ({'a': 'b'}, "int", ["Value '{'a': 'b'}' is not of type 'int'. Path: ''"]),
+        (['a', 'b'], "int", ["Value '['a', 'b']' is not of type 'int'. Path: ''"]),
+    ]
+
+    # Tests for float type
+    data_matrix += [
+        ("1e-06", 'float', []),
+        ("1z-06", 'float', ["Value '1z-06' is not of type 'float'. Path: ''"]),
+        (1.5, 'float', []),
+        ("abc", 'float', ["Value 'abc' is not of type 'float'. Path: ''"]),
+        (True, 'float', ["Value 'True' is not of type 'float'. Path: ''"]),
+    ]
+
+    # Tests for bool
+    data_matrix += [
+        (True, "bool", []),
+        (False, "bool", []),
+        (1, "bool", ["Value '1' is not of type 'bool'. Path: ''"]),
+        (3.14, "bool", ["Value '3.14' is not of type 'bool'. Path: ''"]),
+        ("", "bool", ["Value '' is not of type 'bool'. Path: ''"]),
+        ("yes", "bool", ["Value 'yes' is not of type 'bool'. Path: ''"]),
+        ("no", "bool", ["Value 'no' is not of type 'bool'. Path: ''"]),
+        # TODO: Currently broken with unicode data interpreted as ascii
+        # ("Néron", "bool", ["Value 'Néron' is not of type 'bool'. Path: ''"]),
+        # (b"Néron", "bool", ["Value 'Néron' is not of type 'bool'. Path: ''"]),
+        ([], "bool", ["Value '[]' is not of type 'bool'. Path: ''"]),
+        ({}, "bool", ["Value '{}' is not of type 'bool'. Path: ''"]),
+    ]
+
+    # Tests for number
+    data_matrix += [
+        (1, "number", []),
+        (3.14, "number", []),
+        (True, "number", ["Value 'True' is not of type 'number'. Path: ''"]),
+        (False, "number", ["Value 'False' is not of type 'number'. Path: ''"]),
+        ("", "number", ["Value '' is not of type 'number'. Path: ''"]),
+        ("yes", "number", ["Value 'yes' is not of type 'number'. Path: ''"]),
+        ("no", "number", ["Value 'no' is not of type 'number'. Path: ''"]),
+        # TODO: Currently broken with unicode data interpreted as ascii
+        # ("Néron", "number", ["Value 'Néron' is not of type 'number'. Path: ''"]),
+        # (b"Néron", "number", ["Value 'Néron' is not of type 'number'. Path: ''"]),
+        ([], "number", ["Value '[]' is not of type 'number'. Path: ''"]),
+        ({}, "number", ["Value '{}' is not of type 'number'. Path: ''"]),
+    ]
+
+    # Tests for text
+    data_matrix += [
+        (1, "text", []),
+        (3.14, "text", []),
+        ("", "text", []),
+        ("yes", "text", []),
+        ("no", "text", []),
+        ("Néron", "text", []),
+        (b"Néron", "text", []),
+        (True, "text", ["Value 'True' is not of type 'text'. Path: ''"]),
+        (False, "text", ["Value 'False' is not of type 'text'. Path: ''"]),
+        ([], "text", ["Value '[]' is not of type 'text'. Path: ''"]),
+        ({}, "text", ["Value '{}' is not of type 'text'. Path: ''"]),
+        (datetime.fromtimestamp(1445674938), "text", ["Value '2015-10-24 10:22:18' is not of type 'text'. Path: ''"]),
+    ]
+
+    # Tests for any
+    data_matrix += [
+        (1, "any", []),
+        (3.14, "any", []),
+        (True, "any", []),
+        (False, "any", []),
+        ("", "any", []),
+        ("yes", "any", []),
+        ("no", "any", []),
+        ("Néron", "any", []),
+        (b"Néron", "any", []),
+        ([], "any", []),
+        ({}, "any", []),
+        (datetime.fromtimestamp(1445674938), "any", []),
+    ]
+
+    # Tests for enum
+    data_matrix += [
+        ("", "enum", []),
+        ("123", "enum", []),
+        ("yes", "enum", []),
+        ("no", "enum", []),
+        (b"foobar", "enum", []),
+        ("Néron", "enum", []),
+        (b"Néron", "enum", []),
+        (123, "enum", ["Value '123' is not of type 'enum'. Path: ''"]),
+        (None, "enum", ["Value 'None' is not of type 'enum'. Path: ''"]),
+        (3.14, "enum", ["Value '3.14' is not of type 'enum'. Path: ''"]),
+        (True, "enum", ["Value 'True' is not of type 'enum'. Path: ''"]),
+        ({'a': 'b'}, "enum", ["Value '{'a': 'b'}' is not of type 'enum'. Path: ''"]),
+        (['a', 'b'], "enum", ["Value '['a', 'b']' is not of type 'enum'. Path: ''"]),
+    ]
+
+    # Tests for none
+    data_matrix += [
+        ("", "none", ["Value '' is not of type 'none'. Path: ''"]),
+        ("123", "none", ["Value '123' is not of type 'none'. Path: ''"]),
+        ("yes", "none", ["Value 'yes' is not of type 'none'. Path: ''"]),
+        ("no", "none", ["Value 'no' is not of type 'none'. Path: ''"]),
+        ("None", "none", ["Value 'None' is not of type 'none'. Path: ''"]),
+        (b"foobar", "none", ["Value 'foobar' is not of type 'none'. Path: ''"]),
+        # TODO: Currently broken with unicode data interpreted as ascii
+        # ("Néron", "none", ["Value 'Néron' is not of type 'none'. Path: ''"]),
+        # (b"Néron", "none", ["Value 'Néron' is not of type 'none'. Path: ''"]),
+        (123, "none", ["Value '123' is not of type 'none'. Path: ''"]),
+        (None, "none", []),
+        (3.14, "none", ["Value '3.14' is not of type 'none'. Path: ''"]),
+        (True, "none", ["Value 'True' is not of type 'none'. Path: ''"]),
+        ({'a': 'b'}, "none", ["Value '{'a': 'b'}' is not of type 'none'. Path: ''"]),
+        (['a', 'b'], "none", ["Value '['a', 'b']' is not of type 'none'. Path: ''"]),
+
+    ]
+
+    # Tests for timestamp
+    data_matrix += [
+        ("", 'timestamp', []),
+        ("1234567", 'timestamp', []),
+        ("2016-01-01", 'timestamp', []),
+        ("2016-01-01 15:01", 'timestamp', []),
+        ("Néron", "timestamp", []),
+        (b"Néron", "timestamp", []),
+        (123, 'timestamp', []),
+        (1.5, 'timestamp', []),
+        (0, 'timestamp', []),
+        (-1, 'timestamp', []),
+        (3147483647, 'timestamp', []),
+        ([], 'timestamp', ["Value '[]' is not of type 'timestamp'. Path: ''"]),
+        (datetime.now(), 'timestamp', []),
+        (datetime.today(), 'timestamp', []),
     ]
 
     for data in data_matrix:
+        print("Testing data: '%s', '%s', '%s'" % data)
         c = ec()
-        c._validate_scalar_type(data[0], 'float', '')
-        assert _remap_errors(c) == data[1]
+        c._validate_scalar_type(data[0], data[1], '')
+        assert _remap_errors(c) == data[2]

@@ -717,7 +717,7 @@ class Core(object):
                     path=path,
                     value=unicode(value) if tt['str'](value) else value,
                     scalar_type=t))
-        except Exception as e:
-            # Type not found in map
+        except KeyError as e:
+            # Type not found in valid types mapping
             log.debug(e)
-            raise Exception(u"Unknown type check: %s : %s : %s", path, value, t)
+            raise CoreError(u"Unknown type check: %s : %s : %s" % (path, value, t))

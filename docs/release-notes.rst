@@ -5,6 +5,7 @@ Next release (??? ?, 2016)
 --------------------------
 
 - Convert all documentation to readthedocs
+- True/False is no longer considered valid integer
 
 
 1.5.1 (Mar 6, 2016)
