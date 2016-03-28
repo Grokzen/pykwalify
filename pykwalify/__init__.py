@@ -6,6 +6,13 @@
 import logging
 import logging.config
 import os
+import sys
+
+if sys.version_info[0] < 3:
+    # We must force python2 systems to use utf8 encoding instead of default ascii to fix
+    # some problems that exists when using utf8 data.
+    reload(sys)  # Reload does the trick!  # NOQA
+    sys.setdefaultencoding('UTF8')
 
 __author__ = 'Grokzen <Grokzen@gmail.com>'
 __version_info__ = (1, 5, 1)
