@@ -13,6 +13,8 @@ install:
 script:
   - coverage erase
   - coverage run --source pykwalify -p -m py.test -v
+  - flake8 --max-line-length=160 --show-source --statistics --exclude=.venv,.tox,dist,docs,build,.git
+  - python setup.py sdist bdist
 
 after_success:
   - coverage combine
