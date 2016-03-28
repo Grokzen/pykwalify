@@ -185,7 +185,7 @@ def test_validate_scalar_type():
         (False, "text", ["Value 'False' is not of type 'text'. Path: ''"]),
         ([], "text", ["Value '[]' is not of type 'text'. Path: ''"]),
         ({}, "text", ["Value '{}' is not of type 'text'. Path: ''"]),
-        (datetime.fromtimestamp(1445674938), "text", ["Value '2015-10-24 10:22:18' is not of type 'text'. Path: ''"]),
+        (datetime(2015, 10, 24, 10, 22, 18), "text", ["Value '2015-10-24 10:22:18' is not of type 'text'. Path: ''"]),
     ]
 
     # Tests for any
@@ -201,7 +201,7 @@ def test_validate_scalar_type():
         (u"Néron", "any", []),
         ([], "any", []),
         ({}, "any", []),
-        (datetime.fromtimestamp(1445674938), "any", []),
+        (datetime(2015, 10, 24, 10, 22, 18), "any", []),
     ]
 
     # Tests for enum
