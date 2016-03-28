@@ -8,6 +8,7 @@ if sys.version_info[0] < 3:
     # Python 2.x.x series
     basestring = basestring  # NOQA: F821
     unicode = unicode    # NOQA: F821
+    bytes = str    # NOQA: F821
 
     def u(x):
         return x.decode()
@@ -21,6 +22,7 @@ else:
     # Python 3.x.x series
     basestring = str  # NOQA: F821
     unicode = str  # NOQA: F821
+    bytes = bytes  # NOQA: F821
 
     def u(x):
         return x

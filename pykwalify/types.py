@@ -4,7 +4,7 @@
 
 # python stdlib
 from datetime import datetime
-from pykwalify.compat import basestring
+from pykwalify.compat import basestring, bytes
 
 DEFAULT_TYPE = "str"
 
@@ -60,7 +60,7 @@ def is_correct_type(obj, type):
 
 
 def is_string(obj):
-    return isinstance(obj, basestring)
+    return isinstance(obj, basestring) or isinstance(obj, bytes)
 
 
 def is_int(obj):

@@ -6,6 +6,7 @@ Next release (??? ?, 2016)
 
 - Convert all documentation to readthedocs
 - True/False is no longer considered valid integer
+- python3 'bytes' objects is now a valid strings and text type
 
 
 1.5.1 (Mar 6, 2016)
