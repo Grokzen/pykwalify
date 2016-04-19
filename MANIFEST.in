@@ -1,7 +1,7 @@
 exclude *.py
-include docs/Authors.md
-include docs/License.txt
-include ReleaseNotes.rst
+include docs/Authors.rst
+include docs/License.rst
+include docs/release-notes.rst
 include setup.py
 include README.md
 exclude __pycache__

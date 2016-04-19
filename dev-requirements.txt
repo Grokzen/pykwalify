@@ -7,3 +7,4 @@ coveralls
 flake8
 ptpdb
 ptpython
+setuptools

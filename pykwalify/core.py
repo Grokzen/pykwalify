@@ -561,7 +561,7 @@ class Core(object):
             return
 
         if rule.pattern is not None:
-            res = re.match(rule.pattern, str(value))
+            res = re.match(rule.pattern, value, re.UNICODE)
             if res is None:  # Not matching
                 self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Value '{value}' does not match pattern '{pattern}'. Path: '{path}'",
@@ -720,7 +720,7 @@ class Core(object):
                     path=path,
                     value=unicode(value) if tt['str'](value) else value,
                     scalar_type=t))
-        except Exception as e:
-            # Type not found in map
+        except KeyError as e:
+            # Type not found in valid types mapping
             log.debug(e)
-            raise Exception(u"Unknown type check: %s : %s : %s", path, value, t)
+            raise CoreError(u"Unknown type check: %s : %s : %s" % (path, value, t))

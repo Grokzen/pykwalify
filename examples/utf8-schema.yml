@@ -1,0 +1,7 @@
+---
+
+type: map
+mapping:
+  name:
+    type: str
+    pattern: N.*n
