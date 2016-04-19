@@ -422,6 +422,12 @@ class Rule(object):
         log.debug(u"Init allow none value: %s", path)
         log.debug(u"Type: %s : %s", v, rule)
 
+        if not isinstance(v, bool):
+            raise RuleError(
+                msg=u'Value "{}" for rule "allownone" must be a yaml boolean (“true”/“false”, “yes”/“no”, “on”/“off” or “y”/“n” or “Y”/“N”)'.format(v),
+                error_key=u"allownone.not_boolean",
+                path=path,
+            )
         self.allownone = v
 
 
