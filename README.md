@@ -26,7 +26,23 @@ This readme contains a reduced version of the full documentation.
 Latest stable release from pypi
 
 ```
-$ pip install pykwalify
+pip install -e '.[ruamel]'
+```
+
+`PyYaml` deprecated and `ruamel.yaml` support.
+
+In release `1.6.0` `PyYaml` will be deprecated in favor of `ruamel.yaml`. `PyYaml` is still the default installed one but it will removed in release 1.7.0 and `ruamel.yaml` will be the new default one from that release and forward.
+
+You can install it for production use with
+
+```
+pip install 'pykwalify[ruamel]'
+```
+
+or for development use with
+
+```
+pip install -e '.[ruamel]'
 ```
 
 

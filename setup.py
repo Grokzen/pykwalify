@@ -21,6 +21,9 @@ setup(
     license='MIT',
     packages=['pykwalify'],
     url='http://github.com/grokzen/pykwalify',
+    extras_require={
+        'ruamel': ["ruamel.yaml>=0.11.0,<0.12.0"],
+    },
     entry_points={
         'console_scripts': [
             'pykwalify = pykwalify.cli:cli_entrypoint',

@@ -5,6 +5,13 @@ This document describes all major changes to the validation rules and the API th
 If new types were added, they will not be described here because it will not break existing schemas.
 
 
+1.5.x --> 1.6.0
+---------------
+
+ruamel.yaml is now possible to use as a drop-in replacement for PyYaml. Install it with *pip install 'pykwalify[ruamel]'* for production use and with *pip install -e '.[ruamel]'* for development use.
+
+PyYaml is now deprecated and will be removed in favor or ruamel.yaml in release 1.7.0.
+
 
 1.4.x --> 1.5.0
 ---------------

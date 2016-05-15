@@ -7,6 +7,12 @@ Next release (??? ?, 2016)
 - Convert all documentation to readthedocs
 - True/False is no longer considered valid integer
 - python3 'bytes' objects is now a valid strings and text type
+- The regular PyYaml support is now deprecated in favor of ruamel.yaml, see the following link for more details about
+  PyYaml being deprecated https://bitbucket.org/xi/pyyaml/issues/59/has-this-project-been-abandoned
+  PyYaml will still be possible to use in the next major release version (1.6.0) but removed in release (1.7.0) and forward.
+- ruamel.yaml is now possible to install with the following command for local development *pip install -e '.[ruamel]'*
+  and for production, use *pip install 'pykwalify[ruamel]'*
+- ruamel.yaml is now used before PyYaml if installed on your system
 
 
 1.5.1 (Mar 6, 2016)
