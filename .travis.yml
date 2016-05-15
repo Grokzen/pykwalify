@@ -11,10 +11,15 @@ install:
   - pip install -r dev-requirements.txt
 
 script:
+  - "if [[ $RUAMEL == '3.0' ]]; then pip install ruamel.yaml; fi"
   - coverage erase
   - coverage run --source pykwalify -p -m py.test -v
   - flake8 --max-line-length=160 --show-source --statistics --exclude=.venv,.tox,dist,docs,build,.git
   - python setup.py sdist bdist
+
+env:
+  - RUAMEL=0
+  - RUAMEL=1
 
 after_success:
   - coverage combine
