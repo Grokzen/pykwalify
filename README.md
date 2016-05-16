@@ -26,7 +26,7 @@ This readme contains a reduced version of the full documentation.
 Latest stable release from pypi
 
 ```
-pip install -e '.[ruamel]'
+pip install pykwalify
 ```
 
 `PyYaml` deprecated and `ruamel.yaml` support.
