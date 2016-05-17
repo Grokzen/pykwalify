@@ -81,6 +81,10 @@ pykwalify -d data.yaml -s schema.yaml
  - PyYaml >= 3.11
  - python-dateutil >= 2.4.2
 
+Optional dependencies:
+
+ - ruamel.yaml >= 0.11.0
+
 
 ## Supported python version
 
