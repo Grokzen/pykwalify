@@ -45,6 +45,8 @@ In release ``1.6.0`` ``PyYaml`` will be deprecated in favor of ``ruamel.yaml``.
 
 ``PyYaml`` is still the default installed one but it will removed in release 1.7.0 and ``ruamel.yaml`` will be the new default yaml parser lib from that release and forward.
 
+This decision was based on the following thread in the `PyYaml` repo https://bitbucket.org/xi/pyyaml/issues/59/has-this-project-been-abandoned
+
 Install it for production:
 
 .. code-block:: bash

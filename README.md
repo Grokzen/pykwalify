@@ -48,6 +48,8 @@ or for development:
 pip install -e '.[ruamel]'
 ```
 
+This decision was based on the following thread in the `PyYaml` repo https://bitbucket.org/xi/pyyaml/issues/59/has-this-project-been-abandoned
+
 
 
 # Usage
