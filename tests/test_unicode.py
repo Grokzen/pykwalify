@@ -12,7 +12,7 @@ from pykwalify.core import Core
 from pykwalify.errors import SchemaError
 
 # 3rd party imports
-import yaml
+from pykwalify.compat import yaml
 from testfixtures import compare
 
 

@@ -18,7 +18,7 @@ from pykwalify.rule import Rule
 from pykwalify.types import is_scalar, tt
 
 # 3rd party imports
-import yaml
+from pykwalify.compat import yaml
 from dateutil.parser import parse
 
 log = logging.getLogger(__name__)

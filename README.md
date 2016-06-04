@@ -26,8 +26,29 @@ This readme contains a reduced version of the full documentation.
 Latest stable release from pypi
 
 ```
-$ pip install pykwalify
+pip install pykwalify
 ```
+
+
+# PyYaml and ruamel.yaml
+
+In release `1.6.0` `PyYaml` will be deprecated in favor of `ruamel.yaml`.
+
+`PyYaml` is still the default installed one but it will removed in release 1.7.0 and `ruamel.yaml` will be the new default yaml parser lib from that release and forward.
+
+Install it for production:
+
+```
+pip install 'pykwalify[ruamel]'
+```
+
+or for development:
+
+```
+pip install -e '.[ruamel]'
+```
+
+This decision was based on the following thread in the `PyYaml` repo https://bitbucket.org/xi/pyyaml/issues/59/has-this-project-been-abandoned
 
 
 
@@ -61,6 +82,10 @@ pykwalify -d data.yaml -s schema.yaml
  - docopt >= 0.6.2
  - PyYaml >= 3.11
  - python-dateutil >= 2.4.2
+
+Optional dependencies:
+
+ - ruamel.yaml >= 0.11.0
 
 
 ## Supported python version
