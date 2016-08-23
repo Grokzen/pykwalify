@@ -93,6 +93,40 @@ def test_validate_timestamp():
         assert _remap_errors(c) == data[1]
 
 
+def test_validate_date():
+    formats = ["%Y-%m-%d"]
+
+    data_matrix = [
+        (datetime.now(), [[], []]),
+        (datetime.today(), [[], []]),
+        ("1234567", [["Not a valid date: date=1234567 format= %Y-%m-%d. Path:''"], []]),
+        ("2016-01-01", [[], []]),
+        ("2016-01-01 15:01", [["Not a valid date: date=2016-01-01 15:01 format= %Y-%m-%d. Path:''"], []]),
+        (-1, [["Not a valid date: date=-1 date must be a string or a datetime.date not a 'int'"], []]),
+        (0, [["Not a valid date: date=0 date must be a string or a datetime.date not a 'int'"], []]),
+        (1.5, [["Not a valid date: date=1.5 date must be a string or a datetime.date not a 'float'"], []]),
+        (3147483647, [["Not a valid date: date=3147483647 date must be a string or a datetime.date not a 'int'"], []]),
+        ([], [["Not a valid date: date=[] date must be a string or a datetime.date not a 'list'"], []]),
+        ({}, [["Not a valid date: date={} date must be a string or a datetime.date not a 'dict'"], []]),
+    ]
+
+    for data in data_matrix:
+        for i, format in enumerate(formats):
+            print("Validating: {0} Format: {1}".format(data[0], format))
+            c = ec()
+            c._validate_scalar_date(data[0], format, '')
+            assert _remap_errors(c) == data[1][i]
+
+    # Formats that has wrong types should raise CoreError
+    with pytest.raises(CoreError):
+        c = ec()
+        c._validate_scalar_date('', '', '')
+
+    with pytest.raises(CoreError):
+        c = ec()
+        c._validate_scalar_date('', None, '')
+
+
 def test_validate_scalar_type():
     # Test that when providing a scalar type that do not exists, it should raise an error
     with pytest.raises(CoreError):
@@ -235,7 +269,6 @@ def test_validate_scalar_type():
         (True, "none", ["Value 'True' is not of type 'none'. Path: ''"]),
         ({'a': 'b'}, "none", ["Value '{'a': 'b'}' is not of type 'none'. Path: ''"]),
         (['a', 'b'], "none", ["Value '['a', 'b']' is not of type 'none'. Path: ''"]),
-
     ]
 
     # Tests for timestamp
@@ -254,6 +287,24 @@ def test_validate_scalar_type():
         ([], 'timestamp', ["Value '[]' is not of type 'timestamp'. Path: ''"]),
         (datetime.now(), 'timestamp', []),
         (datetime.today(), 'timestamp', []),
+    ]
+
+    # Tests for date
+    data_matrix += [
+        (datetime.now(), 'date', []),
+        (datetime.today(), 'date', []),
+        ("", "date", []),
+        ("2016-01-01", 'date', []),
+        ("2016-01-01 15:01", 'date', []),
+        ("123", "date", []),
+        ("yes", "date", []),
+        (u"Néron", "date", []),
+        (None, "date", ["Value 'None' is not of type 'date'. Path: ''"]),
+        (123, "date", ["Value '123' is not of type 'date'. Path: ''"]),
+        (3.14, "date", ["Value '3.14' is not of type 'date'. Path: ''"]),
+        (True, "date", ["Value 'True' is not of type 'date'. Path: ''"]),
+        ({'a': 'b'}, "date", ["Value '{'a': 'b'}' is not of type 'date'. Path: ''"]),
+        (['a', 'b'], "date", ["Value '['a', 'b']' is not of type 'date'. Path: ''"]),
     ]
 
     for data in data_matrix:

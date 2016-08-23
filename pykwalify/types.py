@@ -128,7 +128,6 @@ def is_timestamp(obj):
 
 def is_date(obj):
     """
-
     :param obj:
     :return:
     """
