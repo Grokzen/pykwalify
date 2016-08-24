@@ -96,6 +96,19 @@ class TestRule(unittest.TestCase):
         assert str(r.value) == "<RuleError: error code 4: Value of pattern keyword: '1' is not a string: Path: '/'>"
         assert r.value.error_key == 'pattern.not_string'
 
+    def test_date_and_format_value(self):
+        r = Rule(schema={"type": "date", "format": "%y"})
+        assert r.format is not None, "date var not set proper"
+        assert isinstance(r.format, str), "date format should be a string"
+
+        with pytest.raises(RuleError) as r:
+            Rule(schema={"type": "date", "format": 1})
+        assert str(r.value) == "<RuleError: error code 4: Value of format keyword: '1' is not a string: Path: '/'>"
+
+        with pytest.raises(RuleError) as r:
+            Rule(schema={"type": "map", "format": "%y"})
+        assert str(r.value) == "<RuleError: error code 4: Keyword format is only allowed when used with the following types: ('date',): Path: '/'>"
+
     def test_enum_value(self):
         # this tests the various valid enum types
         Rule(schema={"type": "int", "enum": [1, 2, 3]})

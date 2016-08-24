@@ -28,6 +28,7 @@ class Rule(object):
     def __init__(self, schema=None, parent=None):
         self._parent = None
         self._name = None
+        self._format = None
         self._desc = None
         self._required = False
         self._type = None
@@ -124,6 +125,14 @@ class Rule(object):
     @pattern.setter
     def pattern(self, value):
         self._pattern = value
+
+    @property
+    def format(self):
+        return self._format
+
+    @format.setter
+    def format(self, value):
+        self._format = value
 
     @property
     def pattern_regexp(self):
@@ -324,6 +333,7 @@ class Rule(object):
             "required": self.init_required_value,
             "req": self.init_required_value,
             "pattern": self.init_pattern_value,
+            "format": self.init_format_value,
             "enum": self.init_enum_value,
             "assert": self.init_assert_value,
             "range": self.init_range_value,
@@ -857,6 +867,28 @@ class Rule(object):
             raise RuleError(
                 msg=u"Types do not match: '{}' --> '{}'".format(v, self.type_class),
                 error_key=u"default.type.unmatch",
+                path=path,
+            )
+
+    def init_format_value(self, v, rule, path):
+        log.debug(u"Init format value : %s", path)
+
+        if not isinstance(v, str):
+            raise RuleError(
+                msg=u"Value of format keyword: '{}' is not a string".format(v),
+                error_key=u"format.not_string",
+                path=path,
+            )
+
+        self._format = v
+
+        valid_types = ("date", )
+
+        # Format is only supported when used with "type=date"
+        if self._type not in valid_types:
+            raise RuleError(
+                msg="Keyword format is only allowed when used with the following types: {0}".format(valid_types),
+                error_key=u"format.not_used_with_correct_type",
                 path=path,
             )
 

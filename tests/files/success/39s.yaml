@@ -1,0 +1,5 @@
+data:
+  "2016-01-01"
+schema:
+  type: date
+  format: "%Y-%m-%d"

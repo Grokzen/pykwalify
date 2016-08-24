@@ -3,12 +3,13 @@
 """ pyKwalify - core.py """
 
 # python std lib
+import datetime
 import imp
 import json
 import logging
 import os
 import re
-from datetime import datetime
+import time
 
 # pyKwalify imports
 import pykwalify
@@ -218,13 +219,11 @@ class Core(object):
         then handle it for all cases in a generic way.
         """
         func = rule.func
-
         # func keyword is not defined so nothing to do
         if not func:
             return
 
         found_method = False
-
         for extension in self.loaded_extensions:
             method = getattr(extension, func, None)
             if method:
@@ -592,6 +591,12 @@ class Core(object):
         if rule.type == "timestamp":
             self._validate_scalar_timestamp(value, path)
 
+        if rule.type == "date":
+            if not is_scalar(value):
+                raise CoreError(u"value is not a valid scalar")
+            date_format = rule.format
+            self._validate_scalar_date(value, date_format, path)
+
     def _validate_scalar_timestamp(self, timestamp_value, path):
         def _check_int_timestamp_boundaries(timestamp):
             if timestamp < 1:
@@ -614,7 +619,7 @@ class Core(object):
 
         if isinstance(timestamp_value, int) or isinstance(timestamp_value, float):
             _check_int_timestamp_boundaries(timestamp_value)
-        elif isinstance(timestamp_value, datetime):
+        elif isinstance(timestamp_value, datetime.datetime):
             # Datetime objects currently have nothing to validate.
             # In the future, more options will be added to datetime validation
             pass
@@ -651,6 +656,39 @@ class Core(object):
                 path=path,
                 value=timestamp_value,
                 timestamp=timestamp_value,
+            ))
+
+    def _validate_scalar_date(self, date_value, date_format, path):
+        log.debug(u"Validate date : %(value)s : %(format)s : %(path)s" % {
+            'value': date_value,
+            'format': date_format,
+            'path': path,
+        })
+
+        if isinstance(date_value, str):
+            if date_format == "":
+                raise CoreError(u"Empty strings is not valid dates")
+
+            if date_format is None:
+                raise CoreError(u'If date does not match yaml date specification a format must be specify in grammar')
+
+            try:
+                time.strptime(date_value, date_format)
+            except ValueError:
+                self.errors.append(SchemaError.SchemaErrorEntry(
+                    msg=u"Not a valid date: date={value} format= {format}. Path:'{path}'",
+                    path=path,
+                    value=date_value,
+                    format=date_format,
+                ))
+        elif isinstance(date_value, datetime.date):
+            pass
+        else:
+            self.errors.append(SchemaError.SchemaErrorEntry(
+                msg=u"Not a valid date: date={value} date must be a string or a datetime.date not a '{type}'",
+                path=path,
+                value=date_value,
+                type=type(date_value).__name__,
             ))
 
     def _validate_range(self, max_, min_, max_ex, min_ex, value, path, prefix):

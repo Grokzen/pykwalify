@@ -19,7 +19,7 @@ The following types are available:
     - Only **True**/**False** validates. Integers or strings like ``0`` or ``1``, ``"True"`` or ``"False"`` do not validate for bool
 
  - **date** 
-    - Not yet implemented [NYI]
+    - A string or datetime object that follows a date format
 
  - **float**
     - Any object that is a float type, or object that python can interpret as a float with the following python code ``float(obj)``. Scientific notation is supported for this type, for example ``1e-06``.
@@ -239,6 +239,45 @@ Example
 All ``datetime`` objects will validate as a valid timestamp.
 
 PyYaml can sometimes automatically convert data to ``datetime`` objects.
+
+
+
+Date
+----
+
+Parse a string or datetime object to determine if it is a valid date. Date has multiple valid formats based on what standard you are using. For example 2016-12-31 or 31-12-16. If you want to parse a custom format then you can use the `format` keyword.
+
+Example
+
+.. code-block:: yaml
+
+    # Schema
+    type: date
+
+.. code-block:: yaml
+
+    # Data
+    "2015-12-31"
+
+
+
+Format
+------
+
+Only valid with using `date` & `datetime` type. It helps to define custom datetime formats in case the default formats is not good enough for you. Define the value as a string tha tuses the builtin python datetime string formatting language.
+
+Example
+
+.. code-block:: yaml
+
+    # Schema
+    type: date
+    format: "%Y-%m-%d"
+
+.. code-block:: yaml
+
+    # Data
+    "2015-12-31"
 
 
 
