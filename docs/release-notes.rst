@@ -13,6 +13,7 @@ Next release (??? ?, 2016)
 - ruamel.yaml is now possible to install with the following command for local development *pip install -e '.[ruamel]'*
   and for production, use *pip install 'pykwalify[ruamel]'*
 - ruamel.yaml is now used before PyYaml if installed on your system
+- Fixed a bug where scalar type was not validated correctly.
 
 
 1.5.1 (Mar 6, 2016)
