@@ -52,7 +52,7 @@ def is_collection(obj):
 
 
 def is_scalar(obj):
-    return not is_collection(obj)
+    return not is_collection(obj) and obj is not None
 
 
 def is_correct_type(obj, type):
@@ -146,4 +146,5 @@ tt = {
     "none": is_none,
     "timestamp": is_timestamp,
     "date": is_date,
+    "scalar": is_scalar,
 }
