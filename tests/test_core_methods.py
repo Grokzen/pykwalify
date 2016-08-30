@@ -256,6 +256,22 @@ def test_validate_scalar_type():
         (datetime.today(), 'timestamp', []),
     ]
 
+    data_matrix += [
+        (datetime(2015, 10, 24, 10, 22, 18), 'scalar', []),
+        ("", "scalar", []),
+        ("2016-01-01", 'scalar', []),
+        ("2016-01-01 15:01", 'scalar', []),
+        ("123", 'scalar', []),
+        ("yes", 'scalar', []),
+        (u"Néron", 'scalar', []),
+        (None, 'scalar', ["Value 'None' is not of type 'scalar'. Path: ''"]),
+        (123, 'scalar', []),
+        (3.14, 'scalar', []),
+        (True, 'scalar', []),
+        ({'a': 'b'}, 'scalar', ["Value '{'a': 'b'}' is not of type 'scalar'. Path: ''"]),
+        (['a', 'b'], 'scalar', ["Value '['a', 'b']' is not of type 'scalar'. Path: ''"]),
+    ]
+
     for data in data_matrix:
         print("Testing data: '%s', '%s', '%s'" % data)
         c = ec()

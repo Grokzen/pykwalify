@@ -37,7 +37,7 @@ The following types are available:
     - Validates if value is **int** or **float**
 
  - **scalar**
-    - Validates for all but **seq** or **map**
+    - Validates for all but **seq** or **map**. None values will also fail validation.
 
  - **sequence** or **seq**
     - Validates for lists
