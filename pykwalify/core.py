@@ -478,7 +478,11 @@ class Core(object):
             regex_mappings = [(regex_rule, re.search(regex_rule.map_regex_rule, str(k))) for regex_rule in rule.regex_mappings]
             log.debug(u" + Mapping Regex matches: %s", regex_mappings)
 
-            if any(regex_mappings):
+            if r is not None and not r.schema:
+                # validate recursively
+                log.debug(u" + Core Map: validate recursively: %s", r)
+                self._validate(v, r, u"{}/{}".format(path, k), done)
+            elif any(regex_mappings):
                 sub_regex_result = []
 
                 # Found at least one that matches a mapping regex
@@ -515,20 +519,15 @@ class Core(object):
                             regex="' and '".join(sorted([mm[0].map_regex_rule for mm in regex_mappings]))))
                 else:
                     log.debug(u" + No mapping rule defined")
-            elif r is None:
+            elif r is not None and r.schema:
+                print(u" + Something is ignored Oo : {}".format(r))
+            else:
                 if not rule.allowempty_map:
                     self.errors.append(SchemaError.SchemaErrorEntry(
                         msg=u"Key '{key}' was not defined. Path: '{path}'",
                         path=path,
                         value=value,
                         key=k))
-            else:
-                if not r.schema:
-                    # validate recursively
-                    log.debug(u" + Core Map: validate recursively: %s", r)
-                    self._validate(v, r, u"{}/{}".format(path, k), done)
-                else:
-                    print(u" + Something is ignored Oo : {}".format(r))
 
     def _validate_scalar(self, value, rule, path, done=None):
         log.debug(u"Validate scalar")
