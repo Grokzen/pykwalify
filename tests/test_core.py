@@ -367,6 +367,8 @@ class TestCore(object):
             "36s.yaml",
             # Test keyword regex declared matching-rule all
             "37s.yaml",
+            # Test mixed keyword regex and normal keyword
+            "38s.yaml",
         ]
 
         _fail_tests = [

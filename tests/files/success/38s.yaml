@@ -1,0 +1,19 @@
+data:
+  standard:
+    FRIST-800-53
+  AU-1:
+    family: AU
+    name: Audit and Accountability Policy and Procedures
+schema:
+  type: map
+  mapping:
+    regex;/[A-Z]-/:
+      type: map
+      mapping:
+        name:
+          type: str
+        family:
+          type: str
+          required: yes
+    standard:
+      type: str
