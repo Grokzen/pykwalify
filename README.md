@@ -15,7 +15,7 @@ The schema this library is base and extended from: http://www.kuwata-lab.com/kwa
 
 # Documentation
 
-All documentation can be found at http://pykwalify.readthedocs.org/en/latest/
+All documentation can be found at http://pykwalify.readthedocs.io/en/unstable/index.html#
 
 This readme contains a reduced version of the full documentation.
 
