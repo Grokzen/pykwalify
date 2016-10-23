@@ -101,5 +101,5 @@ This is the extension file named ``ext.py`` that is located in the same director
         # Either raise some exception that you have defined your self
         # raise AssertionError('Custom assertion error in jinja_function()')
 
-    # Or you should return True/False that will tell if it validated
-    return True
+        # Or you should return True/False that will tell if it validated
+        return True
