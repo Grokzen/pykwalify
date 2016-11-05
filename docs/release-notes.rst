@@ -15,6 +15,7 @@ Release Notes
 - ruamel.yaml is now used before PyYaml if installed on your system
 - Fixed a bug where scalar type was not validated correctly.
 - Unpin all dependencies but still maintain a minimum versions of each lib
+- Allowed mixing of regex and normal keywords when matching a string (jmacarthur)
 
 
 1.5.1 (Mar 6, 2016)
