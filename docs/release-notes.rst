@@ -1,7 +1,7 @@
 Release Notes
 =============
 
-1.5.2 (Sep 15, 2016)
+1.5.2 (Nov 12, 2016)
 --------------------
 
 - Convert all documentation to readthedocs
