@@ -59,6 +59,5 @@ errors:
   - "Key 'given-name' was not defined. Path: '/1'"
   - "Key 'family-name' was not defined. Path: '/1'"
   - "Type 'scalar' has size of '15', less than or equals to min limit(exclusive) '18'. Path: '/1/age'"
-  - "Type 'scalar' has size of '6', less than or equals to min limit(exclusive) '18'. Path: '/0/age'"
   - "Type 'scalar' has size of '6', less than min limit '8'. Path: '/0/password'"
   - "Type 'scalar' has size of '20', greater than or equals to max limit(exclusive) '19'. Path: '/2/age'"
