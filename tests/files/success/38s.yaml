@@ -14,6 +14,6 @@ schema:
           type: str
         family:
           type: str
-          required: yes
+          required: True
     standard:
       type: str
