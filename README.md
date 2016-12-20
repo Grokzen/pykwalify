@@ -23,17 +23,17 @@ This readme contains a reduced version of the full documentation.
 
 # PyYaml and ruamel.yaml
 
-In release `1.6.0` `PyYaml` will be deprecated in favor of `ruamel.yaml`.
+`ruamel.yaml` is now the default one and will be used over `PyYaml` if both is installed. This was decided becuase `ruamel.yaml` is more up to date and have more support then `PyYaml`
 
-`PyYaml` is still the default installed one but it will removed in release 1.7.0 and `ruamel.yaml` will be the new default yaml parser lib from that release and forward.
+Both versions will continue to be supported.
 
-Install it for production:
+Install it for production with:
 
 ```
 pip install 'pykwalify[ruamel]'
 ```
 
-or for development:
+or for development with:
 
 ```
 pip install -e '.[ruamel]'
