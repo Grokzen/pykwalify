@@ -21,15 +21,6 @@ This readme contains a reduced version of the full documentation.
 
 
 
-# Installation
-
-Latest stable release from pypi
-
-```
-pip install pykwalify
-```
-
-
 # PyYaml and ruamel.yaml
 
 In release `1.6.0` `PyYaml` will be deprecated in favor of `ruamel.yaml`.
@@ -77,29 +68,21 @@ pykwalify -d data.yaml -s schema.yaml
 
 
 
-## Runtime dependencies
-
- - docopt >= 0.6.2
- - PyYaml >= 3.11
- - python-dateutil >= 2.4.2
-
-Optional dependencies:
-
- - ruamel.yaml >= 0.11.0
-
-
-## Supported python version
-
- - Python 2.7
- - Python 3.3
- - Python 3.4
- - Python 3.5
- - Python 3.6 (Experimental, allowed to fail travis)
-
-
-
-# Licensing
-
-MIT, See docs/License.txt for details
-
-Copyright (c) 2013-2015 Johan Andersson
+# Project details
+|   |   |
+|---|---|
+| python support        | 2.7, 3.3, 3.4, 3.5, 3.6 |
+| Source                | https://github.com/Grokzen/pykwalify |
+| Docs                  | http://pykwalify.readthedocs.io/en/master/ |
+| Changelog             | https://github.com/Grokzen/pykwalify/blob/unstable/docs/release-notes.rst |
+| Issues                | https://github.com/Grokzen/pykwalify/issues |
+| Travis                | https://travis-ci.org/Grokzen/pykwalify |
+| Test coverage         | https://coveralls.io/github/Grokzen/pykwalify |
+| pypi                  | https://pypi.python.org/pypi/pykwalify/1.5.2 |
+| Open Hub              | https://www.openhub.net/p/pykwalify |
+| License               | `MIT` https://github.com/Grokzen/pykwalify/blob/unstable/docs/license.rst |
+| git repo              | `git clone git@github.com:Grokzen/pykwalify.git` |
+| install stable        | `pip install pykwalify` |
+| install dev           | `$ git clone git@github.com:Grokzen/pykwalify.git pykwalify`<br>`$ cd ./pykwalify`<br>`$ virtualenv .venv`<br>`$ source .venv/bin/activate`<br>`$ pip install -e .` |
+| required dependencies | `docopt >= 0.6.2`<br> `PyYaml >= 3.11`<br> `python-dateutil >= 2.4.2` |
+| optional dependencies | `ruamel.yaml >= 0.11.0` |
