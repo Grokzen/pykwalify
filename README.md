@@ -67,6 +67,7 @@ pykwalify -d data.yaml -s schema.yaml
 | Source                | https://github.com/Grokzen/pykwalify |
 | Docs                  | http://pykwalify.readthedocs.io/en/master/ |
 | Changelog             | https://github.com/Grokzen/pykwalify/blob/unstable/docs/release-notes.rst |
+| Upgrade instructions  | https://github.com/Grokzen/pykwalify/blob/unstable/docs/upgrade-instructions.rst |
 | Issues                | https://github.com/Grokzen/pykwalify/issues |
 | Travis                | https://travis-ci.org/Grokzen/pykwalify |
 | Test coverage         | https://coveralls.io/github/Grokzen/pykwalify |
