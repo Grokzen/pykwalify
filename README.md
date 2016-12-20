@@ -13,14 +13,6 @@ The schema this library is base and extended from: http://www.kuwata-lab.com/kwa
 
 
 
-# Documentation
-
-All documentation can be found at http://pykwalify.readthedocs.io/en/master/
-
-This readme contains a reduced version of the full documentation.
-
-
-
 # PyYaml and ruamel.yaml
 
 `ruamel.yaml` is now the default one and will be used over `PyYaml` if both is installed. This was decided becuase `ruamel.yaml` is more up to date and have more support then `PyYaml`
