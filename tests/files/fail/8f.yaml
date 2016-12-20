@@ -52,13 +52,12 @@ schema:
         deleted:
           type: bool
 errors:
+  - "Cannot find required key 'name'. Path: '/1'"
+  - "Enum 'a' does not exist. Path: '/0/blood'"
+  - "Key 'family-name' was not defined. Path: '/1'"
+  - "Key 'given-name' was not defined. Path: '/1'"
+  - "Type 'scalar' has size of '15', less than or equals to min limit(exclusive) '18'. Path: '/1/age'"
+  - "Type 'scalar' has size of '20', greater than or equals to max limit(exclusive) '19'. Path: '/2/age'"
+  - "Type 'scalar' has size of '6', less than min limit '8'. Path: '/0/password'"
   - "Value 'twenty' is not of type 'int'. Path: '/0/age'"
   - "Value 'foo(at)mail.com' does not match pattern '.+@.+'. Path: '/0/email'"
-  - "Enum 'a' does not exist. Path: '/0/blood'"
-  - "Cannot find required key 'name'. Path: '/1'"
-  - "Key 'given-name' was not defined. Path: '/1'"
-  - "Key 'family-name' was not defined. Path: '/1'"
-  - "Type 'scalar' has size of '15', less than or equals to min limit(exclusive) '18'. Path: '/1/age'"
-  - "Type 'scalar' has size of '6', less than or equals to min limit(exclusive) '18'. Path: '/0/age'"
-  - "Type 'scalar' has size of '6', less than min limit '8'. Path: '/0/password'"
-  - "Type 'scalar' has size of '20', greater than or equals to max limit(exclusive) '19'. Path: '/2/age'"

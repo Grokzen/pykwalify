@@ -420,6 +420,8 @@ class TestCore(object):
             ("23f.yaml", SchemaError),
             # Test that True/False is not valid integers
             ("24f.yaml", SchemaError),
+            # Test typecheck fails when pattern is used
+            ("25f.yaml", SchemaError),
         ]
 
         # Add override magic to make it easier to test a specific file

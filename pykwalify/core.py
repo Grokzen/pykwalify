@@ -551,7 +551,8 @@ class Core(object):
         if rule.default and value is None:
             value = rule.default
 
-        self._validate_scalar_type(value, rule.type, path)
+        if not self._validate_scalar_type(value, rule.type, path):
+            return
 
         if value is None:
             return
@@ -716,6 +717,8 @@ class Core(object):
                     path=path,
                     value=unicode(value) if tt['str'](value) else value,
                     scalar_type=t))
+                return False
+            return True
         except KeyError as e:
             # Type not found in valid types mapping
             log.debug(e)
