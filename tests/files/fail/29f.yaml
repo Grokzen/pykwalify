@@ -9,5 +9,5 @@ schema:
       =:
         type: int
 errors:
-  - "Value 'abc' is not of type 'int'. Path: '/='"
+  - "Value 'abc' is not of type 'int'. Path: '/OWNERSHIP'"
   - "Value 'def' is not of type 'int'. Path: '/WHT'"
