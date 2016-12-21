@@ -444,7 +444,12 @@ class Core(object):
         log.debug(u" + RuleMapping: %s", m)
 
         if not isinstance(value, dict):
-            raise NotMappingError(u"Value: {} is not of a mapping type".format(value))
+            self.errors.append(SchemaError.SchemaErrorEntry(
+                u"Value '{value}' is not a dict. Value path: '{path}'",
+                path,
+                value,
+            ))
+            return
 
         if rule.range is not None:
             r = rule.range

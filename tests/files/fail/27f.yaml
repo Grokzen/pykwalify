@@ -1,0 +1,19 @@
+data:
+  - foo: whatever
+  - "sgdf"
+  - 2
+  - 
+schema:
+  type: seq
+  required: True
+  matching: all
+  seq:
+    - type: map
+      required: True
+      map:
+        foo:
+          type: str
+errors:
+ - "Value '2' is not a dict. Value path: '/3'"
+ - "Value 'None' is not a dict. Value path: '/4'"
+ - "Value 'sgdf' is not a dict. Value path: '/2'"
