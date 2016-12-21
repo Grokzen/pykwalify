@@ -1,0 +1,16 @@
+data:
+    rally:
+      plugins:
+        - netcreate-boot: rally/rally-plugins/netcreate-boot 
+schema:
+    type: map
+    mapping:
+      rally:
+        type: map
+        allowempty: True
+        mapping:
+          plugins:
+            type: seq
+            sequence:
+              - type: map
+                allowempty: True

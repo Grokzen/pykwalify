@@ -371,6 +371,8 @@ class TestCore(object):
             "38s.yaml",
             # Test that default mapping keyword works out of the box in a good case
             "39s.yaml",
+            # Test that allowempty works without specifying mapping keyword when used inside a sequence block
+            "40s.yaml",
         ]
 
         _fail_tests = [

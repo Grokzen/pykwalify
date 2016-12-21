@@ -14,6 +14,7 @@ Release Notes
  - This feature is NEW and EXPERIMENTAL in this release.
    It is now possible to specify a default rule when using a mapping.
    The rule will be used whenever no other key could be found.
+ - Fixed a bug where if allowempty was specefied in a mapping type inside a sequence type then it would not properly validate.
 
 
 1.5.2 (Nov 12, 2016)

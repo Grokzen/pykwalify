@@ -323,6 +323,10 @@ class Core(object):
                     log.debug(u" * Found map inside sequence")
                     unique_keys = []
 
+                    if r.mapping is None:
+                        log.debug(u" + No rule to apply, prolly because of allowempty: True")
+                        return
+
                     for k, _rule in r.mapping.items():
                         log.debug(u" * Key: %s", k)
                         log.debug(u" * Rule: %s", _rule)
