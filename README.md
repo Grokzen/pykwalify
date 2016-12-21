@@ -1,8 +1,5 @@
 # pyKwalify
 
-[![Build Status](https://travis-ci.org/Grokzen/pykwalify.svg?branch=master)](https://travis-ci.org/Grokzen/pykwalify) [![Coverage Status](https://coveralls.io/repos/Grokzen/pykwalify/badge.png?branch=master)](https://coveralls.io/r/Grokzen/pykwalify)  [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Grokzen/pykwalify?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-
 YAML/JSON validation library
 
 This framework is a port with alot added functionality of the java version of the framework kwalify that can be found at: http://www.kuwata-lab.com/kwalify/
@@ -61,16 +58,18 @@ pykwalify -d data.yaml -s schema.yaml
 
 
 # Project details
+
 |   |   |
 |---|---|
 | python support        | 2.7, 3.3, 3.4, 3.5, 3.6 |
 | Source                | https://github.com/Grokzen/pykwalify |
 | Docs                  | http://pykwalify.readthedocs.io/en/master/ |
+| Gitter (Free Chat)    | [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Grokzen/pykwalify?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
 | Changelog             | https://github.com/Grokzen/pykwalify/blob/unstable/docs/release-notes.rst |
 | Upgrade instructions  | https://github.com/Grokzen/pykwalify/blob/unstable/docs/upgrade-instructions.rst |
 | Issues                | https://github.com/Grokzen/pykwalify/issues |
-| Travis                | https://travis-ci.org/Grokzen/pykwalify |
-| Test coverage         | https://coveralls.io/github/Grokzen/pykwalify |
+| Travis                | [![Build Status](https://travis-ci.org/Grokzen/pykwalify.svg?branch=unstable)](https://travis-ci.org/Grokzen/pykwalify) https://travis-ci.org/Grokzen/pykwalify |
+| Test coverage         | [![Coverage Status](https://coveralls.io/repos/Grokzen/pykwalify/badge.png?branch=master)](https://coveralls.io/r/Grokzen/pykwalify) https://coveralls.io/github/Grokzen/pykwalify |
 | pypi                  | https://pypi.python.org/pypi/pykwalify/1.5.2 |
 | Open Hub              | https://www.openhub.net/p/pykwalify |
 | License               | `MIT` https://github.com/Grokzen/pykwalify/blob/unstable/docs/license.rst |
