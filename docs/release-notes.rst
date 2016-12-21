@@ -11,6 +11,9 @@ Release Notes
  - Fixed a bug where the type validation did not work when schema specefied a sequence of map objects. It now outputs a proper `...is not a dict...` error instead.
  - Checking that the value is a valid dict object is now done even if the mapping keyword is not specefied in the schema.
    This makes that check more eager and errors can apear that previously was not there.
+ - This feature is NEW and EXPERIMENTAL in this release.
+   It is now possible to specify a default rule when using a mapping.
+   The rule will be used whenever no other key could be found.
 
 
 1.5.2 (Nov 12, 2016)

@@ -1,0 +1,13 @@
+data:
+    OWNERSHIP: abc
+    WHT: def
+schema:
+    type: map
+    mapping:
+      WHT:
+        type: int
+      =:
+        type: int
+errors:
+  - "Value 'abc' is not of type 'int'. Path: '/='"
+  - "Value 'def' is not of type 'int'. Path: '/WHT'"

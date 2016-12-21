@@ -465,7 +465,8 @@ class Core(object):
             )
 
         for k, rr in m.items():
-            if rr.required and k not in value:
+            # Specifying =: as key is considered the "default" if no other keys match
+            if rr.required and k not in value and k != "=":
                 self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Cannot find required key '{key}'. Path: '{path}'",
                     path=path,
@@ -474,7 +475,7 @@ class Core(object):
             if k not in value and rr.default is not None:
                 value[k] = rr.default
 
-        for k, v in value.items():
+        def _inner_validate(k, v):
             r = m.get(k, None)
             log.debug(u" + : %s", m)
             log.debug(u" + : %s %s", k, v)
@@ -500,7 +501,6 @@ class Core(object):
                         sub_regex_result.append(False)
 
                 if rule.matching_rule == "any":
-
                     if any(sub_regex_result):
                         log.debug(u" + Matched at least one regex")
                     else:
@@ -527,12 +527,20 @@ class Core(object):
             elif r is not None and r.schema:
                 print(u" + Something is ignored Oo : {}".format(r))
             else:
+                # If no other case was a match, check if a default mapping is valid/present and use
+                # that one instead
+                if "=" in m.keys():
+                    return _inner_validate("=", v)
+
                 if not rule.allowempty_map:
                     self.errors.append(SchemaError.SchemaErrorEntry(
                         msg=u"Key '{key}' was not defined. Path: '{path}'",
                         path=path,
                         value=value,
                         key=k))
+
+        for k, v in value.items():
+            _inner_validate(k, v)
 
     def _validate_scalar(self, value, rule, path, done=None):
         log.debug(u"Validate scalar")

@@ -369,6 +369,8 @@ class TestCore(object):
             "37s.yaml",
             # Test mixed keyword regex and normal keyword
             "38s.yaml",
+            # Test that default mapping keyword works out of the box in a good case
+            "39s.yaml",
         ]
 
         _fail_tests = [
@@ -428,6 +430,8 @@ class TestCore(object):
             ("27f.yaml", SchemaError),
             # Test that type checking of mapping is done even if the mapping keyword is not specefied in the schema
             ("28f.yaml", SchemaError),
+            # Test that default mode fails out in a similar way to regular mode and that a key that is not defined when default is set uses the defualt way
+            ("29f.yaml", SchemaError),
         ]
 
         # Add override magic to make it easier to test a specific file
