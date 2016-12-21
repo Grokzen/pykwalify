@@ -11,7 +11,7 @@ with open(os.path.join('docs', 'release-notes.rst')) as f:
 
 setup(
     name="pykwalify",
-    version="1.5.2",
+    version="1.6.0",
     description='Python lib/cli for JSON/YAML schema validation',
     long_description=readme + '\n\n' + history,
     author="Johan Andersson",

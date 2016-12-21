@@ -15,7 +15,7 @@ if sys.version_info[0] < 3:
     sys.setdefaultencoding('UTF8')
 
 __author__ = 'Grokzen <Grokzen@gmail.com>'
-__version_info__ = (1, 5, 2)
+__version_info__ = (1, 6, 0)
 __version__ = '.'.join(map(str, __version_info__))
 
 

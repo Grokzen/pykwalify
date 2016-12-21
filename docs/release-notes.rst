@@ -1,7 +1,7 @@
 Release Notes
 =============
 
-1.5.3 (??? ??, ????)
+1.6.0 (??? ??, ????)
 --------------------
 
  - Validation do no longer continue to process things like pattern, regex, timestamp, range and other additional checks 
