@@ -433,6 +433,14 @@ class Core(object):
         log.debug(u" + Seq: %s", rule.sequence)
         log.debug(u" + Map: %s", rule.mapping)
 
+        if not isinstance(value, dict):
+            self.errors.append(SchemaError.SchemaErrorEntry(
+                u"Value '{value}' is not a dict. Value path: '{path}'",
+                path,
+                value,
+            ))
+            return
+
         if rule.mapping is None:
             log.debug(u" + No rule to apply, prolly because of allowempty: True")
             return
@@ -442,14 +450,6 @@ class Core(object):
 
         m = rule.mapping
         log.debug(u" + RuleMapping: %s", m)
-
-        if not isinstance(value, dict):
-            self.errors.append(SchemaError.SchemaErrorEntry(
-                u"Value '{value}' is not a dict. Value path: '{path}'",
-                path,
-                value,
-            ))
-            return
 
         if rule.range is not None:
             r = rule.range

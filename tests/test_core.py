@@ -426,6 +426,8 @@ class TestCore(object):
             ("26f.yaml", SchemaError),
             # Test that sequence of mappings check the correct type and raises correct error when value is not a dict
             ("27f.yaml", SchemaError),
+            # Test that type checking of mapping is done even if the mapping keyword is not specefied in the schema
+            ("28f.yaml", SchemaError),
         ]
 
         # Add override magic to make it easier to test a specific file

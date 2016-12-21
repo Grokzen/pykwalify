@@ -1,0 +1,9 @@
+data:
+    - not
+    - a
+    - map
+schema:
+    type: map
+    allowempty: True
+errors:
+    - "Value '['not', 'a', 'map']' is not a dict. Value path: ''"

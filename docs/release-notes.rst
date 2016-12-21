@@ -9,6 +9,8 @@ Release Notes
    that value fails, but reappear again when the type check is fixed. (sbrunner)
  - Catch TypeError when doing regex validation. That happens when the value is not a parsable string type.
  - Fixed a bug where the type validation did not work when schema specefied a sequence of map objects. It now outputs a proper `...is not a dict...` error instead.
+ - Checking that the value is a valid dict object is now done even if the mapping keyword is not specefied in the schema.
+   This makes that check more eager and errors can apear that previously was not there.
 
 
 1.5.2 (Nov 12, 2016)
