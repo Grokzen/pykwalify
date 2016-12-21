@@ -43,6 +43,7 @@ class Rule(object):
         self._unique = None
         self._default = None
         self._allowempty_map = None
+        self._allownone = False
         self._matching_rule = "any"
         self._map_regex_rule = None
 
@@ -206,6 +207,14 @@ class Rule(object):
         self._allowempty_map = value
 
     @property
+    def allownone(self):
+        return self._allownone
+
+    @allownone.setter
+    def allownone(self, value):
+        self._allownone = value
+
+    @property
     def matching_rule(self):
         return self._matching_rule
 
@@ -330,6 +339,7 @@ class Rule(object):
             "ident": self.init_ident_value,
             "unique": self.init_unique_value,
             "allowempty": self.init_allow_empty_map,
+            "allownone": self.init_allow_none,
             "default": self.init_default_value,
             "sequence": self.init_sequence_value,
             "seq": self.init_sequence_value,
@@ -407,6 +417,19 @@ class Rule(object):
         log.debug(u"Type: %s : %s", v, rule)
 
         self.allowempty_map = v
+
+    def init_allow_none(self, v, rule, path):
+        log.debug(u"Init allow none value: %s", path)
+        log.debug(u"Type: %s : %s", v, rule)
+
+        if not isinstance(v, bool):
+            raise RuleError(
+                msg=u'Value "{}" for rule "allownone" must be a yaml boolean (“true”/“false”, “yes”/“no”, “on”/“off” or “y”/“n” or “Y”/“N”)'.format(v),
+                error_key=u"allownone.not_boolean",
+                path=path,
+            )
+        self.allownone = v
+
 
     def init_type_value(self, v, rule, path):
         log.debug(u"Init type value : %s", path)

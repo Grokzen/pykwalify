@@ -547,6 +547,9 @@ class Core(object):
         log.debug(u" # %s", rule.type)
         log.debug(u" # %s", path)
 
+        if rule.allownone and value is None:
+            return True
+
         # Handle 'func' argument on this scalar
         self._handle_func(value, rule, path, done)
 
