@@ -7,6 +7,8 @@ Release Notes
  - Validation do no longer continue to process things like pattern, regex, timestamp, range and other additional checks 
    if the type check fails. This can cause problems where previous errors will now initially be silenced when the typecheck for
    that value fails, but reappear again when the type check is fixed. (sbrunner)
+ - Catch TypeError when doing regex validation. That happens when the value is not a parsable string type.
+
 
 1.5.2 (Nov 12, 2016)
 --------------------

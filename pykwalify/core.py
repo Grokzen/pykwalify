@@ -558,7 +558,11 @@ class Core(object):
             return
 
         if rule.pattern is not None:
-            res = re.match(rule.pattern, value, re.UNICODE)
+            try:
+                res = re.match(rule.pattern, value, re.UNICODE)
+            except TypeError:
+                res = None
+
             if res is None:  # Not matching
                 self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Value '{value}' does not match pattern '{pattern}'. Path: '{path}'",
