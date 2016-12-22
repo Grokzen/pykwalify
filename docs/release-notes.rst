@@ -23,6 +23,9 @@ Release Notes
  - Added support for new keyword "allownone" that can be used to specify that types can have None/null values at the same time as their normal defined type.
  - Removed the force of UTF-8 encoding when importing pykwalify package. It caused issues with jypiter notebooks (py 2.7)
    Added documentation in Readme regarding the suggested solution to use "PYTHONIOENCODING=UTF-8" if the default solution do not work.
+ - Added new cli flag "--strict-rule-validation" that will validate that all used keywords in all Rule objects only uses the rules that is supported by the defined type.
+   If you only use a Core object then set "strict_rule_validation=True" when creating the Core object instance.
+   This feature is opt-in in this releaes but will be mandatory in releases >= 1.7.0.
 
 
 1.5.2 (Nov 12, 2016)

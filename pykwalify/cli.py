@@ -25,7 +25,7 @@ def parse_cli():
     #
 
     __docopt__ = """
-usage: pykwalify -d FILE -s FILE ... [-e FILE ...] [-v ...] [-q]
+usage: pykwalify -d FILE -s FILE ... [-e FILE ...] [--strict-rule-validation] [-v ...] [-q]
 
 optional arguments:
   -d FILE, --data-file FILE            the file to be tested
@@ -33,6 +33,8 @@ optional arguments:
   -h, --help                           show this help message and exit
   -q, --quiet                          suppress terminal output
   -s FILE, --schema-file FILE          schema definition file
+  --strict-rule-validation             enables strict validation of all keywords for all
+                                       Rule objects to find unsupported keyword usage
   -v, --verbose                        verbose terminal output (multiple -v increases verbosity)
   --version                            display the version number and exit
 """
@@ -67,6 +69,7 @@ def run(cli_args):
         source_file=cli_args["--data-file"],
         schema_files=cli_args["--schema-file"],
         extensions=cli_args['--extension'],
+        strict_rule_validation=cli_args['--strict-rule-validation'],
     )
     c.validate()
     return c

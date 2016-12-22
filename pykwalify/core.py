@@ -27,7 +27,7 @@ log = logging.getLogger(__name__)
 class Core(object):
     """ Core class of pyKwalify """
 
-    def __init__(self, source_file=None, schema_files=None, source_data=None, schema_data=None, extensions=None):
+    def __init__(self, source_file=None, schema_files=None, source_data=None, schema_data=None, extensions=None, strict_rule_validation=False):
         """
         :param extensions:
             List of paths to python files that should be imported and available via 'func' keywork.
@@ -53,6 +53,7 @@ class Core(object):
         self.root_rule = None
         self.extensions = extensions
         self.errors = []
+        self.strict_rule_validation = strict_rule_validation
 
         if source_file is not None:
             if not os.path.exists(source_file):
@@ -125,6 +126,9 @@ class Core(object):
             raise CoreError(u"Specified extensions must be a list of file paths")
 
         self._load_extensions()
+
+        if self.strict_rule_validation:
+            log.info("Using strict rule keywords validation...")
 
     def _load_extensions(self):
         """

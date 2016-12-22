@@ -25,7 +25,7 @@ log = logging.getLogger(__name__)
 class Rule(object):
     """ Rule class that handles a rule constraint """
 
-    def __init__(self, schema=None, parent=None):
+    def __init__(self, schema=None, parent=None, strict_rule_validation=False):
         self._allowempty_map = None
         self._allownone = None
         self._assertion = None
@@ -52,6 +52,7 @@ class Rule(object):
         self._schema = schema
         self._schema_str = schema
         self._sequence = None
+        self.strict_rule_validation = strict_rule_validation
         self._type = None
         self._type_class = None
         self._unique = None
@@ -429,6 +430,8 @@ class Rule(object):
                 )
 
         self.check_conflicts(schema, rule, path)
+
+        self.check_type_keywords(schema, rule, path)
 
     def init_allownone(self, v, rule, path):
         """
@@ -954,6 +957,48 @@ class Rule(object):
                 error_key=u"default.type.unmatch",
                 path=path,
             )
+
+    def check_type_keywords(self, schema, rule, path):
+        """
+        """
+        if not self.strict_rule_validation:
+            return
+
+        global_keywords = ['type', 'example', 'name', 'version']
+        all_allowed_keywords = {
+            'str': global_keywords + ['pattern', 'range', 'enum', 'required', 'unique', 'req', 'allownone'],
+            'int': global_keywords + ['range', 'enum', 'required', 'unique'],
+            'float': global_keywords + ['range', 'required'],
+            'number': global_keywords + [],
+            'bool': global_keywords + ['enum'],
+            'map': global_keywords + ['mapping', 'map', 'allowempty', 'required', 'matching-rule', 'range'],
+            'seq': global_keywords + ['sequence', 'seq', 'required', 'range', 'matching'],
+            'sequence': global_keywords + ['sequence', 'seq', 'required'],
+            'mapping': global_keywords + ['mapping', 'seq', 'required'],
+            'timestamp': global_keywords + [],
+            'date': global_keywords + [],
+            'symbol': global_keywords + [],
+            'scalar': global_keywords + [],
+            'text': global_keywords + ['pattern'],
+            'any': global_keywords + [],
+            'enum': global_keywords + [],
+            'none': global_keywords + ['required'],
+        }
+        rule_type = schema.get('type', None)
+        if not rule_type:
+            # Special cases for the "shortcut methods"
+            if 'sequence' in schema or 'seq' in schema:
+                rule_type = 'sequence'
+            elif 'mapping' in schema or 'map' in schema:
+                rule_type = 'mapping'
+
+        allowed_keywords = all_allowed_keywords.get(rule_type, None)
+        if not allowed_keywords and 'sequence' not in schema and 'mapping' not in schema and 'seq' not in schema and 'map' not in schema:
+            raise RuleError('No allowed keywords found for type: {0}'.format(rule_type))
+
+        for k, v in schema.items():
+            if k not in allowed_keywords:
+                raise RuleError('Keyword "{0}" is not supported for type: "{1}" '.format(k, rule_type))
 
     def check_conflicts(self, schema, rule, path):
         log.debug(u"Checking for conflicts : %s", path)
