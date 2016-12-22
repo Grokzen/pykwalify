@@ -21,6 +21,8 @@ Release Notes
  - Added new helper method "keywords" to "Rule" class that can output all active keywords for any Rule object.
    This helps when debugging code to be able to easily dump what all active keywords for any Rule object.
  - Added support for new keyword "allownone" that can be used to specify that types can have None/null values at the same time as their normal defined type.
+ - Removed the force of UTF-8 encoding when importing pykwalify package. It caused issues with jypiter notebooks (py 2.7)
+   Added documentation in Readme regarding the suggested solution to use "PYTHONIOENCODING=UTF-8" if the default solution do not work.
 
 
 1.5.2 (Nov 12, 2016)
