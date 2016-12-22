@@ -3,6 +3,7 @@ data:
   - 2
   - 3
 schema:
+  version: 0.9.9
   type: seq
   sequence:
     - type: str

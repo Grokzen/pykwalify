@@ -17,6 +17,7 @@ Release Notes
  - Fixed a bug where if allowempty was specefied in a mapping type inside a sequence type then it would not properly validate.
  - Fixed a bug where loaded extensions would not allways work in complex & nested objects
  - Add support for keyword "example". It does nothing and have not validation tied to it.
+ - Add support for keyword "version". It does nothing and have no validation done on it.
  - Added new helper method "keywords" to "Rule" class that can output all active keywords for any Rule object.
    This helps when debugging code to be able to easily dump what all active keywords for any Rule object.
 

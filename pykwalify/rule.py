@@ -54,6 +54,7 @@ class Rule(object):
         self._type = None
         self._type_class = None
         self._unique = None
+        self._version = None
 
         if isinstance(schema, dict):
             self.init(schema, "")
@@ -274,6 +275,14 @@ class Rule(object):
     def unique(self, value):
         self._unique = value
 
+    @property
+    def version(self):
+        return self._version
+
+    @version.setter
+    def version(self, value):
+        self._version = value
+
     def __str__(self):
         return "Rule: {0}".format(str(self.schema_str))
 
@@ -292,7 +301,7 @@ class Rule(object):
             ('extensions', 'extensions'),
             ('func', 'func'),
             ('ident', 'ident'),
-            ('include_name', 'include_name'),
+            ('include_name', 'include'),
             ('map_regex_rule', 'map_regex_rule'),
             ('mapping', 'mapping'),
             ('matching', 'matching'),
@@ -310,6 +319,7 @@ class Rule(object):
             ('type', 'type'),
             ('type_class', 'type_class'),
             ('unique', 'unique'),
+            ('version', 'version'),
         ]
         found_keywords = []
 
@@ -387,6 +397,7 @@ class Rule(object):
             "sequence": self.init_sequence_value,
             "type": lambda x, y, z: (),
             "unique": self.init_unique_value,
+            "version": self.init_version,
         }
 
         for k, v in schema.items():
@@ -407,6 +418,13 @@ class Rule(object):
                 )
 
         self.check_conflicts(schema, rule, path)
+
+    def init_version(self, v, rule, path):
+        """
+        """
+        log.debug(u"Init version value : {0}".format(path))
+
+        self._version = str(v)
 
     def init_example(self, v, rule, path):
         log.debug(u'Init example value : {0}'.format(path))
