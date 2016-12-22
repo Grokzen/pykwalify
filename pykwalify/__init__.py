@@ -26,20 +26,20 @@ def init_logging(log_level):
     """
     Init logging settings with default set to INFO
     """
-    l = log_level_to_string_map[min(log_level, 5)]
+    log_level = log_level_to_string_map[min(log_level, 5)]
 
-    msg = "%(levelname)s - %(name)s:%(lineno)s - %(message)s" if l in os.environ else "%(levelname)s - %(message)s"
+    msg = "%(levelname)s - %(name)s:%(lineno)s - %(message)s" if log_level in os.environ else "%(levelname)s - %(message)s"
 
     logging_conf = {
         "version": 1,
         "root": {
-            "level": l,
+            "level": log_level,
             "handlers": ["console"]
         },
         "handlers": {
             "console": {
                 "class": "logging.StreamHandler",
-                "level": l,
+                "level": log_level,
                 "formatter": "simple",
                 "stream": "ext://sys.stdout"
             }
