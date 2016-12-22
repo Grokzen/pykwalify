@@ -273,7 +273,7 @@ def test_validate_scalar_type():
     ]
 
     for data in data_matrix:
-        print("Testing data: '%s', '%s', '%s'" % data)
+        print("Testing data: '{0!s}', '{1!s}', '{2!s}'".format(*data))
         c = ec()
         c._validate_scalar_type(data[0], data[1], '')
         assert _remap_errors(c) == data[2]

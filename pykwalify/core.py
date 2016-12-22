@@ -743,4 +743,4 @@ class Core(object):
         except KeyError as e:
             # Type not found in valid types mapping
             log.debug(e)
-            raise CoreError(u"Unknown type check: %s : %s : %s" % (path, value, t))
+            raise CoreError(u"Unknown type check: {0!s} : {1!s} : {2!s}".format(path, value, t))
