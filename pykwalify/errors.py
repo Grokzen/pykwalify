@@ -64,32 +64,32 @@ class PyKwalifyException(RuntimeError):
         # <PyKwalifyException msg='foo bar' retcode=1>
         # kwargs = []
         # if self.msg:
-        #        kwargs.append("msg='{}'".format(self.msg))
+        #        kwargs.append("msg='{0}'".format(self.msg))
         # if self.retcode != retnames['noerror']:
         #        kwargs.append("retcode=%d" % self.retcode)
         # if kwargs:
         #        kwargs.insert(0, '')
-        # return "<{}{}>".format(self.__class__.__name__, ' '.join(kwargs))
+        # return "<{0}{1}>".format(self.__class__.__name__, ' '.join(kwargs))
 
         # <PyKwalifyException: error code 1: foo bar>
         kwargs = []
         if self.retcode != retnames['noerror']:
-            kwargs.append("error code {}".format(self.retcode))
+            kwargs.append("error code {0}".format(self.retcode))
         if self.msg:
             kwargs.append(self.msg)
         if kwargs:
             kwargs.insert(0, '')
         if self.path:
-            kwargs.append("Path: '{}'".format(self.path))
-        return "<{}{}>".format(self.__class__.__name__, ': '.join(kwargs))
+            kwargs.append("Path: '{0}'".format(self.path))
+        return "<{0}{1}>".format(self.__class__.__name__, ': '.join(kwargs))
 
     def __repr__(self):
         """
         """
         kwargs = []
         if self.msg:
-            kwargs.append("msg='{}'".format(self.msg))
-        return "{}({})".format(self.__class__.__name__, ', '.join(kwargs))
+            kwargs.append("msg='{0}'".format(self.msg))
+        return "{0}({1})".format(self.__class__.__name__, ', '.join(kwargs))
 
     def msg():
         doc = """ """

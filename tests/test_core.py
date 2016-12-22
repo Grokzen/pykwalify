@@ -266,14 +266,14 @@ class TestCore(object):
                 c.validate()
                 compare(c.validation_errors, [], prefix="No validation errors should exist...")
             except Exception as e:
-                print("ERROR RUNNING FILE: {} : {}".format(passing_test[0], passing_test[1]))
+                print("ERROR RUNNING FILE: {0} : {1}".format(passing_test[0], passing_test[1]))
                 raise e
 
             # This serve as an extra schema validation that tests more complex structures then testrule.py do
             compare(c.root_rule.schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed...")
 
         for failing_test in failing_tests:
-            with pytest.raises(failing_test[2], msg="Test files: {} : {}".format(", ".join(failing_test[0]), failing_test[1])):
+            with pytest.raises(failing_test[2], msg="Test files: {0} : {1}".format(", ".join(failing_test[0]), failing_test[1])):
                 c = Core(schema_files=failing_test[0], source_file=failing_test[1])
                 c.validate()
 
@@ -283,7 +283,7 @@ class TestCore(object):
             compare(
                 sorted(c.validation_errors),
                 sorted(failing_test[3]),
-                prefix="Wrong validation errors when parsing files : {} : {}".format(
+                prefix="Wrong validation errors when parsing files : {0} : {1}".format(
                     failing_test[0],
                     failing_test[1],
                 ),
@@ -452,16 +452,16 @@ class TestCore(object):
                 schema = yaml_data["schema"]
 
             try:
-                print("Running test files: {}".format(f))
+                print("Running test files: {0}".format(f))
                 c = Core(source_data=data, schema_data=schema)
                 c.validate()
                 compare(c.validation_errors, [], prefix="No validation errors should exist...")
             except Exception as e:
-                print("ERROR RUNNING FILES: {}".format(f))
+                print("ERROR RUNNING FILES: {0}".format(f))
                 raise e
 
             # This serve as an extra schema validation that tests more complex structures then testrule.py do
-            compare(c.root_rule.schema_str, schema, prefix="Parsed rules is not correct, something have changed... files : {}".format(f))
+            compare(c.root_rule.schema_str, schema, prefix="Parsed rules is not correct, something have changed... files : {0}".format(f))
 
         for failing_test, exception_type in _fail_tests:
             f = self.f(os.path.join("fail", failing_test))
@@ -472,12 +472,12 @@ class TestCore(object):
                 errors = yaml_data["errors"]
 
             try:
-                print("Running test files: {}".format(f))
+                print("Running test files: {0}".format(f))
                 c = Core(source_data=data, schema_data=schema)
                 c.validate()
             except exception_type:
                 pass  # OK
             else:
-                raise AssertionError("Exception {} not raised as expected... FILES: {} : {}".format(exception_type, exception_type))
+                raise AssertionError("Exception {0} not raised as expected... FILES: {1} : {2}".format(exception_type, exception_type))
 
-            compare(sorted(c.validation_errors), sorted(errors), prefix="Wrong validation errors when parsing files : {}".format(f))
+            compare(sorted(c.validation_errors), sorted(errors), prefix="Wrong validation errors when parsing files : {0}".format(f))

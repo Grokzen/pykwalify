@@ -53,7 +53,7 @@ def init_logging(log_level):
         },
         "formatters": {
             "simple": {
-                "format": " {}".format(msg)
+                "format": " {0}".format(msg)
             }
         }
     }

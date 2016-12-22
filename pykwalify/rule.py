@@ -275,7 +275,7 @@ class Rule(object):
         self._unique = value
 
     def __str__(self):
-        return "Rule: {}".format(str(self.schema_str))
+        return "Rule: {0}".format(str(self.schema_str))
 
     def keywords(self):
         """
@@ -401,7 +401,7 @@ class Rule(object):
                 )
             else:
                 raise RuleError(
-                    msg=u"Unknown key: {} found".format(k),
+                    msg=u"Unknown key: {0} found".format(k),
                     error_key=u"key.unknown",
                     path=path,
                 )
@@ -418,7 +418,7 @@ class Rule(object):
         """
         if not isinstance(v, str):
             raise RuleError(
-                msg=u"Value: {} for func keyword must be a string".format(v),
+                msg=u"Value: {0} for func keyword must be a string".format(v),
                 error_key=u"func.notstring",
                 path=path,
             )
@@ -448,7 +448,7 @@ class Rule(object):
         # ["none", "one"] Is currently awaiting proper implementation
         if v not in allowed:
             raise RuleError(
-                msg=u"Specified rule in key: {} is not part of allowed rule set : {}".format(v, allowed),
+                msg=u"Specified rule in key: {0} is not part of allowed rule set : {1}".format(v, allowed),
                 error_key=u"matching_rule.not_allowed",
                 path=path,
             )
@@ -473,7 +473,7 @@ class Rule(object):
 
         if not is_builtin_type(self.type):
             raise RuleError(
-                msg=u"Type: {} is not any of the known types".format(self.type),
+                msg=u"Type: {0} is not any of the known types".format(self.type),
                 error_key=u"type.unknown",
                 path=path,
             )
@@ -485,7 +485,7 @@ class Rule(object):
 
         if str(v) not in valid_values:
             raise RuleError(
-                msg=u"matching value: {} is not one of {}".format(str(v), valid_values),
+                msg=u"matching value: {0} is not one of {1}".format(str(v), valid_values),
                 error_key=u"matching_rule.invalid",
                 path=path,
             )
@@ -507,7 +507,7 @@ class Rule(object):
 
         if not isinstance(v, bool):
             raise RuleError(
-                msg=u"Value: '{}' for required keyword must be a boolean".format(v),
+                msg=u"Value: '{0}' for required keyword must be a boolean".format(v),
                 error_key=u"required.not_bool",
                 path=path,
             )
@@ -518,7 +518,7 @@ class Rule(object):
 
         if not isinstance(v, str):
             raise RuleError(
-                msg=u"Value of pattern keyword: '{}' is not a string".format(v),
+                msg=u"Value of pattern keyword: '{0}' is not a string".format(v),
                 error_key=u"pattern.not_string",
                 path=path,
             )
@@ -538,7 +538,7 @@ class Rule(object):
             self.pattern_regexp = re.compile(self.pattern)
         except Exception:
             raise RuleError(
-                msg=u"Syntax error when compiling regex pattern: {}".format(self.pattern_regexp),
+                msg=u"Syntax error when compiling regex pattern: {0}".format(self.pattern_regexp),
                 error_key=u"pattern.syntax_error",
                 path=path,
             )
@@ -565,14 +565,14 @@ class Rule(object):
         for item in v:
             if not isinstance(item, self.type_class):
                 raise RuleError(
-                    msg=u"Item: '{}' in enum is not of correct class type: '{}'".format(item, self.type_class),
+                    msg=u"Item: '{0}' in enum is not of correct class type: '{1}'".format(item, self.type_class),
                     error_key=u"enum.type.unmatch",
                     path=path,
                 )
 
             if item in lookup:
                 raise RuleError(
-                    msg=u"Duplicate items: '{}' found in enum".format(item),
+                    msg=u"Duplicate items: '{0}' found in enum".format(item),
                     error_key=u"enum.duplicate_items",
                     path=path,
                 )
@@ -584,7 +584,7 @@ class Rule(object):
 
         if not isinstance(v, str):
             raise RuleError(
-                msg=u"Value: '{}' for keyword 'assert' is not a string".format(v),
+                msg=u"Value: '{0}' for keyword 'assert' is not a string".format(v),
                 error_key=u"assert.not_str",
                 path=path,
             )
@@ -604,14 +604,14 @@ class Rule(object):
 
         if not isinstance(v, dict):
             raise RuleError(
-                msg=u"Range value is not a dict type: '{}'".format(v),
+                msg=u"Range value is not a dict type: '{0}'".format(v),
                 error_key=u"range.not_map",
                 path=path,
             )
 
         if self.type not in supported_types:
             raise RuleError(
-                msg=u"Range value type: '{}' is not a supported type".format(self.type),
+                msg=u"Range value type: '{0}' is not a supported type".format(self.type),
                 error_key=u"range.not_supported_type",
                 path=path,
             )
@@ -623,7 +623,7 @@ class Rule(object):
         for k, v in self.range.items():
             if k not in ["max", "min", "max-ex", "min-ex"]:
                 raise RuleError(
-                    msg=u"Unknown key: '{}' found in range keyword".format(k),
+                    msg=u"Unknown key: '{0}' found in range keyword".format(k),
                     error_key=u"range.unknown_key",
                     path=path,
                 )
@@ -649,28 +649,28 @@ class Rule(object):
 
         if max is not None and not is_number(max) or is_bool(max):
             raise RuleError(
-                msg=u"Value: '{}' for 'max' keyword is not a number".format(v),
+                msg=u"Value: '{0}' for 'max' keyword is not a number".format(v),
                 error_key=u"range.max.not_number",
                 path=path,
             )
 
         if min is not None and not is_number(min) or is_bool(min):
             raise RuleError(
-                msg=u"Value: '{}' for 'min' keyword is not a number".format(v),
+                msg=u"Value: '{0}' for 'min' keyword is not a number".format(v),
                 error_key=u"range.min.not_number",
                 path=path,
             )
 
         if max_ex is not None and not is_number(max_ex) or is_bool(max_ex):
             raise RuleError(
-                msg=u"Value: '{}' for 'max-ex' keyword is not a number".format(v),
+                msg=u"Value: '{0}' for 'max-ex' keyword is not a number".format(v),
                 error_key=u"range.max_ex.not_number",
                 path=path,
             )
 
         if min_ex is not None and not is_number(min_ex) or is_bool(min_ex):
             raise RuleError(
-                msg=u"Value: '{}' for 'min-ex' keyword is not a number".format(v),
+                msg=u"Value: '{0}' for 'min-ex' keyword is not a number".format(v),
                 error_key=u"range.min_ex.not_number",
                 path=path,
             )
@@ -680,25 +680,25 @@ class Rule(object):
         if self.type not in ["int", "float", "number"]:
             if min is not None and min < 0:
                 raise RuleError(
-                    msg=u"Value for 'min' can't be negative in case of type {}.".format(self.type),
+                    msg=u"Value for 'min' can't be negative in case of type {0}.".format(self.type),
                     error_key=u"range.min_negative",
                     path=path,
                 )
             elif min_ex is not None and min_ex < 0:
                 raise RuleError(
-                    msg=u"Value for 'min-ex' can't be negative in case of type {}.".format(self.type),
+                    msg=u"Value for 'min-ex' can't be negative in case of type {0}.".format(self.type),
                     error_key=u"range.min-ex_negative",
                     path=path,
                 )
             if max is not None and max < 0:
                 raise RuleError(
-                    msg=u"Value for 'max' can't be negative in case of type {}.".format(self.type),
+                    msg=u"Value for 'max' can't be negative in case of type {0}.".format(self.type),
                     error_key=u"range.max_negative",
                     path=path,
                 )
             elif max_ex is not None and max_ex < 0:
                 raise RuleError(
-                    msg=u"Value for 'max-ex' can't be negative in case of type {}.".format(self.type),
+                    msg=u"Value for 'max-ex' can't be negative in case of type {0}.".format(self.type),
                     error_key=u"range.max-ex_negative",
                     path=path,
                 )
@@ -706,26 +706,26 @@ class Rule(object):
         if max is not None:
             if min is not None and max < min:
                 raise RuleError(
-                    msg=u"Value for 'max' can't be less then value for 'min'. {} < {}".format(max, min),
+                    msg=u"Value for 'max' can't be less then value for 'min'. {0} < {1}".format(max, min),
                     error_key=u"range.max_lt_min",
                     path=path,
                 )
             elif min_ex is not None and max <= min_ex:
                 raise RuleError(
-                    msg=u"Value for 'max' can't be less then value for 'min-ex'. {} <= {}".format(max, min_ex),
+                    msg=u"Value for 'max' can't be less then value for 'min-ex'. {0} <= {1}".format(max, min_ex),
                     error_key=u"range.max_le_min-ex",
                     path=path,
                 )
         elif max_ex is not None:
             if min is not None and max_ex < min:
                 raise RuleError(
-                    msg=u"Value for 'max-ex' can't be less then value for 'min'. {} < {}".format(max_ex, min),
+                    msg=u"Value for 'max-ex' can't be less then value for 'min'. {0} < {1}".format(max_ex, min),
                     error_key=u"range.max-ex_le_min",
                     path=path,
                 )
             elif min_ex is not None and max_ex <= min_ex:
                 raise RuleError(
-                    msg=u"Value for 'max-ex' can't be less then value for 'min-ex'. {} <= {}".format(max_ex, min_ex),
+                    msg=u"Value for 'max-ex' can't be less then value for 'min-ex'. {0} <= {1}".format(max_ex, min_ex),
                     error_key=u"range.max-ex_le_min-ex",
                     path=path,
                 )
@@ -735,7 +735,7 @@ class Rule(object):
 
         if v is None or isinstance(v, bool):
             raise RuleError(
-                msg=u"Value: '{}' of 'ident' is not a boolean value".format(v),
+                msg=u"Value: '{0}' of 'ident' is not a boolean value".format(v),
                 error_key=u"ident.not_bool",
                 path=path,
             )
@@ -745,7 +745,7 @@ class Rule(object):
 
         if is_collection_type(self.type):
             raise RuleError(
-                msg=u"Value: '{}' of 'ident' is not a scalar value".format(v),
+                msg=u"Value: '{0}' of 'ident' is not a scalar value".format(v),
                 error_key=u"ident.not_scalar",
                 path=path,
             )
@@ -769,7 +769,7 @@ class Rule(object):
 
         if not isinstance(v, bool):
             raise RuleError(
-                msg=u"Value: '{}' for 'unique' keyword is not boolean".format(v),
+                msg=u"Value: '{0}' for 'unique' keyword is not boolean".format(v),
                 error_key=u"unique.not_bool",
                 path=path,
             )
@@ -778,7 +778,7 @@ class Rule(object):
 
         if is_collection_type(self.type):
             raise RuleError(
-                msg=u"Type of the value: '{}' for 'unique' keyword is not a scalar type".format(self.type),
+                msg=u"Type of the value: '{0}' for 'unique' keyword is not a scalar type".format(self.type),
                 error_key=u"unique.not_scalar",
                 path=path,
             )
@@ -814,7 +814,7 @@ class Rule(object):
             elem = e or {}
 
             rule = Rule(None, self)
-            rule.init(elem, u"{}/sequence/{}".format(path, i))
+            rule.init(elem, u"{0}/sequence/{1}".format(path, i))
 
             tmp_seq.append(rule)
 
@@ -860,7 +860,7 @@ class Rule(object):
                 regex = k.split(";", 1)
                 if len(regex) != 2:
                     raise RuleError(
-                        msg=u"Value: '{}' for keyword regex is malformed".format(k),
+                        msg=u"Value: '{0}' for keyword regex is malformed".format(k),
                         error_key=u"mapping.regex.malformed",
                         path=path,
                     )
@@ -871,19 +871,19 @@ class Rule(object):
                     except Exception as e:
                         log.debug(e)
                         raise RuleError(
-                            msg=u"Unable to compile regex '{}'".format(regex),
+                            msg=u"Unable to compile regex '{0}'".format(regex),
                             error_key=u"mapping.regex.compile_error",
                             path=path,
                         )
 
                     regex_rule = Rule(None, self)
-                    regex_rule.init(v, u"{}/mapping;regex/{}".format(path, regex[1:-1]))
+                    regex_rule.init(v, u"{0}/mapping;regex/{1}".format(path, regex[1:-1]))
                     regex_rule.map_regex_rule = regex[1:-1]
                     self.regex_mappings.append(regex_rule)
                     self.mapping[k] = regex_rule
             else:
                 rule = Rule(None, self)
-                rule.init(v, u"{}/mapping/{}".format(path, k))
+                rule.init(v, u"{0}/mapping/{1}".format(path, k))
                 self.mapping[k] = rule
 
         return rule
@@ -894,21 +894,21 @@ class Rule(object):
 
         if is_collection_type(self.type):
             raise RuleError(
-                msg=u"Value: {} for keyword 'default' is not a scalar type".format(v),
+                msg=u"Value: {0} for keyword 'default' is not a scalar type".format(v),
                 error_key=u"default.not_scalar",
                 path=path,
             )
 
         if self.type == "map" or self.type == "seq":
             raise RuleError(
-                msg=u"Value: {} for keyword 'default' is not a scalar type".format(v),
+                msg=u"Value: {0} for keyword 'default' is not a scalar type".format(v),
                 error_key=u"default.not_scalar",
                 path=path,
             )
 
         if not isinstance(v, self.type_class):
             raise RuleError(
-                msg=u"Types do not match: '{}' --> '{}'".format(v, self.type_class),
+                msg=u"Types do not match: '{0}' --> '{1}'".format(v, self.type_class),
                 error_key=u"default.type.unmatch",
                 path=path,
             )

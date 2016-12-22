@@ -56,7 +56,7 @@ class Core(object):
 
         if source_file is not None:
             if not os.path.exists(source_file):
-                raise CoreError(u"Provided source_file do not exists on disk: {}".format(source_file))
+                raise CoreError(u"Provided source_file do not exists on disk: {0}".format(source_file))
 
             with open(source_file, "r") as stream:
                 if source_file.endswith(".json"):
@@ -70,7 +70,7 @@ class Core(object):
                     except Exception:
                         raise CoreError(u"Unable to load any data from source yaml file")
                 else:
-                    raise CoreError(u"Unable to load source_file. Unknown file format of specified file path: {}".format(source_file))
+                    raise CoreError(u"Unable to load source_file. Unknown file format of specified file path: {0}".format(source_file))
 
         if not isinstance(schema_files, list):
             raise CoreError(u"schema_files must be of list type")
@@ -87,17 +87,17 @@ class Core(object):
                         try:
                             data = json.load(stream)
                         except Exception:
-                            raise CoreError(u"No data loaded from file : {}".format(f))
+                            raise CoreError(u"No data loaded from file : {0}".format(f))
                     elif f.endswith(".yaml") or f.endswith(".yml"):
                         data = yaml.load(stream)
                         if not data:
-                            raise CoreError(u"No data loaded from file : {}".format(f))
+                            raise CoreError(u"No data loaded from file : {0}".format(f))
                     else:
-                        raise CoreError(u"Unable to load file : {} : Unknown file format. Supported file endings is [.json, .yaml, .yml]")
+                        raise CoreError(u"Unable to load file : {0} : Unknown file format. Supported file endings is [.json, .yaml, .yml]")
 
                     for key in data.keys():
                         if key in schema_data.keys():
-                            raise CoreError(u"Parsed key : {} : two times in schema files...".format(key))
+                            raise CoreError(u"Parsed key : {0} : two times in schema files...".format(key))
 
                     schema_data = dict(schema_data, **data)
 
@@ -139,7 +139,7 @@ class Core(object):
                 f = os.path.abspath(f)
 
             if not os.path.exists(f):
-                raise CoreError(u"Extension file: {} not found on disk".format(f))
+                raise CoreError(u"Extension file: {0} not found on disk".format(f))
 
             self.loaded_extensions.append(imp.load_source("", f))
 
@@ -205,7 +205,7 @@ class Core(object):
         log.debug(u" ? Done: %s", done)
 
         if rule.required and self.source is None:
-            raise CoreError(u"required.novalue : {}".format(path))
+            raise CoreError(u"required.novalue : {0}".format(path))
 
         log.debug(u" ? ValidateRule: %s", rule)
         if rule.include_name is not None:
@@ -240,14 +240,14 @@ class Core(object):
 
                 # If False or None or some other object that is interpreted as False
                 if not ret:
-                    raise CoreError(u"Error when running extension function : {}".format(func))
+                    raise CoreError(u"Error when running extension function : {0}".format(func))
 
                 # Only run the first matched function. Sinc loading order is determined
                 # it should be easy to determine which file is used before others
                 break
 
         if not found_method:
-            raise CoreError(u"Did not find method '{}' in any loaded extension file".format(func))
+            raise CoreError(u"Did not find method '{0}' in any loaded extension file".format(func))
 
     def _validate_include(self, value, rule, path, done=None):
         # TODO: It is difficult to get a good test case to trigger this if case
@@ -257,7 +257,6 @@ class Core(object):
                 path=path,
                 value=value.encode('unicode_escape')))
             return
-
         include_name = rule.include_name
         partial_schema_rule = pykwalify.partial_schemas.get(include_name, None)
         if not partial_schema_rule:
@@ -281,7 +280,7 @@ class Core(object):
         log.debug(u" * Map: %s", rule.mapping)
 
         if len(rule.sequence) <= 0:
-            raise CoreError(u"Sequence must contains atleast one item : {}".format(path))
+            raise CoreError(u"Sequence must contains atleast one item : {0}".format(path))
 
         if value is None:
             log.debug(u" * Core seq: sequence data is None")
@@ -290,7 +289,7 @@ class Core(object):
         if not isinstance(value, list):
             if isinstance(value, str):
                 value = value.encode('unicode_escape')
-            raise NotSequenceError(u"Value: {} is not of a sequence type".format(value))
+            raise NotSequenceError(u"Value: {0} is not of a sequence type".format(value))
 
         # Handle 'func' argument on this sequence
         self._handle_func(value, rule, path, done)
@@ -312,7 +311,7 @@ class Core(object):
                     #  collide with this Core objects errors
                     tmp_core = Core(source_data={}, schema_data={})
                     tmp_core.loaded_extensions = self.loaded_extensions
-                    tmp_core._validate(item, r, "{}/{}".format(path, i), done)
+                    tmp_core._validate(item, r, "{0}/{1}".format(path, i), done)
                     tmp_errors = tmp_core.errors
                 except NotMappingError:
                     # For example: If one type was specified as 'map' but data
@@ -348,8 +347,8 @@ class Core(object):
                                 if val is None:
                                     continue
                                 if val in table:
-                                    curr_path = "{}/{}/{}".format(path, j, v)
-                                    prev_path = "{}/{}/{}".format(path, table[val], v)
+                                    curr_path = "{0}/{1}/{2}".format(path, j, v)
+                                    prev_path = "{0}/{1}/{2}".format(path, table[val], v)
                                     s = SchemaError.SchemaErrorEntry(
                                         msg=u"Value '{duplicate}' is not unique. Previous path: '{prev_path}'. Path: '{path}'",
                                         path=curr_path,
@@ -369,8 +368,8 @@ class Core(object):
                             continue
 
                         if val in table:
-                            curr_path = "{}/{}".format(path, j)
-                            prev_path = "{}/{}".format(path, table[val])
+                            curr_path = "{0}/{1}".format(path, j)
+                            prev_path = "{0}/{1}".format(path, table[val])
                             s = SchemaError.SchemaErrorEntry(
                                 msg=u"Value '{duplicate}' is not unique. Previous path: '{prev_path}'. Path: '{path}'",
                                 path=curr_path,
@@ -499,7 +498,7 @@ class Core(object):
             if r is not None and not r.schema:
                 # validate recursively
                 log.debug(u" + Core Map: validate recursively: %s", r)
-                self._validate(v, r, u"{}/{}".format(path, k), done)
+                self._validate(v, r, u"{0}/{1}".format(path, k), done)
             elif any(regex_mappings):
                 sub_regex_result = []
 
@@ -507,7 +506,7 @@ class Core(object):
                 for mm in regex_mappings:
                     if mm[1]:
                         log.debug(u" + Matching regex patter: %s", mm[0])
-                        self._validate(v, mm[0], "{}/{}".format(path, k), done)
+                        self._validate(v, mm[0], "{0}/{1}".format(path, k), done)
                         sub_regex_result.append(True)
                     else:
                         sub_regex_result.append(False)
@@ -537,7 +536,7 @@ class Core(object):
                 else:
                     log.debug(u" + No mapping rule defined")
             elif r is not None and r.schema:
-                print(u" + Something is ignored Oo : {}".format(r))
+                print(u" + Something is ignored Oo : {0}".format(r))
             else:
                 if not rule.allowempty_map:
                     self.errors.append(SchemaError.SchemaErrorEntry(
