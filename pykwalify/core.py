@@ -306,6 +306,7 @@ class Core(object):
                     # Create a sub core object to enable error tracking that do not
                     #  collide with this Core objects errors
                     tmp_core = Core(source_data={}, schema_data={})
+                    tmp_core.loaded_extensions = self.loaded_extensions
                     tmp_core._validate(item, r, "{}/{}".format(path, i), done)
                     tmp_errors = tmp_core.errors
                 except NotMappingError:
