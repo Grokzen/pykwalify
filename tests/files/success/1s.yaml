@@ -3,6 +3,8 @@ data:
   - bar
   - baz
 schema:
+  example: Foobar
   type: seq
   sequence:
     - type: str
+      example: barfoo

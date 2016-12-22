@@ -35,6 +35,7 @@ class Rule(object):
         self._pattern = None
         self._pattern_regexp = None
         self._enum = None
+        self._example = None
         self._sequence = None
         self._mapping = None
         self._assertion = None
@@ -269,6 +270,14 @@ class Rule(object):
     def schema_str(self, value):
         self._schema_str = value
 
+    @property
+    def example(self):
+        return self._example
+
+    @example.setter
+    def example(self, value):
+        self._example = value
+
     def __str__(self):
         return "Rule: {}".format(str(self.schema_str))
 
@@ -325,6 +334,7 @@ class Rule(object):
             "req": self.init_required_value,
             "pattern": self.init_pattern_value,
             "enum": self.init_enum_value,
+            "example": self.init_example,
             "assert": self.init_assert_value,
             "range": self.init_range_value,
             "ident": self.init_ident_value,
@@ -359,6 +369,11 @@ class Rule(object):
                 )
 
         self.check_conflicts(schema, rule, path)
+
+    def init_example(self, v, rule, path):
+        log.debug(u'Init example value : {0}'.format(path))
+
+        self._example = str(v)
 
     def init_func(self, v, rule, path):
         """

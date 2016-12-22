@@ -16,6 +16,7 @@ Release Notes
    The rule will be used whenever no other key could be found.
  - Fixed a bug where if allowempty was specefied in a mapping type inside a sequence type then it would not properly validate.
  - Fixed a bug where loaded extensions would not allways work in complex & nested objects
+ - Add support for keyword "example". It does nothing and have not validation tied to it.
 
 
 1.5.2 (Nov 12, 2016)
