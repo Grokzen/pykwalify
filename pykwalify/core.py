@@ -27,7 +27,7 @@ log = logging.getLogger(__name__)
 class Core(object):
     """ Core class of pyKwalify """
 
-    def __init__(self, source_file=None, schema_files=[], source_data=None, schema_data=None, extensions=[]):
+    def __init__(self, source_file=None, schema_files=None, source_data=None, schema_data=None, extensions=None):
         """
         :param extensions:
             List of paths to python files that should be imported and available via 'func' keywork.
@@ -35,6 +35,11 @@ class Core(object):
             flag from the cli. This list should not contain files specified by the `extensions` list keyword
             that can be defined at the top level of the schema.
         """
+        if schema_files is None:
+            schema_files = []
+        if extensions is None:
+            extensions = []
+
         log.debug(u"source_file: %s", source_file)
         log.debug(u"schema_file: %s", schema_files)
         log.debug(u"source_data: %s", source_data)
