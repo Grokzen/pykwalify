@@ -1,0 +1,8 @@
+data:
+  property: null
+schema:
+  type: map
+  mapping:
+    property:
+      type: str
+      allownone: True

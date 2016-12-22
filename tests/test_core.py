@@ -373,6 +373,10 @@ class TestCore(object):
             "39s.yaml",
             # Test that allowempty works without specifying mapping keyword when used inside a sequence block
             "40s.yaml",
+            # Test that allownone keyword works with null value
+            "41s.yaml",
+            # Test that allownone keywords works with a string value
+            "42s.yaml",
         ]
 
         _fail_tests = [

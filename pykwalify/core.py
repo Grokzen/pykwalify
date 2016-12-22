@@ -555,6 +555,9 @@ class Core(object):
         # Handle 'func' argument on this scalar
         self._handle_func(value, rule, path, done)
 
+        if rule.allownone and value is None:
+            return True
+
         if rule.enum is not None:
             if value not in rule.enum:
                 self.errors.append(SchemaError.SchemaErrorEntry(

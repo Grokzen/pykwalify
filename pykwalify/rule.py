@@ -27,6 +27,7 @@ class Rule(object):
 
     def __init__(self, schema=None, parent=None):
         self._allowempty_map = None
+        self._allownone = None
         self._assertion = None
         self._default = None
         self._desc = None
@@ -66,6 +67,14 @@ class Rule(object):
     @allowempty_map.setter
     def allowempty_map(self, value):
         self._allowempty_map = value
+
+    @property
+    def allownone(self):
+        return self._allownone
+
+    @allownone.setter
+    def allownone(self, value):
+        self._allownone = value
 
     @property
     def assertion(self):
@@ -293,6 +302,7 @@ class Rule(object):
         """
         defined_keywords = [
             ('allowempty_map', 'allowempty_map'),
+            ('allownone', 'allownone'),
             ('assertion', 'assertion'),
             ('default', 'default'),
             ('desc', 'desc'),
@@ -376,6 +386,7 @@ class Rule(object):
 
         func_mapping = {
             "allowempty": self.init_allow_empty_map,
+            "allownone": self.init_allownone,
             "assert": self.init_assert_value,
             "default": self.init_default_value,
             "desc": self.init_desc_value,
@@ -418,6 +429,19 @@ class Rule(object):
                 )
 
         self.check_conflicts(schema, rule, path)
+
+    def init_allownone(self, v, rule, path):
+        """
+        """
+        log.debug(u'Initi allownone value : {0}'.format(path))
+
+        if not isinstance(v, bool):
+            raise RuleError(
+                msg=u'Value "{0}" for rule "allownone" must be a yaml boolean (“true”/“false”, “yes”/“no”, “on”/“off” or “y”/“n” or “Y”/“N”)'.format(v),
+                error_key=u"allownone.not_boolean",
+                path=path,
+            )
+        self.allownone = v
 
     def init_version(self, v, rule, path):
         """

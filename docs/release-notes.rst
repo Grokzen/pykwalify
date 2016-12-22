@@ -20,6 +20,7 @@ Release Notes
  - Add support for keyword "version". It does nothing and have no validation done on it.
  - Added new helper method "keywords" to "Rule" class that can output all active keywords for any Rule object.
    This helps when debugging code to be able to easily dump what all active keywords for any Rule object.
+ - Added support for new keyword "allownone" that can be used to specify that types can have None/null values at the same time as their normal defined type.
 
 
 1.5.2 (Nov 12, 2016)
