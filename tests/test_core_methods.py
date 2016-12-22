@@ -154,7 +154,7 @@ def test_validate_scalar_type():
         # (b"foobar", "bool", [b"Value 'foobar' is not of type 'bool'. Path: ''"]),
         (u"Néron", "bool", [u"Value 'Néron' is not of type 'bool'. Path: ''"]),
         ([], "bool", ["Value '[]' is not of type 'bool'. Path: ''"]),
-        ({}, "bool", ["Value '{0}' is not of type 'bool'. Path: ''"]),
+        ({}, "bool", ["Value '{}' is not of type 'bool'. Path: ''"]),
     ]
 
     # Tests for number
@@ -169,7 +169,7 @@ def test_validate_scalar_type():
         # (b"foobar", "number", [b"Value 'foobar' is not of type 'number'. Path: ''"]),
         (u"Néron", "number", [u"Value 'Néron' is not of type 'number'. Path: ''"]),
         ([], "number", ["Value '[]' is not of type 'number'. Path: ''"]),
-        ({}, "number", ["Value '{0}' is not of type 'number'. Path: ''"]),
+        ({}, "number", ["Value '{}' is not of type 'number'. Path: ''"]),
     ]
 
     # Tests for text
@@ -184,7 +184,7 @@ def test_validate_scalar_type():
         (True, "text", ["Value 'True' is not of type 'text'. Path: ''"]),
         (False, "text", ["Value 'False' is not of type 'text'. Path: ''"]),
         ([], "text", ["Value '[]' is not of type 'text'. Path: ''"]),
-        ({}, "text", ["Value '{0}' is not of type 'text'. Path: ''"]),
+        ({}, "text", ["Value '{}' is not of type 'text'. Path: ''"]),
         (datetime(2015, 10, 24, 10, 22, 18), "text", ["Value '2015-10-24 10:22:18' is not of type 'text'. Path: ''"]),
     ]
 
