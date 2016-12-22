@@ -448,7 +448,7 @@ class Rule(object):
         """
         if not isinstance(v, list):
             raise RuleError(
-                msg=u"Extension defenition should be a list",
+                msg=u"Extension definition should be a list",
                 error_key=u"extension.not_list",
                 path=path,
             )
