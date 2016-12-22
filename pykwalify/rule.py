@@ -960,6 +960,36 @@ class Rule(object):
 
     def check_type_keywords(self, schema, rule, path):
         """
+        All supported keywords:
+         - allowempty_map
+         - allownone
+         - assertion
+         - default
+         - desc
+         - enum
+         - example
+         - extensions
+         - func
+         - ident
+         - include_name
+         - map_regex_rule
+         - mapping
+         - matching
+         - matching_rule
+         - name
+         - parent
+         - pattern
+         - pattern_regexp
+         - range
+         - regex_mappings
+         - required
+         - schema
+         - schema_str
+         - sequence
+         - type
+         - type_class
+         - unique
+         - version
         """
         if not self.strict_rule_validation:
             return
