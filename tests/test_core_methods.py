@@ -2,6 +2,7 @@
 import pytest
 from datetime import datetime
 
+from pykwalify.compat import unicode
 from pykwalify.core import Core
 from pykwalify.errors import NotSequenceError, CoreError
 
@@ -14,7 +15,7 @@ class Rule(object):
 
 
 def _remap_errors(c):
-    return [str(error) for error in c.errors]
+    return [unicode(error) for error in c.errors]
 
 
 def test_validate_sequence():
@@ -56,7 +57,7 @@ def test_validate_range():
     ]
 
     for max_, min_, max_ex, min_ex, value, errors in data_matrix:
-        print("Testing data: {0} {1} {2} {3} {4}".format(max_, min_, max_ex, min_ex, value))
+        print(u"Testing data: {0} {1} {2} {3} {4}".format(max_, min_, max_ex, min_ex, value))
         c = ec()
         c._validate_range(max_, min_, max_ex, min_ex, value, '/', 'prefix')
         assert _remap_errors(c) == errors
@@ -273,7 +274,7 @@ def test_validate_scalar_type():
     ]
 
     for data in data_matrix:
-        print("Testing data: '{0!s}', '{1!s}', '{2!s}'".format(*data))
+        print(u"Testing data: '{0!s}', '{1!s}', '{2!s}'".format(*data))
         c = ec()
         c._validate_scalar_type(data[0], data[1], '')
         assert _remap_errors(c) == data[2]
