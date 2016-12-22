@@ -341,9 +341,11 @@ class Rule(object):
         return found_keywords
 
     def init(self, schema, path):
+        """
+        """
         log.debug(u"Init schema: %s", schema)
 
-        include = schema.get("include", None)
+        include = schema.get("include")
 
         # Check if this item is a include, overwrite schema with include schema and continue to parse
         if include:
@@ -485,6 +487,8 @@ class Rule(object):
         self.extensions = v
 
     def init_matching_rule(self, v, rule, path):
+        """
+        """
         log.debug(u"Init matching-rule: %s", path)
         log.debug(u"%s %s", v, rule)
 
@@ -501,12 +505,16 @@ class Rule(object):
             self.matching_rule = v
 
     def init_allow_empty_map(self, v, rule, path):
+        """
+        """
         log.debug(u"Init allow empty value: %s", path)
         log.debug(u"Type: %s : %s", v, rule)
 
         self.allowempty_map = v
 
     def init_type_value(self, v, rule, path):
+        """
+        """
         log.debug(u"Init type value : %s", path)
         log.debug(u"Type: %s %s", v, rule)
 
@@ -524,6 +532,8 @@ class Rule(object):
             )
 
     def init_matching(self, v, rule, path):
+        """
+        """
         log.debug(u"Init matching rule : %s", path)
 
         valid_values = ["any", "all", "*"]
@@ -538,16 +548,22 @@ class Rule(object):
         self.matching = str(v)
 
     def init_name_value(self, v, rule, path):
+        """
+        """
         log.debug(u"Init name value : %s", path)
 
         self.name = str(v)
 
     def init_desc_value(self, v, rule, path):
+        """
+        """
         log.debug(u"Init descr value : %s", path)
 
         self.desc = str(v)
 
     def init_required_value(self, v, rule, path):
+        """
+        """
         log.debug(u"Init required value : %s", path)
 
         if not isinstance(v, bool):
@@ -559,6 +575,8 @@ class Rule(object):
         self.required = v
 
     def init_pattern_value(self, v, rule, path):
+        """
+        """
         log.debug(u"Init pattern value : %s", path)
 
         if not isinstance(v, str):
@@ -589,6 +607,8 @@ class Rule(object):
             )
 
     def init_enum_value(self, v, rule, path):
+        """
+        """
         log.debug(u"Init enum value : %s", path)
 
         if not isinstance(v, list):
@@ -625,6 +645,8 @@ class Rule(object):
             lookup.add(item)
 
     def init_assert_value(self, v, rule, path):
+        """
+        """
         log.debug(u"Init assert value : %s", path)
 
         if not isinstance(v, str):
@@ -643,6 +665,8 @@ class Rule(object):
         )
 
     def init_range_value(self, v, rule, path):
+        """
+        """
         log.debug(u"Init range value : %s", path)
 
         supported_types = ["str", "int", "float", "number", "map", "seq"]
@@ -687,10 +711,10 @@ class Rule(object):
                 path=path,
             )
 
-        max = self.range.get("max", None)
-        min = self.range.get("min", None)
-        max_ex = self.range.get("max-ex", None)
-        min_ex = self.range.get("min-ex", None)
+        max = self.range.get("max")
+        min = self.range.get("min")
+        max_ex = self.range.get("max-ex")
+        min_ex = self.range.get("min-ex")
 
         if max is not None and not is_number(max) or is_bool(max):
             raise RuleError(
@@ -776,6 +800,8 @@ class Rule(object):
                 )
 
     def init_ident_value(self, v, rule, path):
+        """
+        """
         log.debug(u"Init ident value : %s", path)
 
         if v is None or isinstance(v, bool):
@@ -810,6 +836,8 @@ class Rule(object):
             )
 
     def init_unique_value(self, v, rule, path):
+        """
+        """
         log.debug(u"Init unique value : %s", path)
 
         if not isinstance(v, bool):
@@ -835,6 +863,8 @@ class Rule(object):
             )
 
     def init_sequence_value(self, v, rule, path):
+        """
+        """
         log.debug(u"Init sequence value : %s", path)
 
         if v is not None and not isinstance(v, list):
@@ -868,6 +898,8 @@ class Rule(object):
         return rule
 
     def init_mapping_value(self, v, rule, path):
+        """
+        """
         # Check for duplicate use of 'map' and 'mapping'
         if self.mapping:
             raise RuleError(
@@ -934,6 +966,8 @@ class Rule(object):
         return rule
 
     def init_default_value(self, v, rule, path):
+        """
+        """
         log.debug(u"Init default value : %s", path)
         self.default = v
 
@@ -1014,7 +1048,7 @@ class Rule(object):
             'enum': global_keywords + [],
             'none': global_keywords + ['required'],
         }
-        rule_type = schema.get('type', None)
+        rule_type = schema.get('type')
         if not rule_type:
             # Special cases for the "shortcut methods"
             if 'sequence' in schema or 'seq' in schema:
@@ -1022,7 +1056,7 @@ class Rule(object):
             elif 'mapping' in schema or 'map' in schema:
                 rule_type = 'mapping'
 
-        allowed_keywords = all_allowed_keywords.get(rule_type, None)
+        allowed_keywords = all_allowed_keywords.get(rule_type)
         if not allowed_keywords and 'sequence' not in schema and 'mapping' not in schema and 'seq' not in schema and 'map' not in schema:
             raise RuleError('No allowed keywords found for type: {0}'.format(rule_type))
 
@@ -1031,6 +1065,8 @@ class Rule(object):
                 raise RuleError('Keyword "{0}" is not supported for type: "{1}" '.format(k, rule_type))
 
     def check_conflicts(self, schema, rule, path):
+        """
+        """
         log.debug(u"Checking for conflicts : %s", path)
 
         if self.type == "seq":
@@ -1097,10 +1133,9 @@ class Rule(object):
                     path=path,
                 )
 
-            if self.enum is not None:
-                if self.range is not None:
-                    raise SchemaConflict(
-                        msg="Enum and range can't be on the same level in the schema",
-                        error_key=u"enum.conflict.range",
-                        path=path,
-                    )
+            if self.enum is not None and self.range is not None:
+                raise SchemaConflict(
+                    msg="Enum and range can't be on the same level in the schema",
+                    error_key=u"enum.conflict.range",
+                    path=path,
+                )

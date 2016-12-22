@@ -151,6 +151,8 @@ class Core(object):
         log.debug([dir(m) for m in self.loaded_extensions])
 
     def validate(self, raise_exception=True):
+        """
+        """
         log.debug(u"starting core")
 
         self._start_validate(self.source)
@@ -173,6 +175,8 @@ class Core(object):
         return self.source
 
     def _start_validate(self, value=None):
+        """
+        """
         path = ""
         self.errors = []
         done = []
@@ -201,6 +205,8 @@ class Core(object):
         self._validate(value, root_rule, path, done)
 
     def _validate(self, value, rule, path, done):
+        """
+        """
         log.debug(u"Core validate")
         log.debug(u" Root validate : Rule: %s", rule)
         log.debug(u" Root validate : Rule_type: %s", rule.type)
@@ -254,6 +260,8 @@ class Core(object):
             raise CoreError(u"Did not find method '{0}' in any loaded extension file".format(func))
 
     def _validate_include(self, value, rule, path, done=None):
+        """
+        """
         # TODO: It is difficult to get a good test case to trigger this if case
         if rule.include_name is None:
             self.errors.append(SchemaError.SchemaErrorEntry(
@@ -262,7 +270,7 @@ class Core(object):
                 value=value.encode('unicode_escape')))
             return
         include_name = rule.include_name
-        partial_schema_rule = pykwalify.partial_schemas.get(include_name, None)
+        partial_schema_rule = pykwalify.partial_schemas.get(include_name)
         if not partial_schema_rule:
             self.errors.append(SchemaError.SchemaErrorEntry(
                 msg=u"Cannot find partial schema with name '{include_name}'. Existing partial schemas: '{existing_schemas}'. Path: '{path}'",
@@ -275,6 +283,8 @@ class Core(object):
         self._validate(value, partial_schema_rule, path, done)
 
     def _validate_sequence(self, value, rule, path, done=None):
+        """
+        """
         log.debug(u"Core Validate sequence")
         log.debug(u" Sequence : Data: %s", value)
         log.debug(u" Sequence : Rule: %s", rule)
@@ -417,7 +427,7 @@ class Core(object):
             elif rule.matching == "all":
                 log.debug(u" * Value: %s did not validate against all possible sequence schemas", value)
 
-            for i in range(len(ok_values)):
+            for i, _ in enumerate(ok_values):
                 for error in error_tracker[i]:
                     for e in error:
                         self.errors.append(e)
@@ -428,16 +438,18 @@ class Core(object):
             rr = rule.range
 
             self._validate_range(
-                rr.get("max", None),
-                rr.get("min", None),
-                rr.get("max-ex", None),
-                rr.get("min-ex", None),
+                rr.get("max"),
+                rr.get("min"),
+                rr.get("max-ex"),
+                rr.get("min-ex"),
                 len(value),
                 path,
                 "seq",
             )
 
     def _validate_mapping(self, value, rule, path, done=None):
+        """
+        """
         log.debug(u"Validate mapping")
         log.debug(u" Mapping : Data: %s", value)
         log.debug(u" Mapping : Rule: %s", rule)
@@ -468,10 +480,10 @@ class Core(object):
             r = rule.range
 
             self._validate_range(
-                r.get("max", None),
-                r.get("min", None),
-                r.get("max-ex", None),
-                r.get("min-ex", None),
+                r.get("max"),
+                r.get("min"),
+                r.get("max-ex"),
+                r.get("min-ex"),
                 len(value),
                 path,
                 "map",
@@ -491,7 +503,7 @@ class Core(object):
         for k, v in value.items():
             # If no other case was a match, check if a default mapping is valid/present and use
             # that one instead
-            r = m.get(k, m.get('=', None))
+            r = m.get(k, m.get('='))
             log.debug(u" + : %s", m)
             log.debug(u" + : %s %s", k, v)
             log.debug(u" + : %s", r)
@@ -550,6 +562,8 @@ class Core(object):
                         key=k))
 
     def _validate_scalar(self, value, rule, path, done=None):
+        """
+        """
         log.debug(u"Validate scalar")
         log.debug(u" # %s", value)
         log.debug(u" # %s", rule)
@@ -562,13 +576,12 @@ class Core(object):
         if rule.allownone and value is None:
             return True
 
-        if rule.enum is not None:
-            if value not in rule.enum:
-                self.errors.append(SchemaError.SchemaErrorEntry(
-                    msg=u"Enum '{value}' does not exist. Path: '{path}'",
-                    path=path,
-                    value=nativestr(value) if tt['str'](value) else value,
-                ))
+        if rule.enum is not None and value not in rule.enum:
+            self.errors.append(SchemaError.SchemaErrorEntry(
+                msg=u"Enum '{value}' does not exist. Path: '{path}'",
+                path=path,
+                value=nativestr(value) if tt['str'](value) else value,
+            ))
 
         # Set default value
         if rule.default and value is None:
@@ -606,10 +619,10 @@ class Core(object):
                 pass
 
             self._validate_range(
-                r.get("max", None),
-                r.get("min", None),
-                r.get("max-ex", None),
-                r.get("min-ex", None),
+                r.get("max"),
+                r.get("min"),
+                r.get("max-ex"),
+                r.get("min-ex"),
                 value,
                 path,
                 "scalar",
@@ -620,7 +633,11 @@ class Core(object):
             self._validate_scalar_timestamp(value, path)
 
     def _validate_scalar_timestamp(self, timestamp_value, path):
+        """
+        """
         def _check_int_timestamp_boundaries(timestamp):
+            """
+            """
             if timestamp < 1:
                 # Timestamp integers can't be negative
                 self.errors.append(SchemaError.SchemaErrorEntry(
@@ -639,7 +656,7 @@ class Core(object):
                     timestamp=str(timestamp),
                 ))
 
-        if isinstance(timestamp_value, int) or isinstance(timestamp_value, float):
+        if isinstance(timestamp_value, (int, float)):
             _check_int_timestamp_boundaries(timestamp_value)
         elif isinstance(timestamp_value, datetime):
             # Datetime objects currently have nothing to validate.
@@ -697,8 +714,7 @@ class Core(object):
             path,
         )
 
-        if max_ is not None:
-            if max_ < value:
+        if max_ is not None and max_ < value:
                 self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Type '{prefix}' has size of '{value}', greater than max limit '{max_}'. Path: '{path}'",
                     path=path,
@@ -706,8 +722,7 @@ class Core(object):
                     prefix=prefix,
                     max_=max_))
 
-        if min_ is not None:
-            if min_ > value:
+        if min_ is not None and min_ > value:
                 self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Type '{prefix}' has size of '{value}', less than min limit '{min_}'. Path: '{path}'",
                     path=path,
@@ -715,8 +730,7 @@ class Core(object):
                     prefix=prefix,
                     min_=min_))
 
-        if max_ex is not None:
-            if max_ex <= value:
+        if max_ex is not None and max_ex <= value:
                 self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Type '{prefix}' has size of '{value}', greater than or equals to max limit(exclusive) '{max_ex}'. Path: '{path}'",
                     path=path,
@@ -724,8 +738,7 @@ class Core(object):
                     prefix=prefix,
                     max_ex=max_ex))
 
-        if min_ex is not None:
-            if min_ex >= value:
+        if min_ex is not None and min_ex >= value:
                 self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Type '{prefix}' has size of '{value}', less than or equals to min limit(exclusive) '{min_ex}'. Path: '{path}'",
                     path=path,
@@ -734,6 +747,8 @@ class Core(object):
                     min_ex=min_ex))
 
     def _validate_scalar_type(self, value, t, path):
+        """
+        """
         log.debug(u" # Core scalar: validating scalar type : %s", t)
         log.debug(u" # Core scalar: scalar type: %s", type(value))
 

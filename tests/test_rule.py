@@ -228,7 +228,7 @@ class TestRule(unittest.TestCase):
         assert r.matching == "any"
         assert len(r.sequence) == 2
         assert isinstance(r.sequence, list)
-        assert all([isinstance(r.sequence[i], Rule) for i in range(len(r.sequence))])
+        assert all(isinstance(r.sequence[i], Rule) for i in range(len(r.sequence)))
         assert r.sequence[0].type == "str"
         assert r.sequence[1].type == "int"
 
@@ -238,7 +238,7 @@ class TestRule(unittest.TestCase):
         assert r.matching == "any"
         assert len(r.sequence) == 2
         assert isinstance(r.sequence, list)
-        assert all([isinstance(r.sequence[i], Rule) for i in range(len(r.sequence))])
+        assert all(isinstance(r.sequence[i], Rule) for i in range(len(r.sequence)))
         assert r.sequence[0].type == "str"
         assert r.sequence[1].type == "int"
 
