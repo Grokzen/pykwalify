@@ -277,6 +277,48 @@ class Rule(object):
     def __str__(self):
         return "Rule: {}".format(str(self.schema_str))
 
+    def keywords(self):
+        """
+        Returns a list of all keywords that this rule object has defined.
+        A keyword is considered defined if the value it returns != None.
+        """
+        defined_keywords = [
+            ('allowempty_map', 'allowempty_map'),
+            ('assertion', 'assertion'),
+            ('default', 'default'),
+            ('desc', 'desc'),
+            ('enum', 'enum'),
+            ('example', 'example'),
+            ('extensions', 'extensions'),
+            ('func', 'func'),
+            ('ident', 'ident'),
+            ('include_name', 'include_name'),
+            ('map_regex_rule', 'map_regex_rule'),
+            ('mapping', 'mapping'),
+            ('matching', 'matching'),
+            ('matching_rule', 'matching_rule'),
+            ('name', 'name'),
+            ('parent', 'parent'),
+            ('pattern', 'pattern'),
+            ('pattern_regexp', 'pattern_regexp'),
+            ('range', 'range'),
+            ('regex_mappings', 'regex_mappings'),
+            ('required', 'required'),
+            ('schema', 'schema'),
+            ('schema_str', 'schema_str'),
+            ('sequence', 'sequence'),
+            ('type', 'type'),
+            ('type_class', 'type_class'),
+            ('unique', 'unique'),
+        ]
+        found_keywords = []
+
+        for var_name, keyword_name in defined_keywords:
+            if getattr(self, var_name, None):
+                found_keywords.append(keyword_name)
+
+        return found_keywords
+
     def init(self, schema, path):
         log.debug(u"Init schema: %s", schema)
 
