@@ -75,6 +75,6 @@ pykwalify -d data.yaml -s schema.yaml
 | License               | `MIT` https://github.com/Grokzen/pykwalify/blob/unstable/docs/license.rst |
 | git repo              | `git clone git@github.com:Grokzen/pykwalify.git` |
 | install stable        | `pip install pykwalify` |
-| install dev           | `$ git clone git@github.com:Grokzen/pykwalify.git pykwalify`<br>`$ cd ./pykwalify`<br>`$ virtualenv .venv`<br>`$ source .venv/bin/activate`<br>`$ pip install -e .` |
-| required dependencies | `docopt >= 0.6.2`<br> `PyYaml >= 3.11`<br> `python-dateutil >= 2.4.2` |
-| optional dependencies | `ruamel.yaml >= 0.11.0` |
+| install dev           | `$ git clone git@github.com:Grokzen/pykwalify.git pykwalify`<br>`$ cd ./pykwalify`<br>`$ virtualenv .venv`<br>`$ source .venv/bin/activate`<br>`$ pip install -r dev-requirements.txt`<br>`$ pip install -e .` |
+| required dependencies | `docopt >= 0.6.2`<br> `python-dateutil >= 2.4.2` |
+| supported yml parsers | `PyYaml >= 3.11`<br>`ruamel.yaml >= 0.11.0` |
