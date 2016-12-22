@@ -198,11 +198,11 @@ class Core(object):
 
     def _validate(self, value, rule, path, done):
         log.debug(u"Core validate")
-        log.debug(u" ? Rule: %s", rule)
-        log.debug(u" ? Rule_type: %s", rule.type)
-        log.debug(u" ? Seq: %s", rule.sequence)
-        log.debug(u" ? Map: %s", rule.mapping)
-        log.debug(u" ? Done: %s", done)
+        log.debug(u" Root validate : Rule: %s", rule)
+        log.debug(u" Root validate : Rule_type: %s", rule.type)
+        log.debug(u" Root validate : Seq: %s", rule.sequence)
+        log.debug(u" Root validate : Map: %s", rule.mapping)
+        log.debug(u" Root validate : Done: %s", done)
 
         if rule.required and self.source is None:
             raise CoreError(u"required.novalue : {0}".format(path))
@@ -272,12 +272,12 @@ class Core(object):
 
     def _validate_sequence(self, value, rule, path, done=None):
         log.debug(u"Core Validate sequence")
-        log.debug(u" * Data: %s", value)
-        log.debug(u" * Rule: %s", rule)
-        log.debug(u" * RuleType: %s", rule.type)
-        log.debug(u" * Path: %s", path)
-        log.debug(u" * Seq: %s", rule.sequence)
-        log.debug(u" * Map: %s", rule.mapping)
+        log.debug(u" Sequence : Data: %s", value)
+        log.debug(u" Sequence : Rule: %s", rule)
+        log.debug(u" Sequence : RuleType: %s", rule.type)
+        log.debug(u" Sequence : Path: %s", path)
+        log.debug(u" Sequence : Seq: %s", rule.sequence)
+        log.debug(u" Sequence : Map: %s", rule.mapping)
 
         if len(rule.sequence) <= 0:
             raise CoreError(u"Sequence must contains atleast one item : {0}".format(path))
@@ -435,12 +435,12 @@ class Core(object):
 
     def _validate_mapping(self, value, rule, path, done=None):
         log.debug(u"Validate mapping")
-        log.debug(u" + Data: %s", value)
-        log.debug(u" + Rule: %s", rule)
-        log.debug(u" + RuleType: %s", rule.type)
-        log.debug(u" + Path: %s", path)
-        log.debug(u" + Seq: %s", rule.sequence)
-        log.debug(u" + Map: %s", rule.mapping)
+        log.debug(u" Mapping : Data: %s", value)
+        log.debug(u" Mapping : Rule: %s", rule)
+        log.debug(u" Mapping : RuleType: %s", rule.type)
+        log.debug(u" Mapping : Path: %s", path)
+        log.debug(u" Mapping : Seq: %s", rule.sequence)
+        log.debug(u" Mapping : Map: %s", rule.mapping)
 
         if not isinstance(value, dict):
             self.errors.append(SchemaError.SchemaErrorEntry(
