@@ -121,7 +121,7 @@ class Core(object):
         for f in self.schema.get('extensions', []):
             self.extensions.append(f)
 
-        if not isinstance(self.extensions, list) and all([isinstance(e, str) for e in self.extensions]):
+        if not isinstance(self.extensions, list) and all(isinstance(e, str) for e in self.extensions):
             raise CoreError(u"Specified extensions must be a list of file paths")
 
         self._load_extensions()

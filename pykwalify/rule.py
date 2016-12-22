@@ -336,10 +336,10 @@ class Rule(object):
         if schema is not None:
             if "type" not in schema:
                 # Mapping and sequence do not need explicit type defenitions
-                if any([sa in schema for sa in sequence_aliases]):
+                if any(sa in schema for sa in sequence_aliases):
                     t = "seq"
                     self.init_type_value(t, rule, path)
-                elif any([ma in schema for ma in mapping_aliases]):
+                elif any(ma in schema for ma in mapping_aliases):
                     t = "map"
                     self.init_type_value(t, rule, path)
                 else:
@@ -917,7 +917,7 @@ class Rule(object):
         log.debug(u"Checking for conflicts : %s", path)
 
         if self.type == "seq":
-            if all([sa not in schema for sa in sequence_aliases]):
+            if all(sa not in schema for sa in sequence_aliases):
                 raise SchemaConflict(
                     msg="Type is sequence but no sequence alias found on same level",
                     error_key=u"seq.no_sequence",
@@ -945,7 +945,7 @@ class Rule(object):
                     path=path,
                 )
         elif self.type == "map":
-            if all([ma not in schema for ma in mapping_aliases]) and not self.allowempty_map:
+            if all(ma not in schema for ma in mapping_aliases) and not self.allowempty_map:
                 raise SchemaConflict(
                     msg="Type is mapping but no mapping alias found on same level",
                     error_key=u"map.no_mapping",
