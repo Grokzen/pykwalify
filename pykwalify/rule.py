@@ -26,177 +26,37 @@ class Rule(object):
     """ Rule class that handles a rule constraint """
 
     def __init__(self, schema=None, parent=None):
-        self._parent = None
-        self._name = None
+        self._allowempty_map = None
+        self._assertion = None
+        self._default = None
         self._desc = None
-        self._required = False
-        self._type = None
-        self._type_class = None
-        self._pattern = None
-        self._pattern_regexp = None
         self._enum = None
         self._example = None
-        self._sequence = None
-        self._mapping = None
-        self._assertion = None
-        self._range = None
-        self._ident = None
-        self._unique = None
-        self._default = None
-        self._allowempty_map = None
-        self._matching_rule = "any"
-        self._map_regex_rule = None
-
-        self._regex_mappings = None
-        self._include_name = None
         self._extensions = None
         self._func = None
-
+        self._ident = None
+        self._include_name = None
+        self._map_regex_rule = None
+        self._mapping = None
         # Possible values: [any, all, *]
         self._matching = "any"
-
+        self._matching_rule = "any"
+        self._name = None
         self._parent = parent
+        self._pattern = None
+        self._pattern_regexp = None
+        self._range = None
+        self._regex_mappings = None
+        self._required = False
         self._schema = schema
         self._schema_str = schema
+        self._sequence = None
+        self._type = None
+        self._type_class = None
+        self._unique = None
 
         if isinstance(schema, dict):
             self.init(schema, "")
-
-    @property
-    def matching(self):
-        return self._matching
-
-    @matching.setter
-    def matching(self, value):
-        self._matching = value
-
-    @property
-    def parent(self):
-        return self._parent
-
-    @parent.setter
-    def parent(self, value):
-        self._parent = value
-
-    @property
-    def name(self):
-        return self._name
-
-    @name.setter
-    def name(self, value):
-        self._name = value
-
-    @property
-    def desc(self):
-        return self._desc
-
-    @desc.setter
-    def desc(self, value):
-        self._desc = value
-
-    @property
-    def required(self):
-        return self._required
-
-    @required.setter
-    def required(self, value):
-        self._required = value
-
-    @property
-    def type(self):
-        return self._type
-
-    @type.setter
-    def type(self, value):
-        self._type = value
-
-    @property
-    def type_class(self):
-        return self._type_class
-
-    @type_class.setter
-    def type_class(self, value):
-        self._type_class = value
-
-    @property
-    def pattern(self):
-        return self._pattern
-
-    @pattern.setter
-    def pattern(self, value):
-        self._pattern = value
-
-    @property
-    def pattern_regexp(self):
-        return self._pattern_regexp
-
-    @pattern_regexp.setter
-    def pattern_regexp(self, value):
-        self._pattern_regexp = value
-
-    @property
-    def enum(self):
-        return self._enum
-
-    @enum.setter
-    def enum(self, value):
-        self._enum = value
-
-    @property
-    def sequence(self):
-        return self._sequence
-
-    @sequence.setter
-    def sequence(self, value):
-        self._sequence = value
-
-    @property
-    def mapping(self):
-        return self._mapping
-
-    @mapping.setter
-    def mapping(self, value):
-        self._mapping = value
-
-    @property
-    def assertion(self):
-        return self._assertion
-
-    @assertion.setter
-    def assertion(self, value):
-        self._assertion = value
-
-    @property
-    def range(self):
-        return self._range
-
-    @range.setter
-    def range(self, value):
-        self._range = value
-
-    @property
-    def ident(self):
-        return self._ident
-
-    @ident.setter
-    def ident(self, value):
-        self._ident = value
-
-    @property
-    def unique(self):
-        return self._unique
-
-    @property
-    def default(self):
-        return self._default
-
-    @default.setter
-    def default(self, value):
-        self._default = value
-
-    @unique.setter
-    def unique(self, value):
-        self._unique = value
 
     @property
     def allowempty_map(self):
@@ -207,36 +67,44 @@ class Rule(object):
         self._allowempty_map = value
 
     @property
-    def matching_rule(self):
-        return self._matching_rule
+    def assertion(self):
+        return self._assertion
 
-    @matching_rule.setter
-    def matching_rule(self, value):
-        self._matching_rule = value
-
-    @property
-    def map_regex_rule(self):
-        return self._map_regex_rule
-
-    @map_regex_rule.setter
-    def map_regex_rule(self, value):
-        self._map_regex_rule = value
+    @assertion.setter
+    def assertion(self, value):
+        self._assertion = value
 
     @property
-    def regex_mappings(self):
-        return self._regex_mappings
+    def default(self):
+        return self._default
 
-    @regex_mappings.setter
-    def regex_mappings(self, value):
-        self._regex_mappings = value
+    @default.setter
+    def default(self, value):
+        self._default = value
 
     @property
-    def include_name(self):
-        return self._include_name
+    def desc(self):
+        return self._desc
 
-    @include_name.setter
-    def include_name(self, value):
-        self._include_name = value
+    @desc.setter
+    def desc(self, value):
+        self._desc = value
+
+    @property
+    def enum(self):
+        return self._enum
+
+    @enum.setter
+    def enum(self, value):
+        self._enum = value
+
+    @property
+    def example(self):
+        return self._example
+
+    @example.setter
+    def example(self, value):
+        self._example = value
 
     @property
     def extensions(self):
@@ -255,6 +123,110 @@ class Rule(object):
         self._func = value
 
     @property
+    def ident(self):
+        return self._ident
+
+    @ident.setter
+    def ident(self, value):
+        self._ident = value
+
+    @property
+    def include_name(self):
+        return self._include_name
+
+    @include_name.setter
+    def include_name(self, value):
+        self._include_name = value
+
+    @property
+    def map_regex_rule(self):
+        return self._map_regex_rule
+
+    @map_regex_rule.setter
+    def map_regex_rule(self, value):
+        self._map_regex_rule = value
+
+    @property
+    def mapping(self):
+        return self._mapping
+
+    @mapping.setter
+    def mapping(self, value):
+        self._mapping = value
+
+    @property
+    def matching(self):
+        return self._matching
+
+    @matching.setter
+    def matching(self, value):
+        self._matching = value
+
+    @property
+    def matching_rule(self):
+        return self._matching_rule
+
+    @matching_rule.setter
+    def matching_rule(self, value):
+        self._matching_rule = value
+
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        self._name = value
+
+    @property
+    def parent(self):
+        return self._parent
+
+    @parent.setter
+    def parent(self, value):
+        self._parent = value
+
+    @property
+    def pattern(self):
+        return self._pattern
+
+    @pattern.setter
+    def pattern(self, value):
+        self._pattern = value
+
+    @property
+    def pattern_regexp(self):
+        return self._pattern_regexp
+
+    @pattern_regexp.setter
+    def pattern_regexp(self, value):
+        self._pattern_regexp = value
+
+    @property
+    def range(self):
+        return self._range
+
+    @range.setter
+    def range(self, value):
+        self._range = value
+
+    @property
+    def regex_mappings(self):
+        return self._regex_mappings
+
+    @regex_mappings.setter
+    def regex_mappings(self, value):
+        self._regex_mappings = value
+
+    @property
+    def required(self):
+        return self._required
+
+    @required.setter
+    def required(self, value):
+        self._required = value
+
+    @property
     def schema(self):
         return self._schema
 
@@ -271,12 +243,36 @@ class Rule(object):
         self._schema_str = value
 
     @property
-    def example(self):
-        return self._example
+    def sequence(self):
+        return self._sequence
 
-    @example.setter
-    def example(self, value):
-        self._example = value
+    @sequence.setter
+    def sequence(self, value):
+        self._sequence = value
+
+    @property
+    def type(self):
+        return self._type
+
+    @type.setter
+    def type(self, value):
+        self._type = value
+
+    @property
+    def type_class(self):
+        return self._type_class
+
+    @type_class.setter
+    def type_class(self, value):
+        self._type_class = value
+
+    @property
+    def unique(self):
+        return self._unique
+
+    @unique.setter
+    def unique(self, value):
+        self._unique = value
 
     def __str__(self):
         return "Rule: {}".format(str(self.schema_str))
@@ -327,28 +323,28 @@ class Rule(object):
             self.init_type_value(t, rule, path)
 
         func_mapping = {
-            "type": lambda x, y, z: (),
-            "name": self.init_name_value,
+            "allowempty": self.init_allow_empty_map,
+            "assert": self.init_assert_value,
+            "default": self.init_default_value,
             "desc": self.init_desc_value,
-            "required": self.init_required_value,
-            "req": self.init_required_value,
-            "pattern": self.init_pattern_value,
             "enum": self.init_enum_value,
             "example": self.init_example,
-            "assert": self.init_assert_value,
-            "range": self.init_range_value,
-            "ident": self.init_ident_value,
-            "unique": self.init_unique_value,
-            "allowempty": self.init_allow_empty_map,
-            "default": self.init_default_value,
-            "sequence": self.init_sequence_value,
-            "seq": self.init_sequence_value,
-            "mapping": self.init_mapping_value,
-            "map": self.init_mapping_value,
-            "matching-rule": self.init_matching_rule,
-            "matching": self.init_matching,
             "extensions": self.init_extensions,
             "func": self.init_func,
+            "ident": self.init_ident_value,
+            "map": self.init_mapping_value,
+            "mapping": self.init_mapping_value,
+            "matching": self.init_matching,
+            "matching-rule": self.init_matching_rule,
+            "name": self.init_name_value,
+            "pattern": self.init_pattern_value,
+            "range": self.init_range_value,
+            "req": self.init_required_value,
+            "required": self.init_required_value,
+            "seq": self.init_sequence_value,
+            "sequence": self.init_sequence_value,
+            "type": lambda x, y, z: (),
+            "unique": self.init_unique_value,
         }
 
         for k, v in schema.items():
