@@ -565,10 +565,10 @@ class Core(object):
         """
         """
         log.debug(u"Validate scalar")
-        log.debug(u" # %s", value)
-        log.debug(u" # %s", rule)
-        log.debug(u" # %s", rule.type)
-        log.debug(u" # %s", path)
+        log.debug(u" Scalar : Value : %s", value)
+        log.debug(u" Scalar : Rule :  %s", rule)
+        log.debug(u" Scalar : RuleType : %s", rule.type)
+        log.debug(u" Scalar : Path %s", path)
 
         # Handle 'func' argument on this scalar
         self._handle_func(value, rule, path, done)
