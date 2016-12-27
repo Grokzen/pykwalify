@@ -732,7 +732,7 @@ schema:
        "email": &email
           type: str
           pattern: .+@.+
-          required: no
+          required: False
    "user":
       type: map
       mapping:
