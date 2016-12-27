@@ -39,7 +39,7 @@ schema:
       type: str
       # This pattern value was modified from /@/ to .+@.+ to make it copmatible with python
       pattern: .+@.+
-      required: yes
+      required: True
     age:
       type: int
     blood:
@@ -90,11 +90,11 @@ schema:
           mapping:
             name:
               type: str
-              required: yes
+              required: true
             email:
               type: str
               pattern: .+@.+
-              required: yes
+              required: true
             age:
               type: int
             blood:
@@ -146,7 +146,7 @@ schema:
       mapping:
         first-name: &name
           type: str
-          required: yes
+          required: true
         family-name: *name
 #
 data:
@@ -250,19 +250,19 @@ schema:
       type: seq
       sequence:
         - type: number
-          required: yes
+          required: true
           range: {max: 100}
    "min-only":
       type: seq
       sequence:
         - type: number
-          required: yes
+          required: true
           range: {min: 10.0}
    "max-and-min":
       type: seq
       sequence:
         - type: number
-          required: yes
+          required: true
           range: {max: 100.0, min: 10.0}
 #
 data:
@@ -308,19 +308,19 @@ schema:
       type: seq
       sequence:
         - type: number
-          required: yes
+          required: true
           range: {max-ex: 100}
    "min-ex-only":
       type: seq
       sequence:
         - type: number
-          required: yes
+          required: true
           range: {min-ex: 10.0}
    "max-ex-and-min-ex":
       type: seq
       sequence:
         - type: number
-          required: yes
+          required: true
           range: {max-ex: 100.0, min-ex: 10.0}
 #
 data:
@@ -366,13 +366,13 @@ schema:
       type: seq
       sequence:
         - type: number
-          required: yes
+          required: true
           range: {max: 100, min-ex: 10.0}
    "B":
       type: seq
       sequence:
         - type: number
-          required: yes
+          required: true
           range: {min: 10, max-ex: 100.0}
 #
 data:
@@ -579,11 +579,11 @@ schema:
         mapping:
          "name":
            type: str
-           required: yes
+           required: true
            unique: yes
          "value": 
            type: any
-           required: yes
+           required: true
 #
 data:
   - &a1
@@ -728,7 +728,7 @@ schema:
       mapping:
        "name": &name
           type: str
-          required: yes
+          required: true
        "email": &email
           type: str
           pattern: .+@.+
@@ -741,7 +741,7 @@ schema:
           length: {max: 16}  # add
        "email":
           <<: *email     # merge
-          required: yes  # override
+          required: true  # override
 #
 data:
   group:
