@@ -54,26 +54,26 @@ name:  nested1
 desc:  nest of seq and map
 #
 schema:
-  type:        map
-  required:    true
+  type: map
+  required: True
   mapping:
     address-book:
-      type:       seq
-      required:   true
+      type: seq
+      required: True
       sequence:
-        - type:   map
+        - type: map
           mapping:
             name:
-              type:       str
-              required:   yes
+              type: str
+              required: True
             email:
-              type:       str
-              pattern:    .+@.+
-              required:   yes
+              type: str
+              pattern: .+@.+
+              required: True
             age:
-              type:       int
+              type: int
             blood:
-              type:       str
+              type: str
               enum:
                 - A
                 - B
@@ -416,7 +416,7 @@ schema:
     - type: map
       mapping:
        "name":
-          unique: yes
+          unique: true
        "age":
           type: int
 #
@@ -436,7 +436,7 @@ schema:
   type: seq
   sequence:
     - type: str
-      unique: yes
+      unique: true
 #
 data:
   - foo
@@ -457,7 +457,7 @@ schema:
          "name":
            type: str
            required: True
-           unique: yes
+           unique: true
          "value": 
            type: any
            required: True
@@ -546,7 +546,7 @@ schema:
     - type: map
       mapping:
        "name":
-          ident: yes
+          ident: true
        "age":
           type: int
 #

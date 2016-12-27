@@ -164,26 +164,26 @@ errors:
   # :type_unmatch       : 4:3:[/1/family-name] '100': not a string.
 ##
 ---
-name:  anchor2
-desc:  schema with anchor 2
+name: anchor2
+desc: schema with anchor 2
 #
 schema:
-  type:        map
-  required:    true
+  type: map
+  required: true
   mapping:
     title: &name
-      type:       str
-      required:   true
+      type: str
+      required: true
     address-book:
-      type:       seq
-      required:   true
+      type: seq
+      required: true
       sequence:
-        - type:   map
+        - type: map
           mapping:
             name: *name
             email:
-              type:       str
-              required:   yes
+              type: str
+              required: true
 #
 data:
   title:   my friends
@@ -529,7 +529,7 @@ schema:
     - type: map
       mapping:
        "name":
-          unique: yes
+          unique: true
        "age":
           type: int
 #
@@ -554,7 +554,7 @@ schema:
   type: seq
   sequence:
     - type: str
-      unique: yes
+      unique: true
 #
 data:
   - foo
@@ -580,7 +580,7 @@ schema:
          "name":
            type: str
            required: true
-           unique: yes
+           unique: true
          "value": 
            type: any
            required: true
@@ -675,7 +675,7 @@ schema:
     - type: map
       mapping:
        "name":
-          ident: yes
+          ident: true
        "age":
           type: int
 #
