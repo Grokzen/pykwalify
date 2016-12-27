@@ -776,11 +776,12 @@ class Rule(object):
 
         self.assertion = v
 
-        raise RuleError(
-            msg=u"Keyword assert is not yet implemented",
-            error_key=u"assert.NotYetImplemented",
-            path=path,
-        )
+        if any(k in self.assertion for k in (';', 'import', '__import__')):
+            raise RuleError(
+                msg=u"Value: '{assertion}' contain invalid content that is not allowed to be present in assertion keyword".format(assertion=self.assertion),
+                error_key=u"assert.unsupported_content",
+                path=path,
+            )
 
     def init_range_value(self, v, rule, path):
         """

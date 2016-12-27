@@ -33,6 +33,8 @@ Release Notes
  - Refactored "test_core_files" method to now accept test files with multiple of documents. The method now tries to read all documents from each test file and run each document seperatly.
    See yaml files 30f.yaml and 43s.yaml for examples. It now alos reports more detailed about what file and document that fails the test.
  - Implemented new keyword "length". It is very similar to range but works primarily string types.
+ - Implemented new keyword "assert". It works by running the python code "assert <assert-expr>" and check if any exception is raised.
+   This feature is considered dangerouns becuase there is only simple logic to prevent escaping out from validation.
 
 
 1.5.2 (Nov 12, 2016)

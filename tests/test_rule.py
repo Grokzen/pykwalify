@@ -118,11 +118,16 @@ class TestRule(unittest.TestCase):
         assert r.value.error_key == 'enum.not_seq'
 
     def test_assert_value(self):
-        # this test the NYI exception for the assert key
         with pytest.raises(RuleError) as r:
-            Rule(schema={"type": "seq", "sequence": [{"type": "str", "assert": "foobar"}]})
-        assert str(r.value) == "<RuleError: error code 4: Keyword assert is not yet implemented: Path: '/sequence/0'>"
-        assert r.value.error_key == 'assert.NotYetImplemented'
+            Rule(schema={"type": "seq", "sequence": [{"type": "str", "assert": 1}]})
+        assert str(r.value) == "<RuleError: error code 4: Value: '1' for keyword 'assert' is not a string: Path: '/sequence/0'>"
+        assert r.value.error_key == 'assert.not_str'
+
+        # Test that invalid characters is not present
+        with pytest.raises(RuleError) as r:
+            Rule(schema={"type": "seq", "sequence": [{"type": "str", "assert": "__import__"}]})
+        assert str(r.value) == "<RuleError: error code 4: Value: '__import__' contain invalid content that is not allowed to be present in assertion keyword: Path: '/sequence/0'>"
+        assert r.value.error_key == 'assert.unsupported_content'
 
     def test_length(self):
         r = Rule(schema={"type": "int", "length": {"max": 10, "min": 1}})

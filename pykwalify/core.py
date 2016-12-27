@@ -8,6 +8,8 @@ import json
 import logging
 import os
 import re
+import sys
+import traceback
 from datetime import datetime
 
 # pyKwalify imports
@@ -578,6 +580,9 @@ class Core(object):
         # Handle 'func' argument on this scalar
         self._handle_func(value, rule, path, done)
 
+        if rule.assertion is not None:
+            self._validate_assert(rule, value, path)
+
         if value is None:
             return True
 
@@ -757,6 +762,26 @@ class Core(object):
                 value=len(value),
                 prefix=prefix,
                 min_ex=min_ex))
+
+    def _validate_assert(self, rule, value, path):
+        assertion_string = "val = {0}; assert {1}".format(value, rule.assertion)
+        try:
+            exec(assertion_string, {}, {})
+        except AssertionError:
+            self.errors.append(SchemaError.SchemaErrorEntry(
+                msg=u"Value: '{0}' assertion expression failed ({1})".format(value, rule.assertion),
+                path=path,
+                value=value,
+            ))
+            return
+        except Exception as err:
+            error_class = err.__class__.__name__
+            detail = err.args[0]
+            cl, exc, tb = sys.exc_info()
+            line_number = traceback.extract_tb(tb)[-1][1]
+            raise Exception("Unknown error during assertion\n{0}\n{1}\n{2}\n{3}\n{4}\n{5}".format(
+                error_class, detail, cl, exc, tb, line_number,
+            ))
 
     def _validate_range(self, max_, min_, max_ex, min_ex, value, path, prefix):
         """
