@@ -8,7 +8,7 @@ import os
 # pykwalify imports
 import pykwalify
 from pykwalify.core import Core
-from pykwalify.errors import SchemaError, CoreError, RuleError
+from pykwalify.errors import SchemaError, CoreError
 
 # 3rd party imports
 import pytest
@@ -179,7 +179,7 @@ class TestCore(object):
         # TODO: Fix this issue...
         # assert ('pykwalify.core', 'ERROR', 'Errors found but will not raise exception...') in l.actual()
 
-    def testCoreDataMode(self):
+    def test_core_data_mode(self):
         Core(source_data=3.14159, schema_data={"type": "number"}).validate()
         Core(source_data="1e-06", schema_data={"type": "float"}).validate()
         Core(source_data=3.14159, schema_data={"type": "float"}).validate()
@@ -484,6 +484,8 @@ class TestCore(object):
                     except exception_type as e:
                         pass
                     else:
-                        raise AssertionError("Exception {0} not raised as expected... FILES: {1} : {2} : {3}:{4}".format(exception_type, exception_type, failing_test, document_index, document.get('name', 'UNKNOWN')))
+                        raise AssertionError("Exception {0} not raised as expected... FILES: {1} : {2} : {3}:{4}".format(
+                            exception_type, exception_type, failing_test, document_index, document.get('name', 'UNKNOWN')))
 
-                    compare(sorted(c.validation_errors), sorted(errors), prefix="Wrong validation errors when parsing files : {0} : {1} : {2}".format(f, document_index, document.get('name', 'UNKNOWN')))
+                    compare(sorted(c.validation_errors), sorted(errors), prefix="Wrong validation errors when parsing files : {0} : {1} : {2}".format(
+                        f, document_index, document.get('name', 'UNKNOWN')))

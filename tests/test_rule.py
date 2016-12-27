@@ -126,7 +126,7 @@ class TestRule(unittest.TestCase):
         # Test that invalid characters is not present
         with pytest.raises(RuleError) as r:
             Rule(schema={"type": "seq", "sequence": [{"type": "str", "assert": "__import__"}]})
-        assert str(r.value) == "<RuleError: error code 4: Value: '__import__' contain invalid content that is not allowed to be present in assertion keyword: Path: '/sequence/0'>"
+        assert str(r.value) == "<RuleError: error code 4: Value: '__import__' contain invalid content that is not allowed to be present in assertion keyword: Path: '/sequence/0'>"  # NOQA: E501
         assert r.value.error_key == 'assert.unsupported_content'
 
     def test_length(self):
