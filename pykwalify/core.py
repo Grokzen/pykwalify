@@ -15,7 +15,7 @@ import pykwalify
 from pykwalify.compat import unicode, nativestr, basestring
 from pykwalify.errors import CoreError, SchemaError, NotMappingError, NotSequenceError
 from pykwalify.rule import Rule
-from pykwalify.types import is_scalar, tt
+from pykwalify.types import is_scalar, is_string, tt
 
 # 3rd party imports
 from pykwalify.compat import yaml
@@ -633,6 +633,14 @@ class Core(object):
                 "scalar",
             )
 
+        if rule.length is not None:
+            self._validate_length(
+                rule.length,
+                value,
+                path,
+                'scalar',
+            )
+
         # Validate timestamp
         if rule.type == "timestamp":
             self._validate_scalar_timestamp(value, path)
@@ -701,6 +709,54 @@ class Core(object):
                 value=timestamp_value,
                 timestamp=timestamp_value,
             ))
+
+    def _validate_length(self, rule, value, path, prefix):
+        if not is_string(value):
+            raise CoreError("Value: '{0}' must be a 'str' type for length check to work".format(value))
+
+        value_length = len(str(value))
+        max_, min_, max_ex, min_ex = rule.get('max'), rule.get('min'), rule.get('max-ex'), rule.get('min-ex')
+
+        log.debug(
+            u"Validate length : %s : %s : %s : %s : %s : %s",
+            max, min, max_ex, min_ex, value, path,
+        )
+
+        if max_ is not None and max_ < value_length:
+            self.errors.append(SchemaError.SchemaErrorEntry(
+                msg=u"Value: '{value_str}' has length of '{value}', greater than max limit '{max_}'. Path: '{path}'",
+                value_str=value,
+                path=path,
+                value=len(value),
+                prefix=prefix,
+                max_=max_))
+
+        if min_ is not None and min_ > value_length:
+            self.errors.append(SchemaError.SchemaErrorEntry(
+                msg=u"Value: '{value_str}' has length of '{value}', greater than min limit '{min_}'. Path: '{path}'",
+                value_str=value,
+                path=path,
+                value=len(value),
+                prefix=prefix,
+                min_=min_))
+
+        if max_ex is not None and max_ex <= value_length:
+            self.errors.append(SchemaError.SchemaErrorEntry(
+                msg=u"Value: '{value_str}' has length of '{value}', greater than max_ex limit '{max_ex}'. Path: '{path}'",
+                value_str=value,
+                path=path,
+                value=len(value),
+                prefix=prefix,
+                max_ex=max_ex))
+
+        if min_ex is not None and min_ex >= value_length:
+            self.errors.append(SchemaError.SchemaErrorEntry(
+                msg=u"Value: '{value_str}' has length of '{value}', greater than min_ex limit '{min_ex}'. Path: '{path}'",
+                value_str=value,
+                path=path,
+                value=len(value),
+                prefix=prefix,
+                min_ex=min_ex))
 
     def _validate_range(self, max_, min_, max_ex, min_ex, value, path, prefix):
         """

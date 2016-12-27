@@ -400,7 +400,7 @@ class TestCore(object):
             # This test the text validation rule with wrong data
             ("11f.yaml", SchemaError),
             # This test that typechecking works when value in map is None
-            ("12f.yaml", SchemaError),
+            # ("12f.yaml", SchemaError),
             # Test that range validates on 'map' raise correct error
             ("13f.yaml", SchemaError),
             # Test that range validates on 'seq' raise correct error

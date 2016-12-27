@@ -36,6 +36,7 @@ class Rule(object):
         self._func = None
         self._ident = None
         self._include_name = None
+        self._length = None
         self._map_regex_rule = None
         self._mapping = None
         # Possible values: [any, all, *]
@@ -139,6 +140,14 @@ class Rule(object):
     @include_name.setter
     def include_name(self, value):
         self._include_name = value
+
+    @property
+    def length(self):
+        return self._length
+
+    @length.setter
+    def length(self, value):
+        self._length = value
 
     @property
     def map_regex_rule(self):
@@ -303,6 +312,7 @@ class Rule(object):
             ('func', 'func'),
             ('ident', 'ident'),
             ('include_name', 'include'),
+            ('length', 'length'),
             ('map_regex_rule', 'map_regex_rule'),
             ('mapping', 'mapping'),
             ('matching', 'matching'),
@@ -384,6 +394,7 @@ class Rule(object):
             "extensions": self.init_extensions,
             "func": self.init_func,
             "ident": self.init_ident_value,
+            "length": self.init_length_value,
             "map": self.init_mapping_value,
             "mapping": self.init_mapping_value,
             "matching": self.init_matching,
@@ -433,6 +444,139 @@ class Rule(object):
         log.debug(u'Init example value : {0}'.format(path))
 
         self._example = str(v)
+
+    def init_length_value(self, v, rule, path):
+        log.debug(u'Init length value : {0}'.format(path))
+
+        supported_types = ["str", "int", "float", "number", "map", "seq"]
+
+        if not isinstance(v, dict):
+            raise RuleError(
+                msg=u"Length value is not a dict type: '{0}'".format(v),
+                error_key=u"length.not_map",
+                path=path,
+            )
+
+        if self.type not in supported_types:
+            raise RuleError(
+                msg=u"Length value type: '{0}' is not a supported type".format(self.type),
+                error_key=u"length.not_supported_type",
+                path=path,
+            )
+
+        # dict that should contain min, max, min-ex, max-ex keys
+        self.length = v
+
+        # This should validate that only min, max, min-ex, max-ex exists in the dict
+        for k, v in self.length.items():
+            if k not in ["max", "min", "max-ex", "min-ex"]:
+                raise RuleError(
+                    msg=u"Unknown key: '{0}' found in length keyword".format(k),
+                    error_key=u"length.unknown_key",
+                    path=path,
+                )
+
+        if "max" in self.length and "max-ex" in self.length:
+            raise RuleError(
+                msg=u"'max' and 'max-ex' can't be used in the same length rule",
+                error_key=u"length.max_duplicate_keywords",
+                path=path,
+            )
+
+        if "min" in self.length and "min-ex" in self.length:
+            raise RuleError(
+                msg=u"'min' and 'min-ex' can't be used in the same length rule",
+                error_key=u"length.min_duplicate_keywords",
+                path=path,
+            )
+
+        max = self.length.get("max")
+        min = self.length.get("min")
+        max_ex = self.length.get("max-ex")
+        min_ex = self.length.get("min-ex")
+
+        if max is not None and not is_number(max) or is_bool(max):
+            raise RuleError(
+                msg=u"Value: '{0}' for 'max' keyword is not a number".format(v),
+                error_key=u"length.max.not_number",
+                path=path,
+            )
+
+        if min is not None and not is_number(min) or is_bool(min):
+            raise RuleError(
+                msg=u"Value: '{0}' for 'min' keyword is not a number".format(v),
+                error_key=u"length.min.not_number",
+                path=path,
+            )
+
+        if max_ex is not None and not is_number(max_ex) or is_bool(max_ex):
+            raise RuleError(
+                msg=u"Value: '{0}' for 'max-ex' keyword is not a number".format(v),
+                error_key=u"length.max_ex.not_number",
+                path=path,
+            )
+
+        if min_ex is not None and not is_number(min_ex) or is_bool(min_ex):
+            raise RuleError(
+                msg=u"Value: '{0}' for 'min-ex' keyword is not a number".format(v),
+                error_key=u"length.min_ex.not_number",
+                path=path,
+            )
+
+        # only numbers allow negative lengths
+        # string, map and seq require non negative lengtsh
+        if self.type not in ["int", "float", "number"]:
+            if min is not None and min < 0:
+                raise RuleError(
+                    msg=u"Value for 'min' can't be negative in case of type {0}.".format(self.type),
+                    error_key=u"length.min_negative",
+                    path=path,
+                )
+            elif min_ex is not None and min_ex < 0:
+                raise RuleError(
+                    msg=u"Value for 'min-ex' can't be negative in case of type {0}.".format(self.type),
+                    error_key=u"length.min-ex_negative",
+                    path=path,
+                )
+            if max is not None and max < 0:
+                raise RuleError(
+                    msg=u"Value for 'max' can't be negative in case of type {0}.".format(self.type),
+                    error_key=u"length.max_negative",
+                    path=path,
+                )
+            elif max_ex is not None and max_ex < 0:
+                raise RuleError(
+                    msg=u"Value for 'max-ex' can't be negative in case of type {0}.".format(self.type),
+                    error_key=u"length.max-ex_negative",
+                    path=path,
+                )
+
+        if max is not None:
+            if min is not None and max < min:
+                raise RuleError(
+                    msg=u"Value for 'max' can't be less then value for 'min'. {0} < {1}".format(max, min),
+                    error_key=u"length.max_lt_min",
+                    path=path,
+                )
+            elif min_ex is not None and max <= min_ex:
+                raise RuleError(
+                    msg=u"Value for 'max' can't be less then value for 'min-ex'. {0} <= {1}".format(max, min_ex),
+                    error_key=u"length.max_le_min-ex",
+                    path=path,
+                )
+        elif max_ex is not None:
+            if min is not None and max_ex < min:
+                raise RuleError(
+                    msg=u"Value for 'max-ex' can't be less then value for 'min'. {0} < {1}".format(max_ex, min),
+                    error_key=u"length.max-ex_le_min",
+                    path=path,
+                )
+            elif min_ex is not None and max_ex <= min_ex:
+                raise RuleError(
+                    msg=u"Value for 'max-ex' can't be less then value for 'min-ex'. {0} <= {1}".format(max_ex, min_ex),
+                    error_key=u"length.max-ex_le_min-ex",
+                    path=path,
+                )
 
     def init_func(self, v, rule, path):
         """

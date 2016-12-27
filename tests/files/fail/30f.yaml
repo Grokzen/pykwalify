@@ -393,123 +393,131 @@ errors:
   # :range_toosmallex   : 3:3:[/A/1] '10.0': too small (<= min 10.0).
   # :range_toosmall     : 5:3:[/B/0] '9.99999': too small (< min 10).
   # :range_toolargeex   : 6:3:[/B/1] '100.0': too large (>= max 100.0).
-# TODO: Keyword "length" is not yet implemented
-# ##
-# ---
-# name:  length1
-# desc:  length test
-# #
-# schema:
-#   type: map
-#   mapping:
-#    "max-only":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {max: 8}
-#    "min-only":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {min: 4}
-#    "max-and-min":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {max: 8, min: 4}
-# #
-# data:
-#   max-only:
-#     - hogehoge!
-#   min-only:
-#     - foo
-#     -
-#   max-and-min:
-#     - foobarbaz
-#     - foo
-# #
-# errors:
-#   - ''
-#   ## Kwalify errors
-#   # :length_toolong     : 2:3:[/max-only/0] 'hogehoge!': too long (length 9 > max 8).
-#   # :length_tooshort    : 4:3:[/min-only/0] 'foo': too short (length 3 < min 4).
-#   # :length_toolong     : 7:3:[/max-and-min/0] 'foobarbaz': too long (length 9 > max 8).
-#   # :length_tooshort    : 8:3:[/max-and-min/1] 'foo': too short (length 3 < min 4).
-# ##
-# ---
-# name:  length2
-# desc:  length test (with max-ex and min-ex)
-# #
-# schema:
-#   type: map
-#   mapping:
-#    "max-ex-only":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {max-ex: 8}
-#    "min-ex-only":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {min-ex: 4}
-#    "max-ex-and-min-ex":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {max-ex: 8, min-ex: 4}
-# #
-# data:
-#   max-ex-only:
-#     - hogehoge
-#   min-ex-only:
-#     - foo!
-#     -
-#   max-ex-and-min-ex:
-#     - foobarba
-#     - foo!
-# #
-# errors:
-#   - ''
-#   ## Kwalify errors
-#   # :length_toolongex   : 2:3:[/max-ex-only/0] 'hogehoge': too long (length 8 >= max 8).
-#   # :length_tooshortex  : 4:3:[/min-ex-only/0] 'foo!': too short (length 4 <= min 4).
-#   # :length_toolongex   : 7:3:[/max-ex-and-min-ex/0] 'foobarba': too long (length 8 >= max 8).
-#   # :length_tooshortex  : 8:3:[/max-ex-and-min-ex/1] 'foo!': too short (length 4 <= min 4).
-# ##
-# ---
-# name:  length3
-# desc:  length test (with min, max, max-ex and min-ex)
-# #
-# schema:
-#   type: map
-#   mapping:
-#    "A":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {max: 8, min-ex: 4}
-#    "B":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {max-ex: 8, min: 4}
-# #
-# data:
-#   A:
-#     - hogehoge!
-#     - hoge
-#   B:
-#     - hogehoge
-#     - hog
-# #
-# errors:
-#   - ''
-#   ## Kwalify errors
-#   # :length_toolong     : 2:3:[/A/0] 'hogehoge!': too long (length 9 > max 8).
-#   # :length_tooshortex  : 3:3:[/A/1] 'hoge': too short (length 4 <= min 4).
-#   # :length_toolongex   : 5:3:[/B/0] 'hogehoge': too long (length 8 >= max 8).
-#   # :length_tooshort    : 6:3:[/B/1] 'hog': too short (length 3 < min 4).
+##
+---
+name:  length1
+desc:  length test
+#
+schema:
+  type: map
+  mapping:
+   "max-only":
+      type: seq
+      sequence:
+        - type: str
+          length: {max: 8}
+   "min-only":
+      type: seq
+      sequence:
+        - type: str
+          length: {min: 4}
+   "max-and-min":
+      type: seq
+      sequence:
+        - type: str
+          length: {max: 8, min: 4}
+#
+data:
+  max-only:
+    - hogehoge!
+  min-only:
+    - foo
+    -
+  max-and-min:
+    - foobarbaz
+    - foo
+#
+errors:
+  - "Value: 'foo' has length of '3', greater than min limit '4'. Path: '/max-and-min/1'"
+  - "Value: 'foo' has length of '3', greater than min limit '4'. Path: '/min-only/0'"
+  - "Value: 'foobarbaz' has length of '9', greater than max limit '8'. Path: '/max-and-min/0'"
+  - "Value: 'hogehoge!' has length of '9', greater than max limit '8'. Path: '/max-only/0'"
+  ## Kwalify errors
+  # :length_toolong     : 2:3:[/max-only/0] 'hogehoge!': too long (length 9 > max 8).
+  # :length_tooshort    : 4:3:[/min-only/0] 'foo': too short (length 3 < min 4).
+  # :length_toolong     : 7:3:[/max-and-min/0] 'foobarbaz': too long (length 9 > max 8).
+  # :length_tooshort    : 8:3:[/max-and-min/1] 'foo': too short (length 3 < min 4).
+##
+---
+name:  length2
+desc:  length test (with max-ex and min-ex)
+#
+schema:
+  type: map
+  mapping:
+   "max-ex-only":
+      type: seq
+      sequence:
+        - type: str
+          length: {max-ex: 8}
+   "min-ex-only":
+      type: seq
+      sequence:
+        - type: str
+          length: {min-ex: 4}
+   "max-ex-and-min-ex":
+      type: seq
+      sequence:
+        - type: str
+          length: {max-ex: 8, min-ex: 4}
+#
+data:
+  max-ex-only:
+    - hogehoge
+  min-ex-only:
+    - foo!
+    -
+  max-ex-and-min-ex:
+    - foobarba
+    - foo!
+#
+errors:
+  - "Value: 'foo!' has length of '4', greater than min_ex limit '4'. Path: '/max-ex-and-min-ex/1'"
+  - "Value: 'foo!' has length of '4', greater than min_ex limit '4'. Path: '/min-ex-only/0'"
+  - "Value: 'foobarba' has length of '8', greater than max_ex limit '8'. Path: '/max-ex-and-min-ex/0'"
+  - "Value: 'hogehoge' has length of '8', greater than max_ex limit '8'. Path: '/max-ex-only/0'"
+  ## Kwalify errors
+  # :length_toolongex   : 2:3:[/max-ex-only/0] 'hogehoge': too long (length 8 >= max 8).
+  # :length_tooshortex  : 4:3:[/min-ex-only/0] 'foo!': too short (length 4 <= min 4).
+  # :length_toolongex   : 7:3:[/max-ex-and-min-ex/0] 'foobarba': too long (length 8 >= max 8).
+  # :length_tooshortex  : 8:3:[/max-ex-and-min-ex/1] 'foo!': too short (length 4 <= min 4).
+##
+---
+name:  length3
+desc:  length test (with min, max, max-ex and min-ex)
+#
+schema:
+  type: map
+  mapping:
+   "A":
+      type: seq
+      sequence:
+        - type: str
+          length: {max: 8, min-ex: 4}
+   "B":
+      type: seq
+      sequence:
+        - type: str
+          length: {max-ex: 8, min: 4}
+#
+data:
+  A:
+    - hogehoge!
+    - hoge
+  B:
+    - hogehoge
+    - hog
+#
+errors:
+  - "Value: 'hog' has length of '3', greater than min limit '4'. Path: '/B/1'"
+  - "Value: 'hoge' has length of '4', greater than min_ex limit '4'. Path: '/A/1'"
+  - "Value: 'hogehoge!' has length of '9', greater than max limit '8'. Path: '/A/0'"
+  - "Value: 'hogehoge' has length of '8', greater than max_ex limit '8'. Path: '/B/0'"
+  ## Kwalify errors
+  # :length_toolong     : 2:3:[/A/0] 'hogehoge!': too long (length 9 > max 8).
+  # :length_tooshortex  : 3:3:[/A/1] 'hoge': too short (length 4 <= min 4).
+  # :length_toolongex   : 5:3:[/B/0] 'hogehoge': too long (length 8 >= max 8).
+  # :length_tooshort    : 6:3:[/B/1] 'hog': too short (length 3 < min 4).
 ##
 ---
 name:  unique1
@@ -707,43 +715,44 @@ errors:
   ## Kwalify errors
   # :range_toolarge     : 2:1:[/value2] '20': too large (> max 10).
   # :range_toosmall     : 3:1:[/value3] '-20': too small (< min -10).
-# Keyword "length" is not implemented
-# ##
-# ---
-# name:  merge1
-# desc:  merge maps
-# #
-# schema:
-#   type: map
-#   mapping:
-#    "group":
-#       type: map
-#       mapping:
-#        "name": &name
-#           type: str
-#           required: yes
-#        "email": &email
-#           type: str
-#           pattern: /@/
-#           required: no
-#    "user":
-#       type: map
-#       mapping:
-#        "name":
-#           <<: *name          # merge
-#           length: {max: 16}  # add
-#        "email":
-#           <<: *email     # merge
-#           required: yes  # override
-# #
-# data:
-#   group:
-#     name: foo
-#     email: foo@mail.com
-#   user:
-#     name: toooooo-looooong-naaaame
-# #
-# errors:
-#   - ''
-#   # :required_nokey     : 5:3:[/user] key 'email:' is required.
-#   # :length_toolong     : 5:3:[/user/name] 'toooooo-looooong-naaaame': too long (length 24 > max 16).
+##
+---
+name:  merge1
+desc:  merge maps
+#
+schema:
+  type: map
+  mapping:
+   "group":
+      type: map
+      mapping:
+       "name": &name
+          type: str
+          required: yes
+       "email": &email
+          type: str
+          pattern: .+@.+
+          required: no
+   "user":
+      type: map
+      mapping:
+       "name":
+          <<: *name          # merge
+          length: {max: 16}  # add
+       "email":
+          <<: *email     # merge
+          required: yes  # override
+#
+data:
+  group:
+    name: foo
+    email: foo@mail.com
+  user:
+    name: toooooo-looooong-naaaame
+#
+errors:
+  - "Cannot find required key 'email'. Path: '/user'"
+  - "Value: 'toooooo-looooong-naaaame' has length of '24', greater than max limit '16'. Path: '/user/name'"
+  ## Kwalify errors
+  # :required_nokey     : 5:3:[/user] key 'email:' is required.
+  # :length_toolong     : 5:3:[/user/name] 'toooooo-looooong-naaaame': too long (length 24 > max 16).

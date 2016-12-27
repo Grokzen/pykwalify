@@ -312,101 +312,100 @@ data:
   B:
     - 10
     - 99.99999
-# TODO: Keyword "length" is not yet implemented
-# ##
-# --- # Doc 10
-# name:  length1
-# desc:  length test
-# #
-# schema:
-#   type: map
-#   mapping:
-#    "max-only":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {max: 8}
-#    "min-only":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {min: 4}
-#    "max-and-min":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {max: 8, min: 4}
-# data:
-#   max-only:
-#     - hogehoge
-#     - a
-#     -
-#   min-only:
-#     - hoge
-#     - hogehogehogehogehoge
-#   max-and-min:
-#     - hogehoge
-#     - hoge
-# ##
-# --- # Doc 11
-# name: length2
-# desc: length test (with max-ex and min-ex)
-# #
-# schema:
-#   type: map
-#   mapping:
-#    "max-ex-only":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {max-ex: 8}
-#    "min-ex-only":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {min-ex: 4}
-#    "max-ex-and-min-ex":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {max-ex: 8, min-ex: 4}
-# data:
-#   max-ex-only:
-#     - hogehog
-#     - a
-#     -
-#   min-ex-only:
-#     - hoge!
-#   max-ex-and-min-ex:
-#     - hogehog
-#     - hoge!
-# ##
-# --- # Doc 12
-# name:  length3
-# desc:  length test (with min, max, max-ex and min-ex)
-# #
-# schema:
-#   type: map
-#   mapping:
-#    "A":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {max: 8, min-ex: 4}
-#    "B":
-#       type: seq
-#       sequence:
-#         - type: str
-#           length: {max-ex: 8, min: 4}
-# #
-# data:
-#   A:
-#     - hogehoge
-#     - hogeh
-#   B:
-#     - hogehog
-#     - hoge
 ##
+--- # Doc 10
+name:  length1
+desc:  length test
+#
+schema:
+  type: map
+  mapping:
+   "max-only":
+      type: seq
+      sequence:
+        - type: str
+          length: {max: 8}
+   "min-only":
+      type: seq
+      sequence:
+        - type: str
+          length: {min: 4}
+   "max-and-min":
+      type: seq
+      sequence:
+        - type: str
+          length: {max: 8, min: 4}
+data:
+  max-only:
+    - hogehoge
+    - a
+    -
+  min-only:
+    - hoge
+    - hogehogehogehogehoge
+  max-and-min:
+    - hogehoge
+    - hoge
+##
+--- # Doc 11
+name: length2
+desc: length test (with max-ex and min-ex)
+#
+schema:
+  type: map
+  mapping:
+   "max-ex-only":
+      type: seq
+      sequence:
+        - type: str
+          length: {max-ex: 8}
+   "min-ex-only":
+      type: seq
+      sequence:
+        - type: str
+          length: {min-ex: 4}
+   "max-ex-and-min-ex":
+      type: seq
+      sequence:
+        - type: str
+          length: {max-ex: 8, min-ex: 4}
+data:
+  max-ex-only:
+    - hogehog
+    - a
+    -
+  min-ex-only:
+    - hoge!
+  max-ex-and-min-ex:
+    - hogehog
+    - hoge!
+##
+--- # Doc 12
+name:  length3
+desc:  length test (with min, max, max-ex and min-ex)
+#
+schema:
+  type: map
+  mapping:
+   "A":
+      type: seq
+      sequence:
+        - type: str
+          length: {max: 8, min-ex: 4}
+   "B":
+      type: seq
+      sequence:
+        - type: str
+          length: {max-ex: 8, min: 4}
+#
+data:
+  A:
+    - hogehoge
+    - hogeh
+  B:
+    - hogehog
+    - hoge
+
 --- # Doc 13
 name:  unique1
 desc:  unique constraint test with map
@@ -577,40 +576,39 @@ data:
   value1: 0
   value2: 10
   value3: -10
-# Keyword "length" is not implemented
-# ##
-# ---
-# name:  merge1
-# desc:  merge maps
-# #
-# schema:
-#   type: map
-#   mapping:
-#    "group":
-#       type: map
-#       mapping:
-#        "name": &name
-#           type: str
-#           required: yes
-#        "email": &email
-#           type: str
-#           pattern: /@/
-#           required: no
-#    "user":
-#       type: map
-#       mapping:
-#        "name":
-#           <<: *name  # merge
-#           length:
-#             max: 16  # add
-#        "email":
-#           <<: *email            # merge
-#           required: yes         # override
-# #
-# data:
-#   group:
-#     name: foo
-#     email: foo@mail.com
-#   user:
-#     name:  bar
-#     email: bar@mail.com
+##
+---
+name:  merge1
+desc:  merge maps
+#
+schema:
+  type: map
+  mapping:
+   "group":
+      type: map
+      mapping:
+       "name": &name
+          type: str
+          required: yes
+       "email": &email
+          type: str
+          pattern: .+@.+
+          required: no
+   "user":
+      type: map
+      mapping:
+       "name":
+          <<: *name  # merge
+          length:
+            max: 16  # add
+       "email":
+          <<: *email            # merge
+          required: yes         # override
+#
+data:
+  group:
+    name: foo
+    email: foo@mail.com
+  user:
+    name:  bar
+    email: bar@mail.com

@@ -124,6 +124,46 @@ class TestRule(unittest.TestCase):
         assert str(r.value) == "<RuleError: error code 4: Keyword assert is not yet implemented: Path: '/sequence/0'>"
         assert r.value.error_key == 'assert.NotYetImplemented'
 
+    def test_length(self):
+        r = Rule(schema={"type": "int", "length": {"max": 10, "min": 1}})
+        assert r.length is not None, "length var not set proper"
+        assert isinstance(r.length, dict), "range var is not of dict type"
+
+        # this tests that the range key must be a dict
+        with pytest.raises(RuleError) as r:
+            Rule(schema={"type": "int", "length": []})
+        assert str(r.value) == "<RuleError: error code 4: Length value is not a dict type: '[]': Path: '/'>"
+        assert r.value.error_key == 'length.not_map'
+
+        with pytest.raises(RuleError) as r:
+            Rule(schema={"type": "str", "length": {"max": "z"}})
+        assert str(r.value) == "<RuleError: error code 4: Value: 'z' for 'max' keyword is not a number: Path: '/'>"
+        assert r.value.error_key == 'length.max.not_number'
+
+        # this tests that min is bigger then max that should not be possible
+        with pytest.raises(RuleError) as r:
+            Rule(schema={"type": "int", "length": {"max": 10, "min": 11}})
+        assert str(r.value) == "<RuleError: error code 4: Value for 'max' can't be less then value for 'min'. 10 < 11: Path: '/'>"
+        assert r.value.error_key == 'length.max_lt_min'
+
+        # test that min-ex is bigger then max-ex, that should not be possible
+        with pytest.raises(RuleError) as r:
+            Rule(schema={"type": "int", "length": {"max-ex": 10, "min-ex": 11}})
+        assert str(r.value) == "<RuleError: error code 4: Value for 'max-ex' can't be less then value for 'min-ex'. 10 <= 11: Path: '/'>"
+        assert r.value.error_key == 'length.max-ex_le_min-ex'
+
+        # test that a string has non negative boundaries
+        with pytest.raises(RuleError) as r:
+            Rule(schema={"type": "str", "length": {"max": -1, "min": -2}})
+        assert str(r.value) == "<RuleError: error code 4: Value for 'min' can't be negative in case of type str.: Path: '/'>"
+        assert r.value.error_key == 'length.min_negative'
+
+        # test that a seq has non negative boundaries
+        with pytest.raises(RuleError) as r:
+            Rule(schema={"type": "seq", "length": {"max": 3, "min": -2}})
+        assert str(r.value) == "<RuleError: error code 4: Value for 'min' can't be negative in case of type seq.: Path: '/'>"
+        assert r.value.error_key == 'length.min_negative'
+
     def test_range_value(self):
         r = Rule(schema={"type": "int", "range": {"max": 10, "min": 1}})
         assert r.range is not None, "range var not set proper"
