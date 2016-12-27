@@ -2,7 +2,7 @@ data:
   - foo: whatever
   - "sgdf"
   - 2
-  - 
+  - ~
 schema:
   type: seq
   required: True
@@ -14,6 +14,6 @@ schema:
         foo:
           type: str
 errors:
- - "Value '2' is not a dict. Value path: '/2'"
- - "Value 'None' is not a dict. Value path: '/3'"
- - "Value 'sgdf' is not a dict. Value path: '/1'"
+  - "Value '2' is not a dict. Value path: '/2'"
+  - "Value 'sgdf' is not a dict. Value path: '/1'"
+  - "required.novalue : '/3'"

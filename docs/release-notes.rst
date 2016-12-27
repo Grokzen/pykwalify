@@ -20,12 +20,18 @@ Release Notes
  - Add support for keyword "version". It does nothing and have no validation done on it.
  - Added new helper method "keywords" to "Rule" class that can output all active keywords for any Rule object.
    This helps when debugging code to be able to easily dump what all active keywords for any Rule object.
- - Added support for new keyword "allownone" that can be used to specify that types can have None/null values at the same time as their normal defined type.
  - Removed the force of UTF-8 encoding when importing pykwalify package. It caused issues with jypiter notebooks (py 2.7)
    Added documentation in Readme regarding the suggested solution to use "PYTHONIOENCODING=UTF-8" if the default solution do not work.
  - Added new cli flag "--strict-rule-validation" that will validate that all used keywords in all Rule objects only uses the rules that is supported by the defined type.
    If you only use a Core object then set "strict_rule_validation=True" when creating the Core object instance.
    This feature is opt-in in this releaes but will be mandatory in releases >= 1.7.0.
+ - Changed validation for if a value is required and a value in a list for example is None. It now adds a normal validation errors instead of raising a CoreError
+ - Changed the sane default type if that key is not defined to be "str". Before this, type had to be defined every time and the default type did not work as expected.
+   This is a major change and can cause validation to either fail or to stop failing depending on the case.
+ - Fixed a bug with keyword "ident" when the rule value was verified to be a boolean. It now only accepts boolean values as expected.
+ - Ported alot of testcases directly from Kwalify test data (test-validator.yaml -> 30f.yaml & 43s.yaml) so that this lib can have greater confidence that rules is implemented in the same way as Kwalify.
+ - Refactored "test_core_files" method to now accept test files with multiple of documents. The method now tries to read all documents from each test file and run each document seperatly.
+   See yaml files 30f.yaml and 43s.yaml for examples. It now alos reports more detailed about what file and document that fails the test.
 
 
 1.5.2 (Nov 12, 2016)

@@ -1,6 +1,6 @@
 data:
   streams:
-    - name:
+    - name: ~
       sampleRateMultiple: 1
 schema:
   type: map

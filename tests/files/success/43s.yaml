@@ -1,0 +1,616 @@
+--- # Doc 0
+name: sequence1
+desc: sequence test
+#
+schema:
+  type: seq
+  required: true
+  sequence:
+    - type: str
+      required: true
+data:
+  - foo
+  - bar
+  - baz
+##
+--- # Doc 1
+name:  mapping1
+desc:  mapping test
+#
+schema:
+  type: map
+  required: true
+  mapping:
+    name:
+      type: str
+      required: true
+    email:
+      type: str
+      # This pattern value was modified from /@/ to .+@.+ to make it copmatible with python
+      pattern: .+@.+
+      required: yes
+    age:
+      type: int
+    blood:
+      type: str
+      enum:
+        - A
+        - B
+        - O
+        - AB
+    # TODO: Date type is not yet implemented
+    # birth:
+    #   type: date
+#
+data:
+  name: foo
+  email: foo@mail.com
+  age: 20
+  blood: AB
+  # birth:   1985-01-01
+##
+--- # Doc 2
+name:  nested1
+desc:  nest of seq and map
+#
+schema:
+  type:        map
+  required:    true
+  mapping:
+    address-book:
+      type:       seq
+      required:   true
+      sequence:
+        - type:   map
+          mapping:
+            name:
+              type:       str
+              required:   yes
+            email:
+              type:       str
+              pattern:    .+@.+
+              required:   yes
+            age:
+              type:       int
+            blood:
+              type:       str
+              enum:
+                - A
+                - B
+                - O
+                - AB
+            # TODO: Date type is not yet implemented
+            # birth:
+            #   type:       date
+#
+data:
+  address-book:
+    - name: foo
+      email: foo@mail.com
+      age: 20
+      blood: AB
+      # birth: 1985-01-01
+    - name: bar
+      email: foo@mail.com
+##
+--- # Doc 3
+name:  anchor1
+desc:  schema with anchor
+#
+schema:
+  type: seq
+  required: true
+  sequence:
+    - type: map
+      required: true
+      mapping:
+        first-name: &name
+          type: str
+          required: yes
+        family-name: *name
+#
+data:
+  - first-name: foo
+    family-name: Foo
+  - first-name: bar
+    family-name: Bar
+##
+--- # Doc 4
+name:  anchor1
+desc:  schema with anchor
+#
+schema:
+  type: seq
+  required: true
+  sequence:
+    - type: map
+      required: true
+      mapping:
+        first-name: &name
+          type: str
+          required: yes
+        family-name: *name
+#
+data:
+  - first-name:  foo
+    family-name: Foo
+  - first-name:  bar
+    family-name: Bar
+##
+--- # Doc 5
+name:  anchor2
+desc:  schema with anchor 2
+#
+schema:
+  type: map
+  required: true
+  mapping:
+    title: &name
+      type: str
+      required: true
+    address-book:
+      type: seq
+      required: true
+      sequence:
+        - type: map
+          mapping:
+            name: *name
+            email:
+              type: str
+              required: yes
+#
+data:
+  title:   my friends
+  address-book:
+    - name:   foo
+      email:  foo@mail.com
+    - name:   bar
+      email:  bar@mail.com
+#
+# TODO: THIS TEST IS BROKEN BECUASE IT CAUSE INFINITE RECURSION IN PYTHON
+#
+# ##
+# --- # Doc 6
+# name:  anchor3
+# desc:  document with anchor
+# #
+# schema:
+#   type: seq
+#   sequence:
+#     - &employee
+#       type: map
+#       mapping:
+#         name:
+#           type: str
+#         post:
+#           type: str
+#           enum:
+#             - exective
+#             - manager
+#             - clerk
+#         supervisor: *employee
+# #
+# data:
+#   - &foo
+#     name:  foo
+#     post:  exective
+#   - &bar
+#     name:  bar
+#     post:  manager
+#     supervisor: *foo
+#   - &baz
+#     name:  baz
+#     post:  clerk
+#     supervisor: *bar
+#   - &zak
+#     name:  zak
+#     post:  clerk
+#     supervisor: *bar
+##
+--- # Doc 7
+name:  range1
+desc:  range test && bug#?????
+#
+schema:
+  type: map
+  mapping:
+   "max-only":
+      type: seq
+      sequence:
+        - type: number
+          required: yes
+          range: {max: 100}
+   "min-only":
+      type: seq
+      sequence:
+        - type: number
+          required: yes
+          range: {min: 10.0}
+   "max-and-min":
+      type: seq
+      sequence:
+        - type: number
+          required: yes
+          range: {max: 100.0, min: 10.0}
+#
+data:
+  max-only:
+    - 100
+    - 100.0
+  min-only:
+    - 10
+    - 10.0
+  max-and-min:
+    - 100
+    - 10
+    - 100.0
+    - 10.0
+##
+--- # Doc 8
+name:  range2
+desc:  range test (with max-ex and min-ex)
+#
+schema:
+  type:  map
+  mapping:
+   "max-ex-only":
+      type: seq
+      sequence:
+        - type: number
+          required: yes
+          range: {max-ex: 100}
+   "min-ex-only":
+      type: seq
+      sequence:
+        - type: number
+          required: yes
+          range: {min-ex: 10.0}
+   "max-ex-and-min-ex":
+      type: seq
+      sequence:
+        - type: number
+          required: yes
+          range: {max-ex: 100.0, min-ex: 10.0}
+#
+data:
+  max-ex-only:
+    - 99
+    - 99.99999
+  min-ex-only:
+    - 11
+    - 10.00001
+  max-ex-and-min-ex:
+    - 99
+    - 11
+    - 99.99999
+    - 10.00001
+##
+--- # Doc 9
+name:  range3
+desc:  range test (with max, min, max-ex and min-ex)
+#
+schema:
+  type:  map
+  mapping:
+   "A":
+      type: seq
+      sequence:
+        - type: number
+          required: yes
+          range: {max: 100, min-ex: 10.0}
+   "B":
+      type: seq
+      sequence:
+        - type: number
+          required: yes
+          range: {min: 10, max-ex: 100.0}
+#
+data:
+  A:
+    - 100
+    - 10.00001
+  B:
+    - 10
+    - 99.99999
+# TODO: Keyword "length" is not yet implemented
+# ##
+# --- # Doc 10
+# name:  length1
+# desc:  length test
+# #
+# schema:
+#   type: map
+#   mapping:
+#    "max-only":
+#       type: seq
+#       sequence:
+#         - type: str
+#           length: {max: 8}
+#    "min-only":
+#       type: seq
+#       sequence:
+#         - type: str
+#           length: {min: 4}
+#    "max-and-min":
+#       type: seq
+#       sequence:
+#         - type: str
+#           length: {max: 8, min: 4}
+# data:
+#   max-only:
+#     - hogehoge
+#     - a
+#     -
+#   min-only:
+#     - hoge
+#     - hogehogehogehogehoge
+#   max-and-min:
+#     - hogehoge
+#     - hoge
+# ##
+# --- # Doc 11
+# name: length2
+# desc: length test (with max-ex and min-ex)
+# #
+# schema:
+#   type: map
+#   mapping:
+#    "max-ex-only":
+#       type: seq
+#       sequence:
+#         - type: str
+#           length: {max-ex: 8}
+#    "min-ex-only":
+#       type: seq
+#       sequence:
+#         - type: str
+#           length: {min-ex: 4}
+#    "max-ex-and-min-ex":
+#       type: seq
+#       sequence:
+#         - type: str
+#           length: {max-ex: 8, min-ex: 4}
+# data:
+#   max-ex-only:
+#     - hogehog
+#     - a
+#     -
+#   min-ex-only:
+#     - hoge!
+#   max-ex-and-min-ex:
+#     - hogehog
+#     - hoge!
+# ##
+# --- # Doc 12
+# name:  length3
+# desc:  length test (with min, max, max-ex and min-ex)
+# #
+# schema:
+#   type: map
+#   mapping:
+#    "A":
+#       type: seq
+#       sequence:
+#         - type: str
+#           length: {max: 8, min-ex: 4}
+#    "B":
+#       type: seq
+#       sequence:
+#         - type: str
+#           length: {max-ex: 8, min: 4}
+# #
+# data:
+#   A:
+#     - hogehoge
+#     - hogeh
+#   B:
+#     - hogehog
+#     - hoge
+##
+--- # Doc 13
+name:  unique1
+desc:  unique constraint test with map
+#
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+       "name":
+          unique: yes
+       "age":
+          type: int
+#
+data:
+  - name: foo
+    age:  10
+  - name: bar
+    age:  10
+  - name: baz
+    age:  10
+##
+--- # Doc 14
+name:  unique2
+desc:  unique constraint test with seq
+#
+schema:
+  type: seq
+  sequence:
+    - type: str
+      unique: yes
+#
+data:
+  - foo
+  - ~
+  - bar
+  - ~
+  - baz
+##
+--- # Doc 15
+name:  unique3
+desc:  unique constraint and '<<' (merge)
+#
+schema:
+    type: seq
+    sequence:
+      - type: map
+        mapping:
+         "name":
+           type: str
+           required: yes
+           unique: yes
+         "value": 
+           type: any
+           required: yes
+#
+data:
+    # no sense
+    - name: x1
+      value: 10
+    - name: x2
+      value: 20
+##
+--- # Doc 16
+name:  unique4
+desc:  unique constrant and anchor
+#
+schema:
+    type: seq
+    sequence:
+      - type: map
+        mapping:
+         "name":
+            type: str
+         "value":
+            type: any
+#
+data:
+    # no sense
+    - name: x1
+      value: 10
+    - name: x2
+      value: 20
+# TODO: Keyword assert is not yet implemented in pykwalify
+# ##
+# ---
+# name:  assert1
+# desc:  assert test
+# #
+# schema: 
+#   type: seq
+#   sequence:
+#     - type: map
+#       mapping:
+#        "less-than":
+#           type: number
+#           assert: val < 8
+#        "more-than":
+#           type: number
+#           assert: 3 < val
+#        "between":
+#           type: number
+#           assert: 3 < val && val < 8
+#        "except":
+#           type: number
+#           assert: val < 3 || 8 < val
+# #
+# data:
+#   - less-than: 5
+#   - more-than: 5
+#   - between: 5
+#   - except: 0
+##
+---
+name: deftype1
+desc: default type test
+#
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+       "name":
+       "email":
+#
+data:
+  - name: foo
+    email: foo@mail.com
+  - name: bar
+  - email: baz@mail.com
+##
+---
+name:  ident1
+desc:  ident constraint test
+#
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+       "name":
+          ident: yes
+       "age":
+          type: int
+#
+data:
+  - name: foo
+    age:  10
+  - name: bar
+    age:  10
+  - name: baz
+    age:  10
+##
+---
+name:  default1
+desc:  default value of map
+#
+schema:
+  type: map
+  mapping:
+    =:
+      type: number
+      range: 
+        min: -10
+        max: 10
+#
+data:
+  value1: 0
+  value2: 10
+  value3: -10
+# Keyword "length" is not implemented
+# ##
+# ---
+# name:  merge1
+# desc:  merge maps
+# #
+# schema:
+#   type: map
+#   mapping:
+#    "group":
+#       type: map
+#       mapping:
+#        "name": &name
+#           type: str
+#           required: yes
+#        "email": &email
+#           type: str
+#           pattern: /@/
+#           required: no
+#    "user":
+#       type: map
+#       mapping:
+#        "name":
+#           <<: *name  # merge
+#           length:
+#             max: 16  # add
+#        "email":
+#           <<: *email            # merge
+#           required: yes         # override
+# #
+# data:
+#   group:
+#     name: foo
+#     email: foo@mail.com
+#   user:
+#     name:  bar
+#     email: bar@mail.com

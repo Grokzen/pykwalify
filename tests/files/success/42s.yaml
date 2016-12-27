@@ -1,8 +1,0 @@
-data:
-  property: 'foobar'
-schema:
-  type: map
-  mapping:
-    property:
-      type: str
-      allownone: True

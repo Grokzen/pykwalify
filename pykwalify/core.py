@@ -214,8 +214,13 @@ class Core(object):
         log.debug(u" Root validate : Map: %s", rule.mapping)
         log.debug(u" Root validate : Done: %s", done)
 
-        if rule.required and self.source is None:
-            raise CoreError(u"required.novalue : {0}".format(path))
+        if rule.required and value is None and not rule.type == 'none':
+            self.errors.append(SchemaError.SchemaErrorEntry(
+                msg=u"required.novalue : '{path}'",
+                path=path,
+                value=value.encode('unicode_escape') if value else value,
+            ))
+            return
 
         log.debug(u" ? ValidateRule: %s", rule)
         if rule.include_name is not None:
@@ -573,7 +578,7 @@ class Core(object):
         # Handle 'func' argument on this scalar
         self._handle_func(value, rule, path, done)
 
-        if rule.allownone and value is None:
+        if value is None:
             return True
 
         if rule.enum is not None and value not in rule.enum:

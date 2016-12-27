@@ -27,7 +27,6 @@ class Rule(object):
 
     def __init__(self, schema=None, parent=None, strict_rule_validation=False):
         self._allowempty_map = None
-        self._allownone = None
         self._assertion = None
         self._default = None
         self._desc = None
@@ -68,14 +67,6 @@ class Rule(object):
     @allowempty_map.setter
     def allowempty_map(self, value):
         self._allowempty_map = value
-
-    @property
-    def allownone(self):
-        return self._allownone
-
-    @allownone.setter
-    def allownone(self, value):
-        self._allownone = value
 
     @property
     def assertion(self):
@@ -303,7 +294,6 @@ class Rule(object):
         """
         defined_keywords = [
             ('allowempty_map', 'allowempty_map'),
-            ('allownone', 'allownone'),
             ('assertion', 'assertion'),
             ('default', 'default'),
             ('desc', 'desc'),
@@ -366,11 +356,8 @@ class Rule(object):
                     t = "map"
                     self.init_type_value(t, rule, path)
                 else:
-                    raise RuleError(
-                        msg=u"Key 'type' not found in schema rule",
-                        error_key=u"type.missing",
-                        path=path,
-                    )
+                    t = DEFAULT_TYPE
+                    self.type = t
             else:
                 if not isinstance(schema["type"], str):
                     raise RuleError(
@@ -389,7 +376,6 @@ class Rule(object):
 
         func_mapping = {
             "allowempty": self.init_allow_empty_map,
-            "allownone": self.init_allownone,
             "assert": self.init_assert_value,
             "default": self.init_default_value,
             "desc": self.init_desc_value,
@@ -418,6 +404,7 @@ class Rule(object):
             if k in func_mapping:
                 func_mapping[k](v, rule, path)
             elif k.startswith("schema;"):
+                # Schema tag is only allowed on top level of data
                 log.debug(u"Found schema tag...")
                 raise RuleError(
                     msg=u"Schema is only allowed on top level of schema file",
@@ -434,19 +421,6 @@ class Rule(object):
         self.check_conflicts(schema, rule, path)
 
         self.check_type_keywords(schema, rule, path)
-
-    def init_allownone(self, v, rule, path):
-        """
-        """
-        log.debug(u'Initi allownone value : {0}'.format(path))
-
-        if not isinstance(v, bool):
-            raise RuleError(
-                msg=u'Value "{0}" for rule "allownone" must be a yaml boolean (“true”/“false”, “yes”/“no”, “on”/“off” or “y”/“n” or “Y”/“N”)'.format(v),
-                error_key=u"allownone.not_boolean",
-                path=path,
-            )
-        self.allownone = v
 
     def init_version(self, v, rule, path):
         """
@@ -804,7 +778,7 @@ class Rule(object):
         """
         log.debug(u"Init ident value : %s", path)
 
-        if v is None or isinstance(v, bool):
+        if v is None or not isinstance(v, bool):
             raise RuleError(
                 msg=u"Value: '{0}' of 'ident' is not a boolean value".format(v),
                 error_key=u"ident.not_bool",
@@ -996,8 +970,7 @@ class Rule(object):
         """
         All supported keywords:
          - allowempty_map
-         - allownone
-         - assertion
+         - assertion - Not yet implemented
          - default
          - desc
          - enum
@@ -1011,14 +984,12 @@ class Rule(object):
          - matching
          - matching_rule
          - name
-         - parent
          - pattern
          - pattern_regexp
          - range
          - regex_mappings
          - required
          - schema
-         - schema_str
          - sequence
          - type
          - type_class
@@ -1028,25 +999,25 @@ class Rule(object):
         if not self.strict_rule_validation:
             return
 
-        global_keywords = ['type', 'example', 'name', 'version']
+        global_keywords = ['type', 'desc', 'example', 'extensions', 'name', 'version', 'func', 'include']
         all_allowed_keywords = {
-            'str': global_keywords + ['pattern', 'range', 'enum', 'required', 'unique', 'req', 'allownone'],
-            'int': global_keywords + ['range', 'enum', 'required', 'unique'],
-            'float': global_keywords + ['range', 'required'],
-            'number': global_keywords + [],
-            'bool': global_keywords + ['enum'],
-            'map': global_keywords + ['mapping', 'map', 'allowempty', 'required', 'matching-rule', 'range'],
+            'str': global_keywords + ['default', 'pattern', 'range', 'enum', 'required', 'unique', 'req'],
+            'int': global_keywords + ['default', 'range', 'enum', 'required', 'unique'],
+            'float': global_keywords + ['default', 'enum', 'range', 'required'],
+            'number': global_keywords + ['default', 'enum'],
+            'bool': global_keywords + ['default', 'enum'],
+            'map': global_keywords + ['allowempty_map', 'mapping', 'map', 'allowempty', 'required', 'matching-rule', 'range'],
             'seq': global_keywords + ['sequence', 'seq', 'required', 'range', 'matching'],
             'sequence': global_keywords + ['sequence', 'seq', 'required'],
             'mapping': global_keywords + ['mapping', 'seq', 'required'],
-            'timestamp': global_keywords + [],
-            'date': global_keywords + [],
-            'symbol': global_keywords + [],
-            'scalar': global_keywords + [],
-            'text': global_keywords + ['pattern'],
-            'any': global_keywords + [],
-            'enum': global_keywords + [],
-            'none': global_keywords + ['required'],
+            'timestamp': global_keywords + ['default', 'enum'],
+            'date': global_keywords + ['default', 'enum'],
+            'symbol': global_keywords + ['default', 'enum'],
+            'scalar': global_keywords + ['default', 'enum'],
+            'text': global_keywords + ['default', 'enum', 'pattern'],
+            'any': global_keywords + ['default', 'enum'],
+            'enum': global_keywords + ['default', 'enum'],
+            'none': global_keywords + ['default', 'enum', 'required'],
         }
         rule_type = schema.get('type')
         if not rule_type:

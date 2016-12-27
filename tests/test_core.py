@@ -8,7 +8,7 @@ import os
 # pykwalify imports
 import pykwalify
 from pykwalify.core import Core
-from pykwalify.errors import SchemaError, CoreError
+from pykwalify.errors import SchemaError, CoreError, RuleError
 
 # 3rd party imports
 import pytest
@@ -373,10 +373,7 @@ class TestCore(object):
             "39s.yaml",
             # Test that allowempty works without specifying mapping keyword when used inside a sequence block
             "40s.yaml",
-            # Test that allownone keyword works with null value
-            "41s.yaml",
-            # Test that allownone keywords works with a string value
-            "42s.yaml",
+            "43s.yaml",
         ]
 
         _fail_tests = [
@@ -438,6 +435,7 @@ class TestCore(object):
             ("28f.yaml", SchemaError),
             # Test that default mode fails out in a similar way to regular mode and that a key that is not defined when default is set uses the defualt way
             ("29f.yaml", SchemaError),
+            ("30f.yaml", SchemaError),
         ]
 
         # Add override magic to make it easier to test a specific file
@@ -451,37 +449,41 @@ class TestCore(object):
         for passing_test_file in pass_tests:
             f = self.f(os.path.join("success", passing_test_file))
             with open(f, "r") as stream:
-                yaml_data = yaml.load(stream)
-                data = yaml_data["data"]
-                schema = yaml_data["schema"]
+                yaml_data = yaml.load_all(stream)
 
-            try:
-                print("Running test files: {0}".format(f))
-                c = Core(source_data=data, schema_data=schema, strict_rule_validation=True)
-                c.validate()
-                compare(c.validation_errors, [], prefix="No validation errors should exist...")
-            except Exception as e:
-                print("ERROR RUNNING FILES: {0}".format(f))
-                raise e
+                for document_index, document in enumerate(yaml_data):
+                    data = document["data"]
+                    schema = document["schema"]
+
+                    try:
+                        print("Running test files: {0}".format(f))
+                        c = Core(source_data=data, schema_data=schema, strict_rule_validation=True)
+                        c.validate()
+                        compare(c.validation_errors, [], prefix="No validation errors should exist...")
+                    except Exception as e:
+                        print("ERROR RUNNING FILES: {0} : {1}:{2}".format(f, document_index, document.get('name', 'UNKNOWN')))
+                        raise e
 
             # This serve as an extra schema validation that tests more complex structures then testrule.py do
-            compare(c.root_rule.schema_str, schema, prefix="Parsed rules is not correct, something have changed... files : {0}".format(f))
+            compare(c.root_rule.schema_str, schema, prefix="Parsed rules is not correct, something have changed... files : {0} : {1}".format(f, document_index))
 
         for failing_test, exception_type in _fail_tests:
             f = self.f(os.path.join("fail", failing_test))
             with open(f, "r") as stream:
-                yaml_data = yaml.load(stream)
-                data = yaml_data["data"]
-                schema = yaml_data["schema"]
-                errors = yaml_data["errors"]
+                yaml_data = yaml.load_all(stream)
 
-            try:
-                print("Running test files: {0}".format(f))
-                c = Core(source_data=data, schema_data=schema, strict_rule_validation=True)
-                c.validate()
-            except exception_type:
-                pass  # OK
-            else:
-                raise AssertionError("Exception {0} not raised as expected... FILES: {1} : {2}".format(exception_type, exception_type))
+                for document_index, document in enumerate(yaml_data):
+                    data = document["data"]
+                    schema = document["schema"]
+                    errors = document["errors"]
 
-            compare(sorted(c.validation_errors), sorted(errors), prefix="Wrong validation errors when parsing files : {0}".format(f))
+                    try:
+                        print("Running test files: {0}".format(f))
+                        c = Core(source_data=data, schema_data=schema, strict_rule_validation=True)
+                        c.validate()
+                    except exception_type as e:
+                        pass
+                    else:
+                        raise AssertionError("Exception {0} not raised as expected... FILES: {1} : {2} : {3}:{4}".format(exception_type, exception_type, failing_test, document_index, document.get('name', 'UNKNOWN')))
+
+                    compare(sorted(c.validation_errors), sorted(errors), prefix="Wrong validation errors when parsing files : {0} : {1} : {2}".format(f, document_index, document.get('name', 'UNKNOWN')))
