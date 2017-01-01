@@ -374,6 +374,8 @@ class TestCore(object):
             # Test that allowempty works without specifying mapping keyword when used inside a sequence block
             "40s.yaml",
             "43s.yaml",
+            # All test cases for merging
+            "test_merge.yaml",
         ]
 
         _fail_tests = [

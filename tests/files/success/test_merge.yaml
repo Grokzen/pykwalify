@@ -1,0 +1,36 @@
+##
+---
+name:  merge1
+desc:  merge maps
+#
+schema:
+  type: map
+  mapping:
+   "group":
+      type: map
+      mapping:
+       "name": &name
+          type: str
+          required: True
+       "email": &email
+          type: str
+          pattern: .+@.+
+          required: False
+   "user":
+      type: map
+      mapping:
+       "name":
+          <<: *name  # merge
+          length:
+            max: 16  # add
+       "email":
+          <<: *email      # merge
+          required: True  # override
+#
+data:
+  group:
+    name: foo
+    email: foo@mail.com
+  user:
+    name:  bar
+    email: bar@mail.com
