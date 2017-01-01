@@ -1,0 +1,106 @@
+##
+---
+name:  range1
+desc:  range test && bug#?????
+#
+schema:
+  type: map
+  mapping:
+   "max-only":
+      type: seq
+      sequence:
+        - type: number
+          required: True
+          range: {max: 100}
+   "min-only":
+      type: seq
+      sequence:
+        - type: number
+          required: True
+          range: {min: 10.0}
+   "max-and-min":
+      type: seq
+      sequence:
+        - type: number
+          required: True
+          range: {max: 100.0, min: 10.0}
+#
+data:
+  max-only:
+    - 100
+    - 100.0
+  min-only:
+    - 10
+    - 10.0
+  max-and-min:
+    - 100
+    - 10
+    - 100.0
+    - 10.0
+##
+---
+name:  range2
+desc:  range test (with max-ex and min-ex)
+#
+schema:
+  type:  map
+  mapping:
+   "max-ex-only":
+      type: seq
+      sequence:
+        - type: number
+          required: True
+          range: {max-ex: 100}
+   "min-ex-only":
+      type: seq
+      sequence:
+        - type: number
+          required: True
+          range: {min-ex: 10.0}
+   "max-ex-and-min-ex":
+      type: seq
+      sequence:
+        - type: number
+          required: True
+          range: {max-ex: 100.0, min-ex: 10.0}
+#
+data:
+  max-ex-only:
+    - 99
+    - 99.99999
+  min-ex-only:
+    - 11
+    - 10.00001
+  max-ex-and-min-ex:
+    - 99
+    - 11
+    - 99.99999
+    - 10.00001
+##
+---
+name:  range3
+desc:  range test (with max, min, max-ex and min-ex)
+#
+schema:
+  type:  map
+  mapping:
+   "A":
+      type: seq
+      sequence:
+        - type: number
+          required: True
+          range: {max: 100, min-ex: 10.0}
+   "B":
+      type: seq
+      sequence:
+        - type: number
+          required: True
+          range: {min: 10, max-ex: 100.0}
+#
+data:
+  A:
+    - 100
+    - 10.00001
+  B:
+    - 10
+    - 99.99999

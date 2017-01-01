@@ -380,6 +380,8 @@ class TestCore(object):
             "test_unique.yaml",
             # All test cases for keyword length
             "test_length.yaml",
+            # All test cases for keyword range
+            "test_range.yaml",
         ]
 
         _fail_tests = [
