@@ -80,7 +80,8 @@ and it might help to force UTF-8 encoding on all string objects. If this do not 
 | Changelog              | https://github.com/Grokzen/pykwalify/blob/unstable/docs/release-notes.rst |
 | Upgrade instructions   | https://github.com/Grokzen/pykwalify/blob/unstable/docs/upgrade-instructions.rst |
 | Issues                 | https://github.com/Grokzen/pykwalify/issues |
-| Travis                 | [![Build Status](https://travis-ci.org/Grokzen/pykwalify.svg?branch=unstable)](https://travis-ci.org/Grokzen/pykwalify) https://travis-ci.org/Grokzen/pykwalify |
+| Travis (master)        | [![Build Status](https://travis-ci.org/Grokzen/pykwalify.svg?branch=master)](https://travis-ci.org/Grokzen/pykwalify) https://travis-ci.org/Grokzen/pykwalify |
+| Travis (unstable)      | [![Build Status](https://travis-ci.org/Grokzen/pykwalify.svg?branch=unstable)](https://travis-ci.org/Grokzen/pykwalify) https://travis-ci.org/Grokzen/pykwalify |
 | Test coverage          | [![Coverage Status](https://coveralls.io/repos/Grokzen/pykwalify/badge.png?branch=master)](https://coveralls.io/r/Grokzen/pykwalify) https://coveralls.io/github/Grokzen/pykwalify |
 | pypi                   | https://pypi.python.org/pypi/pykwalify/ |
 | Open Hub               | https://www.openhub.net/p/pykwalify |
