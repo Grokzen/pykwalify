@@ -378,6 +378,8 @@ class TestCore(object):
             "test_merge.yaml",
             # All test cases for keyword unique
             "test_unique.yaml",
+            # All test cases for keyword length
+            "test_length.yaml",
         ]
 
         _fail_tests = [
