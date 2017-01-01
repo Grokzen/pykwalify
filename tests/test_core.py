@@ -390,6 +390,8 @@ class TestCore(object):
             "test_mapping.yaml",
             # All test cases for keyword assert
             "test_assert.yaml",
+            # All test cases for keyword ident
+            "test_ident.yaml",
         ]
 
         _fail_tests = [

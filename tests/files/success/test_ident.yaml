@@ -1,0 +1,22 @@
+##
+---
+name:  ident1
+desc:  ident constraint test
+#
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+       "name":
+          ident: true
+       "age":
+          type: int
+#
+data:
+  - name: foo
+    age:  10
+  - name: bar
+    age:  10
+  - name: baz
+    age:  10
