@@ -382,6 +382,8 @@ class TestCore(object):
             "test_length.yaml",
             # All test cases for keyword range
             "test_range.yaml",
+            # All test cases for yaml anchors
+            "test_anchor.yaml",
         ]
 
         _fail_tests = [

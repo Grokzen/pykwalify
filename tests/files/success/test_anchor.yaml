@@ -1,0 +1,92 @@
+##
+---
+name:  anchor1
+desc:  schema with anchor
+#
+schema:
+  type: seq
+  required: true
+  sequence:
+    - type: map
+      required: true
+      mapping:
+        first-name: &name
+          type: str
+          required: True
+        family-name: *name
+#
+data:
+  - first-name:  foo
+    family-name: Foo
+  - first-name:  bar
+    family-name: Bar
+##
+---
+name:  anchor2
+desc:  schema with anchor 2
+#
+schema:
+  type: map
+  required: true
+  mapping:
+    title: &name
+      type: str
+      required: true
+    address-book:
+      type: seq
+      required: true
+      sequence:
+        - type: map
+          mapping:
+            name: *name
+            email:
+              type: str
+              required: True
+#
+data:
+  title:   my friends
+  address-book:
+    - name:   foo
+      email:  foo@mail.com
+    - name:   bar
+      email:  bar@mail.com
+#
+# TODO: THIS TEST IS BROKEN BECUASE IT CAUSE INFINITE RECURSION IN PYTHON
+#
+# ##
+# ---
+# name:  anchor3
+# desc:  document with anchor
+# #
+# schema:
+#   type: seq
+#   sequence:
+#     - &employee
+#       type: map
+#       mapping:
+#         name:
+#           type: str
+#         post:
+#           type: str
+#           enum:
+#             - exective
+#             - manager
+#             - clerk
+#         supervisor: *employee
+# #
+# data:
+#   - &foo
+#     name:  foo
+#     post:  exective
+#   - &bar
+#     name:  bar
+#     post:  manager
+#     supervisor: *foo
+#   - &baz
+#     name:  baz
+#     post:  clerk
+#     supervisor: *bar
+#   - &zak
+#     name:  zak
+#     post:  clerk
+#     supervisor: *bar
