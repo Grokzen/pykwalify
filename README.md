@@ -84,6 +84,7 @@ and it might help to force UTF-8 encoding on all string objects. If this do not 
 | pypi                  | https://pypi.python.org/pypi/pykwalify/ |
 | Open Hub              | https://www.openhub.net/p/pykwalify |
 | License               | `MIT` https://github.com/Grokzen/pykwalify/blob/unstable/docs/license.rst |
+| Copyright             | `Copyright (c) 2013-2017 Johan Andersson |
 | git repo              | `git clone git@github.com:Grokzen/pykwalify.git` |
 | install stable        | `pip install pykwalify` |
 | install dev           | `$ git clone git@github.com:Grokzen/pykwalify.git pykwalify`<br>`$ cd ./pykwalify`<br>`$ virtualenv .venv`<br>`$ source .venv/bin/activate`<br>`$ pip install -r dev-requirements.txt`<br>`$ pip install -e .` |
