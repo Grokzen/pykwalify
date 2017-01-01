@@ -93,28 +93,6 @@ data:
     - name: bar
       email: foo@mail.com
 ##
---- # Doc 3
-name:  anchor1
-desc:  schema with anchor
-#
-schema:
-  type: seq
-  required: true
-  sequence:
-    - type: map
-      required: true
-      mapping:
-        first-name: &name
-          type: str
-          required: True
-        family-name: *name
-#
-data:
-  - first-name: foo
-    family-name: Foo
-  - first-name: bar
-    family-name: Bar
-##
 ---
 name:  assert1
 desc:  assert test
