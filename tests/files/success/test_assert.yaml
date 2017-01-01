@@ -1,0 +1,28 @@
+##
+---
+name:  assert1
+desc:  assert test
+#
+schema: 
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+       "less-than":
+          type: number
+          assert: val < 8
+       "more-than":
+          type: number
+          assert: 3 < val
+       "between":
+          type: number
+          assert: 3 < val and val < 8
+       "except":
+          type: number
+          assert: val < 3 or 8 < val
+#
+data:
+  - less-than: 5
+  - more-than: 5
+  - between: 5
+  - except: 0
