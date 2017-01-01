@@ -1,0 +1,15 @@
+##
+---
+name: sequence1
+desc: sequence test
+#
+schema:
+  type: seq
+  required: true
+  sequence:
+    - type: str
+      required: true
+data:
+  - foo
+  - bar
+  - baz
