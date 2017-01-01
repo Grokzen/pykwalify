@@ -1,0 +1,84 @@
+##
+---
+name:  unique1
+desc:  unique constraint test with map
+#
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+       "name":
+          unique: true
+       "age":
+          type: int
+#
+data:
+  - name: foo
+    age:  10
+  - name: bar
+    age:  10
+  - name: baz
+    age:  10
+##
+---
+name:  unique2
+desc:  unique constraint test with seq
+#
+schema:
+  type: seq
+  sequence:
+    - type: str
+      unique: true
+#
+data:
+  - foo
+  - ~
+  - bar
+  - ~
+  - baz
+##
+---
+name:  unique3
+desc:  unique constraint and '<<' (merge)
+#
+schema:
+    type: seq
+    sequence:
+      - type: map
+        mapping:
+         "name":
+           type: str
+           required: True
+           unique: true
+         "value": 
+           type: any
+           required: True
+#
+data:
+    # no sense
+    - name: x1
+      value: 10
+    - name: x2
+      value: 20
+##
+---
+name:  unique4
+desc:  unique constrant and anchor
+#
+schema:
+    type: seq
+    sequence:
+      - type: map
+        mapping:
+         "name":
+            type: str
+         "value":
+            type: any
+#
+data:
+    # no sense
+    - name: x1
+      value: 10
+    - name: x2
+      value: 20
