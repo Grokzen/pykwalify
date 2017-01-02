@@ -344,60 +344,63 @@ class TestCore(object):
             # Test that allowempty works without specifying mapping keyword when used inside a sequence block
             "40s.yaml",
             "43s.yaml",
-            # All test cases for merging
-            "test_merge.yaml",
-            # All test cases for keyword unique
-            "test_unique.yaml",
-            # All test cases for keyword length
-            "test_length.yaml",
-            # All test cases for keyword range
-            "test_range.yaml",
-            # All test cases for yaml anchors
-            "test_anchor.yaml",
-            # All test cases for keyword sequence
-            "test_sequence.yaml",
-            # All test cases for keyword mapping
-            "test_mapping.yaml",
-            # All test cases for keyword assert
+
+            # All tests for keyword assert
             "test_assert.yaml",
-            # All test cases for keyword ident
-            "test_ident.yaml",
-            # All test cases for TYPE: bool
-            "test_type_bool.yaml",
-            # All test cases for TYPE: str
-            "test_type_str.yaml",
-            # All tests cases for TYPE: int
-            "test_type_int.yaml",
-            # All tests cases for TYPE: float
-            "test_type_float.yaml",
-            # All test cases for Multiple sequence checks
-            "test_sequence_multi.yaml",
-            # All tests for keyword: version
-            "test_version.yaml",
             # All tests for keyword example
             "test_example.yaml",
-            # All tests for TYPE: none
-            "test_type_none.yaml",
-            # All tests for TYPE: enum
-            "test_type_enum.yaml",
+            # All tests for keyword ident
+            "test_ident.yaml",
+            # All tests for keyword length
+            "test_length.yaml",
+            # All tests for keyword mapping
+            "test_mapping.yaml",
+            # All tests for keyword range
+            "test_range.yaml",
+            # All tests for keyword sequence
+            "test_sequence.yaml",
+            # All tests for keyword unique
+            "test_unique.yaml",
+            # All tests for keyword version
+            "test_version.yaml",
+
+            # All test cases for Multiple sequence checks
+            "test_sequence_multi.yaml",
+            # All test cases for merging
+            "test_merge.yaml",
+            # All test cases for yaml anchors
+            "test_anchor.yaml",
+
             # All tests for TYPE: any
             "test_type_any.yaml",
-            # All tests for TYPE: text
-            "test_type_text.yaml",
-            # All tests for TYPE: scalar
-            "test_type_scalar.yaml",
-            # All tests for TYPE: symbol
-            "test_type_symbol.yaml",
+            # All tests for TYPE: bool
+            "test_type_bool.yaml",
             # All tests for TYPE: date
             "test_type_date.yaml",
-            # All tests for TYPE: timestamp
-            "test_type_timestamp.yaml",
-            # All tests for TYPE: seq
-            "test_type_seq.yaml",
+            # All tests for TYPE: enum
+            "test_type_enum.yaml",
+            # All tests for TYPE: float
+            "test_type_float.yaml",
+            # All tests for TYPE: int
+            "test_type_int.yaml",
             # All tests for TYPE: map
             "test_type_map.yaml",
+            # All tests for TYPE: none
+            "test_type_none.yaml",
             # All tests for TYPE: number
             "test_type_number.yaml",
+            # All tests for TYPE: scalar
+            "test_type_scalar.yaml",
+            # All tests for TYPE: seq
+            "test_type_seq.yaml",
+            # All tests for TYPE: str
+            "test_type_str.yaml",
+            # All tests for TYPE: symbol
+            "test_type_symbol.yaml",
+            # All tests for TYPE: text
+            "test_type_text.yaml",
+            # All tests for TYPE: timestamp
+            "test_type_timestamp.yaml",
         ]
 
         _fail_tests = [
