@@ -1,3 +1,7 @@
+##
+---
+name: bool1
+desc: Test bool value inside list
 data:
   - True
   - False

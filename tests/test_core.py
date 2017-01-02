@@ -296,8 +296,6 @@ class TestCore(object):
             "1s.yaml",
             # Test sequence where the only valid items is integers
             "2s.yaml",
-            # Test sequence with only booleans
-            "3s.yaml",
             # Test mapping with different types of data and some extra conditions
             "4s.yaml",
             # Test sequence with mapping with valid mapping
@@ -392,6 +390,8 @@ class TestCore(object):
             "test_assert.yaml",
             # All test cases for keyword ident
             "test_ident.yaml",
+            # All test cases for TYPE: bool
+            "test_type_bool.yaml",
         ]
 
         _fail_tests = [
