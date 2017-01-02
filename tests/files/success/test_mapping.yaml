@@ -1,6 +1,16 @@
 ---
 name: mapping1
-desc: mapping test
+desc: Most basic mapping validation
+data:
+  foo: bar
+schema:
+  type: map
+  mapping:
+    foo:
+      type: str
+---
+name: mapping2
+desc: Complex mapping that test several subtypes for each key
 #
 schema:
   type: map
@@ -33,3 +43,15 @@ data:
   age: 20
   blood: AB
   # birth:   1985-01-01
+---
+name: mapping3
+desc: Test that mapping works inside a sequence
+data:
+  - foo: True
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+        foo:
+          type: bool
