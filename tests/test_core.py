@@ -294,8 +294,6 @@ class TestCore(object):
         pass_tests = [
             # Test most of the implemented functions
             "7s.yaml",
-            # This will test the unique constraint
-            "8s.yaml",
             #
             "9s.yaml",
             #
