@@ -1,0 +1,39 @@
+---
+name: str1
+desc: Test simples str value
+data: "foobar"
+schema:
+  type: str
+---
+name: str2
+desc: Test str value inside list
+data:
+  - 'foo'
+  - bar
+schema:
+  type: seq
+  sequence:
+    - type: str
+---
+name: str3
+desc: Test str value in mapping
+data:
+    foo: 'foobar'
+schema:
+  type: map
+  mapping:
+    foo:
+      type: str
+---
+name: str4
+desc: Test str inside nested map & seq
+data:
+  foo:
+    - 'foo'
+schema:
+  type: map
+  mapping:
+    foo:
+      type: seq
+      sequence:
+        - type: str
