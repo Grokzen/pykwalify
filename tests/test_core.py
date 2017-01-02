@@ -339,16 +339,6 @@ class TestCore(object):
             "25s.yaml",
             # Test that the different types of timestamps can be validated
             "26s.yaml",
-            # Test that multiple sequence values is supported
-            "27s.yaml",
-            # Test that multiple sequence values with matching 'all' is supported
-            "28s.yaml",
-            # Test that multiple sequence values with matching '*' is supported
-            "29s.yaml",
-            # Test that multiple sequence values with nested data structures work
-            "30s.yaml",
-            # Test that multiple sequence vlaues with nested lists works
-            "31s.yaml",
             # Test Complex tree with many different structures
             "32s.yaml",
             # Test float range
@@ -394,6 +384,8 @@ class TestCore(object):
             "test_type_int.yaml",
             # All tests cases for TYPE: float
             "test_type_float.yaml",
+            # All test cases for Multiple sequence checks
+            "test_sequence_multi.yaml",
         ]
 
         _fail_tests = [

@@ -1,0 +1,64 @@
+---
+name: seq-multi-1
+desc: Test that multiple sequence values is supported
+data:
+  - "foo"
+  - 123
+schema:
+  type: seq
+  matching: "any"
+  seq:
+    - type: str
+    - type: int
+---
+name: seq-multi-2
+desc: Test that multiple sequence values with matching 'all' is supported
+data:
+  - "foo"
+  - "123"
+schema:
+  type: seq
+  matching: "all"
+  seq:
+    - type: str
+    - type: str
+---
+name: seq-multi-3
+desc: Test that multiple sequence values with matching '*' is supported
+data:
+  - "foo"
+schema:
+  type: seq
+  matching: "*"
+  seq:
+    - type: bool
+    - type: int
+---
+name: seq-multi-4
+desc: Test that multiple sequence values with nested data structures work
+data:
+  - foo: 123
+  - "foobar"
+schema:
+  type: seq
+  matching: "any"
+  seq:
+    - type: str
+    - type: map
+      mapping:
+        foo:
+          type: int
+---
+name: sq-multi-5
+desc: Test that multiple sequence vlaues with nested lists works
+data:
+  - - 123
+  - "foobar"
+schema:
+  type: seq
+  matching: "any"
+  seq:
+    - type: str
+    - type: seq
+      sequence:
+        - type: int
