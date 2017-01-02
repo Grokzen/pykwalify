@@ -386,6 +386,8 @@ class TestCore(object):
             "test_type_float.yaml",
             # All test cases for Multiple sequence checks
             "test_sequence_multi.yaml",
+            # All tests for keyword: version
+            "test_version.yaml",
         ]
 
         _fail_tests = [

@@ -1,0 +1,5 @@
+---
+data: foo
+schema:
+  version: 1.0.0
+  type: str
