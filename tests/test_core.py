@@ -376,6 +376,28 @@ class TestCore(object):
             "test_version.yaml",
             # All tests for keyword example
             "test_example.yaml",
+            # All tests for TYPE: none
+            "test_type_none.yaml",
+            # All tests for TYPE: enum
+            "test_type_enum.yaml",
+            # All tests for TYPE: any
+            "test_type_any.yaml",
+            # All tests for TYPE: text
+            "test_type_text.yaml",
+            # All tests for TYPE: scalar
+            "test_type_scalar.yaml",
+            # All tests for TYPE: symbol
+            "test_type_symbol.yaml",
+            # All tests for TYPE: date
+            "test_type_date.yaml",
+            # All tests for TYPE: timestamp
+            "test_type_timestamp.yaml",
+            # All tests for TYPE: seq
+            "test_type_seq.yaml",
+            # All tests for TYPE: map
+            "test_type_map.yaml",
+            # All tests for TYPE: number
+            "test_type_number.yaml",
         ]
 
         _fail_tests = [
