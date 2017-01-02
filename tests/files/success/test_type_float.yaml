@@ -1,0 +1,43 @@
+---
+name: float1
+desc: Test simples float value
+data: 3.14159
+schema:
+  type: float
+---
+name: float2
+desc: Test float value inside list
+data:
+  - 1
+  - 3.14159
+schema:
+  type: seq
+  sequence:
+    - type: float
+---
+name: float3
+desc: Test float value in mapping
+data:
+    foo: 3.14159
+    bar: 1
+schema:
+  type: map
+  mapping:
+    foo:
+      type: float
+    bar:
+      type: float
+---
+name: float4
+desc: Test float inside nested map & seq
+data:
+  foo:
+    - 1
+    - 3.14159
+schema:
+  type: map
+  mapping:
+    foo:
+      type: seq
+      sequence:
+        - type: float

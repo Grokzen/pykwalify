@@ -392,6 +392,8 @@ class TestCore(object):
             "test_type_str.yaml",
             # All tests cases for TYPE: int
             "test_type_int.yaml",
+            # All tests cases for TYPE: float
+            "test_type_float.yaml",
         ]
 
         _fail_tests = [
