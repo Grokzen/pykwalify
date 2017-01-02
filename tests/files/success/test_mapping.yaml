@@ -55,3 +55,37 @@ schema:
       mapping:
         foo:
           type: bool
+---
+name: mapping4
+desc: Test that map inside seq inside map works
+data:
+  company: Kuwata lab.
+  email: webmaster@kuwata-lab.com
+  employees:
+    - code: 101
+      name: foo
+      email: foo@kuwata-lab.com
+    - code: 102
+      name: bar
+      email: bar@kuwata-lab.com
+schema:
+  type: map
+  mapping:
+    company:
+      type: str
+      required: True
+    email:
+      type: str
+    employees:
+      type: seq
+      sequence:
+        - type: map
+          mapping:
+            code:
+              type: int
+              required: True
+            name:
+              type: str
+              required: True
+            email:
+              type: str

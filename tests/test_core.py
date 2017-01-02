@@ -292,8 +292,6 @@ class TestCore(object):
     def test_core_files(self):
         # These tests should pass with no exception raised
         pass_tests = [
-            # Test mapping with sequence with mapping and valid data
-            "6s.yaml",
             # Test most of the implemented functions
             "7s.yaml",
             # This will test the unique constraint
