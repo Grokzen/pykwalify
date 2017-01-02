@@ -1,0 +1,38 @@
+---
+name: int1
+desc: Test simples int value
+data: 1
+schema:
+  type: int
+---
+name: int2
+desc: Test int value inside list
+data:
+  - 1
+schema:
+  type: seq
+  sequence:
+    - type: int
+---
+name: int3
+desc: Test int value in mapping
+data:
+    foo: 1
+schema:
+  type: map
+  mapping:
+    foo:
+      type: int
+---
+name: int4
+desc: Test int inside nested map & seq
+data:
+  foo:
+    - 1
+schema:
+  type: map
+  mapping:
+    foo:
+      type: seq
+      sequence:
+        - type: int

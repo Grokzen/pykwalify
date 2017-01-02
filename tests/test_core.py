@@ -292,8 +292,6 @@ class TestCore(object):
     def test_core_files(self):
         # These tests should pass with no exception raised
         pass_tests = [
-            # Test sequence where the only valid items is integers
-            "2s.yaml",
             # Test mapping with different types of data and some extra conditions
             "4s.yaml",
             # Test sequence with mapping with valid mapping
@@ -392,6 +390,8 @@ class TestCore(object):
             "test_type_bool.yaml",
             # All test cases for TYPE: str
             "test_type_str.yaml",
+            # All tests cases for TYPE: int
+            "test_type_int.yaml",
         ]
 
         _fail_tests = [
