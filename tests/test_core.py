@@ -388,6 +388,8 @@ class TestCore(object):
             "test_sequence_multi.yaml",
             # All tests for keyword: version
             "test_version.yaml",
+            # All tests for keyword example
+            "test_example.yaml",
         ]
 
         _fail_tests = [
