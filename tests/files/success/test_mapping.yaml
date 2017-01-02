@@ -1,7 +1,6 @@
-##
---- # Doc 1
-name:  mapping1
-desc:  mapping test
+---
+name: mapping1
+desc: mapping test
 #
 schema:
   type: map
