@@ -89,3 +89,19 @@ schema:
               required: True
             email:
               type: str
+---
+name: mapping5
+desc: test allowempty option to mapping
+data:
+  datasources:
+    test1: test1.py
+    test2: test2.py
+schema:
+  type: map
+  mapping:
+    datasources:
+      type: map
+      allowempty: True
+      mapping:
+        test1:
+          type: str
