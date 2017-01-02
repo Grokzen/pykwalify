@@ -1,6 +1,11 @@
-##
 ---
 name: bool1
+desc: Test simples bool value
+data: True
+schema:
+  type: bool
+---
+name: bool2
 desc: Test bool value inside list
 data:
   - True
@@ -9,3 +14,26 @@ schema:
   type: seq
   sequence:
     - type: bool
+---
+name: bool3
+desc: Test bool value in mapping
+data:
+    foo: True
+schema:
+  type: map
+  mapping:
+    foo:
+      type: bool
+---
+name: bool4
+desc: Test bool inside nested map & seq
+data:
+  foo:
+    - True
+schema:
+  type: map
+  mapping:
+    foo:
+      type: seq
+      sequence:
+        - type: bool
