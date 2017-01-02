@@ -295,8 +295,6 @@ class TestCore(object):
             # Test most of the implemented functions
             "7s.yaml",
             #
-            "10s.yaml",
-            #
             "11s.yaml",
             # This tests number validation rule
             "12s.yaml",
