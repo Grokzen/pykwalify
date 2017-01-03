@@ -305,8 +305,6 @@ class TestCore(object):
             #
             # TODO: Currently slightly broken
             # # "16s.yaml",
-            # Test that range validates with map
-            "19s.yaml",
             # Test that range validates with seq
             "20s.yaml",
             # Test that 'seq' can use seq instead of 'sequence'
