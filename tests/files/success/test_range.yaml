@@ -130,3 +130,13 @@ schema:
     max: 3
   sequence:
     - type: str
+---
+name: range6
+desc: test range on float type
+data:
+  2.0
+schema:
+  type: float
+  range:
+    min: 1
+    max: 3
