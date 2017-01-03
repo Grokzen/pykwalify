@@ -305,8 +305,6 @@ class TestCore(object):
             #
             # TODO: Currently slightly broken
             # # "16s.yaml",
-            # Test that 'map' can be used instead of 'mapping'
-            "22s.yaml",
             # Test that 're' can be used instead of 'regex'
             "23s.yaml",
             # Test that 'req' can be used instead of 'required'

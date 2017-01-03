@@ -121,3 +121,23 @@ schema:
       type: seq
       sequence:
         - type: str
+---
+name: mapping7
+desc: Test that mapping name works
+data:
+  datasources: test1.py
+schema:
+  type: map
+  mapping:
+    datasources:
+      type: str
+---
+name: mapping8
+desc: Test that map shortcut works
+data:
+  datasources: test1.py
+schema:
+  type: map
+  map:
+    datasources:
+      type: str
