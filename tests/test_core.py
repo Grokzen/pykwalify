@@ -331,16 +331,38 @@ class TestCore(object):
 
             # All tests for keyword assert
             "test_assert.yaml",
+            # All tests for keyword default
+            "test_default.yaml",
+            # All tests for keyword desc
+            "test_desc.yaml",
+            # All tests for keyword enum
+            "test_enum.yaml",
             # All tests for keyword example
             "test_example.yaml",
+            # All tests for keyword extensions
+            "test_extensions.yaml",
+            # All tests for keyword func
+            "test_func.yaml",
             # All tests for keyword ident
             "test_ident.yaml",
+            # All tests for keyword include
+            "test_include.yaml",
             # All tests for keyword length
             "test_length.yaml",
             # All tests for keyword mapping
             "test_mapping.yaml",
+            # All tests for keyword matching
+            "test_matching.yaml",
+            # All tests for keyword name
+            "test_name.yaml",
+            # All tests for keyword pattern
+            "test_pattern.yaml",
             # All tests for keyword range
             "test_range.yaml",
+            # All tests for keyword required
+            "test_required.yaml",
+            # All tests for keyword schema
+            "test_schema.yaml",
             # All tests for keyword sequence
             "test_sequence.yaml",
             # All tests for keyword unique
