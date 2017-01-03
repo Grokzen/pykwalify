@@ -1,8 +1,0 @@
-data:
-  - foo
-  - bar
-  - baz
-schema:
-  type: seq
-  seq:
-    - type: str
