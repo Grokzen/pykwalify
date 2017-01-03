@@ -1,0 +1,11 @@
+---
+name: type-none-1
+desc: Test that type works with none type
+data:
+  name: ~
+schema:
+  type: map
+  mapping:
+    name:
+      type: none
+      required: True

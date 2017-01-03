@@ -305,8 +305,6 @@ class TestCore(object):
             #
             # TODO: Currently slightly broken
             # # "16s.yaml",
-            # Test that type can be set to 'None' and it will validate ok
-            "18s.yaml",
             # Test that range validates with map
             "19s.yaml",
             # Test that range validates with seq
