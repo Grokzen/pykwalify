@@ -315,8 +315,6 @@ class TestCore(object):
             "26s.yaml",
             # Test Complex tree with many different structures
             "32s.yaml",
-            # Test float range with negative boundary
-            "34s.yaml",
             # Test keyword regex default matching-rule any
             "35s.yaml",
             # Test keyword regex declared matching-rule any

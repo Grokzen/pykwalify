@@ -140,3 +140,13 @@ schema:
   range:
     min: 1
     max: 3
+---
+name: range7
+desc: Test range on float with negative boundary
+data:
+  -0.9
+schema:
+  type: float
+  range:
+    min: -1
+    max: 1.0
