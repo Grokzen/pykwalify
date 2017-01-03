@@ -105,3 +105,19 @@ schema:
       mapping:
         test1:
           type: str
+---
+name: mapping6
+desc: Test that regex keys works
+data:
+  mic:
+  - input
+    foo
+  - output
+    bar
+schema:
+  type: map
+  mapping:
+    regex;(mi.+):
+      type: seq
+      sequence:
+        - type: str

@@ -305,8 +305,6 @@ class TestCore(object):
             #
             # TODO: Currently slightly broken
             # # "16s.yaml",
-            # This test that a regex that will compile
-            "17s.yaml",
             # Test that type can be set to 'None' and it will validate ok
             "18s.yaml",
             # Test that range validates with map
