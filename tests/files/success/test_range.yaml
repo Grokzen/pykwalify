@@ -117,3 +117,16 @@ schema:
   mapping:
       foo:
         type: str
+---
+name: range5
+desc: Test range works with seq
+data:
+  - foobar
+  - barfoo
+schema:
+  type: seq
+  range:
+    min: 1
+    max: 3
+  sequence:
+    - type: str
