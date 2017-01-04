@@ -110,17 +110,23 @@ name: mapping6
 desc: Test that regex keys works
 data:
   mic:
-  - input
-    foo
-  - output
-    bar
+    - input
+    - foo
+  mock:
+    - True
+    - False
 schema:
   type: map
+  matching-rule: "any"
   mapping:
-    regex;(mi.+):
+    re;(mi.+):
       type: seq
       sequence:
         - type: str
+    regex;(mo.+):
+      type: seq
+      sequence:
+        - type: bool
 ---
 name: mapping7
 desc: Test that mapping name works
