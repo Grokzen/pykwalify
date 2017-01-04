@@ -1,0 +1,15 @@
+---
+name: required1
+desc: Test that req and required works
+data:
+  name: foo
+  foo: bar
+schema:
+  type: map
+  mapping:
+    name:
+      type: str
+      req: True
+    foo:
+      type: str
+      required: True
