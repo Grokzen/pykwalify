@@ -37,3 +37,20 @@ schema:
       type: seq
       sequence:
         - type: str
+---
+name: deftype1
+desc: default type test. Becuase str is the default type it is in this file.
+#
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+       "name":
+       "email":
+#
+data:
+  - name: foo
+    email: foo@mail.com
+  - name: bar
+  - email: baz@mail.com

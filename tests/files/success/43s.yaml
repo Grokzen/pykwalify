@@ -44,25 +44,6 @@ data:
       email: foo@mail.com
 ##
 ---
-name: deftype1
-desc: default type test
-#
-schema:
-  type: seq
-  sequence:
-    - type: map
-      mapping:
-       "name":
-       "email":
-#
-data:
-  - name: foo
-    email: foo@mail.com
-  - name: bar
-  - email: baz@mail.com
-
-##
----
 name:  default1
 desc:  default value of map
 #
