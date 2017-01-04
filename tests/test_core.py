@@ -294,8 +294,6 @@ class TestCore(object):
         pass_tests = [
             # Test most of the implemented functions
             "7s.yaml",
-            # This tests number validation rule
-            "12s.yaml",
             # This test the text validation rule
             "13s.yaml",
             # This test the any validation rule

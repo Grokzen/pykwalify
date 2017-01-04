@@ -1,7 +1,0 @@
-data:
-  - 1337
-  - 3.14159
-schema:
-  type: seq
-  sequence:
-    - type: number

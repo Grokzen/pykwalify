@@ -1,0 +1,14 @@
+---
+name: type-number-1
+desc: 
+data:
+  - 1337
+  - 3.14159
+  - 0.0
+  - '1337'
+  - '3.14159'
+  - '0.0'
+schema:
+  type: seq
+  sequence:
+    - type: number
