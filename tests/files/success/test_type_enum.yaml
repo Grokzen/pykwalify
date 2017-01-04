@@ -1,0 +1,43 @@
+---
+name: type-enum-1
+desc: Test the most basic case for enum
+data: C
+schema:
+  type: str
+  enum: [A, B, C, D, E]
+---
+name: type-enum-2
+desc: Test bool value inside list
+data:
+  - B
+  - C
+schema:
+  type: seq
+  sequence:
+    - type: str
+      enum: [A, B, C, D, E]
+---
+name: type-enum-3
+desc: Test bool value in mapping
+data:
+  foo: A
+schema:
+  type: map
+  mapping:
+    foo:
+      type: str
+      enum: [A, B, C, D, E]
+---
+name: type-enum-4
+desc: Test bool inside nested map & seq
+data:
+  foo:
+    - C
+schema:
+  type: map
+  mapping:
+    foo:
+      type: seq
+      sequence:
+        - type: str
+          enum: [A, B, C, D, E]
