@@ -297,16 +297,6 @@ class TestCore(object):
             # # "16s.yaml",
             # Test Complex tree with many different structures
             "32s.yaml",
-            # Test keyword regex default matching-rule any
-            "35s.yaml",
-            # Test keyword regex declared matching-rule any
-            "36s.yaml",
-            # Test keyword regex declared matching-rule all
-            "37s.yaml",
-            # Test mixed keyword regex and normal keyword
-            "38s.yaml",
-            # Test that default mapping keyword works out of the box in a good case
-            "39s.yaml",
             # Test that allowempty works without specifying mapping keyword when used inside a sequence block
             "40s.yaml",
             "43s.yaml",

@@ -165,3 +165,99 @@ schema:
   map:
     streams:
       type: str
+---
+name: mapping11
+desc: Test keyword regex default matching-rule any
+data:
+  foobar1: 1
+  foobar2: 2
+  bar2: 3
+schema:
+  type: map
+  mapping:
+    regex;([1-2]$):
+      type: int
+    regex;(^foobar):
+      type: int
+---
+name: mapping12
+desc: Test keyword regex declared matching-rule any
+data:
+  foobar1: 1
+  foobar2: 2
+  bar2: 3
+schema:
+  type: map
+  matching-rule: 'any'
+  mapping:
+    regex;([1-2]$):
+      type: int
+    regex;(^foobar):
+      type: int
+---
+name: mapping13
+desc: Test keyword regex declared matching-rule all
+data:
+  foobar1: 1
+  foobar2: 2
+  foobar3: 3
+schema:
+  type: map
+  matching-rule: 'all'
+  mapping:
+    regex;([1-3]$):
+      type: int
+    regex;(^foobar):
+      type: int
+---
+name: mapping14
+desc: Test mixed keyword regex and normal keyword
+data:
+  standard:
+    FRIST-800-53
+  AU-1:
+    family: AU
+    name: Audit and Accountability Policy and Procedures
+schema:
+  type: map
+  mapping:
+    regex;/[A-Z]-/:
+      type: map
+      mapping:
+        name:
+          type: str
+        family:
+          type: str
+          required: True
+    standard:
+      type: str
+---
+name: mapping15
+desc: Test that default mapping keyword works out of the box in a good case
+data:
+  OWNERSHIP:
+    - code: 1
+      key: BLM-BURNS
+      alias: BLM-BURNS
+  WHT: foo
+schema:
+  type: map
+  mapping:
+    WHT:
+      type: str
+    =:
+      type: seq
+      required: true
+      sequence:
+        - type: map
+          mapping:
+            'code':
+              type: int
+              required: true
+              unique: true
+            'key':
+              type: str
+              required: true
+            'alias':
+              type: str
+              required: true
