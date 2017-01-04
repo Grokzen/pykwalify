@@ -22,3 +22,23 @@ data:
   - foo
   - bar
   - baz
+---
+name: sequence3
+desc: Test that you do not have to specify type seq when keyword sequence is present
+data:
+  - foo
+  - bar
+  - foobar
+schema:
+  sequence:
+    - type: str
+---
+name: sequence4
+desc: Test that you do not have to specify type seq when keyword seq is present
+data:
+  - foo
+  - bar
+  - foobar
+schema:
+  seq:
+    - type: str

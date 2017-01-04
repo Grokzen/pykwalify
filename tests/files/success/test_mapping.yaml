@@ -147,3 +147,21 @@ schema:
   map:
     datasources:
       type: str
+---
+name: mapping9
+desc: Test that you do not have to specify type map
+data:
+  streams: foobar
+schema:
+  mapping:
+    streams:
+      type: str
+---
+name: mapping10
+desc: Test that you do not have to specify type map when map exists in schema
+data:
+  streams: foobar
+schema:
+  map:
+    streams:
+      type: str

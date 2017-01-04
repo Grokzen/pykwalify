@@ -295,8 +295,6 @@ class TestCore(object):
             #
             # TODO: Currently slightly broken
             # # "16s.yaml",
-            # Test that there is no need to specify 'type: seq' or 'type: map'
-            "25s.yaml",
             # Test that the different types of timestamps can be validated
             "26s.yaml",
             # Test Complex tree with many different structures
