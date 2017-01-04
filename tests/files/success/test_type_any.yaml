@@ -1,0 +1,18 @@
+---
+name: type-any-1
+desc: test simples case of any type
+data: abc
+schema:
+    type: any
+---
+name: type-any-2
+desc: test any type inside sequence
+data:
+  - abc
+  - 123
+  - 3.14159
+  - True
+schema:
+  type: seq
+  sequence:
+    - type: any

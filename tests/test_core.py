@@ -292,8 +292,6 @@ class TestCore(object):
     def test_core_files(self):
         # These tests should pass with no exception raised
         pass_tests = [
-            # This test the any validation rule
-            "14s.yaml",
             #
             "15s.yaml",
             #
