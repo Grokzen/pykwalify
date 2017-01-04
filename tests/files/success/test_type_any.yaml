@@ -16,3 +16,12 @@ schema:
   type: seq
   sequence:
     - type: any
+---
+name: type-any-3
+desc: test any type validates a dict
+data:
+  foobar:
+    barfoo:
+      opa: 1337
+schema:
+  type: any

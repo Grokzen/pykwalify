@@ -293,8 +293,6 @@ class TestCore(object):
         # These tests should pass with no exception raised
         pass_tests = [
             #
-            "15s.yaml",
-            #
             # TODO: Currently slightly broken
             # # "16s.yaml",
             # Test that 're' can be used instead of 'regex'
