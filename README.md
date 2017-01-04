@@ -56,6 +56,20 @@ pykwalify -d data.yaml -s schema.yaml
 ```
 
 
+## Examples
+
+The documentation describes in detail how each keyword and type works and what is possible in each case.
+
+But there is a lot of real world examples that can be found in the test data/files. It shows alot of examples of how all keywords and types work in practise and in combination with eachother.
+
+The files can be found here and it shows both schema/data combinations that will work and that will fail.
+
+ - `tests/files/success/`
+ - `tests/files/fail/`
+ - `tests/files/partial_schemas/`
+
+
+
 ## UTF-8 and data encoding
 
 If you have problems with unicode values not working properly when running pykwalify on python 2.7.x then try to add this environment variable to your execution
