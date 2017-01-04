@@ -1,0 +1,12 @@
+---
+name: enum-1
+desc: Test simple enum
+data:
+  - A
+  - B
+  - O
+schema:
+  type: seq
+  sequence:
+    - type: str
+      enum: [A, B, O, AB]

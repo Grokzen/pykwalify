@@ -1,0 +1,18 @@
+---
+name: pattern1
+desc: Test simples pattern
+data: foo@gmail.com
+schema:
+  type: str
+  pattern: .+@.+
+---
+name: pattern2
+desc: Test simple pattern in list
+data:
+  - foo@mail.com
+  - bar@mail.net
+schema:
+  type: seq
+  sequence:
+    - type: str
+      pattern: .+@.+

@@ -150,3 +150,17 @@ schema:
   range:
     min: -1
     max: 1.0
+---
+name: range8
+desc: Test range min-ex & max-ex
+data:
+  - 20
+  - 25
+  - 29
+schema:
+  type: seq
+  sequence:
+    - type: int
+      range: 
+        max-ex: 30
+        min-ex: 18
