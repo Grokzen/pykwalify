@@ -295,8 +295,6 @@ class TestCore(object):
             #
             # TODO: Currently slightly broken
             # # "16s.yaml",
-            # Test that the different types of timestamps can be validated
-            "26s.yaml",
             # Test Complex tree with many different structures
             "32s.yaml",
             # Test keyword regex default matching-rule any
