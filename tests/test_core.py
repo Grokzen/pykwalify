@@ -297,8 +297,6 @@ class TestCore(object):
             # # "16s.yaml",
             # Test Complex tree with many different structures
             "32s.yaml",
-            # Test that allowempty works without specifying mapping keyword when used inside a sequence block
-            "40s.yaml",
             "43s.yaml",
 
             # All tests for keyword assert

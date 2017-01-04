@@ -261,3 +261,22 @@ schema:
             'alias':
               type: str
               required: true
+---
+name: mapping16
+desc: Test that allowempty works without specifying mapping keyword when used inside a sequence block
+data:
+  rally:
+    plugins:
+      - netcreate-boot: rally/rally-plugins/netcreate-boot 
+schema:
+  type: map
+  mapping:
+    rally:
+      type: map
+      allowempty: True
+      mapping:
+        plugins:
+          type: seq
+          sequence:
+            - type: map
+              allowempty: True
