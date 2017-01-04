@@ -1,0 +1,12 @@
+---
+name: type-text-1
+data:
+  - 'abc'
+  - '1337'
+  - '3.14159'
+  - 1337
+  - 3.14159
+schema:
+  type: seq
+  sequence:
+    - type: text
