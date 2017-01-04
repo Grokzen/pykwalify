@@ -293,8 +293,6 @@ class TestCore(object):
         # These tests should pass with no exception raised
         pass_tests = [
             #
-            # TODO: Currently slightly broken
-            # # "16s.yaml",
             # Test Complex tree with many different structures
             "32s.yaml",
             "43s.yaml",
