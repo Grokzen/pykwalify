@@ -1,6 +1,37 @@
 ---
 name: type-number-1
-desc: 
+desc: Most basic test for type number
+data: '1337.0'
+schema:
+  type: number
+---
+name: type-number-2
+desc: Test that number type works with as value in map
+data:
+  foo: 1337
+  bar: 3.14159
+  qwe: 0.0
+  rty: '1337'
+  ewq: '3.14159'
+  dsa: '0.0'
+schema:
+  type: map
+  mapping:
+    foo:
+      type: number
+    bar:
+      type: number
+    qwe:
+      type: number
+    rty:
+      type: number
+    ewq:
+      type: number
+    dsa:
+      type: number
+---
+name: type-number-3
+desc: Test that different number values works as values in seq
 data:
   - 1337
   - 3.14159
@@ -12,3 +43,34 @@ schema:
   type: seq
   sequence:
     - type: number
+---
+name: type-number-4
+desc: Test that number type works inside nested map, seq, map
+data:
+  foobar:
+    - foo: 1337
+      bar: 3.14159
+      qwe: 0.0
+      rty: '1337'
+      ewq: '3.14159'
+      dsa: '0.0'
+schema:
+  type: map
+  mapping:
+    foobar:
+      type: seq
+      sequence:
+        - type: map
+          mapping:
+            foo:
+              type: number
+            bar:
+              type: number
+            qwe:
+              type: number
+            rty:
+              type: number
+            ewq:
+              type: number
+            dsa:
+              type: number
