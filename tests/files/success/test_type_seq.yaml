@@ -1,0 +1,36 @@
+---
+name: type-seq-1
+desc: Test the most basic case for seq
+data:
+  - foo
+schema:
+  type: seq
+  sequence:
+    - type: str
+---
+name: type-seq-2
+desc: Test that seq in seq works
+data:
+  - - True
+  - - False
+schema:
+  type: seq
+  sequence:
+    - type: seq
+      sequence:
+        - type: bool
+---
+name: type-seq-3
+desc: Test bool inside nested map & seq
+data:
+  - foo:
+      - True
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+        foo:
+          type: seq
+          sequence:
+            - type: bool
