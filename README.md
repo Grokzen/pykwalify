@@ -4,7 +4,9 @@ YAML/JSON validation library
 
 This framework is a port with alot added functionality of the java version of the framework kwalify that can be found at: http://www.kuwata-lab.com/kwalify/
 
-The source code can be found at: http://sourceforge.net/projects/kwalify/files/kwalify-java/0.5.1/
+The original source code can be found at: http://sourceforge.net/projects/kwalify/files/kwalify-java/0.5.1/
+
+The source code of the latest release that has been used can be found at: https://github.com/sunaku/kwalify. Please note that source code is not the original authors code but a fork/upload of the last release available in ruby.
 
 The schema this library is base and extended from: http://www.kuwata-lab.com/kwalify/ruby/users-guide.01.html#schema
 
