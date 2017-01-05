@@ -31,10 +31,12 @@ Release Notes
  - Fixed a bug with keyword "ident" when the rule value was verified to be a boolean. It now only accepts boolean values as expected.
  - Ported alot of testcases directly from Kwalify test data (test-validator.yaml -> 30f.yaml & 43s.yaml) so that this lib can have greater confidence that rules is implemented in the same way as Kwalify.
  - Refactored "test_core_files" method to now accept test files with multiple of documents. The method now tries to read all documents from each test file and run each document seperatly.
-   See yaml files 30f.yaml and 43s.yaml for examples. It now alos reports more detailed about what file and document that fails the test.
+   It now alos reports more detailed about what file and document that fails the test to make it easier to track down problems.
  - Implemented new keyword "length". It is very similar to range but works primarily string types.
  - Implemented new keyword "assert". It works by running the python code "assert <assert-expr>" and check if any exception is raised.
    This feature is considered dangerouns becuase there is only simple logic to prevent escaping out from validation.
+ - Major refactoring of test files to now be grouped based on what they are testing instead of a increased counter that do not represent anything.
+   It will be easier to find out what keywords lack tests and what keywords that have enough tests.
 
 
 1.5.2 (Nov 12, 2016)
