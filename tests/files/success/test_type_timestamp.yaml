@@ -1,5 +1,23 @@
 ---
 name: type-timestamp-1
+desc: Most basic timestamp test
+data: "2015-03-29T18:45:00+00:00"
+schema:
+  type: timestamp
+---
+name: type-timestamp-2
+desc: Test timestamps as values in seq
+data:
+  - "2015-03-29T18:45:00+00:00"
+  - "2015-03-29T18:45:00"
+  - "2015-03-29T11:45:00 -0700"
+  - "2015-03-29"
+schema:
+  type: seq
+  sequence:
+    - type: timestamp
+---
+name: type-timestamp-3
 desc: Basic test of different types of timestamps
 data:
   d1: "2015-03-29T18:45:00+00:00"
