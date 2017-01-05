@@ -1,0 +1,76 @@
+---
+name: type-scalar-1
+desc: Most basic test for type scalar
+data: '1337.0'
+schema:
+  type: scalar
+---
+name: type-scalar-2
+desc: Test that scalar type works with as value in map
+data:
+  foo: 1337
+  bar: 3.14159
+  qwe: True
+  rty: '1337'
+  ewq: '3.14159'
+  dsa: '0.0'
+schema:
+  type: map
+  mapping:
+    foo:
+      type: scalar
+    bar:
+      type: scalar
+    qwe:
+      type: scalar
+    rty:
+      type: scalar
+    ewq:
+      type: scalar
+    dsa:
+      type: scalar
+---
+name: type-scalar-3
+desc: Test that different scalar values works as values in seq
+data:
+  - 1337
+  - 3.14159
+  - True
+  - '1337'
+  - '3.14159'
+  - '0.0'
+schema:
+  type: seq
+  sequence:
+    - type: scalar
+---
+name: type-scalar-4
+desc: Test that scalar type works inside nested map, seq, map
+data:
+  foobar:
+    - foo: 1337
+      bar: 3.14159
+      qwe: True
+      rty: '1337'
+      ewq: '3.14159'
+      dsa: '0.0'
+schema:
+  type: map
+  mapping:
+    foobar:
+      type: seq
+      sequence:
+        - type: map
+          mapping:
+            foo:
+              type: scalar
+            bar:
+              type: scalar
+            qwe:
+              type: scalar
+            rty:
+              type: scalar
+            ewq:
+              type: scalar
+            dsa:
+              type: scalar
