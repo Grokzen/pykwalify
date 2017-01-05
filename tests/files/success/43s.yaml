@@ -44,24 +44,6 @@ data:
       email: foo@mail.com
 ##
 ---
-name:  default1
-desc:  default value of map
-#
-schema:
-  type: map
-  mapping:
-    =:
-      type: number
-      range: 
-        min: -10
-        max: 10
-#
-data:
-  value1: 0
-  value2: 10
-  value3: -10
-##
----
 name: complex1
 desc: Test complext tree with many different structures
 data:

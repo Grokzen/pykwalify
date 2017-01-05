@@ -232,7 +232,7 @@ schema:
     standard:
       type: str
 ---
-name: mapping15
+name: mapping-default-1
 desc: Test that default mapping keyword works out of the box in a good case
 data:
   OWNERSHIP:
@@ -262,7 +262,24 @@ schema:
               type: str
               required: true
 ---
-name: mapping16
+name: mapping-default-2
+desc: default value of map with number type and no other key matching
+#
+schema:
+  type: map
+  mapping:
+    =:
+      type: number
+      range: 
+        min: -10
+        max: 10
+#
+data:
+  value1: 0
+  value2: 10
+  value3: -10
+---
+name: mapping17
 desc: Test that allowempty works without specifying mapping keyword when used inside a sequence block
 data:
   rally:
