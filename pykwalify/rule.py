@@ -1212,7 +1212,6 @@ class Rule(object):
             'any': global_keywords + ['default', 'enum'],
             'enum': global_keywords + ['default', 'enum'],
             'none': global_keywords + ['default', 'enum', 'required'],
-            'date': global_keywords + ['format'],
         }
         rule_type = schema.get('type')
         if not rule_type:
