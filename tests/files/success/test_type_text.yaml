@@ -1,5 +1,12 @@
 ---
 name: type-text-1
+desc: Test simples text type
+data: "foobar"
+schema:
+  type: text
+---
+name: type-text-2
+desc: Test possible values as values in seq
 data:
   - 'abc'
   - '1337'
@@ -10,3 +17,59 @@ schema:
   type: seq
   sequence:
     - type: text
+---
+name: type-text-3
+desc: Test possible values as values in map
+data:
+  foo: 1337
+  bar: 3.14159
+  qwe: 'abc'
+  rty: '1337'
+  ewq: '3.14159'
+  dsa: '0.0'
+schema:
+  type: map
+  mapping:
+    foo:
+      type: text
+    bar:
+      type: text
+    qwe:
+      type: text
+    rty:
+      type: text
+    ewq:
+      type: text
+    dsa:
+      type: text
+---
+name: type-text-4
+desc: Test that text type works inside nested map, seq, map
+data:
+  foobar:
+    - foo: 1337
+      bar: 3.14159
+      qwe: 'abc'
+      rty: '1337'
+      ewq: '3.14159'
+      dsa: '0.0'
+schema:
+  type: map
+  mapping:
+    foobar:
+      type: seq
+      sequence:
+        - type: map
+          mapping:
+            foo:
+              type: text
+            bar:
+              type: text
+            qwe:
+              type: text
+            rty:
+              type: text
+            ewq:
+              type: text
+            dsa:
+              type: text
