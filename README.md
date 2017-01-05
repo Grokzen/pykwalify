@@ -9,29 +9,6 @@ The source code can be found at: http://sourceforge.net/projects/kwalify/files/k
 The schema this library is base and extended from: http://www.kuwata-lab.com/kwalify/ruby/users-guide.01.html#schema
 
 
-
-# PyYaml and ruamel.yaml
-
-`ruamel.yaml` is now the default one and will be used over `PyYaml` if both is installed. This was decided becuase `ruamel.yaml` is more up to date and have more support then `PyYaml`
-
-Both versions will continue to be supported.
-
-Install it for production with:
-
-```
-pip install 'pykwalify[ruamel]'
-```
-
-or for development with:
-
-```
-pip install -e '.[ruamel]'
-```
-
-This decision was based on the following thread in the `PyYaml` repo https://bitbucket.org/xi/pyyaml/issues/59/has-this-project-been-abandoned
-
-
-
 # Usage
 
 Create a data file. `Json` and `Yaml` formats are both supported.
@@ -69,6 +46,26 @@ The files can be found here and it shows both schema/data combinations that will
  - `tests/files/partial_schemas/`
 
 
+# PyYaml and ruamel.yaml
+
+`ruamel.yaml` is now the default one and will be used over `PyYaml` if both is installed. This was decided becuase `ruamel.yaml` is more up to date and have more support then `PyYaml`
+
+Both versions will continue to be supported.
+
+Install it for production with:
+
+```
+pip install 'pykwalify[ruamel]'
+```
+
+or for development with:
+
+```
+pip install -e '.[ruamel]'
+```
+
+This decision was based on the following thread in the `PyYaml` repo https://bitbucket.org/xi/pyyaml/issues/59/has-this-project-been-abandoned
+
 
 ## UTF-8 and data encoding
 
@@ -79,7 +76,6 @@ PYTHONIOENCODING=UTF-8 pykwalify ...
 ```
 
 and it might help to force UTF-8 encoding on all string objects. If this do not work please open up a issue with your schema and data that can be used to track down the problem in the source code.
-
 
 
 # Project details
