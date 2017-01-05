@@ -1,0 +1,39 @@
+---
+name: type-map-1
+desc: Test the most basic case for map
+data:
+  foo: bar
+schema:
+  type: map
+  mapping:
+    foo:
+      type: str
+---
+name: type-map-2
+desc: 
+data:
+  - foo: bar
+  - foo: bar
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+        foo:
+          type: str
+---
+name: type-map-3
+desc: Test bool inside nested map & seq
+data:
+  foo:
+    - bar: foobar
+schema:
+  type: map
+  mapping:
+    foo:
+      type: seq
+      sequence:
+        - type: map
+          mapping:
+            bar:
+              type: str
