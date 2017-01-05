@@ -33,16 +33,14 @@ schema:
         - B
         - O
         - AB
-    # TODO: Date type is not yet implemented
-    # birth:
-    #   type: date
-#
+    birth:
+      type: date
 data:
   name: foo
   email: foo@mail.com
   age: 20
   blood: AB
-  # birth:   1985-01-01
+  birth: 1985-01-01
 ---
 name: mapping3
 desc: Test that mapping works inside a sequence

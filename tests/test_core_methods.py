@@ -94,6 +94,31 @@ def test_validate_timestamp():
         assert _remap_errors(c) == data[1]
 
 
+def test_validate_date():
+    formats = ["%Y-%m-%d"]
+
+    data_matrix = [
+        (datetime.now(), [[], []]),
+        (datetime.today(), [[], []]),
+        ("1234567", [["Not a valid date: 1234567 format: %Y-%m-%d. Path: ''"], []]),
+        ("2016-01-01", [[], []]),
+        ("2016-01-01 15:01", [["Not a valid date: 2016-01-01 15:01 format: %Y-%m-%d. Path: ''"], []]),
+        (-1, [["Not a valid date: -1 date must be a string or a datetime.date not a 'int'"], []]),
+        (0, [["Not a valid date: 0 date must be a string or a datetime.date not a 'int'"], []]),
+        (1.5, [["Not a valid date: 1.5 date must be a string or a datetime.date not a 'float'"], []]),
+        (3147483647, [["Not a valid date: 3147483647 date must be a string or a datetime.date not a 'int'"], []]),
+        ([], [["Not a valid date: [] date must be a string or a datetime.date not a 'list'"], []]),
+        ({}, [["Not a valid date: {} date must be a string or a datetime.date not a 'dict'"], []]),
+    ]
+
+    for data in data_matrix:
+        for i, format in enumerate(formats):
+            print("Validating: {0} Format: {1}".format(data[0], format))
+            c = ec()
+            c._validate_scalar_date(data[0], [format], '')
+            assert _remap_errors(c) == data[1][i]
+
+
 def test_validate_scalar_type():
     # Test that when providing a scalar type that do not exists, it should raise an error
     with pytest.raises(CoreError):

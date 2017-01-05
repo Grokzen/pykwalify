@@ -435,6 +435,8 @@ class TestCore(object):
             # Test that default mode fails out in a similar way to regular mode and that a key that is not defined when default is set uses the defualt way
             ("29f.yaml", SchemaError),
             ("30f.yaml", SchemaError),
+            # All tests for TYPE: date
+            ("test_type_date.yaml", SchemaError),
         ]
 
         # Add override magic to make it easier to test a specific file

@@ -49,16 +49,15 @@ schema:
         - B
         - O
         - AB
-    # TODO: Date type is not yet implemented
-    # birth:
-    #   type: date
+    birth:
+      type: date
 #
 data:
   nam: foo
   email: foo(at)mail.com
   age: twenty
   blood: ab
-  # birth: Jul 01, 1985
+  birth: Jul 01, 1985
 #
 errors:
   - "Cannot find required key 'name'. Path: ''"

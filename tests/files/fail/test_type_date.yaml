@@ -1,0 +1,83 @@
+---
+name: fail-type-date-1
+desc: basic test for date type with default formats
+data: "abc"
+schema:
+  type: date
+errors:
+  - "Not a valid date: abc Path: ''"
+---
+name: fail-type-date-2
+desc: Basic test for date type with defined date-formats
+data: "31-01-2017"
+schema:
+  type: date
+  format: "%Y-%m-%d"
+errors:
+  - "Not a valid date: 31-01-2017 format: %Y-%m-%d. Path: ''"
+---
+name: fail-type-date-3
+desc: Basic test for date type with defined date-formats
+data:
+  - "2017"
+  - "31"
+schema:
+  type: seq
+  sequence:
+    - type: date
+      format:
+        - "%d-%m-%Y"
+        - "%Y-%m-%d"
+errors:
+  - "Not a valid date: 2017 format: %Y-%m-%d. Path: '/0'"
+  - "Not a valid date: 31 format: %Y-%m-%d. Path: '/1'"
+---
+name: fail-type-data-4
+desc: Test date type as values in a list
+data:
+  - 'abc-1997'
+  - 'abc-1997-07'
+  - 'abc-1997-07-16'
+  - 'abc-1997-07-16T19:20+01:00'
+  - 'abc-1997-07-16T19:20:30+01:00'
+  - 'abc-1997-07-16T19:20:30.45+01:00'
+schema:
+  type: seq
+  sequence:
+    - type: date
+errors:
+  - "Not a valid date: abc-1997 Path: '/0'"
+  - "Not a valid date: abc-1997-07 Path: '/1'"
+  - "Not a valid date: abc-1997-07-16 Path: '/2'"
+  - "Not a valid date: abc-1997-07-16T19:20+01:00 Path: '/3'"
+  - "Not a valid date: abc-1997-07-16T19:20:30+01:00 Path: '/4'"
+  - "Not a valid date: abc-1997-07-16T19:20:30.45+01:00 Path: '/5'"
+---
+name: fail-type-date-5
+desc: Test that wrong value types do not validate
+data:
+  - 123
+  - True
+schema:
+  type: seq
+  sequence:
+    - type: date
+errors:
+  - "Value '123' is not of type 'date'. Path: '/0'"
+  - "Value 'True' is not of type 'date'. Path: '/1'"
+---
+name: fail-type-date-6
+desc: Test that wrong value types in map do not validate
+data:
+  foo: 123
+  bar: True
+schema:
+  type: map
+  mapping:
+    foo:
+      type: date
+    bar:
+      type: date
+errors:
+  - "Value '123' is not of type 'date'. Path: '/foo'"
+  - "Value 'True' is not of type 'date'. Path: '/bar'"

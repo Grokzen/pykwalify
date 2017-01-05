@@ -3,7 +3,7 @@
 """ pyKwalify - types.py """
 
 # python stdlib
-from datetime import datetime
+import datetime
 from pykwalify.compat import basestring, bytes
 
 DEFAULT_TYPE = "str"
@@ -16,8 +16,8 @@ _types = {
     "bool": bool,
     "map": dict,
     "seq": list,
-    "timestamp": datetime,
-    "date": datetime,
+    "timestamp": datetime.datetime,
+    "date": datetime.date,
     "symbol": str,
     "scalar": None,
     "text": None,
@@ -123,7 +123,15 @@ def is_timestamp(obj):
     Yaml either have automatically converted it to a datetime object
     or it is a string that will be validated later.
     """
-    return isinstance(obj, datetime) or is_string(obj) or is_int(obj) or is_float(obj)
+    return isinstance(obj, datetime.datetime) or is_string(obj) or is_int(obj) or is_float(obj)
+
+
+def is_date(obj):
+    """
+    :param obj: Object that is to be validated
+    :return: True/False if obj is valid date object
+    """
+    return isinstance(obj, basestring) or isinstance(obj, datetime.date)
 
 
 tt = {
@@ -138,4 +146,5 @@ tt = {
     "none": is_none,
     "timestamp": is_timestamp,
     "scalar": is_scalar,
+    "date": is_date,
 }

@@ -37,6 +37,7 @@ Release Notes
    This feature is considered dangerouns becuase there is only simple logic to prevent escaping out from validation.
  - Major refactoring of test files to now be grouped based on what they are testing instead of a increased counter that do not represent anything.
    It will be easier to find out what keywords lack tests and what keywords that have enough tests.
+ - Implmenet keyword *date* and added support keyword *format*. This can be used to validate many different types of datetime objects.
 
 
 1.5.2 (Nov 12, 2016)

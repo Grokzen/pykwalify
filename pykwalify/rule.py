@@ -7,6 +7,7 @@ import logging
 import re
 
 # pykwalify imports
+from pykwalify.compat import basestring
 from pykwalify.errors import SchemaConflict, RuleError
 from pykwalify.types import (
     DEFAULT_TYPE,
@@ -33,6 +34,7 @@ class Rule(object):
         self._enum = None
         self._example = None
         self._extensions = None
+        self._format = None
         self._func = None
         self._ident = None
         self._include_name = None
@@ -116,6 +118,14 @@ class Rule(object):
     @extensions.setter
     def extensions(self, value):
         self._extensions = value
+
+    @property
+    def format(self):
+        return self._format
+
+    @format.setter
+    def format(self, value):
+        self._format = value
 
     @property
     def func(self):
@@ -309,6 +319,7 @@ class Rule(object):
             ('enum', 'enum'),
             ('example', 'example'),
             ('extensions', 'extensions'),
+            ('format', 'format'),
             ('func', 'func'),
             ('ident', 'ident'),
             ('include_name', 'include'),
@@ -392,6 +403,7 @@ class Rule(object):
             "enum": self.init_enum_value,
             "example": self.init_example,
             "extensions": self.init_extensions,
+            "format": self.init_format_value,
             "func": self.init_func,
             "ident": self.init_ident_value,
             "length": self.init_length_value,
@@ -432,6 +444,42 @@ class Rule(object):
         self.check_conflicts(schema, rule, path)
 
         self.check_type_keywords(schema, rule, path)
+
+    def init_format_value(self, v, rule, path):
+        log.debug(u"Init format value : %s", path)
+
+        if isinstance(v, basestring):
+            self._format = [v]
+        elif isinstance(v, list):
+            valid = True
+            for date_format in v:
+                if not isinstance(date_format, basestring):
+                    valid = False
+
+            if valid:
+                self._format = v
+            else:
+                raise RuleError(
+                    msg=u"All values in format list must be strings",
+                    error_key=u"format.not_string",
+                    path=path,
+                )
+        else:
+            raise RuleError(
+                msg=u"Value of format keyword: '{}' must be a string or list or string values".format(v),
+                error_key=u"format.not_string",
+                path=path,
+            )
+
+        valid_types = ("date", )
+
+        # Format is only supported when used with "type=date"
+        if self._type not in valid_types:
+            raise RuleError(
+                msg="Keyword format is only allowed when used with the following types: {0}".format(valid_types),
+                error_key=u"format.not_used_with_correct_type",
+                path=path,
+            )
 
     def init_version(self, v, rule, path):
         """
@@ -1115,7 +1163,8 @@ class Rule(object):
         """
         All supported keywords:
          - allowempty_map
-         - assertion - Not yet implemented
+         - assertion
+         - date
          - default
          - desc
          - enum
@@ -1163,6 +1212,7 @@ class Rule(object):
             'any': global_keywords + ['default', 'enum'],
             'enum': global_keywords + ['default', 'enum'],
             'none': global_keywords + ['default', 'enum', 'required'],
+            'date': global_keywords + ['format'],
         }
         rule_type = schema.get('type')
         if not rule_type:

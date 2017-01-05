@@ -3,6 +3,7 @@
 """ pyKwalify - core.py """
 
 # python std lib
+import datetime
 import imp
 import json
 import logging
@@ -10,7 +11,7 @@ import os
 import re
 import sys
 import traceback
-from datetime import datetime
+import time
 
 # pyKwalify imports
 import pykwalify
@@ -650,6 +651,12 @@ class Core(object):
         if rule.type == "timestamp":
             self._validate_scalar_timestamp(value, path)
 
+        if rule.type == "date":
+            if not is_scalar(value):
+                raise CoreError(u'value is not a valid scalar')
+            date_format = rule.format
+            self._validate_scalar_date(value, date_format, path)
+
     def _validate_scalar_timestamp(self, timestamp_value, path):
         """
         """
@@ -676,7 +683,7 @@ class Core(object):
 
         if isinstance(timestamp_value, (int, float)):
             _check_int_timestamp_boundaries(timestamp_value)
-        elif isinstance(timestamp_value, datetime):
+        elif isinstance(timestamp_value, datetime.datetime):
             # Datetime objects currently have nothing to validate.
             # In the future, more options will be added to datetime validation
             pass
@@ -713,6 +720,56 @@ class Core(object):
                 path=path,
                 value=timestamp_value,
                 timestamp=timestamp_value,
+            ))
+
+    def _validate_scalar_date(self, date_value, date_formats, path):
+        log.debug(u"Validate date : %(value)s : %(format)s : %(path)s" % {
+            'value': date_value,
+            'format': date_formats,
+            'path': path,
+        })
+
+        if isinstance(date_value, str):
+            # If a date_format is specefied then use strptime on all formats
+            # If no date_format is specefied then use dateutils.parse() to test the value
+            print(date_formats)
+            if date_formats:
+                # Run through all date_formats and it is valid if atleast one of them passed time.strptime() parsing
+                valid = False
+                for date_format in date_formats:
+                    try:
+                        time.strptime(date_value, date_format)
+                        valid = True
+                    except ValueError:
+                        pass
+
+                if not valid:
+                    self.errors.append(SchemaError.SchemaErrorEntry(
+                        msg=u"Not a valid date: {value} format: {format}. Path: '{path}'",
+                        path=path,
+                        value=date_value,
+                        format=date_format,
+                    ))
+                    return
+            else:
+                try:
+                    parse(date_value)
+                except ValueError:
+                    self.errors.append(SchemaError.SchemaErrorEntry(
+                        msg=u"Not a valid date: {value} Path: '{path}'",
+                        path=path,
+                        value=date_value,
+                    ))
+        elif isinstance(date_value, (datetime.date, datetime.datetime)):
+            # If the object already is a datetime or date object it passes validation
+            pass
+        else:
+            # If value is any other type then raise error
+            self.errors.append(SchemaError.SchemaErrorEntry(
+                msg=u"Not a valid date: {value} date must be a string or a datetime.date not a '{type}'",
+                path=path,
+                value=date_value,
+                type=type(date_value).__name__,
             ))
 
     def _validate_length(self, rule, value, path, prefix):
