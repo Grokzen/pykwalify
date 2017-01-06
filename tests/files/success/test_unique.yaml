@@ -114,3 +114,25 @@ schema:
           sequence:
             - type: str
               unique: True
+---
+name: unique6
+desc: Test that unique do not fail when the key it tries to lookup is missing
+data:
+  - xref: 'GOC:hm'
+    uri: 'GOC:hm'
+  - uri: 'http://orcid.org/0000-0002-4862-3181'
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+        "uri":
+          type: str
+          required: true
+          unique: true
+          pattern: ^((ht|f)tp(s?)\:\/\/\w[\/\.\-\:\w]+)|(GOC\:[\w\_]+)$
+        "xref":
+          type: str
+          required: false
+          unique: true
+          pattern: ^\w+:\w+$

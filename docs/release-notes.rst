@@ -44,6 +44,8 @@ Release Notes
    When using this flag the first and last */* will be trimmed of the pattern before running validation.
    If you only use a Core object then set "fix_ruby_style_regex=True" when creating the Core object instance.
    Default behaviour will still be that you should use python style regex values but this flag can help in some cases when you can't change the schema.
+ - Fixed a bug in unique validation when a key that it tried to lookup in the data would not exists.
+   Now it just ignores that it did not find any value becuase a missing value do not impact validation.
 
 
 1.5.2 (Nov 12, 2016)

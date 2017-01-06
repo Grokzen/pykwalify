@@ -369,9 +369,12 @@ class Core(object):
                         for v in unique_keys:
                             table = {}
                             for j, V in enumerate(value):
-                                val = V[v]
+                                # If key do not exists it should be ignored by unique because that is not a broken constraint
+                                val = V.get(v, None)
+
                                 if val is None:
                                     continue
+
                                 if val in table:
                                     curr_path = "{0}/{1}/{2}".format(path, j, v)
                                     prev_path = "{0}/{1}/{2}".format(path, table[val], v)
