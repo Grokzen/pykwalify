@@ -482,7 +482,7 @@ class Core(object):
         self._handle_func(value, rule, path, done)
 
         m = rule.mapping
-        log.debug(u" + RuleMapping: %s", m)
+        log.debug(u"   Mapping: Rule-Mapping: %s", m)
 
         if rule.range is not None:
             r = rule.range
@@ -512,16 +512,16 @@ class Core(object):
             # If no other case was a match, check if a default mapping is valid/present and use
             # that one instead
             r = m.get(k, m.get('='))
-            log.debug(u" + : %s", m)
-            log.debug(u" + : %s %s", k, v)
-            log.debug(u" + : %s", r)
+            log.debug(u"  Mapping-value : %s", m)
+            log.debug(u"  Mapping-value : %s %s", k, v)
+            log.debug(u"  Mapping-value : %s", r)
 
             regex_mappings = [(regex_rule, re.search(regex_rule.map_regex_rule, str(k))) for regex_rule in rule.regex_mappings]
-            log.debug(u" + Mapping Regex matches: %s", regex_mappings)
+            log.debug(u"  Mapping-value: Mapping Regex matches: %s", regex_mappings)
 
             if r is not None and not r.schema:
                 # validate recursively
-                log.debug(u" + Core Map: validate recursively: %s", r)
+                log.debug(u"  Mapping-value: Core Map: validate recursively: %s", r)
                 self._validate(v, r, u"{0}/{1}".format(path, k), done)
             elif any(regex_mappings):
                 sub_regex_result = []
@@ -529,7 +529,7 @@ class Core(object):
                 # Found at least one that matches a mapping regex
                 for mm in regex_mappings:
                     if mm[1]:
-                        log.debug(u" + Matching regex patter: %s", mm[0])
+                        log.debug(u"  Mapping-value: Matching regex patter: %s", mm[0])
                         self._validate(v, mm[0], "{0}/{1}".format(path, k), done)
                         sub_regex_result.append(True)
                     else:
@@ -537,9 +537,9 @@ class Core(object):
 
                 if rule.matching_rule == "any":
                     if any(sub_regex_result):
-                        log.debug(u" + Matched at least one regex")
+                        log.debug(u"  Mapping-value: Matched at least one regex")
                     else:
-                        log.debug(u"No regex matched")
+                        log.debug(u"  Mapping-value: No regex matched")
                         self.errors.append(SchemaError.SchemaErrorEntry(
                             msg=u"Key '{key}' does not match any regex '{regex}'. Path: '{path}'",
                             path=path,
@@ -548,9 +548,9 @@ class Core(object):
                             regex="' or '".join(sorted([mm[0].map_regex_rule for mm in regex_mappings]))))
                 elif rule.matching_rule == "all":
                     if all(sub_regex_result):
-                        log.debug(u" + Matched all regex rules")
+                        log.debug(u"  Mapping-value: Matched all regex rules")
                     else:
-                        log.debug(u"Did not match all regex rules")
+                        log.debug(u"  Mapping-value: Did not match all regex rules")
                         self.errors.append(SchemaError.SchemaErrorEntry(
                             msg=u"Key '{key}' does not match all regex '{regex}'. Path: '{path}'",
                             path=path,
@@ -558,9 +558,9 @@ class Core(object):
                             key=k,
                             regex="' and '".join(sorted([mm[0].map_regex_rule for mm in regex_mappings]))))
                 else:
-                    log.debug(u" + No mapping rule defined")
+                    log.debug(u"  Mapping-value: No mapping rule defined")
             elif r is not None and r.schema:
-                print(u" + Something is ignored Oo : {0}".format(r))
+                print(u"  Mapping-value: Something is ignored Oo : {0}".format(r))
             else:
                 if not rule.allowempty_map:
                     self.errors.append(SchemaError.SchemaErrorEntry(
