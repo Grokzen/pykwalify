@@ -1,50 +1,50 @@
 Release Notes
 =============
 
-1.6.0 (??? ??, ????)
+1.6.0 (Jan ??, 2017)
 --------------------
 
- - Validation do no longer continue to process things like pattern, regex, timestamp, range and other additional checks 
+ - Validation do no longer continue to process things like *pattern*, *regex*, *timestamp*, *range* and other additional checks 
    if the type check fails. This can cause problems where previous errors will now initially be silenced when the typecheck for
    that value fails, but reappear again when the type check is fixed. (sbrunner)
- - Catch TypeError when doing regex validation. That happens when the value is not a parsable string type.
+ - Catches *TypeError* when doing regex validation. That happens when the value is not a parsable string type.
  - Fixed a bug where the type validation did not work when schema specefied a sequence of map objects. It now outputs a proper `...is not a dict...` error instead.
  - Checking that the value is a valid dict object is now done even if the mapping keyword is not specefied in the schema.
    This makes that check more eager and errors can apear that previously was not there.
- - This feature is NEW and EXPERIMENTAL in this release.
-   It is now possible to specify a default rule when using a mapping.
+ - It is now possible to specify a default rule when using a mapping.
    The rule will be used whenever no other key could be found.
- - Fixed a bug where if allowempty was specefied in a mapping type inside a sequence type then it would not properly validate.
- - Fixed a bug where loaded extensions would not allways work in complex & nested objects
- - Add support for keyword "example". It does nothing and have no validation done on it.
- - Add support for keyword "version". It does nothing and have no validation done on it.
- - Added new helper method "keywords" to "Rule" class that can output all active keywords for any Rule object.
-   This helps when debugging code to be able to easily dump what all active keywords for any Rule object.
- - Removed the force of UTF-8 encoding when importing pykwalify package. It caused issues with jypiter notebooks (py 2.7)
-   Added documentation in Readme regarding the suggested solution to use "PYTHONIOENCODING=UTF-8" if the default solution do not work.
- - Added new cli flag "--strict-rule-validation" that will validate that all used keywords in all Rule objects only uses the rules that is supported by the defined type.
-   If you only use a Core object then set "strict_rule_validation=True" when creating the Core object instance.
-   This feature is opt-in in this releaes but will be mandatory in releases >= 1.7.0.
- - Changed validation for if a value is required and a value in a list for example is None. It now adds a normal validation errors instead of raising a CoreError
- - Changed the sane default type if that key is not defined to be "str". Before this, type had to be defined every time and the default type did not work as expected.
+   This is a port of a missing feature from original kwalify implementation.
+ - Fixed a bug where if *allowempty* was specefied in a mapping type inside a sequence type then it would not properly validate.
+ - Fixed a bug where loaded extensions would not allways work in complex & nested objects.
+ - Add support for keyword *example*. It does nothing and have no validation done on it.
+ - Add support for keyword *version*. It does nothing and have no validation done on it.
+ - Added new helper method *keywords* to *Rule* class that can output all active keywords for any *Rule* object.
+   This helps when debugging code to be able to easily dump what all active keywords for any *Rule* object.
+ - Removed the force of *UTF-8* encoding when importing pykwalify package. It caused issues with *jypiter notebooks* on python 2.7.x
+   Added documentation in Readme regarding the suggested solution to use *PYTHONIOENCODING=UTF-8* if the default solution do not work.
+ - Added new cli flag *--strict-rule-validation* that will validate that all used keywords in all *Rule* objects only uses the rules that is supported by each defined type.
+   If you only use a *Core* object then set *strict_rule_validation=True* when creating the *Core* object instance.
+   This feature is opt-in in this releaes but will be mandatory in *releases >= 1.7.0*.
+ - Changed validation for if a value is required and a value in a list for example is *None*. It now adds a normal validation errors instead of raising a *CoreError*.
+ - Changed the sane default type if that key is not defined to be *str*. Before this, type had to be defined every time and the default type did not work as expected.
    This is a major change and can cause validation to either fail or to stop failing depending on the case.
- - Fixed a bug with keyword "ident" when the rule value was verified to be a boolean. It now only accepts boolean values as expected.
- - Ported alot of testcases directly from Kwalify test data (test-validator.yaml -> 30f.yaml & 43s.yaml) so that this lib can have greater confidence that rules is implemented in the same way as Kwalify.
- - Refactored "test_core_files" method to now accept test files with multiple of documents. The method now tries to read all documents from each test file and run each document seperatly.
+ - Fixed a bug with keyword *ident* when the rule value was verified to be a *boolean*. It now only accepts *boolean* values as expected.
+ - Ported alot of testcases directly from *Kwalify* test data (*test-validator.yaml -> 30f.yaml & 43s.yaml*) so that this lib can have greater confidence that rules is implemented in the same way as *Kwalify*.
+ - Refactored *test_core_files* method to now accept test files with multiple of documents. The method now tries to read all documents from each test file and run each document seperatly.
    It now alos reports more detailed about what file and document that fails the test to make it easier to track down problems.
- - Implemented new keyword "length". It is very similar to range but works primarily string types.
- - Implemented new keyword "assert". It works by running the python code "assert <assert-expr>" and check if any exception is raised.
+ - Implemented new keyword *length*. It is very similar to *range* but works primarily string types.
+ - Implemented new keyword *assert*. It works by running the python code *assert <assert-expr>* and check if any exception is raised.
    This feature is considered dangerouns becuase there is only simple logic to prevent escaping out from validation.
  - Major refactoring of test files to now be grouped based on what they are testing instead of a increased counter that do not represent anything.
    It will be easier to find out what keywords lack tests and what keywords that have enough tests.
- - Implmenet keyword *date* and added support keyword *format*. This can be used to validate many different types of datetime objects.
- - Value for keyword *desc* now *MUST* be a string or a RuleError will be raised.
- - Value for keyword *example* now *MUST* be a string or a RuleError will be raised.
+ - Implmenet keyword *date* and added support keyword *format*. This can be used to validate many different types of *datetime* objects.
+ - Value for keyword *desc* now *MUST* be a string or a *RuleError* will be raised.
+ - Value for keyword *example* now *MUST* be a string or a *RuleError* will be raised.
  - Added new cli flag *--fix-ruby-style-regex* that will trim slashes from ruby style regex/patterns.
    When using this flag the first and last */* will be trimmed of the pattern before running validation.
-   If you only use a Core object then set "fix_ruby_style_regex=True" when creating the Core object instance.
+   If you only use a *Core* object then set *fix_ruby_style_regex=True* when creating the *Core* object instance.
    Default behaviour will still be that you should use python style regex values but this flag can help in some cases when you can't change the schema.
- - Fixed a bug in unique validation when a key that it tried to lookup in the data would not exists.
+ - Fixed a bug in *unique* validation when a key that it tried to lookup in the data would not exists.
    Now it just ignores that it did not find any value becuase a missing value do not impact validation.
 
 
