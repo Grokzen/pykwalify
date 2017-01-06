@@ -1,7 +1,0 @@
-data:
-    0x12345678
-schema:
-    type: text
-    pattern: ^0x[0-9A-F]{1,8}$
-errors:
-    - "Value '305419896' does not match pattern '^0x[0-9A-F]{1,8}$'. Path: ''"

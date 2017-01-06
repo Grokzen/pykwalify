@@ -1,0 +1,126 @@
+---
+name: fail-mapping-1
+desc: This test that typechecking works when value in map is None
+data:
+  streams:
+    - name: ~
+      sampleRateMultiple: 1
+    - name: media
+      sampleRateMultiple: 2
+schema:
+  type: map
+  mapping:
+    streams:
+      type: seq
+      required: True
+      sequence:
+        - type: map
+          mapping:
+            name:
+              type: str
+              range:
+                min: 1
+              required: True
+            sampleRateMultiple:
+              type: int
+              required: True
+errors:
+  - "required.novalue : '/streams/0/name'"
+---
+name: fail-mapping-2
+desc: Test keyword regex using default matching-rule 'any'
+data:
+  foobar1: 1
+  foobar2: 2
+  foobar3: 3
+schema:
+  type: map
+  mapping:
+    regex;(^foobar[1-2]$):
+      type: int
+errors:
+  - "Key 'foobar3' does not match any regex '^foobar[1-2]$'. Path: ''"
+---
+name: fail-mapping-3
+desc: Test keyword regex using declared matching-rule 'any'
+data:
+  foobar1: 1
+  foobar2: 2
+  bar3: 3
+schema:
+  type: map
+  matching-rule: 'any'
+  mapping:
+    regex;(^foobar):
+      type: int
+    regex;([1-2]$):
+      type: int
+errors:
+  - "Key 'bar3' does not match any regex '[1-2]$' or '^foobar'. Path: ''"
+---
+name: fail-mapping-4
+desc: Test keyword regex using declared matching-rule 'all'
+data:
+  foobar1: 1
+  foobar2: 2
+  foobar3: 3
+schema:
+  type: map
+  matching-rule: 'all'
+  mapping:
+    regex;(^foobar.*$):
+      type: int
+    regex;(^.*[1-2]$):
+      type: int
+errors:
+  - "Key 'foobar3' does not match all regex '^.*[1-2]$' and '^foobar.*$'. Path: ''"
+---
+name: fail-mapping-5
+desc: Test that sequence of mappings check the correct type and raises correct error when value is not a dict
+data:
+  - foo: whatever
+  - "sgdf"
+  - 2
+  - ~
+schema:
+  type: seq
+  required: True
+  matching: all
+  seq:
+    - type: map
+      required: True
+      map:
+        foo:
+          type: str
+errors:
+  - "Value '2' is not a dict. Value path: '/2'"
+  - "Value 'sgdf' is not a dict. Value path: '/1'"
+  - "required.novalue : '/3'"
+---
+name: fail-mapping-6
+desc: Test that type checking of mapping is done even if the mapping keyword is not specefied in the schema
+data:
+  - not
+  - a
+  - map
+schema:
+  type: map
+  allowempty: True
+errors:
+  - "Value '['not', 'a', 'map']' is not a dict. Value path: ''"
+---
+name: fail-mapping-7
+desc: Test that default mode fails out in a similar way to regular mode and that a key that is not defined when default is set uses the default impl
+data:
+    OWNERSHIP: abc
+    WHT: def
+schema:
+    type: map
+    mapping:
+      WHT:
+        type: int
+      =:
+        type: int
+errors:
+  - "Value 'abc' is not of type 'int'. Path: '/OWNERSHIP'"
+  - "Value 'def' is not of type 'int'. Path: '/WHT'"

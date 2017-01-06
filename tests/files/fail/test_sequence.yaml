@@ -1,0 +1,32 @@
+---
+name: fail-sequence-1
+desc: 
+data:
+  - 1
+  - 2
+  - 3
+  - True
+  - False
+schema:
+  type: seq
+  sequence:
+    - type: str
+errors:
+  - "Value '1' is not of type 'str'. Path: '/0'"
+  - "Value '2' is not of type 'str'. Path: '/1'"
+  - "Value '3' is not of type 'str'. Path: '/2'"
+  - "Value 'True' is not of type 'str'. Path: '/3'"
+  - "Value 'False' is not of type 'str'. Path: '/4'"
+---
+name: fail-sequence-2
+desc: 
+data:
+  - True
+  - False
+  - 1
+schema:
+  type: seq
+  sequence:
+    - type: bool
+errors:
+  - "Value '1' is not of type 'bool'. Path: '/2'"

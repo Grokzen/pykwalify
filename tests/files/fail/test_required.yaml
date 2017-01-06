@@ -1,0 +1,19 @@
+---
+name: fail-required-1
+desc: 
+data:
+  - name: foo
+    email: foo@mail.com
+  - email: bar@mail.net
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+        name:
+          type: str
+          required: True
+        email:
+          type: str
+errors:
+  - "Cannot find required key 'name'. Path: '/1'"

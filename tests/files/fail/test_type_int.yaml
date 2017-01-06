@@ -1,0 +1,45 @@
+---
+name: fail-type-int-1
+desc:
+data:
+  A101
+schema:
+  type: int
+errors:
+ - "Value 'A101' is not of type 'int'. Path: ''"
+---
+name: fail-type-int-2
+desc: Test wrong type as value in list
+data:
+  - "foo"
+schema:
+  type: seq
+  matching: "any"
+  seq:
+    - type: int
+errors:
+  - "Value 'foo' is not of type 'int'. Path: '/0'"
+---
+name: fail-type-int-3
+desc: Test that True/False is not valid integers
+data:
+  - 1
+  - True
+  - False
+schema:
+  type: seq
+  sequence:
+    - type: int
+errors:
+ - "Value 'False' is not of type 'int'. Path: '/2'"
+ - "Value 'True' is not of type 'int'. Path: '/1'"
+---
+name: fail-type-int-4
+desc: Test that hexadecimal characters fails with pattern
+data:
+    0x12345678
+schema:
+    type: text
+    pattern: ^0x[0-9A-F]{1,8}$
+errors:
+    - "Value '305419896' does not match pattern '^0x[0-9A-F]{1,8}$'. Path: ''"

@@ -376,64 +376,7 @@ class TestCore(object):
         ]
 
         _fail_tests = [
-            # Test sequence with defined string content type but data only has integers
-            ("1f.yaml", SchemaError),
-            # Test sequence with defined string content type but data only has booleans
-            ("2f.yaml", SchemaError),
-            # Test sequence with defined booleans but with one integer
-            ("3f.yaml", SchemaError),
-            # Test sequence with strings and and lenght on each string
-            ("4f.yaml", SchemaError),
-            # Test mapping that do not work
-            ("5f.yaml", SchemaError),
-            # Test sequence with mapping with missing required key
-            ("6f.yaml", SchemaError),
-            # Test mapping with sequence with mapping and invalid data
-            ("7f.yaml", SchemaError),
-            #
-            ("8f.yaml", SchemaError),
-            # TODO: The reverse unique do not currently work proper # This will test the unique constraint but should fail
-            ("9f.yaml", SchemaError),
-            # This tests number validation rule with wrong data
-            ("10f.yaml", SchemaError),
-            # This test the text validation rule with wrong data
-            ("11f.yaml", SchemaError),
-            # This test that typechecking works when value in map is None
-            ("12f.yaml", SchemaError),
-            # Test that range validates on 'map' raise correct error
-            ("13f.yaml", SchemaError),
-            # Test that range validates on 'seq' raise correct error
-            ("14f.yaml", SchemaError),
-            # Test timestamps that should throw errors
-            ("15f.yaml", SchemaError),
-            # Test multiple sequence values with wrong sub type and 'any' matching rule
-            ("16f.yaml", SchemaError),
-            # Test multiple sequence values with wrong sub type and 'all' matching rule
-            ("17f.yaml", SchemaError),
-            # Test multiple nested sequence values with error in level 2 with 'any' matching rule
-            ("18f.yaml", SchemaError),
-            # Test float range value out of range
-            ("19f.yaml", SchemaError),
-            # Test float range value out of range (min-ex)
-            ("20f.yaml", SchemaError),
-            # Test keyword regex using default matching-rule 'any'
-            ("21f.yaml", SchemaError),
-            # Test keyword regex using declared matching-rule 'any'
-            ("22f.yaml", SchemaError),
-            # Test keyword regex using declared matching-rule 'all'
-            ("23f.yaml", SchemaError),
-            # Test that True/False is not valid integers
-            ("24f.yaml", SchemaError),
-            # Test typecheck fails when pattern is used
-            ("25f.yaml", SchemaError),
-            # Test that pattern validation fails when data is Int type
-            ("26f.yaml", SchemaError),
-            # Test that sequence of mappings check the correct type and raises correct error when value is not a dict
-            ("27f.yaml", SchemaError),
-            # Test that type checking of mapping is done even if the mapping keyword is not specefied in the schema
-            ("28f.yaml", SchemaError),
-            # Test that default mode fails out in a similar way to regular mode and that a key that is not defined when default is set uses the defualt way
-            ("29f.yaml", SchemaError),
+            # TODO: Convert
             ("30f.yaml", SchemaError),
 
             # All tests for keyword assert

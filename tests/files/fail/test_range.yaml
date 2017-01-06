@@ -1,0 +1,76 @@
+---
+name: fail-range-1
+desc: 
+data:
+  - foo
+  - bar
+  - foobar
+schema:
+  type: seq
+  sequence:
+    - type: str
+      range:
+        max: 5
+        min: 1
+errors:
+ - "Type 'scalar' has size of '6', greater than max limit '5'. Path: '/2'"
+---
+name: fail-range-2
+desc: Test that range validates on 'map' raise correct error
+data:
+  streams:
+    sampleRateMultiple: 1
+schema:
+  type: map
+  mapping:
+    streams:
+      type: map
+      range:
+        min: 2
+        max: 3
+      mapping:
+        sampleRateMultiple:
+          type: int
+          required: True
+errors:
+  - "Type 'map' has size of '1', less than min limit '2'. Path: '/streams'"
+---
+name: fail-range-3
+desc: Test that range validates on 'seq' raise correct error
+data:
+  - foobar
+  - barfoo
+  - opa
+schema:
+  type: seq
+  range:
+    min: 1
+    max: 2
+  sequence:
+    - type: str
+errors:
+  - "Type 'seq' has size of '3', greater than max limit '2'. Path: ''"
+---
+name: fail-range-4
+desc: Test float range value out of range
+data:
+  the_float: 1.2
+  the_float_ex: 2.1
+schema:
+  type: map
+  mapping:
+    the_float:
+      type: float
+      required: True
+      range:
+        min: 2.1
+        max: 3.2
+    the_float_ex:
+      type: float
+      required: True
+      range:
+        min-ex: 2.1
+        max-ex: 3.2
+errors:
+  - "Type 'scalar' has size of '1.2', less than min limit '2.1'. Path: '/the_float'"
+  - "Type 'scalar' has size of '2.1', less than or equals to min limit(exclusive) '2.1'. Path: '/the_float_ex'"

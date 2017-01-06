@@ -1,0 +1,13 @@
+---
+name: fail-type-number-1
+desc: This tests number validation rule with wrong data types
+data:
+  - 1337
+  - 3.14159
+  - abc
+schema:
+  type: seq
+  sequence:
+    - type: number
+errors:
+  - "Value 'abc' is not of type 'number'. Path: '/2'"

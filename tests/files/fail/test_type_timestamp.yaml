@@ -1,0 +1,15 @@
+---
+name: fail-type-timestamp-1
+desc: Test timestamps that should throw errors
+data:
+  d1: ""
+  d2: "1427650980"
+schema:
+  type: map
+  mapping:
+    d1:
+      type: timestamp
+    d2:
+      type: timestamp
+errors:
+  - "Timestamp value is empty. Path: '/d1'"

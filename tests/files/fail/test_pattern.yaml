@@ -1,0 +1,26 @@
+---
+name: fail-pattern-1
+desc: 
+data:
+  email: foo(at)mail.com
+schema:
+  type: map
+  mapping:
+    email:
+      type: str
+      pattern: .+@.+
+errors:
+  - "Value 'foo(at)mail.com' does not match pattern '.+@.+'. Path: '/email'"
+---
+name: fail-pattern-2
+desc:
+data:
+  d: 'a'
+schema:
+  type: map
+  mapping:
+    d:
+      type: str
+      pattern: '[0-9]+'
+errors:
+  - "Value 'a' does not match pattern '[0-9]+'. Path: '/d'"

@@ -1,0 +1,14 @@
+---
+name: fail-type-text-1
+desc: This test the text validation rule with wrong data
+data:
+  - abc
+  - 123
+  - 3.14159
+  - True
+schema:
+  type: seq
+  sequence:
+    - type: text
+errors:
+  - "Value 'True' is not of type 'text'. Path: '/3'"

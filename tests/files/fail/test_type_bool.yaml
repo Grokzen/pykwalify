@@ -1,0 +1,12 @@
+---
+name: fail-type-bool-1
+desc: Test wrong type as value in list
+data:
+  - "foo"
+schema:
+  type: seq
+  matching: "any"
+  seq:
+    - type: bool
+errors:
+  - "Value 'foo' is not of type 'bool'. Path: '/0'"

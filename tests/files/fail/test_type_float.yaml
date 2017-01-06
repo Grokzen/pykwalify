@@ -1,0 +1,12 @@
+---
+name: fail-type-float-1
+desc: Test wrong type as value in list
+data:
+  - "foo"
+schema:
+  type: seq
+  matching: "any"
+  seq:
+    - type: float
+errors:
+  - "Value 'foo' is not of type 'float'. Path: '/0'"

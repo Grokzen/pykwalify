@@ -1,0 +1,31 @@
+---
+name: fail-sequence-multi-1
+desc: Test multiple sequence values with wrong sub type and 'all' matching rule
+data:
+  - "foo"
+schema:
+  type: seq
+  matching: "all"
+  seq:
+    - type: str
+    - type: int
+errors:
+  - "Value 'foo' is not of type 'int'. Path: '/0'"
+---
+name: fail-sequence-multi-2
+desc: Test multiple nested sequence values with error in level 2 with 'any' matching rule
+data:
+  - - 123
+  - "foobar"
+schema:
+  type: seq
+  matching: "any"
+  seq:
+    - type: str
+    - type: seq
+      matching: "any"
+      sequence:
+        - type: str
+errors:
+  - "Value '123' is not of type 'str'. Path: '/0/0'"
+  - "Value '[123]' is not of type 'str'. Path: '/0'"
