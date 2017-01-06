@@ -24,6 +24,7 @@ Bug fixes:
 - Fixed a bug where loaded extensions would not allways work in complex & nested objects.
 - Fixed a major bug in very nested *seq* schemas where if the schema expected another *seq* but the value was something else it would not raise it as a validation error.
   This has now been fixed and now raises the proper error.
+- Fixed a bug where include directive would not work in all cases when used inside a key in a mapping block.
 
 New features:
 
