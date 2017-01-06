@@ -1,4 +1,52 @@
 ---
+name: fail-type-str-1
+desc: Test simples str value
+data: 1
+schema:
+  type: str
+errors:
+  - "Value '1' is not of type 'str'. Path: ''"
+---
+name: fail-type-str-2
+desc: Test str value inside list
+data:
+  - 1
+  - True
+schema:
+  type: seq
+  sequence:
+    - type: str
+errors:
+  - "Value '1' is not of type 'str'. Path: '/0'"
+  - "Value 'True' is not of type 'str'. Path: '/1'"
+---
+name: fail-type-str-3
+desc: Test str value in mapping
+data:
+    foo: 1
+schema:
+  type: map
+  mapping:
+    foo:
+      type: str
+errors:
+  - "Value '1' is not of type 'str'. Path: '/foo'"
+---
+name: fail-type-str-4
+desc: Test str inside nested map & seq
+data:
+  foo:
+    - 1
+schema:
+  type: map
+  mapping:
+    foo:
+      type: seq
+      sequence:
+        - type: str
+errors:
+  - "Value '1' is not of type 'str'. Path: '/foo/0'"
+---
 name: fail-deftype-1
 desc: default type test
 schema:

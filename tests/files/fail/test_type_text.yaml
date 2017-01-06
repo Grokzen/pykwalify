@@ -1,6 +1,14 @@
 ---
 name: fail-type-text-1
-desc: This test the text validation rule with wrong data
+desc: Test simples text type
+data: True
+schema:
+  type: text
+errors:
+ - "Value 'True' is not of type 'text'. Path: ''"
+---
+name: fail-type-text-2
+desc: Test possible values as values in seq
 data:
   - abc
   - 123
@@ -12,3 +20,51 @@ schema:
     - type: text
 errors:
   - "Value 'True' is not of type 'text'. Path: '/3'"
+---
+name: fail-type-text-3
+desc: Test possible values as values in map
+data:
+  foo: abc
+  bar: 123
+  qwe: 3.14159
+  rty: True
+schema:
+  type: map
+  mapping:
+    foo:
+      type: text
+    bar:
+      type: text
+    qwe:
+      type: text
+    rty:
+      type: text
+errors:
+ - "Value 'True' is not of type 'text'. Path: '/rty'"
+---
+name: fail-type-text-4
+desc: Test that text type works inside nested map, seq, map
+data:
+  foobar:
+    - foo: abc
+      bar: 123
+      qwe: 3.14159
+      rty: True
+schema:
+  type: map
+  mapping:
+    foobar:
+      type: seq
+      sequence:
+        - type: map
+          mapping:
+            foo:
+              type: text
+            bar:
+              type: text
+            qwe:
+              type: text
+            rty:
+              type: text
+errors:
+ - "Value 'True' is not of type 'text'. Path: '/foobar/0/rty'"

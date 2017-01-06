@@ -1,0 +1,47 @@
+#
+# TODO: All of these failure tests currently raises a strange error that might not be the correct one and might require some redesign of the implementation.
+#       pykwalify.errors.NotSequenceError: <NotSequenceError: error code 7: Value: {} is not of a sequence type: Path: '/'>
+#
+
+# ---
+# name: fail-type-seq-1
+# desc: Test the most basic case for seq
+# data:
+#   {}
+# schema:
+#   type: seq
+#   sequence:
+#     - type: str
+# errors:
+#   - ''
+# ---
+# name: fail-type-seq-2
+# desc: Test that seq in seq works
+# data:
+#   - {}
+#   - {}
+# schema:
+#   type: seq
+#   sequence:
+#     - type: seq
+#       sequence:
+#         - type: bool
+# errors:
+#   - ''
+# ---
+# name: fail-type-seq-3
+# desc: Test bool inside nested map & seq
+# data:
+#   - foo:
+#       {}
+# schema:
+#   type: seq
+#   sequence:
+#     - type: map
+#       mapping:
+#         foo:
+#           type: seq
+#           sequence:
+#             - type: bool
+# errors:
+#   - ''

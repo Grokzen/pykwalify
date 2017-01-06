@@ -1,13 +1,83 @@
 ---
 name: fail-type-number-1
 desc: This tests number validation rule with wrong data types
+data: True
+schema:
+  type: number
+errors:
+  - "Value 'True' is not of type 'number'. Path: ''"
+---
+name: fail-type-number-2
+desc: Test that number type works with as value in map
 data:
-  - 1337
-  - 3.14159
-  - abc
+  foo: True
+  bar: 'abc'
+  qwe: []
+  rty: {}
+schema:
+  type: map
+  mapping:
+    foo:
+      type: number
+    bar:
+      type: number
+    qwe:
+      type: number
+    rty:
+      type: number
+errors:
+  - "Value 'True' is not of type 'number'. Path: '/foo'"
+  - "Value '[]' is not of type 'number'. Path: '/qwe'"
+  - "Value 'abc' is not of type 'number'. Path: '/bar'"
+  - "Value '{}' is not of type 'number'. Path: '/rty'"
+---
+name: fail-type-number-3
+desc: Test that different number values works as values in seq
+data:
+  - True
+  - 'abc'
+  - {}
+  - []
 schema:
   type: seq
   sequence:
     - type: number
 errors:
-  - "Value 'abc' is not of type 'number'. Path: '/2'"
+  - "Value 'True' is not of type 'number'. Path: '/0'"
+  - "Value '[]' is not of type 'number'. Path: '/3'"
+  - "Value 'abc' is not of type 'number'. Path: '/1'"
+  - "Value '{}' is not of type 'number'. Path: '/2'"
+---
+name: fail-type-number-4
+desc: Test that number type works inside nested map, seq, map
+data:
+  foobar:
+    - foo: True
+      bar: 'abc'
+      qwe: {}
+      rty: []
+schema:
+  type: map
+  mapping:
+    foobar:
+      type: seq
+      sequence:
+        - type: map
+          mapping:
+            foo:
+              type: number
+            bar:
+              type: number
+            qwe:
+              type: number
+            rty:
+              type: number
+            ewq:
+              type: number
+            dsa:
+              type: number
+errors:
+ - "Value 'True' is not of type 'number'. Path: '/foobar/0/foo'"
+ - "Value '[]' is not of type 'number'. Path: '/foobar/0/rty'"
+ - "Value 'abc' is not of type 'number'. Path: '/foobar/0/bar'"
+ - "Value '{}' is not of type 'number'. Path: '/foobar/0/qwe'"

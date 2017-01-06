@@ -10,3 +10,43 @@ schema:
     - type: bool
 errors:
   - "Value 'foo' is not of type 'bool'. Path: '/0'"
+---
+name: fail-type-bool-2
+desc: Test bool value inside list
+data:
+  - 'abc'
+  - 123
+schema:
+  type: seq
+  sequence:
+    - type: bool
+errors:
+  - "Value '123' is not of type 'bool'. Path: '/1'"
+  - "Value 'abc' is not of type 'bool'. Path: '/0'"
+---
+name: fail-type-bool-3
+desc: Test bool value in mapping
+data:
+  foo: 'abc'
+schema:
+  type: map
+  mapping:
+    foo:
+      type: bool
+errors:
+  - "Value 'abc' is not of type 'bool'. Path: '/foo'"
+---
+name: fail-type-bool-4
+desc: Test bool inside nested map & seq
+data:
+  foo:
+    - 'abc'
+schema:
+  type: map
+  mapping:
+    foo:
+      type: seq
+      sequence:
+        - type: bool
+errors:
+  - "Value 'abc' is not of type 'bool'. Path: '/foo/0'"

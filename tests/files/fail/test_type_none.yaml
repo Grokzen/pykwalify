@@ -1,0 +1,54 @@
+#
+# NOTE: This case is not allowed becuase Core class do NOT allow
+#       there is no data to validate. This happens if None is at top level
+#       of the data structure.
+#
+# ---
+# name: type-none-1
+# desc: Most basic test for type None
+# data: ~
+# schema:
+#   type: none
+---
+name: fail-type-none-2
+desc: Test that none type works with none type as value in map
+data:
+  name: 'abc'
+schema:
+  type: map
+  mapping:
+    name:
+      type: none
+errors:
+  - "Value 'abc' is not of type 'none'. Path: '/name'"
+---
+name: fail-type-none-3
+desc: Test that none type works as value in sequence
+data:
+  - 'abc'
+  - 123
+schema:
+  type: seq
+  sequence:
+    - type: none
+errors:
+  - "Value '123' is not of type 'none'. Path: '/1'"
+  - "Value 'abc' is not of type 'none'. Path: '/0'"
+---
+name: fail-type-none-4
+desc: Test that none type works inside nested map, seq, map
+data:
+  foo:
+    - bar: 'abc'
+schema:
+  type: map
+  mapping:
+    foo:
+      type: seq
+      sequence:
+        - type: map
+          mapping:
+            bar:
+              type: none
+errors:
+  - "Value 'abc' is not of type 'none'. Path: '/foo/0/bar'"

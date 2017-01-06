@@ -1,0 +1,46 @@
+---
+name: fail-type-map-1
+desc: Test the most basic case for map
+data:
+  - 'foo'
+schema:
+  type: map
+  mapping:
+    foo:
+      type: str
+errors:
+  - "Value '['foo']' is not a dict. Value path: ''"
+---
+name: type-map-2
+desc: 
+data:
+  - - 'foo'
+  - - 'foo'
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+        foo:
+          type: str
+errors:
+  - "Value '['foo']' is not a dict. Value path: '/0'"
+  - "Value '['foo']' is not a dict. Value path: '/1'"
+---
+name: type-map-3
+desc: Test bool inside nested map & seq
+data:
+  foo:
+    - - 'foo'
+schema:
+  type: map
+  mapping:
+    foo:
+      type: seq
+      sequence:
+        - type: map
+          mapping:
+            bar:
+              type: str
+errors:
+  - "Value '['foo']' is not a dict. Value path: '/foo/0'"

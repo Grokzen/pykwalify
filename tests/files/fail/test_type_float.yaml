@@ -1,12 +1,56 @@
 ---
 name: fail-type-float-1
+desc: Test simples float value
+data: "abc"
+schema:
+  type: float
+errors:
+  - "Value 'abc' is not of type 'float'. Path: ''"
+---
+name: fail-type-float-2
 desc: Test wrong type as value in list
 data:
   - "foo"
+  - True
 schema:
   type: seq
-  matching: "any"
   seq:
     - type: float
 errors:
   - "Value 'foo' is not of type 'float'. Path: '/0'"
+errors:
+  - "Value 'True' is not of type 'float'. Path: '/1'"
+  - "Value 'foo' is not of type 'float'. Path: '/0'"
+---
+name: fail-type-float-3
+desc: Test float value in mapping
+data:
+    foo: "abc"
+    bar: True
+schema:
+  type: map
+  mapping:
+    foo:
+      type: float
+    bar:
+      type: float
+errors:
+  - "Value 'True' is not of type 'float'. Path: '/bar'"
+  - "Value 'abc' is not of type 'float'. Path: '/foo'"
+---
+name: fail-type-float-4
+desc: Test float inside nested map & seq
+data:
+  foo:
+    - True
+    - "abc"
+schema:
+  type: map
+  mapping:
+    foo:
+      type: seq
+      sequence:
+        - type: float
+errors:
+  - "Value 'True' is not of type 'float'. Path: '/foo/0'"
+  - "Value 'abc' is not of type 'float'. Path: '/foo/1'"
