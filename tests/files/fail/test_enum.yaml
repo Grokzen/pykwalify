@@ -1,0 +1,16 @@
+---
+name: fail-enum-1
+desc: Test simple enum
+data:
+  - A
+  - B
+  - O
+schema:
+  type: seq
+  sequence:
+    - type: str
+      enum: [E, F, G, H]
+errors:
+  - "Enum 'A' does not exist. Path: '/0'"
+  - "Enum 'B' does not exist. Path: '/1'"
+  - "Enum 'O' does not exist. Path: '/2'"
