@@ -1,0 +1,7 @@
+---
+name: desc-1
+desc: Test basic desc
+data: 'foobar'
+schema:
+  desc: This is a description...
+  type: str

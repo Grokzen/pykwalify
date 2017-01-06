@@ -725,7 +725,14 @@ class Rule(object):
         """
         log.debug(u"Init descr value : %s", path)
 
-        self.desc = str(v)
+        if not isinstance(v, basestring):
+            raise RuleError(
+                msg=u"Value: {0} for keyword desc must be a string".format(v),
+                error_key=u"desc.not_string",
+                path=path,
+            )
+
+        self.desc = v
 
     def init_required_value(self, v, rule, path):
         """

@@ -441,6 +441,8 @@ Description of schema.
 
 This have no effect on the parsing, but is useful for humans to read. Similar to ``name``.
 
+Value for desc ``MUST`` be a string otherwise a ``RuleError`` will be raised upon usage.
+
 Example
 
 .. code-block:: yaml

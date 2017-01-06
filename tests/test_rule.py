@@ -68,7 +68,9 @@ class TestRule(unittest.TestCase):
         pass
 
     def test_desc_value(self):
-        pass
+        with pytest.raises(RuleError) as r:
+            Rule(schema={'type': 'str', 'desc': []})
+        assert str(r.value) == "<RuleError: error code 4: Value: [] for keyword desc must be a string: Path: '/'>"
 
     def test_required_value(self):
         # Test that required value must be bool otherwise exception is raised
