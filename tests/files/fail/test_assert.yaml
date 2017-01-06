@@ -1,0 +1,34 @@
+---
+name: fail-assert-1
+desc: assert test
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+       "less-than":
+          type: number
+          assert: val < 8
+       "more-than":
+          type: number
+          assert: 3 < val
+       "between":
+          type: number
+          assert: 3 < val and val < 8
+       "except":
+          type: number
+          assert: val < 3 or 8 < val
+data:
+  - less-than: 8
+  - more-than: 3
+  - between: 2.9
+  - except: 3.1
+errors:
+  - "Value: '2.9' assertion expression failed (3 < val and val < 8)"
+  - "Value: '3' assertion expression failed (3 < val)"
+  - "Value: '3.1' assertion expression failed (val < 3 or 8 < val)"
+  - "Value: '8' assertion expression failed (val < 8)"
+  # :assert_failed      : 1:3:[/0/less-than] '8': assertion expression failed (val < 8).
+  # :assert_failed      : 2:3:[/1/more-than] '3': assertion expression failed (3 < val).
+  # :assert_failed      : 3:3:[/2/between] '2.9': assertion expression failed (3 < val and val < 8).
+  # :assert_failed      : 4:3:[/3/except] '3.1': assertion expression failed (val < 3 or 8 < val).

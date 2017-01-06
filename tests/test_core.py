@@ -376,9 +376,6 @@ class TestCore(object):
         ]
 
         _fail_tests = [
-            # TODO: Convert
-            ("30f.yaml", SchemaError),
-
             # All tests for keyword assert
             ("test_assert.yaml", SchemaError),
             # All tests for keyword default

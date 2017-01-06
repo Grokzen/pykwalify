@@ -1,0 +1,37 @@
+---
+name: fail-merge-1
+desc: merge maps
+schema:
+  type: map
+  mapping:
+   "group":
+      type: map
+      mapping:
+       "name": &name
+          type: str
+          required: true
+       "email": &email
+          type: str
+          pattern: .+@.+
+          required: False
+   "user":
+      type: map
+      mapping:
+       "name":
+          <<: *name          # merge
+          length: {max: 16}  # add
+       "email":
+          <<: *email     # merge
+          required: true  # override
+data:
+  group:
+    name: foo
+    email: foo@mail.com
+  user:
+    name: toooooo-looooong-naaaame
+errors:
+  - "Cannot find required key 'email'. Path: '/user'"
+  - "Value: 'toooooo-looooong-naaaame' has length of '24', greater than max limit '16'. Path: '/user/name'"
+  ## Kwalify errors
+  # :required_nokey     : 5:3:[/user] key 'email:' is required.
+  # :length_toolong     : 5:3:[/user/name] 'toooooo-looooong-naaaame': too long (length 24 > max 16).

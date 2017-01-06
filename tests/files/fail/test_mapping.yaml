@@ -124,3 +124,48 @@ schema:
 errors:
   - "Value 'abc' is not of type 'int'. Path: '/OWNERSHIP'"
   - "Value 'def' is not of type 'int'. Path: '/WHT'"
+---
+name: fail-mapping-8
+desc: mapping test
+schema:
+  type: map
+  required: true
+  mapping:
+    name:
+      type: str
+      required: true
+    email:
+      type: str
+      # This pattern value was modified from /@/ to .+@.+ to make it copmatible with python
+      pattern: .+@.+
+      required: True
+    age:
+      type: int
+    blood:
+      type: str
+      enum:
+        - A
+        - B
+        - O
+        - AB
+    birth:
+      type: date
+data:
+  nam: foo
+  email: foo(at)mail.com
+  age: twenty
+  blood: ab
+  birth: Jul 01, 1985
+errors:
+  - "Cannot find required key 'name'. Path: ''"
+  - "Enum 'ab' does not exist. Path: '/blood'"
+  - "Key 'nam' was not defined. Path: ''"
+  - "Value 'foo(at)mail.com' does not match pattern '.+@.+'. Path: '/email'"
+  - "Value 'twenty' is not of type 'int'. Path: '/age'"
+  ## Kwalify errors
+  # :required_nokey     : 1:1:[/] key 'name:' is required.
+  # :key_undefined      : 1:1:[/nam] key 'nam:' is undefined.
+  # :pattern_unmatch    : 2:1:[/email] 'foo(at)mail.com': not matched to pattern /@/.
+  # :type_unmatch       : 3:1:[/age] 'twenty': not a integer.
+  # :enum_notexist      : 4:1:[/blood] 'ab': invalid blood value.
+  # :type_unmatch       : 5:1:[/birth] 'Jul 01, 1985': not a date.

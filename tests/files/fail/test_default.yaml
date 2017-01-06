@@ -1,0 +1,21 @@
+---
+name: fail-default-1
+desc: default value of map
+schema:
+  type: map
+  mapping:
+    =:
+      type: number
+      range: 
+        min: -10
+        max: 10
+data:
+  value1: 0
+  value2: 20
+  value3: -20
+errors:
+  - "Type 'scalar' has size of '-20', less than min limit '-10'. Path: '/value3'"
+  - "Type 'scalar' has size of '20', greater than max limit '10'. Path: '/value2'"
+  ## Kwalify errors
+  # :range_toolarge     : 2:1:[/value2] '20': too large (> max 10).
+  # :range_toosmall     : 3:1:[/value3] '-20': too small (< min -10).

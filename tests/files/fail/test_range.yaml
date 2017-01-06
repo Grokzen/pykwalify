@@ -74,3 +74,146 @@ schema:
 errors:
   - "Type 'scalar' has size of '1.2', less than min limit '2.1'. Path: '/the_float'"
   - "Type 'scalar' has size of '2.1', less than or equals to min limit(exclusive) '2.1'. Path: '/the_float_ex'"
+---
+name: fail-range-1
+desc: range test && bug#?????
+schema:
+  type: map
+  mapping:
+   "max-only":
+      type: seq
+      sequence:
+        - type: number
+          required: true
+          range: {max: 100}
+   "min-only":
+      type: seq
+      sequence:
+        - type: number
+          required: true
+          range: {min: 10.0}
+   "max-and-min":
+      type: seq
+      sequence:
+        - type: number
+          required: true
+          range: {max: 100.0, min: 10.0}
+data:
+  max-only:
+    - 101
+    - 100.1
+  min-only:
+    - 9
+    - 9.99
+  max-and-min:
+    - 101
+    - 100.1
+    - 9
+    - 9.99
+errors:
+  - "Type 'scalar' has size of '100.1', greater than max limit '100'. Path: '/max-only/1'"
+  - "Type 'scalar' has size of '100.1', greater than max limit '100.0'. Path: '/max-and-min/1'"
+  - "Type 'scalar' has size of '101', greater than max limit '100'. Path: '/max-only/0'"
+  - "Type 'scalar' has size of '101', greater than max limit '100.0'. Path: '/max-and-min/0'"
+  - "Type 'scalar' has size of '9', less than min limit '10.0'. Path: '/max-and-min/2'"
+  - "Type 'scalar' has size of '9', less than min limit '10.0'. Path: '/min-only/0'"
+  - "Type 'scalar' has size of '9.99', less than min limit '10.0'. Path: '/max-and-min/3'"
+  - "Type 'scalar' has size of '9.99', less than min limit '10.0'. Path: '/min-only/1'"
+  ## Kwalify errors
+  # :range_toolarge     : 2:3:[/max-only/0] '101': too large (> max 100).
+  # :range_toolarge     : 3:3:[/max-only/1] '100.1': too large (> max 100).
+  # :range_toosmall     : 5:3:[/min-only/0] '9': too small (< min 10.0).
+  # :range_toosmall     : 6:3:[/min-only/1] '9.99': too small (< min 10.0).
+  # :range_toolarge     : 8:3:[/max-and-min/0] '101': too large (> max 100.0).
+  # :range_toolarge     : 9:3:[/max-and-min/1] '100.1': too large (> max 100.0).
+  # :range_toosmall     : 10:3:[/max-and-min/2] '9': too small (< min 10.0).
+  # :range_toosmall     : 11:3:[/max-and-min/3] '9.99': too small (< min 10.0).
+---
+name: fail-range-2
+desc: range test (with max-ex and min-ex)
+schema:
+  type:  map
+  mapping:
+   "max-ex-only":
+      type: seq
+      sequence:
+        - type: number
+          required: true
+          range: {max-ex: 100}
+   "min-ex-only":
+      type: seq
+      sequence:
+        - type: number
+          required: true
+          range: {min-ex: 10.0}
+   "max-ex-and-min-ex":
+      type: seq
+      sequence:
+        - type: number
+          required: true
+          range: {max-ex: 100.0, min-ex: 10.0}
+data:
+  max-ex-only:
+    - 100
+    - 100.0
+  min-ex-only:
+    - 10
+    - 10.0
+  max-ex-and-min-ex:
+    - 100
+    - 100.0
+    - 10
+    - 10.0
+errors:
+  - "Type 'scalar' has size of '10', less than or equals to min limit(exclusive) '10.0'. Path: '/max-ex-and-min-ex/2'"
+  - "Type 'scalar' has size of '10', less than or equals to min limit(exclusive) '10.0'. Path: '/min-ex-only/0'"
+  - "Type 'scalar' has size of '10.0', less than or equals to min limit(exclusive) '10.0'. Path: '/max-ex-and-min-ex/3'"
+  - "Type 'scalar' has size of '10.0', less than or equals to min limit(exclusive) '10.0'. Path: '/min-ex-only/1'"
+  - "Type 'scalar' has size of '100', greater than or equals to max limit(exclusive) '100'. Path: '/max-ex-only/0'"
+  - "Type 'scalar' has size of '100', greater than or equals to max limit(exclusive) '100.0'. Path: '/max-ex-and-min-ex/0'"
+  - "Type 'scalar' has size of '100.0', greater than or equals to max limit(exclusive) '100'. Path: '/max-ex-only/1'"
+  - "Type 'scalar' has size of '100.0', greater than or equals to max limit(exclusive) '100.0'. Path: '/max-ex-and-min-ex/1'"
+  ## Kwalify errors
+  # :range_toolargeex   : 2:3:[/max-ex-only/0] '100': too large (>= max 100).
+  # :range_toolargeex   : 3:3:[/max-ex-only/1] '100.0': too large (>= max 100).
+  # :range_toosmallex   : 5:3:[/min-ex-only/0] '10': too small (<= min 10.0).
+  # :range_toosmallex   : 6:3:[/min-ex-only/1] '10.0': too small (<= min 10.0).
+  # :range_toolargeex   : 8:3:[/max-ex-and-min-ex/0] '100': too large (>= max 100.0).
+  # :range_toolargeex   : 9:3:[/max-ex-and-min-ex/1] '100.0': too large (>= max 100.0).
+  # :range_toosmallex   : 10:3:[/max-ex-and-min-ex/2] '10': too small (<= min 10.0).
+  # :range_toosmallex   : 11:3:[/max-ex-and-min-ex/3] '10.0': too small (<= min 10.0).
+---
+name: fail-range-3
+desc: range test (with max, min, max-ex and min-ex)
+schema:
+  type:  map
+  mapping:
+   "A":
+      type: seq
+      sequence:
+        - type: number
+          required: true
+          range: {max: 100, min-ex: 10.0}
+   "B":
+      type: seq
+      sequence:
+        - type: number
+          required: true
+          range: {min: 10, max-ex: 100.0}
+data:
+  A:
+    - 100.00001
+    - 10.0
+  B:
+    - 9.99999
+    - 100.0
+errors:
+  - "Type 'scalar' has size of '10.0', less than or equals to min limit(exclusive) '10.0'. Path: '/A/1'"
+  - "Type 'scalar' has size of '100.0', greater than or equals to max limit(exclusive) '100.0'. Path: '/B/1'"
+  - "Type 'scalar' has size of '100.00001', greater than max limit '100'. Path: '/A/0'"
+  - "Type 'scalar' has size of '9.99999', less than min limit '10'. Path: '/B/0'"
+  ## Kwalify errors
+  # :range_toolarge     : 2:3:[/A/0] '100.00001': too large (> max 100)"
+  # :range_toosmallex   : 3:3:[/A/1] '10.0': too small (<= min 10.0).
+  # :range_toosmall     : 5:3:[/B/0] '9.99999': too small (< min 10).
+  # :range_toolargeex   : 6:3:[/B/1] '100.0': too large (>= max 100.0).

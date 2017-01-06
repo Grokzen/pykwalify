@@ -1,0 +1,25 @@
+---
+name: fail-deftype-1
+desc: default type test
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+        "name":
+        "email":
+data:
+  - name: 123
+    email: true
+  - name: 3.14
+  - email: 2004-01-01
+errors:
+  - "Value '123' is not of type 'str'. Path: '/0/name'"
+  - "Value '2004-01-01' is not of type 'str'. Path: '/2/email'"
+  - "Value '3.14' is not of type 'str'. Path: '/1/name'"
+  - "Value 'True' is not of type 'str'. Path: '/0/email'"
+  ## Kwalify errors
+  # :type_unmatch       : 1:3:[/0/name] '123': not a string.
+  # :type_unmatch       : 2:3:[/0/email] 'true': not a string.
+  # :type_unmatch       : 3:3:[/1/name] '3.14': not a string.
+  # :type_unmatch       : 4:3:[/2/email] '2004-01-01': not a string.

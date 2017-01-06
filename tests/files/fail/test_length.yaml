@@ -1,0 +1,113 @@
+---
+name: fail-length-1
+desc: length test
+schema:
+  type: map
+  mapping:
+   "max-only":
+      type: seq
+      sequence:
+        - type: str
+          length: {max: 8}
+   "min-only":
+      type: seq
+      sequence:
+        - type: str
+          length: {min: 4}
+   "max-and-min":
+      type: seq
+      sequence:
+        - type: str
+          length: {max: 8, min: 4}
+data:
+  max-only:
+    - hogehoge!
+  min-only:
+    - foo
+    -
+  max-and-min:
+    - foobarbaz
+    - foo
+errors:
+  - "Value: 'foo' has length of '3', greater than min limit '4'. Path: '/max-and-min/1'"
+  - "Value: 'foo' has length of '3', greater than min limit '4'. Path: '/min-only/0'"
+  - "Value: 'foobarbaz' has length of '9', greater than max limit '8'. Path: '/max-and-min/0'"
+  - "Value: 'hogehoge!' has length of '9', greater than max limit '8'. Path: '/max-only/0'"
+  ## Kwalify errors
+  # :length_toolong     : 2:3:[/max-only/0] 'hogehoge!': too long (length 9 > max 8).
+  # :length_tooshort    : 4:3:[/min-only/0] 'foo': too short (length 3 < min 4).
+  # :length_toolong     : 7:3:[/max-and-min/0] 'foobarbaz': too long (length 9 > max 8).
+  # :length_tooshort    : 8:3:[/max-and-min/1] 'foo': too short (length 3 < min 4).
+---
+name: fail-length-2
+desc: length test (with max-ex and min-ex)
+schema:
+  type: map
+  mapping:
+   "max-ex-only":
+      type: seq
+      sequence:
+        - type: str
+          length: {max-ex: 8}
+   "min-ex-only":
+      type: seq
+      sequence:
+        - type: str
+          length: {min-ex: 4}
+   "max-ex-and-min-ex":
+      type: seq
+      sequence:
+        - type: str
+          length: {max-ex: 8, min-ex: 4}
+data:
+  max-ex-only:
+    - hogehoge
+  min-ex-only:
+    - foo!
+    -
+  max-ex-and-min-ex:
+    - foobarba
+    - foo!
+errors:
+  - "Value: 'foo!' has length of '4', greater than min_ex limit '4'. Path: '/max-ex-and-min-ex/1'"
+  - "Value: 'foo!' has length of '4', greater than min_ex limit '4'. Path: '/min-ex-only/0'"
+  - "Value: 'foobarba' has length of '8', greater than max_ex limit '8'. Path: '/max-ex-and-min-ex/0'"
+  - "Value: 'hogehoge' has length of '8', greater than max_ex limit '8'. Path: '/max-ex-only/0'"
+  ## Kwalify errors
+  # :length_toolongex   : 2:3:[/max-ex-only/0] 'hogehoge': too long (length 8 >= max 8).
+  # :length_tooshortex  : 4:3:[/min-ex-only/0] 'foo!': too short (length 4 <= min 4).
+  # :length_toolongex   : 7:3:[/max-ex-and-min-ex/0] 'foobarba': too long (length 8 >= max 8).
+  # :length_tooshortex  : 8:3:[/max-ex-and-min-ex/1] 'foo!': too short (length 4 <= min 4).
+---
+name: fail-length-3
+desc: length test (with min, max, max-ex and min-ex)
+schema:
+  type: map
+  mapping:
+   "A":
+      type: seq
+      sequence:
+        - type: str
+          length: {max: 8, min-ex: 4}
+   "B":
+      type: seq
+      sequence:
+        - type: str
+          length: {max-ex: 8, min: 4}
+data:
+  A:
+    - hogehoge!
+    - hoge
+  B:
+    - hogehoge
+    - hog
+errors:
+  - "Value: 'hog' has length of '3', greater than min limit '4'. Path: '/B/1'"
+  - "Value: 'hoge' has length of '4', greater than min_ex limit '4'. Path: '/A/1'"
+  - "Value: 'hogehoge!' has length of '9', greater than max limit '8'. Path: '/A/0'"
+  - "Value: 'hogehoge' has length of '8', greater than max_ex limit '8'. Path: '/B/0'"
+  ## Kwalify errors
+  # :length_toolong     : 2:3:[/A/0] 'hogehoge!': too long (length 9 > max 8).
+  # :length_tooshortex  : 3:3:[/A/1] 'hoge': too short (length 4 <= min 4).
+  # :length_toolongex   : 5:3:[/B/0] 'hogehoge': too long (length 8 >= max 8).
+  # :length_tooshort    : 6:3:[/B/1] 'hog': too short (length 3 < min 4).

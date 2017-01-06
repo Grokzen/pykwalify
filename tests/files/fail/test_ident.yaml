@@ -1,0 +1,23 @@
+---
+name: fail-ident-1
+desc: ident constraint test
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+       "name":
+          ident: true
+       "age":
+          type: int
+data:
+  - name: foo
+    age:  10
+  - name: bar
+    age:  10
+  - name: bar
+    age:  10
+errors:
+  - "Value 'bar' is not unique. Previous path: '/1/name'. Path: '/2/name'"
+  ## Kwalify errors
+  # :value_notunique    : 5:3:[/2/name] 'bar': is already used at '/1/name'.

@@ -38,3 +38,72 @@ schema:
 errors:
   - "Value 'bar' is not unique. Previous path: '/1/name'. Path: '/2/name'"
   - "Value 'foo' is not unique. Previous path: '/0/groups/0'. Path: '/0/groups/3'"
+---
+name: fail-unique-2
+desc: unique constraint test with map
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+       "name":
+          unique: true
+       "age":
+          type: int
+data:
+  - name: foo
+    age:  10
+  - name: bar
+    age:  10
+  - age:  10
+    name: bar
+errors:
+  - "Value 'bar' is not unique. Previous path: '/1/name'. Path: '/2/name'"
+  ## Kwalify errors
+  # :value_notunique    : 6:3:[/2/name] 'bar': is already used at '/1/name'.
+---
+name: fail-unique-3
+desc: unique constraint test with seq
+schema:
+  type: seq
+  sequence:
+    - type: str
+      unique: true
+data:
+  - foo
+  - ~
+  - bar
+  - ~
+  - bar
+errors:
+  - "Value 'bar' is not unique. Previous path: '/2'. Path: '/4'"
+  ## Kwalify errors
+  # :value_notunique    : 5:1:[/4] 'bar': is already used at '/2'.
+---
+name: fail-unique-4
+desc: unique constraint and '<<' (merge)
+schema:
+    type: seq
+    sequence:
+      - type: map
+        mapping:
+         "name":
+           type: str
+           required: true
+           unique: true
+         "value": 
+           type: any
+           required: true
+data:
+  - &a1
+    name:  x1
+    value: 10
+  - <<: *a1
+  - <<: *a1         # wrong validation error
+    name:  x3
+errors:
+  - "Value 'x1' is not unique. Previous path: '/0/name'. Path: '/1/name'"
+  # TODO: Possibly missing one error here...
+  ## Kwalify errors
+  # :value_notunique    : 4:3:[/1/name] 'x1': is already used at '/0/name'.
+  # :value_notunique    : 5:3:[/2/name] 'x1': is already used at '/0/name'.

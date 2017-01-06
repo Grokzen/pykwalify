@@ -30,3 +30,25 @@ schema:
     - type: bool
 errors:
   - "Value '1' is not of type 'bool'. Path: '/2'"
+---
+name: fail-sequence-3
+desc: sequence test
+schema:
+  type: seq
+  required: true
+  sequence:
+    - type: str
+      required: true
+data:
+  - foo
+  - bar
+  -
+  - baz
+  - 100
+errors:
+  - "Value '100' is not of type 'str'. Path: '/4'"
+  - "required.novalue : '/2'"
+  ## Kwalify errors
+  # - "Value 'None' is not of type 'str'. Path: '/2'"
+  # :required_novalue   : (line 3)[/2] value required but none.
+  # :type_unmatch       : (line 5)[/4] '100': not a string.
