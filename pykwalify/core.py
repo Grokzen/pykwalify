@@ -511,6 +511,26 @@ class Core(object):
             )
 
         for k, rr in m.items():
+            # Handle if the value of the key contains a include keyword
+            if rr.include_name is not None:
+                include_name = rr.include_name
+                partial_schema_rule = pykwalify.partial_schemas.get(include_name)
+
+                if not partial_schema_rule:
+                    self.errors.append(SchemaError.SchemaErrorEntry(
+                        msg=u"Cannot find partial schema with name '{include_name}'. Existing partial schemas: '{existing_schemas}'. Path: '{path}'",
+                        path=path,
+                        value=value,
+                        include_name=include_name,
+                        existing_schemas=", ".join(sorted(pykwalify.partial_schemas.keys()))))
+                    return
+
+                include_rule = Rule()
+                include_rule.mapping = {k: partial_schema_rule}
+                include_rule.regex_mappings = []
+
+                return self._validate(value, include_rule, u"{0}/{1}".format(path, k), done)
+
             # Find out if this is a regex rule
             is_regex_rule = False
             required_regex = ""
