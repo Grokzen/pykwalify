@@ -169,3 +169,18 @@ errors:
   # :type_unmatch       : 3:1:[/age] 'twenty': not a integer.
   # :enum_notexist      : 4:1:[/blood] 'ab': invalid blood value.
   # :type_unmatch       : 5:1:[/birth] 'Jul 01, 1985': not a date.
+---
+name: fail-mapping-9
+desc: Test that regexes can be 'required'
+data:
+  hello: Hi
+  person: Fred
+schema:
+  type: map
+  mapping:
+    regex;(person[1-9]):
+      required: True
+errors:
+  - "Cannot find required key 'regex;(person[1-9])'. Path: ''"
+  - "Key 'hello' does not match any regex 'person[1-9]'. Path: ''"
+  - "Key 'person' does not match any regex 'person[1-9]'. Path: ''"

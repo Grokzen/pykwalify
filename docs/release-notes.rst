@@ -15,6 +15,7 @@ New keywords:
 
 Bug fixes:
 
+- Fixed a bug where regexes marked as 'required' in a map were matched as strings, rather than regexes.
 - Fixed a bug where the type validation did not work when schema specefied a sequence of map objects. It now outputs a proper `...is not a dict...` error instead.
 - Fixed a bug in *unique* validation when a key that it tried to lookup in the data would not exists.
   Now it just ignores that it did not find any value becuase a missing value do not impact validation.
