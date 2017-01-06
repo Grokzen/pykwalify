@@ -292,9 +292,6 @@ class TestCore(object):
     def test_core_files(self):
         # These tests should pass with no exception raised
         pass_tests = [
-            #
-            "43s.yaml",
-
             # All tests for keyword assert
             "test_assert.yaml",
             # All tests for keyword default
