@@ -295,3 +295,14 @@ schema:
           sequence:
             - type: map
               allowempty: True
+---
+name: mapping18
+desc: Test that regexes can be 'required'
+data:
+  person1: Jack
+  person2: Fred
+schema:
+  type: map
+  mapping:
+    regex;(person[1-9]):
+      required: True

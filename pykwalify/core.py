@@ -505,8 +505,23 @@ class Core(object):
             )
 
         for k, rr in m.items():
+            # Find out if this is a regex rule
+            is_regex_rule = False
+            required_regex = ""
+            for regex_rule in rule.regex_mappings:
+                if k == "regex;({})".format(regex_rule.map_regex_rule) or k == "re;({})".format(regex_rule.map_regex_rule):
+                    is_regex_rule = True
+                    required_regex = regex_rule.map_regex_rule
+
+            # Check for the presense of the required key
+            is_present = False
+            if not is_regex_rule:
+                is_present = k in value
+            else:
+                is_present = any([re.search(required_regex, v) for v in value])
+
             # Specifying =: as key is considered the "default" if no other keys match
-            if rr.required and k not in value and k != "=":
+            if rr.required and not is_present and k != "=":
                 self.errors.append(SchemaError.SchemaErrorEntry(
                     msg=u"Cannot find required key '{key}'. Path: '{path}'",
                     path=path,
