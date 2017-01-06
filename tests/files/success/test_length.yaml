@@ -1,8 +1,6 @@
-##
 ---
-name:  length1
-desc:  length test
-#
+name: length1
+desc: length test
 schema:
   type: map
   mapping:
@@ -10,17 +8,21 @@ schema:
       type: seq
       sequence:
         - type: str
-          length: {max: 8}
+          length:
+            max: 8
    "min-only":
       type: seq
       sequence:
         - type: str
-          length: {min: 4}
+          length:
+            min: 4
    "max-and-min":
       type: seq
       sequence:
         - type: str
-          length: {max: 8, min: 4}
+          length:
+            max: 8
+            min: 4
 data:
   max-only:
     - hogehoge
@@ -32,11 +34,9 @@ data:
   max-and-min:
     - hogehoge
     - hoge
-##
 ---
 name: length2
 desc: length test (with max-ex and min-ex)
-#
 schema:
   type: map
   mapping:
@@ -44,17 +44,21 @@ schema:
       type: seq
       sequence:
         - type: str
-          length: {max-ex: 8}
+          length:
+            max-ex: 8
    "min-ex-only":
       type: seq
       sequence:
         - type: str
-          length: {min-ex: 4}
+          length:
+            min-ex: 4
    "max-ex-and-min-ex":
       type: seq
       sequence:
         - type: str
-          length: {max-ex: 8, min-ex: 4}
+          length:
+            max-ex: 8
+            min-ex: 4
 data:
   max-ex-only:
     - hogehog
@@ -65,11 +69,9 @@ data:
   max-ex-and-min-ex:
     - hogehog
     - hoge!
-##
 ---
-name:  length3
-desc:  length test (with min, max, max-ex and min-ex)
-#
+name: length3
+desc: length test (with min, max, max-ex and min-ex)
 schema:
   type: map
   mapping:
@@ -77,13 +79,16 @@ schema:
       type: seq
       sequence:
         - type: str
-          length: {max: 8, min-ex: 4}
+          length:
+            max: 8
+            min-ex: 4
    "B":
       type: seq
       sequence:
         - type: str
-          length: {max-ex: 8, min: 4}
-#
+          length:
+            max-ex: 8
+            min: 4
 data:
   A:
     - hogehoge
