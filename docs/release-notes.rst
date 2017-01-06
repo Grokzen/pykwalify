@@ -40,6 +40,10 @@ Release Notes
  - Implmenet keyword *date* and added support keyword *format*. This can be used to validate many different types of datetime objects.
  - Value for keyword *desc* now *MUST* be a string or a RuleError will be raised.
  - Value for keyword *example* now *MUST* be a string or a RuleError will be raised.
+ - Added new cli flag *--fix-ruby-style-regex* that will trim slashes from ruby style regex/patterns.
+   When using this flag the first and last */* will be trimmed of the pattern before running validation.
+   If you only use a Core object then set "fix_ruby_style_regex=True" when creating the Core object instance.
+   Default behaviour will still be that you should use python style regex values but this flag can help in some cases when you can't change the schema.
 
 
 1.5.2 (Nov 12, 2016)

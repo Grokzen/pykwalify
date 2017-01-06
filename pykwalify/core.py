@@ -30,7 +30,8 @@ log = logging.getLogger(__name__)
 class Core(object):
     """ Core class of pyKwalify """
 
-    def __init__(self, source_file=None, schema_files=None, source_data=None, schema_data=None, extensions=None, strict_rule_validation=False):
+    def __init__(self, source_file=None, schema_files=None, source_data=None, schema_data=None, extensions=None, strict_rule_validation=False,
+                 fix_ruby_style_regex=False):
         """
         :param extensions:
             List of paths to python files that should be imported and available via 'func' keywork.
@@ -57,6 +58,7 @@ class Core(object):
         self.extensions = extensions
         self.errors = []
         self.strict_rule_validation = strict_rule_validation
+        self.fix_ruby_style_regex = fix_ruby_style_regex
 
         if source_file is not None:
             if not os.path.exists(source_file):
@@ -332,6 +334,8 @@ class Core(object):
                     # Create a sub core object to enable error tracking that do not
                     #  collide with this Core objects errors
                     tmp_core = Core(source_data={}, schema_data={})
+                    tmp_core.fix_ruby_style_regex = self.fix_ruby_style_regex
+                    tmp_core.strict_rule_validation = self.strict_rule_validation
                     tmp_core.loaded_extensions = self.loaded_extensions
                     tmp_core._validate(item, r, "{0}/{1}".format(path, i), done)
                     tmp_errors = tmp_core.errors
@@ -605,6 +609,18 @@ class Core(object):
             return
 
         if rule.pattern is not None:
+            #
+            # Try to trim away the surrounding slashes around ruby style /<regex>/ if they are defined.
+            # This is a quirk from ruby that they define regex patterns with surrounding slashes.
+            # Docs on how ruby regex works can be found here: https://ruby-doc.org/core-2.4.0/Regexp.html
+            # The original ruby implementation uses this code to validate patterns
+            #   unless value.to_s =~ rule.regexp
+            # Becuase python do not work with surrounding slashes we have to trim them away in order to make the regex work
+            #
+            if rule.pattern.startswith('/') and rule.pattern.endswith('/') and self.fix_ruby_style_regex:
+                rule.pattern = rule.pattern[1:-1]
+                log.debug("Trimming slashes around ruby style regex. New pattern value: '{0}'".format(rule.pattern))
+
             try:
                 res = re.match(rule.pattern, value, re.UNICODE)
             except TypeError:

@@ -25,12 +25,14 @@ def parse_cli():
     #
 
     __docopt__ = """
-usage: pykwalify -d FILE -s FILE ... [-e FILE ...] [--strict-rule-validation] [-v ...] [-q]
+usage: pykwalify -d FILE -s FILE ... [-e FILE ...] [--strict-rule-validation] [--fix-ruby-style-regex] [-v ...] [-q]
 
 optional arguments:
   -d FILE, --data-file FILE            the file to be tested
   -e FILE, --extension FILE            file containing python extension
   -s FILE, --schema-file FILE          schema definition file
+  --fix-ruby-style-regex               This flag fixes some of the quirks of ruby style regex
+                                       that is not compatible with python style regex
   --strict-rule-validation             enables strict validation of all keywords for all
                                        Rule objects to find unsupported keyword usage
   -h, --help                           show this help message and exit
@@ -70,6 +72,7 @@ def run(cli_args):
         schema_files=cli_args["--schema-file"],
         extensions=cli_args['--extension'],
         strict_rule_validation=cli_args['--strict-rule-validation'],
+        fix_ruby_style_regex=cli_args['--fix-ruby-style-regex'],
     )
     c.validate()
     return c
