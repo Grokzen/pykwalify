@@ -30,11 +30,11 @@ usage: pykwalify -d FILE -s FILE ... [-e FILE ...] [--strict-rule-validation] [-
 optional arguments:
   -d FILE, --data-file FILE            the file to be tested
   -e FILE, --extension FILE            file containing python extension
-  -h, --help                           show this help message and exit
-  -q, --quiet                          suppress terminal output
   -s FILE, --schema-file FILE          schema definition file
   --strict-rule-validation             enables strict validation of all keywords for all
                                        Rule objects to find unsupported keyword usage
+  -h, --help                           show this help message and exit
+  -q, --quiet                          suppress terminal output
   -v, --verbose                        verbose terminal output (multiple -v increases verbosity)
   --version                            display the version number and exit
 """
