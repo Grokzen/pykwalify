@@ -39,6 +39,7 @@ Release Notes
    It will be easier to find out what keywords lack tests and what keywords that have enough tests.
  - Implmenet keyword *date* and added support keyword *format*. This can be used to validate many different types of datetime objects.
  - Value for keyword *desc* now *MUST* be a string or a RuleError will be raised.
+ - Value for keyword *example* now *MUST* be a string or a RuleError will be raised.
 
 
 1.5.2 (Nov 12, 2016)

@@ -491,7 +491,14 @@ class Rule(object):
     def init_example(self, v, rule, path):
         log.debug(u'Init example value : {0}'.format(path))
 
-        self._example = str(v)
+        if not isinstance(v, basestring):
+            raise RuleError(
+                msg=u"Value: {0} for keyword example must be a string".format(v),
+                error_key=u"example.not_string",
+                path=path,
+            )
+
+        self.desc = v
 
     def init_length_value(self, v, rule, path):
         log.debug(u'Init length value : {0}'.format(path))
