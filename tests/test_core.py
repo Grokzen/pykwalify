@@ -435,8 +435,83 @@ class TestCore(object):
             # Test that default mode fails out in a similar way to regular mode and that a key that is not defined when default is set uses the defualt way
             ("29f.yaml", SchemaError),
             ("30f.yaml", SchemaError),
+
+            # All tests for keyword assert
+            ("test_assert.yaml", SchemaError),
+            # All tests for keyword default
+            ("test_default.yaml", SchemaError),
+            # All tests for keyword desc
+            ("test_desc.yaml", SchemaError),
+            # All tests for keyword enum
+            ("test_enum.yaml", SchemaError),
+            # All tests for keyword example
+            ("test_example.yaml", SchemaError),
+            # All tests for keyword extensions
+            ("test_extensions.yaml", SchemaError),
+            # All tests for keyword func
+            ("test_func.yaml", SchemaError),
+            # All tests for keyword ident
+            ("test_ident.yaml", SchemaError),
+            # All tests for keyword include
+            ("test_include.yaml", SchemaError),
+            # All tests for keyword length
+            ("test_length.yaml", SchemaError),
+            # All tests for keyword mapping
+            ("test_mapping.yaml", SchemaError),
+            # All tests for keyword matching
+            ("test_matching.yaml", SchemaError),
+            # All tests for keyword name
+            ("test_name.yaml", SchemaError),
+            # All tests for keyword pattern
+            ("test_pattern.yaml", SchemaError),
+            # All tests for keyword range
+            ("test_range.yaml", SchemaError),
+            # All tests for keyword required
+            ("test_required.yaml", SchemaError),
+            # All tests for keyword schema
+            ("test_schema.yaml", SchemaError),
+            # All tests for keyword sequence
+            ("test_sequence.yaml", SchemaError),
+            # All tests for keyword unique
+            ("test_unique.yaml", SchemaError),
+            # All tests for keyword version
+            ("test_version.yaml", SchemaError),
+
+            # All test cases for Multiple sequence checks
+            ("test_sequence_multi.yaml", SchemaError),
+            # All test cases for merging
+            ("test_merge.yaml", SchemaError),
+            # All test cases for yaml anchors
+            ("test_anchor.yaml", SchemaError),
+
+            # All tests for TYPE: any
+            ("test_type_any.yaml", SchemaError),
+            # All tests for TYPE: bool
+            ("test_type_bool.yaml", SchemaError),
             # All tests for TYPE: date
             ("test_type_date.yaml", SchemaError),
+            # All tests for TYPE: float
+            ("test_type_float.yaml", SchemaError),
+            # All tests for TYPE: int
+            ("test_type_int.yaml", SchemaError),
+            # All tests for TYPE: map
+            ("test_type_map.yaml", SchemaError),
+            # All tests for TYPE: none
+            ("test_type_none.yaml", SchemaError),
+            # All tests for TYPE: number
+            ("test_type_number.yaml", SchemaError),
+            # All tests for TYPE: scalar
+            ("test_type_scalar.yaml", SchemaError),
+            # All tests for TYPE: seq
+            ("test_type_seq.yaml", SchemaError),
+            # All tests for TYPE: str
+            ("test_type_str.yaml", SchemaError),
+            # All tests for TYPE: symbol
+            ("test_type_symbol.yaml", SchemaError),
+            # All tests for TYPE: text
+            ("test_type_text.yaml", SchemaError),
+            # All tests for TYPE: timestamp
+            ("test_type_timestamp.yaml", SchemaError),
         ]
 
         # Add override magic to make it easier to test a specific file
@@ -476,7 +551,7 @@ class TestCore(object):
                 for document_index, document in enumerate(yaml_data):
                     data = document["data"]
                     schema = document["schema"]
-                    errors = document["errors"]
+                    errors = document.get("errors", [])
 
                     try:
                         print("Running test files: {0}".format(f))
@@ -485,6 +560,7 @@ class TestCore(object):
                     except exception_type as e:
                         pass
                     else:
+                        print("ERROR RUNNING FILES: {0} : {1}:{2}".format(f, document_index, document.get('name', 'UNKNOWN')))
                         raise AssertionError("Exception {0} not raised as expected... FILES: {1} : {2} : {3}:{4}".format(
                             exception_type, exception_type, failing_test, document_index, document.get('name', 'UNKNOWN')))
 
