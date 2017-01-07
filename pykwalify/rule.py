@@ -725,7 +725,14 @@ class Rule(object):
         """
         log.debug(u"Init name value : %s", path)
 
-        self.name = str(v)
+        if not isinstance(v, basestring):
+            raise RuleError(
+                msg=u"Value: {0} for keyword name must be a string".format(v),
+                error_key=u"name.not_string",
+                path=path,
+            )
+
+        self.name = v
 
     def init_desc_value(self, v, rule, path):
         """

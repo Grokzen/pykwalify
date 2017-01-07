@@ -65,7 +65,9 @@ class TestRule(unittest.TestCase):
         assert r.value.error_key == 'type.not_string'
 
     def test_name_value(self):
-        pass
+        with pytest.raises(RuleError) as r:
+            Rule(schema={'type': 'str', 'name': {}})
+        assert str(r.value) == "<RuleError: error code 4: Value: {} for keyword name must be a string: Path: '/'>"
 
     def test_desc_value(self):
         with pytest.raises(RuleError) as r:

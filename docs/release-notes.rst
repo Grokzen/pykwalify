@@ -53,6 +53,7 @@ Changed behaviour:
 - Changed validation for if a value is required and a value in a list for example is *None*. It now adds a normal validation errors instead of raising a *CoreError*.
 - Value for keyword *desc* now *MUST* be a string or a *RuleError* will be raised.
 - Value for keyword *example* now *MUST* be a string or a *RuleError* will be raised.
+- Value for keyword *name* now *MUST* be a string or a *RuleError* will be raised.
 
 General changes:
 
