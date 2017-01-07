@@ -22,6 +22,8 @@ Bug fixes:
 - Fixed a bug with keyword *ident* when the rule value was verified to be a *boolean*. It now only accepts *boolean* values as expected.
 - Fixed a bug where if *allowempty* was specefied in a mapping type inside a sequence type then it would not properly validate.
 - Fixed a bug where loaded extensions would not allways work in complex & nested objects.
+- Fixed a major bug in very nested *seq* schemas where if the schema expected another *seq* but the value was something else it would not raise it as a validation error.
+  This has now been fixed and now raises the proper error.
 
 New features:
 

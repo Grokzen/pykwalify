@@ -52,3 +52,20 @@ errors:
   # - "Value 'None' is not of type 'str'. Path: '/2'"
   # :required_novalue   : (line 3)[/2] value required but none.
   # :type_unmatch       : (line 5)[/4] '100': not a string.
+---
+name: fail-sequence-4
+desc: Test that very deep nested sequences fail when schema expected sequence but value was something else
+schema:
+  type: seq
+  sequence:
+    - type: seq
+      sequence:
+        - type: seq
+          sequence:
+            - type: seq
+              sequence:
+                - type: str
+data:
+  - - - 1
+errors:
+  - "Value '1' is not a list. Value path: '/0/0/0'"

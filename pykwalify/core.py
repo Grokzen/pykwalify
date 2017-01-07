@@ -313,7 +313,12 @@ class Core(object):
         if not isinstance(value, list):
             if isinstance(value, str):
                 value = value.encode('unicode_escape')
-            raise NotSequenceError(u"Value: {0} is not of a sequence type".format(value))
+            self.errors.append(SchemaError.SchemaErrorEntry(
+                u"Value '{value}' is not a list. Value path: '{path}'",
+                path,
+                value,
+            ))
+            return
 
         # Handle 'func' argument on this sequence
         self._handle_func(value, rule, path, done)
@@ -442,10 +447,11 @@ class Core(object):
             elif rule.matching == "all":
                 log.debug(u" * Value: %s did not validate against all possible sequence schemas", value)
 
-            for i, _ in enumerate(ok_values):
-                for error in error_tracker[i]:
-                    for e in error:
-                        self.errors.append(e)
+            for i, is_ok in enumerate(ok_values):
+                if not is_ok:
+                    for error in error_tracker[i]:
+                        for e in error:
+                            self.errors.append(e)
 
         log.debug(u" * Core seq: validation recursivley done...")
 
