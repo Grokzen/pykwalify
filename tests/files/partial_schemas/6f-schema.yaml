@@ -1,0 +1,22 @@
+type: map
+mapping:
+  foo:
+    include: fooone
+
+schema;fooone:
+  type: map
+  mapping:
+    bar:
+      include: footwo
+
+schema;footwo:
+  type: map
+  mapping:
+    qwe:
+      include: foothree
+
+schema;foothree:
+  type: map
+  mapping:
+    ewq:
+      type: str
