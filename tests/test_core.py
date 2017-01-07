@@ -257,6 +257,46 @@ class TestCore(object):
                 self.f("partial_schemas", "1f-data.yaml"),
                 SchemaError,
                 ["Cannot find partial schema with name 'fooonez'. Existing partial schemas: 'fooone, foothree, footwo'. Path: '/0'"]
+            ),
+            (
+                [
+                    self.f('partial_schemas', '2f-schema.yaml')
+                ],
+                self.f('partial_schemas', '2f-data.yaml'),
+                SchemaError,
+                ["Value 'True' is not of type 'str'. Path: '/0'"]
+            ),
+            (
+                [
+                    self.f('partial_schemas', '3f-schema.yaml')
+                ],
+                self.f('partial_schemas', '3f-data.yaml'),
+                SchemaError,
+                ["Value 'True' is not of type 'str'. Path: ''"]
+            ),
+            (
+                [
+                    self.f('partial_schemas', '4f-schema.yaml')
+                ],
+                self.f('partial_schemas', '4f-data.yaml'),
+                SchemaError,
+                ["Value 'True' is not of type 'str'. Path: '/0/foo/0/bar'"]
+            ),
+            (
+                [
+                    self.f('partial_schemas', '5f-schema.yaml')
+                ],
+                self.f('partial_schemas', '5f-data.yaml'),
+                SchemaError,
+                ["Value 'True' is not of type 'str'. Path: '/0/0/0/0'"]
+            ),
+            (
+                [
+                    self.f('partial_schemas', '6f-schema.yaml')
+                ],
+                self.f('partial_schemas', '6f-data.yaml'),
+                SchemaError,
+                ["Value 'True' is not of type 'str'. Path: '/foo/bar/qwe/ewq'"]
             )
         ]
 

@@ -1,0 +1,18 @@
+type: seq
+sequence:
+  - include: fooone
+
+schema;fooone:
+  type: seq
+  sequence:
+    - include: footwo
+
+schema;footwo:
+  type: seq
+  sequence:
+    - include: foothree
+
+schema;foothree:
+  type: seq
+  sequence:
+    - type: str

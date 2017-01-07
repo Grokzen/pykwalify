@@ -529,7 +529,7 @@ class Core(object):
                 include_rule.mapping = {k: partial_schema_rule}
                 include_rule.regex_mappings = []
 
-                return self._validate(value, include_rule, u"{0}/{1}".format(path, k), done)
+                return self._validate(value, include_rule, u"{0}".format(path), done)
 
             # Find out if this is a regex rule
             is_regex_rule = False
@@ -567,7 +567,7 @@ class Core(object):
             regex_mappings = [(regex_rule, re.search(regex_rule.map_regex_rule, str(k))) for regex_rule in rule.regex_mappings]
             log.debug(u"  Mapping-value: Mapping Regex matches: %s", regex_mappings)
 
-            if r is not None and not r.schema:
+            if r is not None:
                 # validate recursively
                 log.debug(u"  Mapping-value: Core Map: validate recursively: %s", r)
                 self._validate(v, r, u"{0}/{1}".format(path, k), done)
@@ -607,8 +607,6 @@ class Core(object):
                             regex="' and '".join(sorted([mm[0].map_regex_rule for mm in regex_mappings]))))
                 else:
                     log.debug(u"  Mapping-value: No mapping rule defined")
-            elif r is not None and r.schema:
-                print(u"  Mapping-value: Something is ignored Oo : {0}".format(r))
             else:
                 if not rule.allowempty_map:
                     self.errors.append(SchemaError.SchemaErrorEntry(
