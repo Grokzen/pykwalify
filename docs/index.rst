@@ -21,67 +21,65 @@ The schema this library is base and extended from: http://www.kuwata-lab.com/kwa
 
 
 
-Installation
-------------
+Usage
+-----
 
-Latest stable release from pypi
+Create a data file. `Json` and `Yaml` formats are both supported.
+
+.. code-block:: yaml
+
+   - foo
+   - bar
+
+Create a schema file with validation rules.
+
+.. code-block:: yaml
+
+   type: seq
+   sequence:
+     - type: str
+
+Run validation from cli.
 
 .. code-block:: bash
 
-    $ pip install pykwalify
+   pykwalify -d data.yaml -s schema.yaml
 
-or from source
 
-.. code-block:: bash
 
-    $ python setup.py install
+Examples
+--------
+
+The documentation describes in detail how each keyword and type works and what is possible in each case.
+
+But there is a lot of real world examples that can be found in the test data/files. It shows alot of examples of how all keywords and types work in practise and in combination with eachother.
+
+The files can be found here and it shows both schema/data combinations that will work and that will fail.
+
+ - `tests/files/success/`
+ - `tests/files/fail/`
+ - `tests/files/partial_schemas/`
 
 
 
 PyYaml and ruamel.yaml
 ----------------------
 
-In release ``1.6.0`` ``PyYaml`` will be deprecated in favor of ``ruamel.yaml``.
-
-``PyYaml`` is still the default installed one but it will removed in release 1.7.0 and ``ruamel.yaml`` will be the new default yaml parser lib from that release and forward.
-
-This decision was based on the following thread in the `PyYaml` repo https://bitbucket.org/xi/pyyaml/issues/59/has-this-project-been-abandoned
-
-Install it for production:
+``PyYaml`` is the default installed yaml parser and ``ruamel.yaml`` is possible to install at the same time with the following command
 
 .. code-block:: bash
 
   pip install 'pykwalify[ruamel]'
 
-or for development:
-
-.. code-block:: bash
+  # or for development:
 
   pip install -e '.[ruamel]'
 
+``ruamel.yaml`` will however be used if both is installed becuase it is more up to date and includes the YAML 1.2 specification that ``PyYaml`` do not support.
 
+``PyYaml`` will still be the default parser becuase it is used more and is still considered the default ``YAML`` parser in the python world.
 
-Runtime Dependencies
---------------------
-
- - docopt >= 0.6.2
- - PyYaml >= 3.11
- - python-dateutil >= 2.4.2
-
-Optional dependencies:
-
- - ruamel.yaml >= 0.11.0
-
-
-
-Supported python version
-------------------------
-
- - Python 2.7
- - Python 3.3
- - Python 3.4
- - Python 3.5
- - Python 3.6 (Experimental, allowed to fail travis testing)
+Depending on how both libraries is developed, this can change in the future in any major update.
 
 
 
