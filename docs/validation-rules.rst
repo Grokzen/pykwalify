@@ -452,6 +452,30 @@ Example
 
 
 
+Example
+-------
+
+Write a example that can show what values is upported. Or just type any comment into the schema for future reference.
+
+It is possible to use in all levels and places in the schema and have no effect on the parsing, 
+but is useful for humans to read. Similar to ``desc``.
+
+Value for ``example`` ``MUST`` be a string otherwise a ``RuleError`` will be raised upon usage.
+
+Example
+
+.. code-block:: yaml
+
+    # Schema
+    example: List of values
+    type: seq
+    sequence:
+      - type: str
+        unique: true
+        example: Each value must be unique and a string
+
+
+
 Unique
 ------
 
