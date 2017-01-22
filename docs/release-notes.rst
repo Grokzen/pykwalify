@@ -40,6 +40,10 @@ New features:
   When using this flag the first and last */* will be trimmed of the pattern before running validation.
   If you only use a *Core* object then set *fix_ruby_style_regex=True* when creating the *Core* object instance.
   Default behaviour will still be that you should use python style regex values but this flag can help in some cases when you can't change the schema.
+- Added new cli flag *--allow-assertions* that will enable the otherwise blocked keyword *assert*.
+  This flag was introduced so that pykwalify would not assert assertions without user controll.
+  Default behaviour will be to raise a *CoreError* is assertion is used but not allowed explicitly.
+  If you only use a *Core* object then set *allow_assertions=True* when creating the *Core* object instance.
 
 Changed behaviour:
 

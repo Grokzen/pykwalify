@@ -25,7 +25,8 @@ def parse_cli():
     #
 
     __docopt__ = """
-usage: pykwalify -d FILE -s FILE ... [-e FILE ...] [--strict-rule-validation] [--fix-ruby-style-regex] [-v ...] [-q]
+usage: pykwalify -d FILE -s FILE ... [-e FILE ...] 
+       [--strict-rule-validation] [--fix-ruby-style-regex] [--allow-assertions] [-v ...] [-q]
 
 optional arguments:
   -d FILE, --data-file FILE            the file to be tested
@@ -35,6 +36,9 @@ optional arguments:
                                        that is not compatible with python style regex
   --strict-rule-validation             enables strict validation of all keywords for all
                                        Rule objects to find unsupported keyword usage
+  --allow-assertions                   By default assertions is disabled due to security risk.
+                                       Error will be raised if assertion is used in schema
+                                       but this flag is not used. This option enables assert keyword.
   -h, --help                           show this help message and exit
   -q, --quiet                          suppress terminal output
   -v, --verbose                        verbose terminal output (multiple -v increases verbosity)
@@ -73,6 +77,7 @@ def run(cli_args):
         extensions=cli_args['--extension'],
         strict_rule_validation=cli_args['--strict-rule-validation'],
         fix_ruby_style_regex=cli_args['--fix-ruby-style-regex'],
+        allow_assertions=cli_args['--allow-assertions'],
     )
     c.validate()
     return c

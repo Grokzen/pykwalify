@@ -31,7 +31,7 @@ class Core(object):
     """ Core class of pyKwalify """
 
     def __init__(self, source_file=None, schema_files=None, source_data=None, schema_data=None, extensions=None, strict_rule_validation=False,
-                 fix_ruby_style_regex=False):
+                 fix_ruby_style_regex=False, allow_assertions=False,):
         """
         :param extensions:
             List of paths to python files that should be imported and available via 'func' keywork.
@@ -59,6 +59,7 @@ class Core(object):
         self.errors = []
         self.strict_rule_validation = strict_rule_validation
         self.fix_ruby_style_regex = fix_ruby_style_regex
+        self.allow_assertions = allow_assertions
 
         if source_file is not None:
             if not os.path.exists(source_file):
@@ -340,6 +341,7 @@ class Core(object):
                     #  collide with this Core objects errors
                     tmp_core = Core(source_data={}, schema_data={})
                     tmp_core.fix_ruby_style_regex = self.fix_ruby_style_regex
+                    tmp_core.allow_assertions = self.allow_assertions
                     tmp_core.strict_rule_validation = self.strict_rule_validation
                     tmp_core.loaded_extensions = self.loaded_extensions
                     tmp_core._validate(item, r, "{0}/{1}".format(path, i), done)
@@ -879,7 +881,16 @@ class Core(object):
                 min_ex=min_ex))
 
     def _validate_assert(self, rule, value, path):
-        assertion_string = "val = {0}; assert {1}".format(value, rule.assertion)
+        if not self.allow_assertions:
+            raise CoreError('To allow usage of keyword "assert" you must use cli flag "--allow-assertions" or set the keyword "allow_assert" in Core class')
+
+        # Small hack to make strings work as a value.
+        if isinstance(value, str):
+            assert_value_str = '"{0}"'.format(value)
+        else:
+            assert_value_str = '{0}'.format(value)
+
+        assertion_string = "val = {0}; assert {1}".format(assert_value_str, rule.assertion)
         try:
             exec(assertion_string, {}, {})
         except AssertionError:

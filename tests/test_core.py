@@ -510,7 +510,7 @@ class TestCore(object):
 
                     try:
                         print("Running test files: {0}".format(f))
-                        c = Core(source_data=data, schema_data=schema, strict_rule_validation=True)
+                        c = Core(source_data=data, schema_data=schema, strict_rule_validation=True, allow_assertions=True)
                         c.validate()
                         compare(c.validation_errors, [], prefix="No validation errors should exist...")
                     except Exception as e:
@@ -532,7 +532,7 @@ class TestCore(object):
 
                     try:
                         print("Running test files: {0}".format(f))
-                        c = Core(source_data=data, schema_data=schema, strict_rule_validation=True)
+                        c = Core(source_data=data, schema_data=schema, strict_rule_validation=True, allow_assertions=True)
                         c.validate()
                     except exception_type as e:
                         pass
