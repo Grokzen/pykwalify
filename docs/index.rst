@@ -103,16 +103,16 @@ Project details
 ---------------
 
 .. |travis-master| image:: https://travis-ci.org/Grokzen/pykwalify.svg?branch=master
-   :target: https://travis-ci.org/Grokzen/pykwalify
+   :target: https://travis-ci.org/Grokzen/pykwalify.svg?branch=master
 
 .. |travis-unstable| image:: https://travis-ci.org/Grokzen/pykwalify.svg?branch=unstable
-   :target: https://travis-ci.org/Grokzen/pykwalify
+   :target: https://travis-ci.org/Grokzen/pykwalify.svg?branch=unstable
 
 .. |gitter-badge| image:: https://badges.gitter.im/Join Chat.svg
    :target: https://gitter.im/Grokzen/pykwalify?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
 .. |coveralls-badge| image:: https://coveralls.io/repos/github/Grokzen/pykwalify/badge.svg?branch=unstable
-   :target: https://coveralls.io/github/Grokzen/pykwalify?branch=unstable
+   :target: https://coveralls.io/repos/github/Grokzen/pykwalify/badge.svg?branch=unstable
 
 +-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | python support        | 2.7, 3.3, 3.4, 3.5, 3.6, 3.7                                                                                                                                                                                    |
@@ -158,11 +158,11 @@ Project details
 |                       |    $ pip install -r dev-requirements.txt                                                                                                                                                                        |
 |                       |    $ pip install -e .                                                                                                                                                                                           |
 +-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| required dependencies |  docopt >= 0.6.2                                                                                                                                                                                                |
-|                       |  python-dateutil >= 2.4.2                                                                                                                                                                                       |
+| required dependencies | | docopt >= 0.6.2                                                                                                                                                                                               |
+|                       | | python-dateutil >= 2.4.2                                                                                                                                                                                      |
 +-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| supported yml parsers | PyYaml >= 3.11                                                                                                                                                                                                  |
-|                       | ruamel.yaml >= 0.11.0                                                                                                                                                                                           |
+| supported yml parsers | | PyYaml >= 3.11                                                                                                                                                                                                |
+|                       | | ruamel.yaml >= 0.11.0                                                                                                                                                                                         |
 +-----------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 
