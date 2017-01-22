@@ -50,23 +50,22 @@ The files can be found here and it shows both schema/data combinations that will
 
 # PyYaml and ruamel.yaml
 
-`ruamel.yaml` is now the default one and will be used over `PyYaml` if both is installed. This was decided becuase `ruamel.yaml` is more up to date and have more support then `PyYaml`
+`PyYaml` is the default installed yaml parser and `ruamel.yaml` is possible to install at the same time with the following command
 
-Both versions will continue to be supported.
-
-Install it for production with:
-
-```
+```bash
 pip install 'pykwalify[ruamel]'
-```
 
-or for development with:
+# or for development:
 
-```
 pip install -e '.[ruamel]'
 ```
 
-This decision was based on the following thread in the `PyYaml` repo https://bitbucket.org/xi/pyyaml/issues/59/has-this-project-been-abandoned
+`ruamel.yaml` will however be used if both is installed becuase it is more up to date and includes the YAML 1.2 specification that `PyYaml` do not support.
+
+`PyYaml` will still be the default parser becuase it is used more and is still considered the default `YAML` parser in the python world.
+
+Depending on how both libraries is developed, this can change in the future in any major update.
+
 
 
 ## UTF-8 and data encoding
