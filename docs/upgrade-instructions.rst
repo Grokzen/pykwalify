@@ -10,7 +10,26 @@ If new types were added, they will not be described here because it will not bre
 
 ruamel.yaml is now possible to use as a drop-in replacement for PyYaml. Install it with *pip install 'pykwalify[ruamel]'* for production use and with *pip install -e '.[ruamel]'* for development use.
 
-PyYaml is now deprecated and will be removed in favor or ruamel.yaml in release 1.7.0.
+Several new keywords and types was added. It should bring more copmatiblity with original kwalify spec, but they can also break existsing schemas.
+
+SECURITY: Please note that if you are executing user provided schemas there is a security risk in using the assert keyword.
+
+Fixed several small bugs that have a high risk of causing validations to change behaviour from earlier versions. Many of the bugs was only found in complex schemas and data structures.
+
+Default rule is now possible to be specefied with key ``=`` so if you have a key in your schema it will now be considered default validation and not a plain key.
+
+New CLI flags was added. They are all optional and only introduce new (opt-in) functionality.
+
+Reworked how UTF-8 is handled. Code should now be fully compatible internally with UTF-8/unicode encodings. Docs has been updated to help if you still have errors.
+
+If the type check fails it will no longer continue to check any other keywords and report the errors for them.
+Before when it continued to process keywords, it would lead to errors that made no sense when keywords was not supposed to even be available for some types.
+This can cause less errors to appear when running your schemas.
+
+A major change was done to the default type. It is now string so if you do not specify the type in the schema it will default back to string. This change is based on the original kwalify spec/code.
+
+Keywords ``desc``, ``example``, ``name`` now enforces correct value type (str) even if the values them self have no impact on the validation.
+
 
 
 1.4.x --> 1.5.0
