@@ -25,7 +25,7 @@ def parse_cli():
     #
 
     __docopt__ = """
-usage: pykwalify -d FILE -s FILE ... [-e FILE ...] 
+usage: pykwalify -d FILE -s FILE ... [-e FILE ...]
        [--strict-rule-validation] [--fix-ruby-style-regex] [--allow-assertions] [-v ...] [-q]
 
 optional arguments:
