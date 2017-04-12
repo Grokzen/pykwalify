@@ -380,9 +380,9 @@ class Rule(object):
                     t = DEFAULT_TYPE
                     self.type = t
             else:
-                if not isinstance(schema["type"], str):
+                if not (isinstance(schema["type"], str) or isinstance(schema["type"], unicode)):
                     raise RuleError(
-                        msg=u"Key 'type' in schema rule is not a string type",
+                        msg=u"Key 'type' in schema rule is not a string type (found "+str(type(schema["type"]))+")",
                         error_key=u"type.not_string",
                         path=path,
                     )
