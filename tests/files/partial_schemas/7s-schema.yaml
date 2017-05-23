@@ -8,5 +8,6 @@ mapping:
 
 schema;bar:
   type: seq
+  required: True
   sequence:
     - type: str
