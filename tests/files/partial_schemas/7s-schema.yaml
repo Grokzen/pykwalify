@@ -1,0 +1,12 @@
+type: map
+mapping:
+  foo:
+    type: str
+    required: True
+  bar:
+    include: bar
+
+schema;bar:
+  type: seq
+  sequence:
+    - type: str

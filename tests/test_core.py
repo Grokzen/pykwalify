@@ -244,6 +244,25 @@ class TestCore(object):
                     'sequence': [{'include': 'fooone'}],
                     'type': 'seq',
                 }
+            ),
+            # This tests that you can include a partial schema alongside other rules in a map
+            (
+                [
+                    self.f("partial_schemas", "7s-schema.yaml"),
+                ],
+                self.f("partial_schemas", "7s-data.yaml"),
+                {
+                    'type': 'map',
+                    'mapping': {
+                        'foo': {
+                            'type': 'str',
+                            'required': True
+                        },
+                        'bar': {
+                            'include' : 'bar'
+                        }
+                    }
+                }
             )
         ]
 
@@ -256,7 +275,7 @@ class TestCore(object):
                 ],
                 self.f("partial_schemas", "1f-data.yaml"),
                 SchemaError,
-                ["Cannot find partial schema with name 'fooonez'. Existing partial schemas: 'fooone, foothree, footwo'. Path: '/0'"]
+                ["Cannot find partial schema with name 'fooonez'. Existing partial schemas: 'bar, fooone, foothree, footwo'. Path: '/0'"]
             ),
             (
                 [
