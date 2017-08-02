@@ -228,6 +228,14 @@ class Core(object):
             ))
             return
 
+        if not rule.nullable and value is None and not rule.type == 'none':
+            self.errors.append(SchemaError.SchemaErrorEntry(
+             msg=u"nullable.novalue : '{path}'",
+                path=path,
+                value=value.encode('unicode_escape') if value else value,
+            ))
+            return
+
         log.debug(u" ? ValidateRule: %s", rule)
         if rule.include_name is not None:
             self._validate_include(value, rule, path, done=None)
