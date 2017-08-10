@@ -73,7 +73,7 @@ class Core(object):
                         raise CoreError(u"Unable to load any data from source json file")
                 elif source_file.endswith(".yaml") or source_file.endswith('.yml'):
                     try:
-                        self.source = yaml.load(stream)
+                        self.source = yaml.safe_load(stream)
                     except Exception:
                         raise CoreError(u"Unable to load any data from source yaml file")
                 else:
@@ -96,7 +96,7 @@ class Core(object):
                         except Exception:
                             raise CoreError(u"No data loaded from file : {0}".format(f))
                     elif f.endswith(".yaml") or f.endswith(".yml"):
-                        data = yaml.load(stream)
+                        data = yaml.safe_load(stream)
                         if not data:
                             raise CoreError(u"No data loaded from file : {0}".format(f))
                     else:

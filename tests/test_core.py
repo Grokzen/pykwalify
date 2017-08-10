@@ -502,7 +502,7 @@ class TestCore(object):
         for passing_test_file in pass_tests:
             f = self.f(os.path.join("success", passing_test_file))
             with open(f, "r") as stream:
-                yaml_data = yaml.load_all(stream)
+                yaml_data = yaml.safe_load_all(stream)
 
                 for document_index, document in enumerate(yaml_data):
                     data = document["data"]
@@ -523,7 +523,7 @@ class TestCore(object):
         for failing_test, exception_type in _fail_tests:
             f = self.f(os.path.join("fail", failing_test))
             with open(f, "r") as stream:
-                yaml_data = yaml.load_all(stream)
+                yaml_data = yaml.safe_load_all(stream)
 
                 for document_index, document in enumerate(yaml_data):
                     data = document["data"]
