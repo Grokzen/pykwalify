@@ -1,9 +1,9 @@
 exclude *.py
-include docs/Authors.rst
-include docs/License.rst
+include docs/authors.rst
+include docs/license.rst
 include docs/release-notes.rst
 include setup.py
 include README.md
-exclude __pycache__
+global-exclude __pycache__/*
 recursive-include tests *
-recursive-exclude tests *.pyc
+recursive-exclude tests *.py[co]
