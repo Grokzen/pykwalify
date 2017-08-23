@@ -121,9 +121,12 @@ class TestCore(object):
         schema_f = tmpdir.join("bar.json")
         schema_f.write("")
 
-        with pytest.raises(CoreError) as ex:
+        with pytest.raises(ValueError) as ex:
             Core(source_file=str(source_f), schema_files=[str(schema_f)])
-        assert "Unable to load any data from source json file" in str(ex.value)
+        # Python 2.7 and Python 3.5 JSON parsers return different exception
+        # strings for the same data file, so check for both errors strings.
+        assert ("No JSON object could be decoded" in str(ex.value) or
+                "Expecting value:" in str(ex.value))
 
         # Load empty schema files
         source_f = tmpdir.join("foo.json")
@@ -132,9 +135,10 @@ class TestCore(object):
         schema_f = tmpdir.join("bar.json")
         schema_f.write("")
 
-        with pytest.raises(CoreError) as ex:
+        with pytest.raises(ValueError) as ex:
             Core(source_file=str(source_f), schema_files=[str(schema_f)])
-        assert "No data loaded from file" in str(ex.value)
+        assert ("No JSON object could be decoded" in str(ex.value) or
+                "Expecting value:" in str(ex.value))
 
     def test_load_empty_yaml_file(self, tmpdir):
         """
