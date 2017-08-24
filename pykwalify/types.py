@@ -10,7 +10,6 @@ DEFAULT_TYPE = "str"
 
 _types = {
     "str": str,
-    "unicode": unicode,
     "int": int,
     "float": float,
     "number": None,
