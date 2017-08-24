@@ -259,7 +259,7 @@ class TestCore(object):
                             'required': True
                         },
                         'bar': {
-                            'include' : 'bar'
+                            'include': 'bar'
                         }
                     }
                 }
