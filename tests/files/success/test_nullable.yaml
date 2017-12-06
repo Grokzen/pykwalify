@@ -1,0 +1,11 @@
+---
+name: nullable1
+desc: Test that nullable works
+data:
+  name:
+schema:
+  type: map
+  mapping:
+    name:
+      type: str
+      nullable: True

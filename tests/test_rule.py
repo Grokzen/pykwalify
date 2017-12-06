@@ -69,6 +69,13 @@ class TestRule(unittest.TestCase):
             Rule(schema={'type': 'str', 'name': {}})
         assert str(r.value) == "<RuleError: error code 4: Value: {} for keyword name must be a string: Path: '/'>"
 
+    def test_nullable_value(self):
+        # Test that nullable value must be bool otherwise exception is raised
+        with pytest.raises(RuleError) as r:
+            Rule(schema={"type": "str", "nullable": "foobar"})
+        assert str(r.value) == "<RuleError: error code 4: Value: 'foobar' for nullable keyword must be a boolean: Path: '/'>"
+        assert r.value.error_key == 'nullable.not_bool'
+
     def test_desc_value(self):
         with pytest.raises(RuleError) as r:
             Rule(schema={'type': 'str', 'desc': []})

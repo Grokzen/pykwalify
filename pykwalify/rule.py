@@ -45,6 +45,7 @@ class Rule(object):
         self._matching = "any"
         self._matching_rule = "any"
         self._name = None
+        self._nullable = True
         self._parent = parent
         self._pattern = None
         self._pattern_regexp = None
@@ -200,6 +201,14 @@ class Rule(object):
         self._name = value
 
     @property
+    def nullable(self):
+        return self._nullable
+
+    @nullable.setter
+    def nullable(self, value):
+        self._nullable = value
+
+    @property
     def parent(self):
         return self._parent
 
@@ -329,6 +338,7 @@ class Rule(object):
             ('matching', 'matching'),
             ('matching_rule', 'matching_rule'),
             ('name', 'name'),
+            ('nullable', 'nullable')
             ('parent', 'parent'),
             ('pattern', 'pattern'),
             ('pattern_regexp', 'pattern_regexp'),
@@ -412,6 +422,8 @@ class Rule(object):
             "matching": self.init_matching,
             "matching-rule": self.init_matching_rule,
             "name": self.init_name_value,
+            "nul": self.init_nullable_value,
+            "nullable": self.init_nullable_value,
             "pattern": self.init_pattern_value,
             "range": self.init_range_value,
             "req": self.init_required_value,
@@ -733,6 +745,20 @@ class Rule(object):
             )
 
         self.name = v
+
+    def init_nullable_value(self, v, rule, path):
+        """
+        """
+        log.debug(u"Init nullable value : %s", path)
+
+        if not isinstance(v, bool):
+            raise RuleError(
+                msg=u"Value: '{0}' for nullable keyword must be a boolean".format(v),
+                error_key=u"nullable.not_bool",
+                path=path,
+            )
+
+        self.nullable = v
 
     def init_desc_value(self, v, rule, path):
         """
@@ -1199,6 +1225,7 @@ class Rule(object):
          - matching
          - matching_rule
          - name
+         - nullable
          - pattern
          - pattern_regexp
          - range
@@ -1214,7 +1241,7 @@ class Rule(object):
         if not self.strict_rule_validation:
             return
 
-        global_keywords = ['type', 'desc', 'example', 'extensions', 'name', 'version', 'func', 'include']
+        global_keywords = ['type', 'desc', 'example', 'extensions', 'name', 'nullable', 'version', 'func', 'include']
         all_allowed_keywords = {
             'str': global_keywords + ['default', 'pattern', 'range', 'enum', 'required', 'unique', 'req'],
             'int': global_keywords + ['default', 'range', 'enum', 'required', 'unique'],

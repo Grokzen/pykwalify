@@ -573,6 +573,35 @@ Example
     # Schema
     name: foobar schema
 
+	
+	
+Nullable
+--------
+
+If the ``nullable`` constraint is set to ``False``, the key and its value must not be empty, otherwise a validation error will be raised.
+
+Default is ``True``.
+
+Aliases
+
+  - ``nullable``
+  - ``nul``
+
+Example
+
+.. code-block:: yaml
+
+    # Schema
+    type: map
+    mapping:
+      key_one:
+        type: str
+        nullable: False
+
+.. code-block:: yaml
+
+    # Data
+    key_one: foobar
 
 
 Desc
