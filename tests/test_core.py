@@ -381,6 +381,8 @@ class TestCore(object):
             "test_matching.yaml",
             # All tests for keyword name
             "test_name.yaml",
+            # All tests for keyword nullable
+            "test_nullable.yaml",
             # All tests for keyword pattern
             "test_pattern.yaml",
             # All tests for keyword range
@@ -462,6 +464,8 @@ class TestCore(object):
             ("test_matching.yaml", SchemaError),
             # All tests for keyword name
             ("test_name.yaml", SchemaError),
+            # All tests for keyword nullable
+            ("test_nullable.yaml", SchemaError),
             # All tests for keyword pattern
             ("test_pattern.yaml", SchemaError),
             # All tests for keyword range

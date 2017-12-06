@@ -8,6 +8,16 @@ from pykwalify.compat import basestring, bytes
 
 DEFAULT_TYPE = "str"
 
+
+class TextMeta(type):
+    def __instancecheck__(self, instance):
+        return is_text(instance)
+
+
+class text(object):
+    __metaclass__ = TextMeta
+
+
 _types = {
     "str": str,
     "int": int,
@@ -20,7 +30,7 @@ _types = {
     "date": datetime.date,
     "symbol": str,
     "scalar": None,
-    "text": None,
+    "text": text,
     "any": object,
     "enum": str,
     "none": None

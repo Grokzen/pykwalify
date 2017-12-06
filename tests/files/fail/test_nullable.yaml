@@ -1,0 +1,19 @@
+---
+name: fail-nullable-1
+desc:
+data:
+  - name:
+    email: foo@mail.com
+  - email: bar@mail.net
+schema:
+  type: seq
+  sequence:
+    - type: map
+      mapping:
+        name:
+          type: str
+          nullable: False
+        email:
+          type: str
+errors:
+  - "nullable.novalue : '/0/name'"
