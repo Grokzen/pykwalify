@@ -21,7 +21,7 @@ def parse_cli():
     #
 
     __docopt__ = """
-Usage: pykwalifire -d FILE -s FILE ... [-e FILE ...]
+Usage: pykwalify -d FILE -s FILE ... [-e FILE ...]
        [-y EXT] [-j EXT]
        [--strict-rule-validation] [--fix-ruby-style-regex]
        [--allow-assertions]
@@ -105,6 +105,6 @@ def cli_entrypoint():
     # Check minimum version of Python
     if sys.version_info < (2, 7, 0):
         sys.stderr.write(
-            u"WARNING: pykwalifire should be run with Python >= 2.7!\n\n")
+            u"WARNING: pykwalify should be run with Python >= 2.7!\n\n")
 
     run(parse_cli())
