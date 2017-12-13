@@ -136,7 +136,6 @@ class TestCore(object):
         Core(source_file=str(source_f), schema_files=[str(schema_f)],
              custom_json_ext='jext')
 
-
     def test_load_empty_json_file(self, tmpdir):
         """
         Loading an empty json files should raise an exception
