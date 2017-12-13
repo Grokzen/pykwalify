@@ -19,7 +19,6 @@ cleantox:
 	-rm -rf .tox/
 
 cleancov:
-	coverage combine
 	coverage erase
 	-rm -rf htmlcov/
 
@@ -39,7 +38,8 @@ cleanall: clean cleanegg cleanpy cleancov
 test:
 	coverage erase
 	coverage run --source pykwalify/ -m pytest
-	coverage report -m
+	coverage report
+	coverage html
 
 sdist:
 	python setup.py sdist
