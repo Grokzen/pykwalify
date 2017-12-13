@@ -16,7 +16,8 @@ import time
 # pyKwalify imports
 import pykwalify
 from pykwalify.compat import unicode, nativestr, basestring
-from pykwalify.errors import CoreError, SchemaError, NotMappingError, NotSequenceError
+from pykwalify.errors import CoreError, SchemaError
+from pykwalify.errors import NotMappingError, NotSequenceError
 from pykwalify.rule import Rule
 from pykwalify.types import is_scalar, is_string, tt
 
@@ -30,8 +31,11 @@ log = logging.getLogger(__name__)
 class Core(object):
     """ Core class of pyKwalify """
 
-    def __init__(self, source_file=None, schema_files=None, source_data=None, schema_data=None, extensions=None, strict_rule_validation=False,
-                 fix_ruby_style_regex=False, allow_assertions=False,):
+    def __init__(self, source_file=None, schema_files=None,
+                 source_data=None, schema_data=None, extensions=None,
+                 strict_rule_validation=False,
+                 fix_ruby_style_regex=False, allow_assertions=False,
+                 custom_yaml_ext=None, custom_json_ext=None):
         """
         :param extensions:
             List of paths to python files that should be imported and available via 'func' keywork.
@@ -49,6 +53,8 @@ class Core(object):
         log.debug(u"source_data: %s", source_data)
         log.debug(u"schema_data: %s", schema_data)
         log.debug(u"extension files: %s", extensions)
+        log.debug(u"yaml extension: %s", custom_yaml_ext)
+        log.debug(u"json extension: %s", custom_json_ext)
 
         self.source = None
         self.schema = None
@@ -60,24 +66,36 @@ class Core(object):
         self.strict_rule_validation = strict_rule_validation
         self.fix_ruby_style_regex = fix_ruby_style_regex
         self.allow_assertions = allow_assertions
+        self.custom_yaml_ext = custom_yaml_ext
+        self.custom_json_ext = custom_json_ext
 
         if source_file is not None:
             if not os.path.exists(source_file):
-                raise CoreError(u"Provided source_file do not exists on disk: {0}".format(source_file))
+                raise CoreError(u"Provided source_file do not exists on "
+                                "disk: {0}".format(source_file))
 
             with open(source_file, "r") as stream:
-                if source_file.endswith(".json"):
+                if source_file.endswith(".json") or \
+                        (self.custom_json_ext is not None and
+                         source_file.endswith(self.custom_json_ext)):
                     try:
                         self.source = json.load(stream)
                     except Exception:
-                        raise CoreError(u"Unable to load any data from source json file")
-                elif source_file.endswith(".yaml") or source_file.endswith('.yml'):
+                        raise CoreError(u"Unable to load any data from "
+                                        "source json file")
+                elif source_file.endswith(".yaml") or \
+                        source_file.endswith('.yml') or \
+                        (self.custom_yaml_ext is not None and
+                         source_file.endswith(self.custom_yaml_ext)):
                     try:
                         self.source = yaml.load(stream)
                     except Exception:
-                        raise CoreError(u"Unable to load any data from source yaml file")
+                        raise CoreError(u"Unable to load any data from "
+                                        "source yaml file")
                 else:
-                    raise CoreError(u"Unable to load source_file. Unknown file format of specified file path: {0}".format(source_file))
+                    raise CoreError(u"Unable to load source_file. Unknown "
+                                    "file format of specified file path:"
+                                    " {0}".format(source_file))
 
         if not isinstance(schema_files, list):
             raise CoreError(u"schema_files must be of list type")

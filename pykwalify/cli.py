@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-""" pyKwalify - cli.py """
-
 # python std lib
 import logging
 import logging.config
@@ -25,24 +21,40 @@ def parse_cli():
     #
 
     __docopt__ = """
-usage: pykwalify -d FILE -s FILE ... [-e FILE ...]
-       [--strict-rule-validation] [--fix-ruby-style-regex] [--allow-assertions] [-v ...] [-q]
+Usage: pykwalifire -d FILE -s FILE ... [-e FILE ...]
+       [-y EXT] [-j EXT]
+       [--strict-rule-validation] [--fix-ruby-style-regex]
+       [--allow-assertions]
+       [-v ...] [-q]
 
-optional arguments:
-  -d FILE, --data-file FILE            the file to be tested
-  -e FILE, --extension FILE            file containing python extension
-  -s FILE, --schema-file FILE          schema definition file
-  --fix-ruby-style-regex               This flag fixes some of the quirks of ruby style regex
-                                       that is not compatible with python style regex
-  --strict-rule-validation             enables strict validation of all keywords for all
-                                       Rule objects to find unsupported keyword usage
-  --allow-assertions                   By default assertions is disabled due to security risk.
-                                       Error will be raised if assertion is used in schema
-                                       but this flag is not used. This option enables assert keyword.
-  -h, --help                           show this help message and exit
-  -q, --quiet                          suppress terminal output
-  -v, --verbose                        verbose terminal output (multiple -v increases verbosity)
-  --version                            display the version number and exit
+Options:
+  -d FILE, --data-file FILE            The file to be validated
+  -e FILE, --extension FILE            File containing python extension
+  -s FILE, --schema-file FILE          Schema definition file
+  -y EXT, --yaml-extension EXT         A custom YAML file extension to
+                                           accept for validation
+  -j EXT, --json-extension EXT         A custom JSON file extension to
+                                           accept for validation
+  --fix-ruby-style-regex               This flag fixes some of the
+                                           quirks of ruby style regex
+                                           that is not compatible with
+                                           python style regex
+  --strict-rule-validation             Enables strict validation of all
+                                           keywords for all Rule objects
+                                           to find unsupported keyword
+                                           usage
+  --allow-assertions                   By default assertions is disabled
+                                           due to security risk. An
+                                           error will be raised if
+                                           assertion is used in schema
+                                           but this flag is not used.
+                                           This option enables assert
+                                           keyword.
+  -h, --help                           Show this help message and exit
+  -q, --quiet                          Suppress terminal output
+  -v, --verbose                        Verbose terminal output (multiple
+                                           'v' increase verbosity)
+  --version                            Display the version number and exit
 """
 
     # Import pykwalify package
@@ -78,6 +90,8 @@ def run(cli_args):
         strict_rule_validation=cli_args['--strict-rule-validation'],
         fix_ruby_style_regex=cli_args['--fix-ruby-style-regex'],
         allow_assertions=cli_args['--allow-assertions'],
+        custom_yaml_ext=cli_args['--yaml-extension'],
+        custom_json_ext=cli_args['--json-extension'],
     )
     c.validate()
     return c
@@ -90,6 +104,7 @@ def cli_entrypoint():
     """
     # Check minimum version of Python
     if sys.version_info < (2, 7, 0):
-        sys.stderr.write(u"WARNING: pykwalify: It is recommended to run pykwalify on python version 2.7.x or later...\n\n")
+        sys.stderr.write(
+            u"WARNING: pykwalifire should be run with Python >= 2.7!\n\n")
 
     run(parse_cli())
