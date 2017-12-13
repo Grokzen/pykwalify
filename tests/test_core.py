@@ -110,6 +110,32 @@ class TestCore(object):
             Core(schema_files=[str(schema_f)])
         assert "Unknown file format. Supported file endings is" in str(ex.value)
 
+    def test_load_custom_yaml_format(self, tmpdir):
+        """
+        Try to load some file extension with custom support.
+        """
+        source_f = tmpdir.join("foo.yext")
+        source_f.write("3.14159")
+
+        schema_f = tmpdir.join("bar.yaml")
+        schema_f.write("type: float")
+
+        Core(source_file=str(source_f), schema_files=[str(schema_f)],
+             custom_yaml_ext='yext')
+
+    def test_load_custom_json_format(self, tmpdir):
+        """
+        Load source & schema files that has json file ending.
+        """
+        source_f = tmpdir.join("bar.jext")
+        source_f.write("3.14159")
+
+        schema_f = tmpdir.join("foo.json")
+        schema_f.write('{"type": "float"}')
+
+        Core(source_file=str(source_f), schema_files=[str(schema_f)],
+             custom_json_ext='jext')
+
     def test_load_empty_json_file(self, tmpdir):
         """
         Loading an empty json files should raise an exception

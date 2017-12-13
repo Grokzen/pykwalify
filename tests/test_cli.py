@@ -38,6 +38,36 @@ class TestCLI(object):
             assert k in cli_args
             assert cli_args[k] == expected[k]
 
+    def test_cli_custom_yaml_ext(self, tmpdir):
+        """
+        Test that when passing in certain arguments from commandline they
+        are handled correctly by docopt and correct args structure is returned.
+        """
+        input = tmpdir.join("cli/1a.yext")
+        schema_file = tmpdir.join("cli/1b.yaml")
+
+        sys.argv = [
+            'scripts/pykwalify',
+            '-d', str(input),
+            '-s', str(schema_file),
+            '-y', 'yext',
+            '-v'
+        ]
+
+        expected = {
+            '--data-file': str(input),
+            '--schema-file': [str(schema_file)],
+            '--quiet': False,
+            '--verbose': 1,
+            '--yaml-extension': 'yext',
+        }
+
+        cli_args = cli.parse_cli()
+
+        for k, v in expected.items():
+            assert k in cli_args
+            assert cli_args[k] == expected[k]
+
     def f(self, *args):
         """
         Returns abs path to test files inside tests/files/
