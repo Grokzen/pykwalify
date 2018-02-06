@@ -69,7 +69,7 @@ class Core(object):
                 if source_file.endswith(".json"):
                     self.source = json.load(stream)
                 elif source_file.endswith(".yaml") or source_file.endswith('.yml'):
-                    self.source = yaml.load(stream)
+                    self.source = yaml.safe_load(stream)
                 else:
                     raise CoreError(u"Unable to load source_file. Unknown file format of specified file path: {0}".format(source_file))
 
@@ -87,7 +87,7 @@ class Core(object):
                     if f.endswith(".json"):
                         data = json.load(stream)
                     elif f.endswith(".yaml") or f.endswith(".yml"):
-                        data = yaml.load(stream)
+                        data = yaml.safe_load(stream)
                         if not data:
                             raise CoreError(u"No data loaded from file : {0}".format(f))
                     else:
