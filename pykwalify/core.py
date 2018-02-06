@@ -779,7 +779,8 @@ class Core(object):
         if isinstance(date_value, str):
             # If a date_format is specefied then use strptime on all formats
             # If no date_format is specefied then use dateutils.parse() to test the value
-            print(date_formats)
+            log.debug(date_formats)
+
             if date_formats:
                 # Run through all date_formats and it is valid if atleast one of them passed time.strptime() parsing
                 valid = False
