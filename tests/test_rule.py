@@ -52,6 +52,10 @@ class TestRule(unittest.TestCase):
         # assert str(r.value) == "<RuleError: error code 4: Key 'type' not found in schema rule: Path: '/'>"
         # assert r.value.error_key == 'type.missing'
 
+        # Test a valid rule with both "str" and "unicode" types work
+        r = Rule(schema={"type": str("str")})
+        r = Rule(schema={"type": unicode("str")})
+
         # Test that type key must be string otherwise exception is raised
         with pytest.raises(RuleError) as r:
             Rule(schema={"type": 1})
