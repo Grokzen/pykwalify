@@ -527,11 +527,7 @@ class Core(object):
                         existing_schemas=", ".join(sorted(pykwalify.partial_schemas.keys()))))
                     return
 
-                include_rule = Rule()
-                include_rule.mapping = {k: partial_schema_rule}
-                include_rule.regex_mappings = []
-
-                return self._validate(value, include_rule, u"{0}".format(path), done)
+                rr = partial_schema_rule
 
             # Find out if this is a regex rule
             is_regex_rule = False
