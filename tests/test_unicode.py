@@ -65,7 +65,7 @@ class TestUnicode(object):
             f = self.f(passing_test_files)
 
             with open(f, "r") as stream:
-                yaml_data = yaml.load(stream)
+                yaml_data = yaml.safe_load(stream)
                 data = yaml_data["data"]
                 schema = yaml_data["schema"]
 
@@ -120,7 +120,7 @@ class TestUnicode(object):
             f = self.f(failing_test)
 
             with open(f, "r") as stream:
-                yaml_data = yaml.load(stream)
+                yaml_data = yaml.safe_load(stream)
                 data = yaml_data["data"]
                 schema = yaml_data["schema"]
                 errors = yaml_data["errors"]

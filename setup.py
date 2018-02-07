@@ -22,7 +22,7 @@ setup(
     packages=['pykwalify'],
     url='http://github.com/grokzen/pykwalify',
     extras_require={
-        'ruamel': ["ruamel.yaml>=0.11.0,<0.12.0"],
+        'ruamel': ["ruamel.yaml>=0.11.0,<0.16.0"],
     },
     entry_points={
         'console_scripts': [

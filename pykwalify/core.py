@@ -67,15 +67,9 @@ class Core(object):
 
             with open(source_file, "r") as stream:
                 if source_file.endswith(".json"):
-                    try:
-                        self.source = json.load(stream)
-                    except Exception:
-                        raise CoreError(u"Unable to load any data from source json file")
+                    self.source = json.load(stream)
                 elif source_file.endswith(".yaml") or source_file.endswith('.yml'):
-                    try:
-                        self.source = yaml.load(stream)
-                    except Exception:
-                        raise CoreError(u"Unable to load any data from source yaml file")
+                    self.source = yaml.safe_load(stream)
                 else:
                     raise CoreError(u"Unable to load source_file. Unknown file format of specified file path: {0}".format(source_file))
 
@@ -91,12 +85,9 @@ class Core(object):
 
                 with open(f, "r") as stream:
                     if f.endswith(".json"):
-                        try:
-                            data = json.load(stream)
-                        except Exception:
-                            raise CoreError(u"No data loaded from file : {0}".format(f))
+                        data = json.load(stream)
                     elif f.endswith(".yaml") or f.endswith(".yml"):
-                        data = yaml.load(stream)
+                        data = yaml.safe_load(stream)
                         if not data:
                             raise CoreError(u"No data loaded from file : {0}".format(f))
                     else:
@@ -535,11 +526,7 @@ class Core(object):
                         existing_schemas=", ".join(sorted(pykwalify.partial_schemas.keys()))))
                     return
 
-                include_rule = Rule()
-                include_rule.mapping = {k: partial_schema_rule}
-                include_rule.regex_mappings = []
-
-                return self._validate(value, include_rule, u"{0}".format(path), done)
+                rr = partial_schema_rule
 
             # Find out if this is a regex rule
             is_regex_rule = False
@@ -800,7 +787,8 @@ class Core(object):
         if isinstance(date_value, str):
             # If a date_format is specefied then use strptime on all formats
             # If no date_format is specefied then use dateutils.parse() to test the value
-            print(date_formats)
+            log.debug(date_formats)
+
             if date_formats:
                 # Run through all date_formats and it is valid if atleast one of them passed time.strptime() parsing
                 valid = False

@@ -15,6 +15,7 @@ from pykwalify.types import (
     is_builtin_type,
     is_collection_type,
     is_number,
+    is_string,
     mapping_aliases,
     sequence_aliases,
     type_class,
@@ -390,9 +391,9 @@ class Rule(object):
                     t = DEFAULT_TYPE
                     self.type = t
             else:
-                if not isinstance(schema["type"], str):
+                if not is_string(schema["type"]):
                     raise RuleError(
-                        msg=u"Key 'type' in schema rule is not a string type",
+                        msg=u"Key 'type' in schema rule is not a string type (found %s)" % type(schema["type"]).__name__,
                         error_key=u"type.not_string",
                         path=path,
                     )
@@ -460,7 +461,7 @@ class Rule(object):
     def init_format_value(self, v, rule, path):
         log.debug(u"Init format value : %s", path)
 
-        if isinstance(v, basestring):
+        if is_string(v):
             self._format = [v]
         elif isinstance(v, list):
             valid = True
@@ -503,7 +504,7 @@ class Rule(object):
     def init_example(self, v, rule, path):
         log.debug(u'Init example value : {0}'.format(path))
 
-        if not isinstance(v, basestring):
+        if not is_string(v):
             raise RuleError(
                 msg=u"Value: {0} for keyword example must be a string".format(v),
                 error_key=u"example.not_string",
@@ -648,7 +649,7 @@ class Rule(object):
     def init_func(self, v, rule, path):
         """
         """
-        if not isinstance(v, str):
+        if not is_string(v):
             raise RuleError(
                 msg=u"Value: {0} for func keyword must be a string".format(v),
                 error_key=u"func.notstring",
@@ -737,7 +738,7 @@ class Rule(object):
         """
         log.debug(u"Init name value : %s", path)
 
-        if not isinstance(v, basestring):
+        if not is_string(v):
             raise RuleError(
                 msg=u"Value: {0} for keyword name must be a string".format(v),
                 error_key=u"name.not_string",
@@ -765,7 +766,7 @@ class Rule(object):
         """
         log.debug(u"Init descr value : %s", path)
 
-        if not isinstance(v, basestring):
+        if not is_string(v):
             raise RuleError(
                 msg=u"Value: {0} for keyword desc must be a string".format(v),
                 error_key=u"desc.not_string",
@@ -779,7 +780,7 @@ class Rule(object):
         """
         log.debug(u"Init required value : %s", path)
 
-        if not isinstance(v, bool):
+        if not is_bool(v):
             raise RuleError(
                 msg=u"Value: '{0}' for required keyword must be a boolean".format(v),
                 error_key=u"required.not_bool",
@@ -792,7 +793,7 @@ class Rule(object):
         """
         log.debug(u"Init pattern value : %s", path)
 
-        if not isinstance(v, str):
+        if not is_string(v):
             raise RuleError(
                 msg=u"Value of pattern keyword: '{0}' is not a string".format(v),
                 error_key=u"pattern.not_string",
@@ -862,7 +863,7 @@ class Rule(object):
         """
         log.debug(u"Init assert value : %s", path)
 
-        if not isinstance(v, str):
+        if not is_string(v):
             raise RuleError(
                 msg=u"Value: '{0}' for keyword 'assert' is not a string".format(v),
                 error_key=u"assert.not_str",
@@ -1018,7 +1019,7 @@ class Rule(object):
         """
         log.debug(u"Init ident value : %s", path)
 
-        if v is None or not isinstance(v, bool):
+        if v is None or not is_bool(v):
             raise RuleError(
                 msg=u"Value: '{0}' of 'ident' is not a boolean value".format(v),
                 error_key=u"ident.not_bool",
@@ -1054,7 +1055,7 @@ class Rule(object):
         """
         log.debug(u"Init unique value : %s", path)
 
-        if not isinstance(v, bool):
+        if not is_bool(v):
             raise RuleError(
                 msg=u"Value: '{0}' for 'unique' keyword is not boolean".format(v),
                 error_key=u"unique.not_bool",

@@ -121,9 +121,12 @@ class TestCore(object):
         schema_f = tmpdir.join("bar.json")
         schema_f.write("")
 
-        with pytest.raises(CoreError) as ex:
+        with pytest.raises(ValueError) as ex:
             Core(source_file=str(source_f), schema_files=[str(schema_f)])
-        assert "Unable to load any data from source json file" in str(ex.value)
+        # Python 2.7 and Python 3.5 JSON parsers return different exception
+        # strings for the same data file, so check for both errors strings.
+        assert ("No JSON object could be decoded" in str(ex.value) or
+                "Expecting value:" in str(ex.value))
 
         # Load empty schema files
         source_f = tmpdir.join("foo.json")
@@ -132,9 +135,10 @@ class TestCore(object):
         schema_f = tmpdir.join("bar.json")
         schema_f.write("")
 
-        with pytest.raises(CoreError) as ex:
+        with pytest.raises(ValueError) as ex:
             Core(source_file=str(source_f), schema_files=[str(schema_f)])
-        assert "No data loaded from file" in str(ex.value)
+        assert ("No JSON object could be decoded" in str(ex.value) or
+                "Expecting value:" in str(ex.value))
 
     def test_load_empty_yaml_file(self, tmpdir):
         """
@@ -244,6 +248,25 @@ class TestCore(object):
                     'sequence': [{'include': 'fooone'}],
                     'type': 'seq',
                 }
+            ),
+            # This tests that you can include a partial schema alongside other rules in a map
+            (
+                [
+                    self.f("partial_schemas", "7s-schema.yaml"),
+                ],
+                self.f("partial_schemas", "7s-data.yaml"),
+                {
+                    'type': 'map',
+                    'mapping': {
+                        'foo': {
+                            'type': 'str',
+                            'required': True
+                        },
+                        'bar': {
+                            'include': 'bar'
+                        }
+                    }
+                }
             )
         ]
 
@@ -256,7 +279,7 @@ class TestCore(object):
                 ],
                 self.f("partial_schemas", "1f-data.yaml"),
                 SchemaError,
-                ["Cannot find partial schema with name 'fooonez'. Existing partial schemas: 'fooone, foothree, footwo'. Path: '/0'"]
+                ["Cannot find partial schema with name 'fooonez'. Existing partial schemas: 'bar, fooone, foothree, footwo'. Path: '/0'"]
             ),
             (
                 [
@@ -506,7 +529,7 @@ class TestCore(object):
         for passing_test_file in pass_tests:
             f = self.f(os.path.join("success", passing_test_file))
             with open(f, "r") as stream:
-                yaml_data = yaml.load_all(stream)
+                yaml_data = yaml.safe_load_all(stream)
 
                 for document_index, document in enumerate(yaml_data):
                     data = document["data"]
@@ -527,7 +550,7 @@ class TestCore(object):
         for failing_test, exception_type in _fail_tests:
             f = self.f(os.path.join("fail", failing_test))
             with open(f, "r") as stream:
-                yaml_data = yaml.load_all(stream)
+                yaml_data = yaml.safe_load_all(stream)
 
                 for document_index, document in enumerate(yaml_data):
                     data = document["data"]
