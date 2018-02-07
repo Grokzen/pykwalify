@@ -1,6 +1,11 @@
 Release Notes
 =============
 
+1.6.1 (Feb 07, 2018)
+--------------------
+
+- Added support for keyword *nullable*. It is now possible to allow for a key not to be empty, when *required* keyword is not used.
+
 1.6.0 (Jan 22, 2017)
 --------------------
 
