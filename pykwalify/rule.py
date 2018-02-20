@@ -325,6 +325,7 @@ class Rule(object):
             ('allowempty_map', 'allowempty_map'),
             ('assertion', 'assertion'),
             ('default', 'default'),
+            ('class', 'class'),
             ('desc', 'desc'),
             ('enum', 'enum'),
             ('example', 'example'),
@@ -409,6 +410,7 @@ class Rule(object):
         func_mapping = {
             "allowempty": self.init_allow_empty_map,
             "assert": self.init_assert_value,
+            "class": lambda x, y, z: (),
             "default": self.init_default_value,
             "desc": self.init_desc_value,
             "enum": self.init_enum_value,
@@ -1212,6 +1214,7 @@ class Rule(object):
         All supported keywords:
          - allowempty_map
          - assertion
+         - class
          - date
          - default
          - desc
@@ -1249,7 +1252,7 @@ class Rule(object):
             'float': global_keywords + ['default', 'enum', 'range', 'required'],
             'number': global_keywords + ['default', 'enum'],
             'bool': global_keywords + ['default', 'enum'],
-            'map': global_keywords + ['allowempty_map', 'mapping', 'map', 'allowempty', 'required', 'matching-rule', 'range'],
+            'map': global_keywords + ['allowempty_map', 'mapping', 'map', 'allowempty', 'required', 'matching-rule', 'range', 'class'],
             'seq': global_keywords + ['sequence', 'seq', 'required', 'range', 'matching'],
             'sequence': global_keywords + ['sequence', 'seq', 'required'],
             'mapping': global_keywords + ['mapping', 'seq', 'required'],
