@@ -4,6 +4,7 @@ include docs/license.rst
 include docs/release-notes.rst
 include setup.py
 include README.md
+include LICENSE
 global-exclude __pycache__/*
 recursive-include tests *
 recursive-exclude tests *.py[co]
