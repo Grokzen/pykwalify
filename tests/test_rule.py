@@ -12,6 +12,7 @@ import pytest
 import pykwalify
 from pykwalify.errors import RuleError, SchemaConflict
 from pykwalify.rule import Rule
+from pykwalify.compat import unicode
 
 
 class TestRule(unittest.TestCase):
