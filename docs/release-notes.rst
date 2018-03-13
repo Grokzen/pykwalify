@@ -1,10 +1,27 @@
 Release Notes
 =============
 
-1.6.1 (Feb 07, 2018)
+1.6.1 (March 13, 2018)
 --------------------
 
+New keywords:
+
 - Added support for keyword *nullable*. It is now possible to allow for a key not to be empty, when *required* keyword is not used.
+- Added support for keyword *class*. It will not cause any validation errors, but serves to make kwalify schemas compatible that uses that keywork.
+
+Bug fixes:
+
+- Improved compatibility with unicodes to validate as strings.
+
+Changed behaviour:
+
+- Propergate json and yaml loading errors when used from the cli to the user for easier debugging.
+
+General changes:
+
+- Allow ruamel.yaml versions up to 0.16
+- License is now bundled with the built release.
+
 
 1.6.0 (Jan 22, 2017)
 --------------------
