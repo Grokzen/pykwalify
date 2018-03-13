@@ -34,7 +34,7 @@ setup(
         'PyYAML>=3.11',
         'python-dateutil>=2.4.2',
     ],
-    classifiers=(
+    classifiers=[
         # 'Development Status :: 1 - Planning',
         # 'Development Status :: 2 - Pre-Alpha',
         # 'Development Status :: 3 - Alpha',
@@ -51,5 +51,5 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
-    )
+    ],
 )
