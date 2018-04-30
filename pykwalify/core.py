@@ -661,6 +661,7 @@ class Core(object):
                 log.debug("Trimming slashes around ruby style regex. New pattern value: '{0}'".format(rule.pattern))
 
             try:
+                log.debug("Matching pattern '{0}' to regex '{1}".format(rule.pattern, value))
                 res = re.match(rule.pattern, value, re.UNICODE)
             except TypeError:
                 res = None
@@ -671,6 +672,8 @@ class Core(object):
                     path=path,
                     value=nativestr(str(value)),
                     pattern=rule._pattern))
+            else:
+                log.debug("Pattern matched...")
 
         if rule.range is not None:
             if not is_scalar(value):
