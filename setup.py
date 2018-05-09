@@ -14,6 +14,7 @@ setup(
     version="1.6.1",
     description='Python lib/cli for JSON/YAML schema validation',
     long_description=readme + '\n\n' + history,
+    long_description_content_type='text/markdown',
     author="Johan Andersson",
     author_email="Grokzen@gmail.com",
     maintainer='Johan Andersson',
