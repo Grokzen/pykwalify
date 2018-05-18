@@ -258,6 +258,12 @@ class Core(object):
 
                 # No exception will should be caught. If one is raised it should bubble up all the way.
                 ret = method(value, rule, path)
+                if ret is not True and ret is not None:
+                    msg = '%s. Path: {path}' % unicode(ret)
+                    self.errors.append(SchemaError.SchemaErrorEntry(
+                                    msg=msg,
+                                    path=path,
+                                    value=None))
 
                 # If False or None or some other object that is interpreted as False
                 if not ret:
