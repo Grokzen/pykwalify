@@ -28,7 +28,7 @@ Each function defined inside the extension must be defined with a globally uniqu
     def method_name(value, rule_obj, path):
         pass
 
-To raise a validation error you can either raise any exception and it will propegate up to the caller or you can return ``True`` or ``False``. Any value/object that will be interpreted as ``False`` inside a if check will cause a ``CoreError`` validation error to be raised.
+To raise a validation error, you can either raise any exception (which will propagate up to the caller), or you can return ``True`` or ``False``. Any value/object interpreted as ``False`` inside an if check will cause a ``CoreError`` validation error to be raised.
 
 When using a validation function on a ``sequence``, the method will be called with the entire list content as the value.
 
