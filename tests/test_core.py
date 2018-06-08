@@ -336,7 +336,7 @@ class TestCore(object):
             compare(c.root_rule.schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed...")
 
         for failing_test in failing_tests:
-            with pytest.raises(failing_test[2], msg="Test files: {0} : {1}".format(", ".join(failing_test[0]), failing_test[1])):
+            with pytest.raises(failing_test[2], message="Test files: {0} : {1}".format(", ".join(failing_test[0]), failing_test[1])):
                 c = Core(schema_files=failing_test[0], source_file=failing_test[1])
                 c.validate()
 

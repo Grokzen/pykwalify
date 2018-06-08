@@ -1,7 +1,7 @@
 -r requirements.txt
 
 testfixtures
-pytest
+pytest>=3.6.0
 tox
 coveralls
 flake8
