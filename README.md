@@ -2,13 +2,13 @@
 
 YAML/JSON validation library
 
-This framework is a port with alot added functionality of the java version of the framework kwalify that can be found at: http://www.kuwata-lab.com/kwalify/
+This framework is a port with a lot of added functionality of the Java version of the framework kwalify that can be found at http://www.kuwata-lab.com/kwalify/
 
-The original source code can be found at: http://sourceforge.net/projects/kwalify/files/kwalify-java/0.5.1/
+The original source code can be found at http://sourceforge.net/projects/kwalify/files/kwalify-java/0.5.1/
 
-The source code of the latest release that has been used can be found at: https://github.com/sunaku/kwalify. Please note that source code is not the original authors code but a fork/upload of the last release available in ruby.
+The source code of the latest release that has been used can be found at https://github.com/sunaku/kwalify. Please note that source code is not the original authors code but a fork/upload of the last release available in Ruby.
 
-The schema this library is base and extended from: http://www.kuwata-lab.com/kwalify/ruby/users-guide.01.html#schema
+The schema this library is based on and extended from: http://www.kuwata-lab.com/kwalify/ruby/users-guide.01.html#schema
 
 
 # Usage
@@ -39,9 +39,9 @@ pykwalify -d data.yaml -s schema.yaml
 
 The documentation describes in detail how each keyword and type works and what is possible in each case.
 
-But there is a lot of real world examples that can be found in the test data/files. It shows alot of examples of how all keywords and types work in practise and in combination with eachother.
+But there is a lot of real world examples that can be found in the test data/files. It shows a lot of examples of how all keywords and types work in practice and in combination with each other.
 
-The files can be found here and it shows both schema/data combinations that will work and that will fail.
+The files can be found here and show both schema/data combinations that will work and that will fail.
 
  - `tests/files/success/`
  - `tests/files/fail/`
@@ -50,7 +50,7 @@ The files can be found here and it shows both schema/data combinations that will
 
 # PyYaml and ruamel.yaml
 
-`PyYaml` is the default installed yaml parser and `ruamel.yaml` is possible to install at the same time with the following command
+`PyYaml` is the default installed YAML parser and `ruamel.yaml` is possible to install at the same time with the following command
 
 ```bash
 pip install 'pykwalify[ruamel]'
@@ -60,23 +60,23 @@ pip install 'pykwalify[ruamel]'
 pip install -e '.[ruamel]'
 ```
 
-`ruamel.yaml` will however be used if both is installed becuase it is more up to date and includes the YAML 1.2 specification that `PyYaml` do not support.
+`ruamel.yaml` will however be used if both are installed because it is more up to date and includes the YAML 1.2 specification that `PyYaml` does not support.
 
-`PyYaml` will still be the default parser becuase it is used more and is still considered the default `YAML` parser in the python world.
+`PyYaml` will still be the default parser because it is used more and is still considered the default `YAML` parser in the Python world.
 
-Depending on how both libraries is developed, this can change in the future in any major update.
+Depending on how both libraries are developed, this can change in the future in any major update.
 
 
 
 ## UTF-8 and data encoding
 
-If you have problems with unicode values not working properly when running pykwalify on python 2.7.x then try to add this environment variable to your execution
+If you have problems with unicode values not working properly when running pykwalify on Python 2.7.x then try to add this environment variable to your execution:
 
 ```
 PYTHONIOENCODING=UTF-8 pykwalify ...
 ```
 
-and it might help to force UTF-8 encoding on all string objects. If this do not work please open up a issue with your schema and data that can be used to track down the problem in the source code.
+and it might help to force UTF-8 encoding on all string objects. If this does not work please open up an issue with your schema and data that can be used to track down the problem in the source code.
 
 
 # Project details
