@@ -1,6 +1,22 @@
 Release Notes
 =============
 
+1.7.0 (October 3, 2018)
+-----------------------
+
+**IMPORTANT** LICENSE UPDATE **IMPORTANT**
+
+- In this release there was a line removed from the license file. It was modified in the following commit
+  (cc4e31b39ff4cce2dfbc662baa6469470dd3c033 Wed Oct 3 16:20:59 2018 +0200) and will be the main reason for
+  the 1.7.0 release. All commits and tags and releases (1.6.1 and all releases before it) prior to this commit will
+  use the old license that includes the change done in the above mentioned commit. Only release 1.7.0 and commits past
+  this point will use the new/updated license file. 
+
+General changes:
+
+- Dropped support for python 3.3 and 3.4
+
+
 1.6.1 (March 13, 2018)
 --------------------
 
