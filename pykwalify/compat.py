@@ -2,22 +2,9 @@
 
 # python stdlib
 import sys
-import logging
 
-
-log = logging.getLogger(__name__)
-
-
-try:
-    from ruamel import yaml
-except ImportError:
-    try:
-        import yaml
-    except ImportError:
-        log.critical("Unable to import either ruamel.yaml or pyyaml")
-        sys.exit(1)
-
-log.debug("Using yaml library: {0}".format(yaml.__file__))
+# 3rd party imports
+from ruamel import yaml
 
 
 if sys.version_info[0] < 3:
