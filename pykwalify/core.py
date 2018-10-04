@@ -12,6 +12,7 @@ import re
 import sys
 import traceback
 import time
+from io import open
 
 # pyKwalify imports
 import pykwalify
@@ -31,7 +32,7 @@ class Core(object):
     """ Core class of pyKwalify """
 
     def __init__(self, source_file=None, schema_files=None, source_data=None, schema_data=None, extensions=None, strict_rule_validation=False,
-                 fix_ruby_style_regex=False, allow_assertions=False,):
+                 fix_ruby_style_regex=False, allow_assertions=False, file_encoding=None):
         """
         :param extensions:
             List of paths to python files that should be imported and available via 'func' keywork.
@@ -65,7 +66,7 @@ class Core(object):
             if not os.path.exists(source_file):
                 raise CoreError(u"Provided source_file do not exists on disk: {0}".format(source_file))
 
-            with open(source_file, "r") as stream:
+            with open(source_file, "r", encoding=file_encoding) as stream:
                 if source_file.endswith(".json"):
                     self.source = json.load(stream)
                 elif source_file.endswith(".yaml") or source_file.endswith('.yml'):
@@ -83,7 +84,7 @@ class Core(object):
                 if not os.path.exists(f):
                     raise CoreError(u"Provided source_file do not exists on disk : {0}".format(f))
 
-                with open(f, "r") as stream:
+                with open(f, "r", encoding=file_encoding) as stream:
                     if f.endswith(".json"):
                         data = json.load(stream)
                     elif f.endswith(".yaml") or f.endswith(".yml"):

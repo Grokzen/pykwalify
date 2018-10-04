@@ -26,7 +26,8 @@ def parse_cli():
 
     __docopt__ = """
 usage: pykwalify -d FILE -s FILE ... [-e FILE ...]
-       [--strict-rule-validation] [--fix-ruby-style-regex] [--allow-assertions] [-v ...] [-q]
+       [--strict-rule-validation] [--fix-ruby-style-regex] [--allow-assertions] [--encoding ENCODING]
+       [-v ...] [-q]
 
 optional arguments:
   -d FILE, --data-file FILE            the file to be tested
@@ -39,6 +40,7 @@ optional arguments:
   --allow-assertions                   By default assertions is disabled due to security risk.
                                        Error will be raised if assertion is used in schema
                                        but this flag is not used. This option enables assert keyword.
+  --encoding ENCODING                  Specify encoding to open data and schema files with.
   -h, --help                           show this help message and exit
   -q, --quiet                          suppress terminal output
   -v, --verbose                        verbose terminal output (multiple -v increases verbosity)
@@ -78,6 +80,7 @@ def run(cli_args):
         strict_rule_validation=cli_args['--strict-rule-validation'],
         fix_ruby_style_regex=cli_args['--fix-ruby-style-regex'],
         allow_assertions=cli_args['--allow-assertions'],
+        file_encoding=cli_args['--encoding'],
     )
     c.validate()
     return c
