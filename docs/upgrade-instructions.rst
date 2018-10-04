@@ -5,6 +5,12 @@ This document describes all major changes to the validation rules and the API th
 If new types were added, they will not be described here because it will not break existing schemas.
 
 
+1.7.x --> 1.8.0
+---------------
+
+Pyyaml was removed as supported and default installed yaml parser. The new default parser is ruamel.yaml. If you are running pyyaml then you need to uninstall it and install ruamel.yaml in order to continue to use this tool/library.
+
+
 1.5.x --> 1.6.0
 ---------------
 
