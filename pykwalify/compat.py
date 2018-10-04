@@ -4,7 +4,7 @@
 import sys
 
 # 3rd party imports
-from ruamel import yaml
+from ruamel import yaml  # NOQA: F401
 
 
 if sys.version_info[0] < 3:
