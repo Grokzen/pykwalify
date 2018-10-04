@@ -1,6 +1,13 @@
 Release Notes
 =============
 
+Next release
+------------
+
+- Install ruamel.yaml by default.
+- Dropped support for pyyaml
+
+
 1.7.0 (October 3, 2018)
 -----------------------
 
