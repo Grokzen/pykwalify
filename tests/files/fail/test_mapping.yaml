@@ -158,7 +158,7 @@ data:
   birth: Jul 01, 1985
 errors:
   - "Cannot find required key 'name'. Path: ''"
-  - "Enum 'ab' does not exist. Path: '/blood'"
+  - "Enum 'ab' does not exist. Path: '/blood' Enum: ['A', 'B', 'O', 'AB']"
   - "Key 'nam' was not defined. Path: ''"
   - "Value 'foo(at)mail.com' does not match pattern '.+@.+'. Path: '/email'"
   - "Value 'twenty' is not of type 'int'. Path: '/age'"

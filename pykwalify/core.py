@@ -632,9 +632,10 @@ class Core(object):
 
         if rule.enum is not None and value not in rule.enum:
             self.errors.append(SchemaError.SchemaErrorEntry(
-                msg=u"Enum '{value}' does not exist. Path: '{path}'",
+                msg=u"Enum '{value}' does not exist. Path: '{path}' Enum: {enum_values}",
                 path=path,
                 value=nativestr(value) if tt['str'](value) else value,
+                enum_values=rule.enum,
             ))
 
         # Set default value
