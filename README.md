@@ -48,21 +48,11 @@ The files can be found here and show both schema/data combinations that will wor
  - `tests/files/partial_schemas/`
 
 
-# PyYaml and ruamel.yaml
+# YAML parser
 
-`PyYaml` is the default installed YAML parser and `ruamel.yaml` is possible to install at the same time with the following command
+`ruamel.yaml` is the default YAMl parser installed with pykwalify.
 
-```bash
-pip install 'pykwalify[ruamel]'
-
-# or for development:
-
-pip install -e '.[ruamel]'
-```
-
-`ruamel.yaml` will however be used if both are installed because it is more up to date and includes the YAML 1.2 specification that `PyYaml` does not support.
-
-`PyYaml` will still be the default parser because it is used more and is still considered the default `YAML` parser in the Python world.
+Ruamel.yaml is more supported in the yaml 1.2 spec and is more actively developed.
 
 Depending on how both libraries are developed, this can change in the future in any major update.
 
@@ -102,4 +92,4 @@ and it might help to force UTF-8 encoding on all string objects. If this does no
 | install stable         | `pip install pykwalify` |
 | install dev            | `$ git clone git@github.com:Grokzen/pykwalify.git pykwalify`<br>`$ cd ./pykwalify`<br>`$ virtualenv .venv`<br>`$ source .venv/bin/activate`<br>`$ pip install -r dev-requirements.txt`<br>`$ pip install -e .` |
 | required dependencies  | `docopt >= 0.6.2`<br> `python-dateutil >= 2.4.2` |
-| supported yml parsers  | `PyYaml >= 3.11`<br>`ruamel.yaml >= 0.11.0` |
+| supported yml parsers  | `ruamel.yaml >= 0.11.0` |
