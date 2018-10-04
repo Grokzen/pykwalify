@@ -61,25 +61,14 @@ The files can be found here and it shows both schema/data combinations that will
  - `tests/files/partial_schemas/`
 
 
+YAML parser
+-----------
 
-PyYaml and ruamel.yaml
-----------------------
+`ruamel.yaml` is the default YAMl parser installed with pykwalify.
 
-``PyYaml`` is the default installed yaml parser and ``ruamel.yaml`` is possible to install at the same time with the following command
+Ruamel.yaml is more supported in the yaml 1.2 spec and is more actively developed.
 
-.. code-block:: bash
-
-  pip install 'pykwalify[ruamel]'
-
-  # or for development:
-
-  pip install -e '.[ruamel]'
-
-``ruamel.yaml`` will however be used if both is installed becuase it is more up to date and includes the YAML 1.2 specification that ``PyYaml`` do not support.
-
-``PyYaml`` will still be the default parser becuase it is used more and is still considered the default ``YAML`` parser in the python world.
-
-Depending on how both libraries is developed, this can change in the future in any major update.
+Depending on how both libraries are developed, this can change in the future in any major update.
 
 
 
