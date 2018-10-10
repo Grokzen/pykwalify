@@ -77,7 +77,7 @@ and it might help to force UTF-8 encoding on all string objects. If this does no
 | Source                 | https://github.com/Grokzen/pykwalify |
 | Docs (Latest release)  | http://pykwalify.readthedocs.io/en/master/ |
 | Docs (Unstable branch) | http://pykwalify.readthedocs.io/en/unstable/ |
-| Gitter (Free Chat)     | [![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/Grokzen/pykwalify?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
+| Gitter (Free Chat)     | [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Grokzen/pykwalify?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
 | Changelog              | https://github.com/Grokzen/pykwalify/blob/unstable/docs/release-notes.rst |
 | Upgrade instructions   | https://github.com/Grokzen/pykwalify/blob/unstable/docs/upgrade-instructions.rst |
 | Issues                 | https://github.com/Grokzen/pykwalify/issues |
