@@ -256,9 +256,9 @@ class Core(object):
             return
 
         log.debug(u" ? ValidateRule: %s", rule)
-        if rule.include_name is not None:
-            self._validate_include(value, rule, path, done=None)
-        elif rule.sequence is not None:
+        # if rule.include_name is not None:
+        #     self._validate_include(value, rule, path, done=None)
+        if rule.sequence is not None:
             self._validate_sequence(value, rule, path, done=None)
         elif rule.mapping is not None or rule.allowempty_map:
             self._validate_mapping(value, rule, path, done=None)
@@ -303,28 +303,28 @@ class Core(object):
         if not found_method:
             raise CoreError(u"Did not find method '{0}' in any loaded extension file".format(func))
 
-    def _validate_include(self, value, rule, path, done=None):
-        """
-        """
-        # TODO: It is difficult to get a good test case to trigger this if case
-        if rule.include_name is None:
-            self.errors.append(SchemaError.SchemaErrorEntry(
-                msg=u'Include name not valid',
-                path=path,
-                value=value.encode('unicode_escape')))
-            return
-        include_name = rule.include_name
-        partial_schema_rule = pykwalify.partial_schemas.get(include_name)
-        if not partial_schema_rule:
-            self.errors.append(SchemaError.SchemaErrorEntry(
-                msg=u"Cannot find partial schema with name '{include_name}'. Existing partial schemas: '{existing_schemas}'. Path: '{path}'",
-                path=path,
-                value=value,
-                include_name=include_name,
-                existing_schemas=", ".join(sorted(pykwalify.partial_schemas.keys()))))
-            return
-
-        self._validate(value, partial_schema_rule, path, done)
+#     def _validate_include(self, value, rule, path, done=None):
+#         """
+#         """
+#         # TODO: It is difficult to get a good test case to trigger this if case
+#         if rule.include_name is None:
+#             self.errors.append(SchemaError.SchemaErrorEntry(
+#                 msg=u'Include name not valid',
+#                 path=path,
+#                 value=value.encode('unicode_escape')))
+#             return
+#         include_name = rule.include_name
+#         partial_schema_rule = pykwalify.partial_schemas.get(include_name)
+#         if not partial_schema_rule:
+#             self.errors.append(SchemaError.SchemaErrorEntry(
+#                 msg=u"Cannot find partial schema with name '{include_name}'. Existing partial schemas: '{existing_schemas}'. Path: '{path}'",
+#                 path=path,
+#                 value=value,
+#                 include_name=include_name,
+#                 existing_schemas=", ".join(sorted(pykwalify.partial_schemas.keys()))))
+#             return
+# 
+#         self._validate(value, partial_schema_rule, path, done)
 
     def _validate_sequence(self, value, rule, path, done=None):
         """

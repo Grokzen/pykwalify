@@ -5,6 +5,7 @@ mapping:
     required: True
   bar:
     include: bar  
+
 schema;bar:
   type: seq
   required: True

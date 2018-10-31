@@ -227,11 +227,10 @@ class TestCore(object):
             (
                 [
                     self.f("partial_schemas", "1s-schema.yaml"),
-                    self.f("partial_schemas", "1s-partials.yaml"),
                 ],
                 self.f("partial_schemas", "1s-data.yaml"),
                 {
-                    'sequence': [{'include': 'fooone'}],
+                    'sequence': [{'include': 'fooone', 'mapping': {'foo': {'type': 'str'}}, 'type': 'map'}],
                     'type': 'seq',
                 }
             ),
@@ -241,13 +240,25 @@ class TestCore(object):
             (
                 [
                     self.f("partial_schemas", "2s-schema.yaml"),
-                    self.f("partial_schemas", "2s-partials.yaml"),
                 ],
                 self.f("partial_schemas", "2s-data.yaml"),
+                # {
+                #     'sequence': [{'include': 'fooone'}],
+                #     'type': 'seq',
+                # }
+
                 {
-                    'sequence': [{'include': 'fooone'}],
-                    'type': 'seq',
-                }
+                    "type": "seq",
+                    "sequence":
+                        [{'include': 'fooone',
+                          'mapping': {'foo': {'include': 'footwo',
+                                              'mapping': {'bar': {'include': 'foothree',
+                                                                  'sequence': [{'type': 'bool'}],
+                                                                  'type': 'seq'}},
+                                              'type': 'map'}},
+                          'type': 'map'}]
+                  },
+
             ),
             # This tests that you can include a partial schema alongside other rules in a map
             (
@@ -263,7 +274,10 @@ class TestCore(object):
                             'required': True
                         },
                         'bar': {
-                            'include': 'bar'
+                            'include': 'bar',
+                            "required": True,
+                            "sequence": [{'type': 'str'}],
+                            "type": "seq",
                         }
                     }
                 }
@@ -324,6 +338,8 @@ class TestCore(object):
         ]
 
         for passing_test in pass_tests:
+            print("Running testfile: {0}".format(passing_test))
+
             try:
                 c = Core(source_file=passing_test[1], schema_files=passing_test[0])
                 c.validate()
@@ -333,7 +349,7 @@ class TestCore(object):
                 raise e
 
             # This serve as an extra schema validation that tests more complex structures then testrule.py do
-            compare(c.root_rule.schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed...")
+            compare(c.root_rule.schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed... {0}".format(passing_test))
 
         for failing_test in failing_tests:
             print("Test files: {0} : {1}".format(", ".join(failing_test[0]), failing_test[1]))
