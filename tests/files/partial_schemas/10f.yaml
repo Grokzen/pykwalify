@@ -21,4 +21,4 @@ partial-files:
 
 fail-exception-class: "SchemaError"
 fail-validation-errors:
-  - "Cannot find required key 'y'. Path: '/point'.: Path: '/'"
+  - "Cannot find required key 'y'. Path: '/point'"

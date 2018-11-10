@@ -8,7 +8,7 @@ import re
 
 # pykwalify imports
 from pykwalify.compat import basestring
-from pykwalify.errors import SchemaConflict, RuleError, SchemaError
+from pykwalify.errors import SchemaConflict, RuleError
 from pykwalify.types import (
     DEFAULT_TYPE,
     is_bool,

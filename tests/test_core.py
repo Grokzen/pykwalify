@@ -402,6 +402,14 @@ class TestCore(object):
                 )
                 c.validate()
 
+            compare(
+                sorted(c.validation_errors),
+                sorted(fail_validation_errors),
+                prefix="Wrong validation errors when parsing file : {0}".format(
+                    fail_test,
+                )
+            )
+
     def test_python_obj_loading(self, tmp_path):
         schema = """
         allowempty: True
