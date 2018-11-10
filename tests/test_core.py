@@ -370,6 +370,38 @@ class TestCore(object):
                     ),
                 )
 
+        fail_tests = [
+            self.f('partial_schemas', '10f.yaml')
+        ]
+
+        for fail_test in fail_tests:
+            with open(fail_test, 'r') as stream:
+                fail_test_raw_data = yaml.safe_load_all(stream)
+
+                for document_index, document in enumerate(fail_test_raw_data):
+                    fail_test_data = document
+
+            data = fail_test_data['data']
+            schema = fail_test_data['schema']
+            partial_files = fail_test_data['partial-files']
+            fail_exception_class = fail_test_data['fail-exception-class']
+            fail_validation_errors = fail_test_data['fail-validation-errors']
+            fail_except_class_instance = None
+
+            if fail_exception_class == "SchemaError":
+                fail_except_class_instance = SchemaError
+            elif fail_exception_class == "RuleError":
+                fail_except_class_instance = RuleError
+
+            msg = "FAILED TEST FILE: {0}".format(fail_test)
+
+            with pytest.raises(fail_except_class_instance, message=msg):
+                c = Core(
+                    source_data=data,
+                    schema_data=[schema] + partial_files,
+                )
+                c.validate()
+
     def test_python_obj_loading(self, tmp_path):
         schema = """
         allowempty: True

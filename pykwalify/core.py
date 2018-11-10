@@ -133,9 +133,17 @@ class Core(object):
         if self.source is None:
             log.debug(u"No source file loaded, trying source data variable")
             self.source = source_data
+
         if self.schema is None:
             log.debug(u"No schema file loaded, trying schema data variable")
-            self.schema = schema_data
+
+            if isinstance(schema_data, list):
+                merged_schema = {}
+                for schema in schema_data:
+                    merged_schema.update(schema)
+                self.schema = merged_schema
+            else:
+                self.schema = schema_data
 
         # Test if anything was loaded
         if self.source is None:
