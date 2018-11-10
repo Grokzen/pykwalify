@@ -2,17 +2,17 @@ type: seq
 sequence:
   - include: fooone
 
-schema;fooone:
+schema;foothree:
   type: seq
   sequence:
-    - include: footwo
+    - type: str
 
 schema;footwo:
   type: seq
   sequence:
     - include: foothree
 
-schema;foothree:
+schema;fooone:
   type: seq
   sequence:
-    - type: str
+    - include: footwo

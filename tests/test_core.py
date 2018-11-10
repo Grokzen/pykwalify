@@ -8,7 +8,7 @@ import os
 # pykwalify imports
 import pykwalify
 from pykwalify.core import Core
-from pykwalify.errors import SchemaError, CoreError
+from pykwalify.errors import SchemaError, CoreError, RuleError
 
 # 3rd party imports
 import pytest
@@ -292,8 +292,8 @@ class TestCore(object):
                     self.f("partial_schemas", "1f-partials.yaml")
                 ],
                 self.f("partial_schemas", "1f-data.yaml"),
-                SchemaError,
-                ["Cannot find partial schema with name 'fooonez'. Existing partial schemas: 'bar, fooone, foothree, footwo'. Path: '/0'"]
+                RuleError,
+                ["Include key: None not defined in schema: Path: '/sequence/0'"],
             ),
             (
                 [
@@ -352,23 +352,23 @@ class TestCore(object):
             compare(c.root_rule.schema_str, passing_test[2], prefix="Parsed rules is not correct, something have changed... {0}".format(passing_test))
 
         for failing_test in failing_tests:
-            print("Test files: {0} : {1}".format(", ".join(failing_test[0]), failing_test[1]))
+            print("Running failing tests: {0}".format(failing_test))
 
             with pytest.raises(failing_test[2]):
                 c = Core(schema_files=failing_test[0], source_file=failing_test[1])
                 c.validate()
 
-            if not c.validation_errors:
-                raise AssertionError("No validation_errors was raised...")
+                if not c.validation_errors:
+                    raise AssertionError("No validation_errors was raised...")
 
-            compare(
-                sorted(c.validation_errors),
-                sorted(failing_test[3]),
-                prefix="Wrong validation errors when parsing files : {0} : {1}".format(
-                    failing_test[0],
-                    failing_test[1],
-                ),
-            )
+                compare(
+                    sorted(c.validation_errors),
+                    sorted(failing_test[3]),
+                    prefix="Wrong validation errors when parsing files : {0} : {1}".format(
+                        failing_test[0],
+                        failing_test[1],
+                    ),
+                )
 
     def test_python_obj_loading(self, tmp_path):
         schema = """

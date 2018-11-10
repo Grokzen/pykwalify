@@ -3,11 +3,11 @@ mapping:
   foo:
     include: fooone
 
-schema;fooone:
+schema;foothree:
   type: map
   mapping:
-    bar:
-      include: footwo
+    ewq:
+      type: str
 
 schema;footwo:
   type: map
@@ -15,8 +15,8 @@ schema;footwo:
     qwe:
       include: foothree
 
-schema;foothree:
+schema;fooone:
   type: map
   mapping:
-    ewq:
-      type: str
+    bar:
+      include: footwo

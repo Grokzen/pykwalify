@@ -8,7 +8,7 @@ import re
 
 # pykwalify imports
 from pykwalify.compat import basestring
-from pykwalify.errors import SchemaConflict, RuleError
+from pykwalify.errors import SchemaConflict, RuleError, SchemaError
 from pykwalify.types import (
     DEFAULT_TYPE,
     is_bool,
@@ -375,6 +375,13 @@ class Rule(object):
             import pykwalify
 
             partial_schema_rule = pykwalify.partial_schemas.get(include)
+
+            if not partial_schema_rule:
+                raise RuleError(
+                    msg=u"Include key: {0} not defined in schema".format(include),
+                    error_key=u"include.key.unknown",
+                    path=path,
+                )
 
             # schema = {key: value for (key, value) in (schema.items() + partial_schema_rule.schema.items())}
             # schema = dict(schema.items() | partial_schema_rule.schema.items())
