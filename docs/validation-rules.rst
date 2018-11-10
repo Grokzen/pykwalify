@@ -537,7 +537,7 @@ Default is ``any``.
 Example
 
 The following dataset will raise an error because the key ``bar2`` does not fit all of the regex.
-If the constraint was instead ``matching-rule: all``, the same data would be valid because all the keys in the data match one of the regex formats and associated constraints in the schema.
+If the constraint was instead ``matching-rule: any``, the same data would be valid because all the keys in the data match one of the regex formats and associated constraints in the schema.
 
 .. code-block:: yaml
 
