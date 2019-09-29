@@ -72,7 +72,7 @@ Example
 Mapping
 -------
 
-A mapping is validates to the ``dict`` datastructure.
+A mapping validates to the ``dict`` data structure.
 
 Aliases
 
@@ -104,10 +104,10 @@ The schema below sets the ``mapping`` type implicitly and is also a valid schema
         type: str
 
 
-There are some constraints which are available only for the map type, and expand its functionality.
+There are some constraints which are available only for the map type and expand its functionality.
 See the ``allowempty``, ``regex;(regex-pattern)`` and ``matching-rule`` sections below for details.
 
-By default, map keys specified in the map rule can be omitted unless they have the ``required`` constraint explictly set to ``True``.
+By default, map keys specified in the map rule can be omitted unless they have the ``required`` constraint explicitly set to ``True``.
 
 
 
@@ -146,7 +146,7 @@ The schema below sets the ``sequence`` type implicitly and is also a valid schem
     seq:
       - type: str
 
-Multiple list entries is supported to enable validation of different types of data inside the sequence.
+Multiple list entries are supported to enable validation of different types of data inside the sequence.
 
 .. note:: The original kwalify specification only allowed one entry in the list. This has been extended in PyKwalify to give more flexibility when validating.
 
@@ -208,7 +208,7 @@ Example
 Timestamp
 ---------
 
-Parse a string or integer to determine if it is a valid unix timestamp.
+Parse a string or integer to determine if it is a valid Unix timestamp.
 
 Timestamps must be above ``1`` and below ``2147483647``.
 
@@ -247,9 +247,9 @@ Date
 
 Parse a string or datetime object to determine if it is a valid date. Date has multiple valid formats based on what standard you are using.
 
-For example 2016-12-31 or 31-12-16 is both valid formats.
+For example, 2016-12-31 or 31-12-16 are both valid formats.
 
-If you want to parse a custom format then you can use the `format` keyword to specify a valid datetime parsing syntax. The valid sytax can be found here `python-strptime`_
+If you want to parse a custom format then you can use the `format` keyword to specify a valid datetime parsing syntax. The valid syntax can be found here `python-strptime`_
 
 .. _python-strptime: https://docs.python.org/2/library/datetime.html#strftime-and-strptime-behavior
 
@@ -270,9 +270,9 @@ Example:
 Format
 ------
 
-Only valid when using `date` or `datetime` type. It helps to define custom datetime formats if the default formats is not enough.
+Only valid when using `date` or `datetime` type. It helps to define custom datetime formats if the default formats are not enough.
 
-Define the value as a string or a list with foramts as values that uses the builtin python datetime string formatting language. The syntax can be found here `python-strptime`_
+Define the value as a string or a list with formats as values that use the builtin python datetime string formatting language. The syntax can be found here `python-strptime`_
 
 .. code-block:: yaml
 
@@ -322,9 +322,9 @@ Enum
 
 Set of possible elements, the value must be a member of this set.
 
-Object in enum must be a list of items.
+Objects in enum must be a list of items.
 
-Currently only exact case matching is implemented. If you need complex validation you should use ``pattern``.
+Currently, only exact case matching is implemented. If you need complex validation you should use ``pattern``.
 
 Example
 
@@ -388,7 +388,7 @@ For the data value (or length), ``x``, the range can be specified to test for th
  - ``min-ex`` provides an exclusive lower bound, ``a < x``
  - ``max-ex`` provieds an exclusive upper bound, ``x < b``
 
-Non-numeric types require non-negative values for the boundaries, since length can not be negative.
+Non-numeric types require non-negative values for the boundaries since the length can not be negative.
 
 Types ``bool`` and ``any`` are not compatible with ``range``.
 
@@ -453,7 +453,7 @@ Only applies to ``mapping``.
 
 If ``True``, the map can have keys which are not present in the schema, and these can map to anything.
 
-Any keys which **are** specified in the schema must have values which conform to their corresponding constraints, if they are present.
+Any keys which **are** specified in the schema must have values which conform to their corresponding constraints if they are present.
 
 Default is ``False``.
 
@@ -522,7 +522,7 @@ Example
 Matching-rule
 -------------
 
-Only applies to ``mapping``. This enables more finegrained control over how the matching rule should behave when validation regex keys inside mappings.
+Only applies to ``mapping``. This enables more fine-grained control over how the matching rule should behave when validation regex keys inside mappings.
 
 Currently supported constraint settings are
 
@@ -564,7 +564,7 @@ Name
 
 Name of the schema.
 
-This have no effect on the parsing, but is useful for humans to read.
+This has no effect on the parsing but is useful for humans to read.
 
 Example
 
@@ -573,12 +573,12 @@ Example
     # Schema
     name: foobar schema
 
-	
-	
+    
+    
 Nullable
 --------
 
-If the ``nullable`` constraint is set to ``False``, the key and its value must not be empty, otherwise a validation error will be raised.
+If the ``nullable`` constraint is set to ``False``, the key and its value must not be empty, otherwise, a validation error will be raised.
 
 Default is ``True``.
 
@@ -607,9 +607,9 @@ Example
 Desc
 ----
 
-Description of schema.
+Description of the schema.
 
-This have no effect on the parsing, but is useful for humans to read. Similar to ``name``.
+This has no effect on the parsing but is useful for humans to read. Similar to ``name``.
 
 Value for desc ``MUST`` be a string otherwise a ``RuleError`` will be raised upon usage.
 
@@ -625,7 +625,7 @@ Example
 Example
 -------
 
-Write a example that can show what values is upported. Or just type any comment into the schema for future reference.
+Write an example that can show what values are supported. Or just type any comment into the schema for future reference.
 
 It is possible to use in all levels and places in the schema and have no effect on the parsing, 
 but is useful for humans to read. Similar to ``desc``.
