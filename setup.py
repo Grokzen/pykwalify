@@ -6,14 +6,12 @@ except ImportError:
 
 with open('README.md') as f:
     readme = f.read()
-with open(os.path.join('docs', 'release-notes.rst')) as f:
-    history = f.read()
 
 setup(
     name="pykwalify",
     version="1.7.0",
     description='Python lib/cli for JSON/YAML schema validation',
-    long_description=readme + '\n\n' + history,
+    long_description=readme,
     long_description_content_type='text/markdown',
     author="Johan Andersson",
     author_email="Grokzen@gmail.com",
