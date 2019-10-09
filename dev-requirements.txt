@@ -1,10 +1,13 @@
 -r requirements.txt
 
+coverage
+pytest
 testfixtures
-pytest>=3.6.0
+mock
+docopt
 tox
-coveralls
-flake8
+python-coveralls
 ptpdb
 ptpython
+pysnooper
 setuptools
