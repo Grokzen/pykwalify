@@ -1,25 +1,31 @@
 sudo: false
+dist: xenial
 language: python
+cache: pip
+
 python:
   - "2.7"
   - "3.5"
   - "3.5"
   - "3.6"
-  - "3.7-dev"
+  - "3.7"
   - "nightly"
 
 install: 
   - pip install -r dev-requirements.txt
+  - pip install -e .
+  - pip freeze
 
 script:
   - coverage erase
   - coverage run --source pykwalify -p -m py.test -v
-  - flake8 --max-line-length=160 --show-source --statistics --exclude=.venv,.tox,dist,docs,build,.git
+  - py.test
   - python setup.py sdist bdist
 
 after_success:
   - coverage combine
   - coveralls
+  - "if [[ $TEST_PYCODESTYLE == '1' ]]; then pycodestyle --repeat --show-source --exclude=.venv,.tox,dist,docs,build,*.egg,pykwalify_install .; fi"
 
 matrix:
   allow_failures:
