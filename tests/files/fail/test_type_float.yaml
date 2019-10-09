@@ -17,8 +17,6 @@ schema:
   seq:
     - type: float
 errors:
-  - "Value 'foo' is not of type 'float'. Path: '/0'"
-errors:
   - "Value 'True' is not of type 'float'. Path: '/1'"
   - "Value 'foo' is not of type 'float'. Path: '/0'"
 ---
