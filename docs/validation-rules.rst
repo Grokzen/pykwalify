@@ -58,6 +58,10 @@ The following types are available:
     - Validates data is a valid Email address based on RFC 5322 Official Standard
       ^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$
 
+ - **url**
+    - Validates data is a valid URL based on RFC 1808. Uses following regex
+      http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+
+
 
 Example
 
