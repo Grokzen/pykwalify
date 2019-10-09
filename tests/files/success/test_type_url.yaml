@@ -1,0 +1,9 @@
+---
+name:  url1
+desc:  basic url type validation
+#
+schema:
+  type: url
+#
+data:
+  "http://www.google.com"

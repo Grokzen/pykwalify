@@ -1,0 +1,11 @@
+---
+name:  url2
+desc:  basic url type validation. Fails as not confirms with RFC 1808
+#
+schema:
+  type: url
+#
+data:
+  "www.google.com"
+errors:
+   - "Value 'www.google.com' is not of type 'url'. Path: ''"
