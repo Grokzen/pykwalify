@@ -4,8 +4,10 @@ Release Notes
 Next release
 ------------
 
-- Install ruamel.yaml by default.
+- ruamel.yaml is now the default and preffered yaml parser
 - Dropped support for pyyaml
+- Added new cli argument "--encoding ENCODING" that specifies what encoding to open data and schema files with
+- Enum error strings now output all possible values for easier debugging
 
 
 1.7.0 (October 3, 2018)
