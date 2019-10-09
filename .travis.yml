@@ -30,3 +30,7 @@ after_success:
 matrix:
   allow_failures:
     - python: "nightly"
+    - python: 2.7
+      env: TEST_PYCODESTYLE=1
+    - python: 3.6
+      env: TEST_PYCODESTYLE=1
