@@ -60,7 +60,7 @@ The following types are available:
 
  - **url**
     - Validates data is a valid URL based on RFC 1808. Uses following regex
-      http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+
+      `http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+`
 
 
 Example
