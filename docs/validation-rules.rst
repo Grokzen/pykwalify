@@ -54,6 +54,10 @@ The following types are available:
  - **timestamp**
     - Validates for basic timestamp formats
 
+ - **email**
+    - Validates data is a valid Email address based on RFC 5322 Official Standard
+      ^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$
+
 
 Example
 
