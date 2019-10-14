@@ -4,6 +4,7 @@
 
 # python stdlib
 import datetime
+import re
 from pykwalify.compat import basestring, bytes
 
 DEFAULT_TYPE = "str"
@@ -33,7 +34,8 @@ _types = {
     "text": text,
     "any": object,
     "enum": str,
-    "none": None
+    "none": None,
+    "email": str,
 }
 
 
@@ -144,6 +146,12 @@ def is_date(obj):
     return isinstance(obj, basestring) or isinstance(obj, datetime.date)
 
 
+def is_email(obj):
+    """
+    """
+    return re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", obj)
+
+
 tt = {
     "str": is_string,
     "int": is_int,
@@ -157,4 +165,5 @@ tt = {
     "timestamp": is_timestamp,
     "scalar": is_scalar,
     "date": is_date,
+    "email": is_email,
 }

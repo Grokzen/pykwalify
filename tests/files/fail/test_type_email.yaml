@@ -1,0 +1,10 @@
+---
+name: email-1
+desc: basic email type validation. Fails if not conforms with RFC 5322 Official Standard
+#
+schema:
+  type: email
+data:
+  "foobar|gmail.com"
+errors:
+  - "Value 'foobar|gmail.com' is not of type 'email'. Path: ''"

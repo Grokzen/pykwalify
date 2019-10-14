@@ -8,6 +8,7 @@ Next release
 - Dropped support for pyyaml
 - Added new cli argument "--encoding ENCODING" that specifies what encoding to open data and schema files with
 - Enum error strings now output all possible values for easier debugging
+- Implement new type email that uses a relative simple regex to validate email addresses according to RFC 5322 Official Standard
 
 
 1.7.0 (October 3, 2018)

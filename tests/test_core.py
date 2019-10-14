@@ -437,6 +437,8 @@ class TestCore(object):
             "test_type_text.yaml",
             # All tests for TYPE: timestamp
             "test_type_timestamp.yaml",
+            # All tests for TYPE: email
+            "test_type_email.yaml",
         ]
 
         _fail_tests = [
@@ -518,6 +520,8 @@ class TestCore(object):
             ("test_type_text.yaml", SchemaError),
             # All tests for TYPE: timestamp
             ("test_type_timestamp.yaml", SchemaError),
+            # All tests for TYPE: email
+            ("test_type_email.yaml", SchemaError),
         ]
 
         # Add override magic to make it easier to test a specific file
