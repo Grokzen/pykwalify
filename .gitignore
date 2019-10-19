@@ -37,3 +37,7 @@ htmlcov
 .mr.developer.cfg
 .project
 .pydevproject
+
+# To not commit any comomnly used test files from local system
+data.yaml
+schema.yaml
