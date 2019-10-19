@@ -424,10 +424,10 @@ class TestCore(object):
          - default
          - goodbye
         """
-        schema_path = os.path.join(tmp_path, 'schema.yaml')
+        schema_path = os.path.join(str(tmp_path), 'schema.yaml')
         with open(schema_path, 'w') as stream:
             stream.write(schema)
-        data_path = os.path.join(tmp_path, 'data.yaml')
+        data_path = os.path.join(str(tmp_path), 'data.yaml')
         with open(data_path, 'w') as stream:
             stream.write(data)
 
