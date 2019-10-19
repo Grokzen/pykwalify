@@ -41,3 +41,4 @@ htmlcov
 # To not commit any comomnly used test files from local system
 data.yaml
 schema.yaml
+testfile.py
