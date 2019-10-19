@@ -354,6 +354,31 @@ class TestCore(object):
                 ),
             )
 
+    def test_python_obj_loading(self, tmp_path):
+        schema = """
+        allowempty: True
+        mapping:
+          intents:
+            type: !!python/str "seq"
+            sequence:
+            - type: !!python/str "str"
+        """
+        data = """
+        intents:
+         - greet
+         - default
+         - goodbye
+        """
+        schema_path = os.path.join(tmp_path, 'schema.yaml')
+        with open(schema_path, 'w') as stream:
+            stream.write(schema)
+        data_path = os.path.join(tmp_path, 'data.yaml')
+        with open(data_path, 'w') as stream:
+            stream.write(data)
+
+        c = Core(source_file=data_path, schema_files=[schema_path])
+        c.validate()
+
     def test_core_files(self):
         # These tests should pass with no exception raised
         pass_tests = [

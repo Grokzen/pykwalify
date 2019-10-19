@@ -6,6 +6,9 @@ import sys
 # 3rd party imports
 from ruamel import yaml  # NOQA: F401
 
+# Build our global yml object that will be used in all other operations in the code
+yml = yaml.YAML(typ='safe', pure=True)
+
 
 if sys.version_info[0] < 3:
     # Python 2.x.x series

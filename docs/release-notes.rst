@@ -12,6 +12,8 @@ Next release
 - Implement new type `url` that uses a relative simple regex to validate url:s according to RFC 1808
 - Update minimum version of ruamel.yaml to 0.16.0
 - Update minimum version of python-dateutil to 2.8.0
+- Fixed a regression from 1.6.1 where ruamel.yaml safe_load would break for all built-in custom python tags.
+  All normal python tags should now be possible to use again.
 
 
 1.7.0 (October 3, 2018)

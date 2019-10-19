@@ -22,8 +22,9 @@ from pykwalify.rule import Rule
 from pykwalify.types import is_scalar, is_string, tt
 
 # 3rd party imports
-from pykwalify.compat import yaml
 from dateutil.parser import parse
+from pykwalify.compat import yml
+from ruamel.yaml.constructor import Constructor
 
 log = logging.getLogger(__name__)
 
@@ -62,6 +63,20 @@ class Core(object):
         self.fix_ruby_style_regex = fix_ruby_style_regex
         self.allow_assertions = allow_assertions
 
+        # Patch in all the normal python types into the yaml load instance so we can use all the
+        # internal python types in the yaml loading.
+        yml.constructor.add_constructor('tag:yaml.org,2002:python/bool', Constructor.construct_yaml_bool)
+        yml.constructor.add_constructor('tag:yaml.org,2002:python/complex', Constructor.construct_python_complex)
+        yml.constructor.add_constructor('tag:yaml.org,2002:python/dict', Constructor.construct_yaml_map)
+        yml.constructor.add_constructor('tag:yaml.org,2002:python/float', Constructor.construct_yaml_float)
+        yml.constructor.add_constructor('tag:yaml.org,2002:python/int', Constructor.construct_yaml_int)
+        yml.constructor.add_constructor('tag:yaml.org,2002:python/list', Constructor.construct_yaml_seq)
+        yml.constructor.add_constructor('tag:yaml.org,2002:python/long', Constructor.construct_python_long)
+        yml.constructor.add_constructor('tag:yaml.org,2002:python/none', Constructor.construct_yaml_null)
+        yml.constructor.add_constructor('tag:yaml.org,2002:python/str', Constructor.construct_python_str)
+        yml.constructor.add_constructor('tag:yaml.org,2002:python/tuple', Constructor.construct_python_tuple)
+        yml.constructor.add_constructor('tag:yaml.org,2002:python/unicode', Constructor.construct_python_unicode)
+
         if source_file is not None:
             if not os.path.exists(source_file):
                 raise CoreError(u"Provided source_file do not exists on disk: {0}".format(source_file))
@@ -70,7 +85,7 @@ class Core(object):
                 if source_file.endswith(".json"):
                     self.source = json.load(stream)
                 elif source_file.endswith(".yaml") or source_file.endswith('.yml'):
-                    self.source = yaml.safe_load(stream)
+                    self.source = yml.load(stream)
                 else:
                     raise CoreError(u"Unable to load source_file. Unknown file format of specified file path: {0}".format(source_file))
 
@@ -88,7 +103,7 @@ class Core(object):
                     if f.endswith(".json"):
                         data = json.load(stream)
                     elif f.endswith(".yaml") or f.endswith(".yml"):
-                        data = yaml.safe_load(stream)
+                        data = yml.load(stream)
                         if not data:
                             raise CoreError(u"No data loaded from file : {0}".format(f))
                     else:
