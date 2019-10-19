@@ -11,6 +11,7 @@ Next release
 - Implement new type email that uses a relative simple regex to validate email addresses according to RFC 5322 Official Standard
 - Implement new type `url` that uses a relative simple regex to validate url:s according to RFC 1808
 - Update minimum version of ruamel.yaml to 0.16.0
+- Update minimum version of python-dateutil to 2.8.0
 
 
 1.7.0 (October 3, 2018)

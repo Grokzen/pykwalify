@@ -28,7 +28,7 @@ setup(
     install_requires=[
         'docopt>=0.6.2',
         "ruamel.yaml>=0.16.0"
-        'python-dateutil>=2.4.2',
+        'python-dateutil>=2.8.0',
     ],
     classifiers=[
         # 'Development Status :: 1 - Planning',
