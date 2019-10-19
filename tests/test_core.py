@@ -393,9 +393,8 @@ class TestCore(object):
             elif fail_exception_class == "RuleError":
                 fail_except_class_instance = RuleError
 
-            msg = "FAILED TEST FILE: {0}".format(fail_test)
-
-            with pytest.raises(fail_except_class_instance, message=msg):
+            with pytest.raises(fail_except_class_instance):
+                print("Running test file {0}".format(fail_test))
                 c = Core(
                     source_data=data,
                     schema_data=[schema] + partial_files,
