@@ -33,7 +33,7 @@ class Core(object):
     """ Core class of pyKwalify """
 
     def __init__(self, source_file=None, schema_files=None, source_data=None, schema_data=None, extensions=None, strict_rule_validation=False,
-                 fix_ruby_style_regex=False, allow_assertions=False, file_encoding=None):
+                 fix_ruby_style_regex=False, allow_assertions=False, file_encoding=None, schema_file_obj=None, data_file_obj=None):
         """
         :param extensions:
             List of paths to python files that should be imported and available via 'func' keywork.
@@ -76,6 +76,18 @@ class Core(object):
         yml.constructor.add_constructor('tag:yaml.org,2002:python/str', Constructor.construct_python_str)
         yml.constructor.add_constructor('tag:yaml.org,2002:python/tuple', Constructor.construct_python_tuple)
         yml.constructor.add_constructor('tag:yaml.org,2002:python/unicode', Constructor.construct_python_unicode)
+
+        if data_file_obj:
+            try:
+                self.source = yml.load(data_file_obj.read())
+            except Exception as e:
+                raise CoreError("Unable to load data_file_obj input")
+
+        if schema_file_obj:
+            try:
+                self.schema = yml.load(schema_file_obj.read())
+            except Exception as e:
+                raise CoreError("Unable to load schema_file_obj")
 
         if source_file is not None:
             if not os.path.exists(source_file):

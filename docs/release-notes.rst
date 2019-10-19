@@ -14,6 +14,8 @@ Next release
 - Update minimum version of python-dateutil to 2.8.0
 - Fixed a regression from 1.6.1 where ruamel.yaml safe_load would break for all built-in custom python tags.
   All normal python tags should now be possible to use again.
+- Add new argument "schema_file_obj" to Core class. Allows to pass in StringIO or similar interfaced objects to use for validation.
+- Add new argument "data_file_obj" to Core class. Allows to pass in StringIO or similar interfaced objects to use for validation.
 
 
 1.7.0 (October 3, 2018)
