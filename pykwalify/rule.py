@@ -455,17 +455,24 @@ class Rule(object):
             "version": self.init_version,
         }
 
+        # Do a initial pass of all keys to look for the schema tagg.
+        # If we are on the root rule, this check will not be done.
+        # If we are in any child rules, check all keys for any schema and
+        # raise error if we find any as schemas can only be defined at root level
+        if self.parent:
+            for k, v in schema.items():
+                if k.startswith("schema;"):
+                    # Schema tag is only allowed on top level of data
+                    log.debug(u"Found schema tag...")
+                    raise RuleError(
+                        msg=u"Schema is only allowed on top level of schema file",
+                        error_key=u"schema.not.toplevel",
+                        path=path,
+                    )
+
         for k, v in schema.items():
             if k in func_mapping:
                 func_mapping[k](v, rule, path)
-            elif k.startswith("schema;"):
-                # Schema tag is only allowed on top level of data
-                log.debug(u"Found schema tag...")
-                raise RuleError(
-                    msg=u"Schema is only allowed on top level of schema file",
-                    error_key=u"schema.not.toplevel",
-                    path=path,
-                )
             else:
                 raise RuleError(
                     msg=u"Unknown key: {0} found".format(k),
