@@ -340,7 +340,7 @@ class Rule(object):
             ('matching', 'matching'),
             ('matching_rule', 'matching_rule'),
             ('name', 'name'),
-            ('nullable', 'nullable')
+            ('nullable', 'nullable'),
             ('parent', 'parent'),
             ('pattern', 'pattern'),
             ('pattern_regexp', 'pattern_regexp'),
