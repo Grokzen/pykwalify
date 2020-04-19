@@ -321,7 +321,6 @@ schema:
       mapping:
         regex;(.+):
           type: str
-
 ---
 name: mapping 20
 desc: Test mapping with integer keys
@@ -336,3 +335,15 @@ schema:
       mapping:
         0:
           type: str
+---
+name: mapping21
+desc: Test that 'required' integer regex keys are supported.
+data:
+  1234: Albert
+  1235: Tom
+schema:
+  type: map
+  mapping:
+    regex;([0-9]+):
+      required: True
+      type: str
