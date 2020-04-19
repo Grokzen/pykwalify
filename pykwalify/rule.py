@@ -1158,6 +1158,14 @@ class Rule(object):
                         error_key=u"mapping.regex.malformed",
                         path=path,
                     )
+
+                elif not regex[1].startswith('(') or not regex[1].endswith(')'):
+                    raise RuleError(
+                        msg=u"Regex '{0}' should start and end with parentheses".format(regex[1]),
+                        error_key=u"mapping.regex.missing_parentheses",
+                        path=path,
+                    )
+
                 else:
                     regex = regex[1]
                     try:
