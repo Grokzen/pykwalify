@@ -37,7 +37,7 @@ class TestRule(unittest.TestCase):
     def test_matching_rule(self):
         # Test that exception is raised when a invalid matching rule is used
         with pytest.raises(RuleError) as r:
-            Rule(schema={"type": "map", "matching-rule": "foobar", "mapping": {"regex;.+": {"type": "seq", "sequence": [{"type": "str"}]}}})
+            Rule(schema={"type": "map", "matching-rule": "foobar", "mapping": {"regex;(.+)": {"type": "seq", "sequence": [{"type": "str"}]}}})
         assert str(r.value) == "<RuleError: error code 4: Specified rule in key: foobar is not part of allowed rule set : ['any', 'all']: Path: '/'>"
         assert r.value.error_key == 'matching_rule.not_allowed'
 
@@ -349,8 +349,8 @@ class TestRule(unittest.TestCase):
 
         # This will test that a invalid regex will throw error when parsing rules
         with pytest.raises(RuleError) as r:
-            Rule(schema={"type": "map", "matching-rule": "any", "mapping": {"regex;(+": {"type": "seq", "sequence": [{"type": "str"}]}}})
-        assert str(r.value) == "<RuleError: error code 4: Unable to compile regex '(+': Path: '/'>"
+            Rule(schema={"type": "map", "matching-rule": "any", "mapping": {"regex;(+)": {"type": "seq", "sequence": [{"type": "str"}]}}})
+        assert str(r.value) == "<RuleError: error code 4: Unable to compile regex '(+)': Path: '/'>"
         assert r.value.error_key == 'mapping.regex.compile_error'
 
         # this tests map/dict but with no elements
@@ -358,6 +358,12 @@ class TestRule(unittest.TestCase):
             Rule(schema={"type": "map", "mapping": {}})
         assert str(r.value) == "<RuleError: error code 4: Mapping do not contain any elements: Path: '/'>"
         assert r.value.error_key == 'mapping.no_elements'
+
+        # Test that regex with missing parentheses are correctly detected.
+        with pytest.raises(RuleError) as r:
+            Rule(schema={"type": "map", "matching-rule": "any", "mapping": {"regex;[a-z]": {"type": "seq", "sequence": [{"type": "str"}]}}})
+            assert str(r.value) == "<RuleError: Regex '[a-z]' should start and end with parentheses: Path: '/'>"
+        assert r.value.error_key == 'mapping.regex.missing_parentheses'
 
     def test_default_value(self):
         pass

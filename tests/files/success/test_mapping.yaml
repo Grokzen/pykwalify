@@ -219,7 +219,7 @@ data:
 schema:
   type: map
   mapping:
-    regex;/[A-Z]-/:
+    regex;([A-Z]-):
       type: map
       mapping:
         name:
