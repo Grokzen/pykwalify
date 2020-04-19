@@ -355,6 +355,9 @@ class TestCore(object):
             )
 
     def test_python_obj_loading(self, tmp_path):
+        # in latest pytest version, tmp_path is a PosixPath
+        tmp_path = str(tmp_path)
+
         schema = """
         allowempty: True
         mapping:
