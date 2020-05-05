@@ -306,3 +306,17 @@ schema:
   mapping:
     regex;(person[1-9]):
       required: True
+---
+name: mapping 20
+desc: Test mapping with integer keys
+data:
+  test:
+    0: test
+schema:
+  type: map
+  mapping:
+    test:
+      type: map
+      mapping:
+        0:
+          type: str

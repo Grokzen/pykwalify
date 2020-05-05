@@ -1149,7 +1149,7 @@ class Rule(object):
                 v = {}
 
             # Check if this is a regex rule. Handle specially
-            if k.startswith("regex;") or k.startswith("re;"):
+            if str(k).startswith("regex;") or str(k).startswith("re;"):
                 log.debug(u"Found regex map rule")
                 regex = k.split(";", 1)
                 if len(regex) != 2:
