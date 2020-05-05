@@ -575,7 +575,7 @@ class Core(object):
             if not is_regex_rule:
                 is_present = k in value
             else:
-                is_present = any([re.search(required_regex, v) for v in value])
+                is_present = any([re.search(required_regex, str(v)) for v in value])
 
             # Specifying =: as key is considered the "default" if no other keys match
             if rr.required and not is_present and k != "=":
