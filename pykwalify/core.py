@@ -4,7 +4,7 @@
 
 # python std lib
 import datetime
-import imp
+import importlib
 import json
 import logging
 import os
@@ -170,7 +170,7 @@ class Core(object):
             if not os.path.exists(f):
                 raise CoreError(u"Extension file: {0} not found on disk".format(f))
 
-            self.loaded_extensions.append(imp.load_source("", f))
+            self.loaded_extensions.append(importlib.load_source("", f))
 
         log.debug(self.loaded_extensions)
         log.debug([dir(m) for m in self.loaded_extensions])
