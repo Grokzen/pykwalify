@@ -72,20 +72,6 @@ Depending on how both libraries are developed, this can change in the future in 
 
 
 
-UTF-8 and data encoding
------------------------
-
-If you have problems with unicode values not working properly when running pykwalify on python 3.6.x then try to add 
-this environment variable to your execution and it might help to force UTF-8 encoding on all string objects.
-
-If this do not work please open up a issue with your schema and data that can be used to track down the problem in the source code.
-
-.. code-block:: bash
-
-    PYTHONIOENCODING=UTF-8 pykwalify ...
-
-
-
 Project details
 ---------------
 
