@@ -4,8 +4,6 @@ language: python
 cache: pip
 
 python:
-  - "2.7"
-  - "3.5"
   - "3.6"
   - "3.7"
   - "nightly"
@@ -29,7 +27,5 @@ after_success:
 matrix:
   allow_failures:
     - python: "nightly"
-    - python: 2.7
-      env: TEST_PYCODESTYLE=1
     - python: 3.6
       env: TEST_PYCODESTYLE=1
