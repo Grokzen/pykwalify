@@ -60,7 +60,7 @@ Depending on how both libraries are developed, this can change in the future in 
 
 ## UTF-8 and data encoding
 
-If you have problems with unicode values not working properly when running pykwalify on Python 2.7.x then try to add this environment variable to your execution:
+If you have problems with unicode values not working properly when running pykwalify on Python 3.6x then try to add this environment variable to your execution:
 
 ```
 PYTHONIOENCODING=UTF-8 pykwalify ...
@@ -73,7 +73,7 @@ and it might help to force UTF-8 encoding on all string objects. If this does no
 
 |   |   |
 |---|---|
-| python support         | 2.7, 3.5, 3.6, 3.7 |
+| python support         | 3.6, 3.7 |
 | Source                 | https://github.com/Grokzen/pykwalify |
 | Docs (Latest release)  | http://pykwalify.readthedocs.io/en/master/ |
 | Docs (Unstable branch) | http://pykwalify.readthedocs.io/en/unstable/ |

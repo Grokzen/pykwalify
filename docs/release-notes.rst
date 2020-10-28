@@ -16,6 +16,7 @@ Next release
   All normal python tags should now be possible to use again.
 - Add new argument "schema_file_obj" to Core class. Allows to pass in StringIO or similar interfaced objects to use for validation.
 - Add new argument "data_file_obj" to Core class. Allows to pass in StringIO or similar interfaced objects to use for validation.
+- Deprecated imp module and removed support for python 3.5 and below.
 
 
 1.7.0 (October 3, 2018)
