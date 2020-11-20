@@ -2,10 +2,10 @@ sudo: false
 dist: xenial
 language: python
 cache: pip
-
+arch:
+  - amd64
+  - ppc64le
 python:
-  - "2.7"
-  - "3.5"
   - "3.6"
   - "3.7"
   - "nightly"
