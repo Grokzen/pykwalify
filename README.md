@@ -73,7 +73,7 @@ and it might help to force UTF-8 encoding on all string objects. If this does no
 
 |   |   |
 |---|---|
-| python support         | 3.6, 3.7 |
+| python support         | 3.6, 3.7, 3.8, 3.9 |
 | Source                 | https://github.com/Grokzen/pykwalify |
 | Docs (Latest release)  | http://pykwalify.readthedocs.io/en/master/ |
 | Docs (Unstable branch) | http://pykwalify.readthedocs.io/en/unstable/ |
