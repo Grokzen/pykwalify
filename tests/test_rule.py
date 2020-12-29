@@ -23,7 +23,23 @@ class TestRule(unittest.TestCase):
     def test_schema(self):
         # Test that when using both schema; and include tag that it throw an error because schema; tags should be parsed via Core()
         with pytest.raises(RuleError) as r:
-            Rule(schema={"schema;str": {"type": "map", "mapping": {"foo": {"type": "str"}}}, "type": "map", "mapping": {"foo": {"include": "str"}}})
+            Rule(
+                schema={
+                    "schema;str": {
+                        "type": "map", "mapping": {
+                            "foo": {
+                                "type": "str"
+                            },
+                        },
+                    },
+                    "type": "map",
+                    "mapping": {
+                        "foo": {
+                            "include": "str"
+                        },
+                    },
+                }
+            )
         assert str(r.value) == "<RuleError: error code 4: Schema is only allowed on top level of schema file: Path: '/'>"
         assert r.value.error_key == 'schema.not.toplevel'
 

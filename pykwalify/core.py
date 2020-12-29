@@ -133,9 +133,17 @@ class Core(object):
         if self.source is None:
             log.debug(u"No source file loaded, trying source data variable")
             self.source = source_data
+
         if self.schema is None:
             log.debug(u"No schema file loaded, trying schema data variable")
-            self.schema = schema_data
+
+            if isinstance(schema_data, list):
+                merged_schema = {}
+                for schema in schema_data:
+                    merged_schema.update(schema)
+                self.schema = merged_schema
+            else:
+                self.schema = schema_data
 
         # Test if anything was loaded
         if self.source is None:
@@ -256,9 +264,9 @@ class Core(object):
             return
 
         log.debug(u" ? ValidateRule: %s", rule)
-        if rule.include_name is not None:
-            self._validate_include(value, rule, path, done=None)
-        elif rule.sequence is not None:
+        # if rule.include_name is not None:
+        #     self._validate_include(value, rule, path, done=None)
+        if rule.sequence is not None:
             self._validate_sequence(value, rule, path, done=None)
         elif rule.mapping is not None or rule.allowempty_map:
             self._validate_mapping(value, rule, path, done=None)
@@ -302,29 +310,6 @@ class Core(object):
 
         if not found_method:
             raise CoreError(u"Did not find method '{0}' in any loaded extension file".format(func))
-
-    def _validate_include(self, value, rule, path, done=None):
-        """
-        """
-        # TODO: It is difficult to get a good test case to trigger this if case
-        if rule.include_name is None:
-            self.errors.append(SchemaError.SchemaErrorEntry(
-                msg=u'Include name not valid',
-                path=path,
-                value=value.encode('unicode_escape')))
-            return
-        include_name = rule.include_name
-        partial_schema_rule = pykwalify.partial_schemas.get(include_name)
-        if not partial_schema_rule:
-            self.errors.append(SchemaError.SchemaErrorEntry(
-                msg=u"Cannot find partial schema with name '{include_name}'. Existing partial schemas: '{existing_schemas}'. Path: '{path}'",
-                path=path,
-                value=value,
-                include_name=include_name,
-                existing_schemas=", ".join(sorted(pykwalify.partial_schemas.keys()))))
-            return
-
-        self._validate(value, partial_schema_rule, path, done)
 
     def _validate_sequence(self, value, rule, path, done=None):
         """

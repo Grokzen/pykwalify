@@ -1,0 +1,24 @@
+---
+data:
+  point:
+    x: 3
+
+schema:
+  type: map
+  mapping:
+    point:
+      mapping:
+        x:
+          required: true
+          include: coordinate_value
+        y:
+          required: true
+          include: coordinate_value
+
+partial-files:
+  - schema;coordinate_value:
+      type: number
+
+fail-exception-class: "SchemaError"
+fail-validation-errors:
+  - "Cannot find required key 'y'. Path: '/point'"

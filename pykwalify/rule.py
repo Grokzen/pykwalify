@@ -372,9 +372,25 @@ class Rule(object):
 
         # Check if this item is a include, overwrite schema with include schema and continue to parse
         if include:
-            log.debug(u"Found include tag...")
-            self.include_name = include
-            return
+            import pykwalify
+
+            partial_schema_rule = pykwalify.partial_schemas.get(include)
+
+            if not partial_schema_rule:
+                raise RuleError(
+                    msg=u"Include key: {0} not defined in schema".format(include),
+                    error_key=u"include.key.unknown",
+                    path=path,
+                )
+
+            # schema = {key: value for (key, value) in (schema.items() + partial_schema_rule.schema.items())}
+            # schema = dict(schema.items() | partial_schema_rule.schema.items())
+            for k, v in partial_schema_rule.schema.items():
+                schema[k] = v
+
+            # log.debug(u"Found include tag...")
+            # self.include_name = include
+            # return
 
         t = None
         rule = self
@@ -419,6 +435,7 @@ class Rule(object):
             "format": self.init_format_value,
             "func": self.init_func,
             "ident": self.init_ident_value,
+            "include": self.init_include,
             "length": self.init_length_value,
             "map": self.init_mapping_value,
             "mapping": self.init_mapping_value,
@@ -438,17 +455,24 @@ class Rule(object):
             "version": self.init_version,
         }
 
+        # Do a initial pass of all keys to look for the schema tagg.
+        # If we are on the root rule, this check will not be done.
+        # If we are in any child rules, check all keys for any schema and
+        # raise error if we find any as schemas can only be defined at root level
+        if self.parent:
+            for k, v in schema.items():
+                if k.startswith("schema;"):
+                    # Schema tag is only allowed on top level of data
+                    log.debug(u"Found schema tag...")
+                    raise RuleError(
+                        msg=u"Schema is only allowed on top level of schema file",
+                        error_key=u"schema.not.toplevel",
+                        path=path,
+                    )
+
         for k, v in schema.items():
             if k in func_mapping:
                 func_mapping[k](v, rule, path)
-            elif k.startswith("schema;"):
-                # Schema tag is only allowed on top level of data
-                log.debug(u"Found schema tag...")
-                raise RuleError(
-                    msg=u"Schema is only allowed on top level of schema file",
-                    error_key=u"schema.not.toplevel",
-                    path=path,
-                )
             else:
                 raise RuleError(
                     msg=u"Unknown key: {0} found".format(k),
@@ -459,6 +483,9 @@ class Rule(object):
         self.check_conflicts(schema, rule, path)
 
         self.check_type_keywords(schema, rule, path)
+
+    def init_include(self, v, rule, path):
+        pass
 
     def init_format_value(self, v, rule, path):
         log.debug(u"Init format value : %s", path)
