@@ -13,7 +13,7 @@ about: Propose a new PyKwalify feature or enhancement
 -->
 
 ### Environment
-* PyKwalify version: <!-- Example: 1.7.0 -->
+* PyKwalify version: <!-- Example: 1.8.0 -->
 * Python version: <!-- Example: 3.7.0 -->
 
 <!--

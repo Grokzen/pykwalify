@@ -9,7 +9,7 @@ with open('README.md') as f:
 
 setup(
     name="pykwalify",
-    version="1.7.0",
+    version="1.8.0",
     description='Python lib/cli for JSON/YAML schema validation',
     long_description=readme,
     long_description_content_type='text/markdown',

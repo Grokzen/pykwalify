@@ -1,8 +1,8 @@
 Release Notes
 =============
 
-Next release
-------------
+1.8.0 (Jan xx, 2021)
+--------------------
 
 - ruamel.yaml is now the default and preffered yaml parser
 - Dropped support for pyyaml
