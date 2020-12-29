@@ -73,3 +73,5 @@ class TestTypes(unittest.TestCase):
 
         assert types.is_none(None)
         assert not types.is_none("foo")
+
+        assert types.is_url("https://github.com")

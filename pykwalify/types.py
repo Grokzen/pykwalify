@@ -159,7 +159,7 @@ def is_url(obj):
     :param obj: Object that is to be validated
     :return: True/False if obj is valid 
     """
-    return re.match('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', obj)
+    return re.match(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*(),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', obj)
 
 
 tt = {
