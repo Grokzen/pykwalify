@@ -20,7 +20,6 @@ install:
 script:
   - coverage erase
   - coverage run --source pykwalify -p -m py.test -v -s
-  - py.test -v -s
   - python setup.py sdist bdist
 
 after_success:
