@@ -10,6 +10,15 @@ If new types were added, they will not be described here because it will not bre
 
 Pyyaml was removed as supported and default installed yaml parser. The new default parser is ruamel.yaml. If you are running pyyaml then you need to uninstall it and install ruamel.yaml in order to continue to use this tool/library.
 
+Ruamel yaml is no longer available to be installed via the `extras_require=ruamel`
+
+Older python versions was dropped support for. This do not mean that they might work with older versions if you run them. But they will not be oficially published to pypi and supported if issues is found.
+
+Regex values will not be attempted to be converted with str() before validation is attempted. This can cause values that was previously validated or failed to now work or fail.
+
+Regex rules will now enforce a rule error if parentheses is missing in the regex defenition part.
+
+
 
 1.5.x --> 1.6.0
 ---------------

@@ -4,19 +4,36 @@ Release Notes
 1.8.0 (Jan xx, 2021)
 --------------------
 
+General changes:
+
+- Dropped support for python 3.5 and below, including 2.7
 - ruamel.yaml is now the default and preffered yaml parser
-- Dropped support for pyyaml
-- Added new cli argument "--encoding ENCODING" that specifies what encoding to open data and schema files with
-- Enum error strings now output all possible values for easier debugging
-- Implement new type email that uses a relative simple regex to validate email addresses according to RFC 5322 Official Standard
-- Implement new type `url` that uses a relative simple regex to validate url:s according to RFC 1808
+- Dropped support for pyyaml parser
 - Update minimum version of ruamel.yaml to 0.16.0
 - Update minimum version of python-dateutil to 2.8.0
-- Fixed a regression from 1.6.1 where ruamel.yaml safe_load would break for all built-in custom python tags.
-  All normal python tags should now be possible to use again.
+
+CLI changes:
+
+- Added new cli argument "--encoding ENCODING" that specifies what encoding to open data and schema files with
+
+Changed behaviour:
+
+- Enum error strings now output all possible values for easier debugging
+- Removed deprecated imp module. Dynamic imports imght be affected
+
+New features:
+
+- Implement new type email that uses a relative simple regex to validate email addresses according to RFC 5322 Official Standard
+- Implement new type `url` that uses a relative simple regex to validate url:s according to RFC 1808
 - Add new argument "schema_file_obj" to Core class. Allows to pass in StringIO or similar interfaced objects to use for validation.
 - Add new argument "data_file_obj" to Core class. Allows to pass in StringIO or similar interfaced objects to use for validation.
-- Deprecated imp module and removed support for python 3.5 and below.
+
+Bug/issues fixed:
+
+- Fixed a regression from 1.6.1 where ruamel.yaml safe_load would break for all built-in custom python tags.
+  All normal python tags should now be possible to use again.
+- Fixed an issue with regex values that was not converted to str() before regex mapping was attempted.
+  This should validate things like integers and objects that support str() conversion better.
 
 
 1.7.0 (October 3, 2018)
