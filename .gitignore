@@ -42,3 +42,8 @@ htmlcov
 data.yaml
 schema.yaml
 testfile.py
+s.yaml
+d.yaml
+
+# Editor config folders
+.vscode
