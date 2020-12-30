@@ -6,6 +6,13 @@ about: Report a reproducible bug in the current release of PyKwalify
 
 
 <!--
+    ** IMPORTANT **
+
+    IF You need help or have a general question with your data and schema that you SHALL use the Discussions section for these types of questions. This bug for SHALL only be used if you have a reproducible bug.
+
+    ** IMPORTANT **
+-->
+<!--
     NOTE: This form is only for reproducible bugs.
 
     Please describe the environment in which you are running PyKwalify. Be sure
