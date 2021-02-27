@@ -697,7 +697,7 @@ class Core(object):
 
             try:
                 log.debug("Matching pattern '{0}' to regex '{1}".format(rule.pattern, value))
-                res = re.match(rule.pattern, value, re.UNICODE)
+                res = re.fullmatch(rule.pattern, value, re.UNICODE)
             except TypeError:
                 res = None
 
