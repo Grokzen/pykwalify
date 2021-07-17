@@ -19,6 +19,7 @@ from pykwalify.types import (
     mapping_aliases,
     sequence_aliases,
     type_class,
+    is_ip,
 )
 
 log = logging.getLogger(__name__)

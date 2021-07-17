@@ -1,0 +1,9 @@
+---
+name:  ipv4-success
+desc:  basic ip type validation
+#
+schema:
+  type: ipv4
+#
+data:
+  "8.8.8.8"

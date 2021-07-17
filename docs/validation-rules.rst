@@ -62,6 +62,17 @@ The following types are available:
     - Validates data is a valid URL based on RFC 1808. Uses following regex
       `http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+`
 
+- **ip**
+    - Validates data is a valid IP (both IPv4 and IPv6 are accepted, see below for details)
+
+- **ipv4**
+    - Validates data is a valid IPv4 (only validates the format, not the IP range). Uses following regex
+      `^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$`
+
+- **ipv6**
+    - Validates data is a valid IPv6 (only validates the format, not the IP range). Uses following regex
+      `^(?:[a-fA-F0-9]{0,4}:){0,7}[a-fA-F0-9]{0,4}$`
+
 
 Example
 

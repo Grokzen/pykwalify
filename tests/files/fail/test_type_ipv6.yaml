@@ -1,0 +1,15 @@
+---
+name:  ipv6-fail
+desc:  basic ip type validation. Fails as not IPv6
+#
+schema:
+  type: seq
+  sequence:
+    - type: ipv6
+#
+data:
+  - "foo"
+  - "8.8.8.8"
+errors:
+   - "Value 'foo' is not of type 'ipv6'. Path: '/0'"
+   - "Value '8.8.8.8' is not of type 'ipv6'. Path: '/1'"
