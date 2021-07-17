@@ -1,0 +1,14 @@
+---
+name:  ipv6-success
+desc:  basic ipv6 type validation
+#
+schema:
+  type: seq
+  sequence:
+    - type: ipv6
+
+#
+data:
+  - "2001:db8:3333:4444:5555:6666:7777:8888"
+  - "::1234:5678"
+  - "::"

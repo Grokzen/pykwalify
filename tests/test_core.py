@@ -469,6 +469,10 @@ class TestCore(object):
             "test_type_email.yaml",
             # All tests for TYPE: url
             "test_type_url.yaml",
+            # All tests for TYPE: ip
+            "test_type_ip.yaml",
+            "test_type_ipv4.yaml",
+            "test_type_ipv6.yaml",
         ]
 
         _fail_tests = [
@@ -554,6 +558,10 @@ class TestCore(object):
             ("test_type_email.yaml", SchemaError),
             # All tests for TYPE: url
             ("test_type_url.yaml", SchemaError),
+            # All tests for TYPE: ip
+            ("test_type_ip.yaml", SchemaError),
+            ("test_type_ipv4.yaml", SchemaError),
+            ("test_type_ipv6.yaml", SchemaError),
         ]
 
         # Add override magic to make it easier to test a specific file

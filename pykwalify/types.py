@@ -38,6 +38,9 @@ _types = {
     "none": None,
     "email": str,
     "url": str,
+    "ipv4": str,
+    "ipv6": str,
+    "ip": str,
 }
 
 
@@ -151,7 +154,7 @@ def is_date(obj):
 def is_email(obj):
     """
     """
-    return re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", obj)
+    return False if not is_string(obj) else re.match(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)", obj)
 
 
 def is_url(obj):
@@ -159,8 +162,28 @@ def is_url(obj):
     :param obj: Object that is to be validated
     :return: True/False if obj is valid 
     """
-    return re.match(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*(),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', obj)
+    return False if not is_string(obj) else re.match(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*(),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', obj)
 
+def is_ipv4(obj):
+    """
+    :param obj: Object that is to be validated
+    :return: True/False if obj is a valid IPv4 address
+    """
+    return False if not is_string(obj) else re.match(r'^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$', obj)
+
+def is_ipv6(obj):
+    """
+    :param obj: Object that is to be validated
+    :return: True/False if obj is a valid IPv6 address
+    """
+    return False if not is_string(obj) else re.match(r'^(?:[a-fA-F0-9]{0,4}:){0,7}[a-fA-F0-9]{0,4}$', obj)
+
+def is_ip(obj):
+    """
+    :param obj: Object that is to be validated
+    :return: True/False if obj is a valid IP address (both IPv4 and IPv6)
+    """
+    return is_ipv4(obj) or is_ipv6(obj)
 
 tt = {
     "str": is_string,
@@ -177,4 +200,7 @@ tt = {
     "date": is_date,
     "email": is_email,
     "url": is_url,
+    "ipv4": is_ipv4,
+    "ipv6": is_ipv6,
+    "ip": is_ip,
 }

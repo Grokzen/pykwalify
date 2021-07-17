@@ -1,0 +1,15 @@
+---
+name:  ipv4-fail
+desc:  basic ip type validation. Fails as not IPv4
+#
+schema:
+  type: seq
+  sequence:
+    - type: ipv4
+#
+data:
+  - "foo"
+  - "2001:db8:3333:4444:5555:6666:7777:8888"
+errors:
+   - "Value 'foo' is not of type 'ipv4'. Path: '/0'"
+   - "Value '2001:db8:3333:4444:5555:6666:7777:8888' is not of type 'ipv4'. Path: '/1'"

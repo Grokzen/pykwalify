@@ -75,3 +75,18 @@ class TestTypes(unittest.TestCase):
         assert not types.is_none("foo")
 
         assert types.is_url("https://github.com")
+        assert not types.is_url(None)
+
+        assert types.is_email("foo@bar.com")
+        assert not types.is_email("foo")
+        assert not types.is_email(None)
+
+        assert types.is_ipv4("8.8.8.8")
+        assert types.is_ipv6("2001:db8:3333:4444:5555:6666:7777:8888")
+        assert types.is_ipv6("::1234:5678")
+        assert types.is_ipv6("::")
+        assert types.is_ip("8.8.8.8")
+        assert types.is_ip("2001:db8:3333:4444:5555:6666:7777:8888")
+        assert not types.is_ip("foo")
+        assert not types.is_ip(None)
+        assert not types.is_ip(1)
