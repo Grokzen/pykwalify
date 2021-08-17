@@ -66,12 +66,12 @@ The following types are available:
     - Validates data is a valid IP (both IPv4 and IPv6 are accepted, see below for details)
 
 - **ipv4**
-    - Validates data is a valid IPv4 (only validates the format, not the IP range). Uses following regex
-      `^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$`
+    - Validates data is a valid IPv4. Uses `IPv4Address(string)` and checks for
+      `AddressValueError, NetmaskValueError` exceptions.
 
 - **ipv6**
-    - Validates data is a valid IPv6 (only validates the format, not the IP range). Uses following regex
-      `^(?:[a-fA-F0-9]{0,4}:){0,7}[a-fA-F0-9]{0,4}$`
+    - Validates data is a valid IPv6. Uses `IPv6Address(string)` and checks for
+      `AddressValueError, NetmaskValueError` exceptions.
 
 
 Example
