@@ -3,10 +3,10 @@
 """ pyKwalify - types.py """
 
 # python stdlib
-import re
 import datetime
 import re
 from pykwalify.compat import basestring, bytes
+from ipaddress import IPv4Address, IPv6Address, AddressValueError, NetmaskValueError
 
 DEFAULT_TYPE = "str"
 
@@ -169,14 +169,32 @@ def is_ipv4(obj):
     :param obj: Object that is to be validated
     :return: True/False if obj is a valid IPv4 address
     """
-    return False if not is_string(obj) else re.match(r'^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$', obj)
+    if not is_string(obj):
+        # the upaddress library will convert integers to IPs
+        # but that's not a valid case in this scenario as we don't want to consider 1 as a valid IP
+        return False
+    try:
+        IPv4Address(obj)
+    except (AddressValueError, NetmaskValueError):
+        return False
+    else:
+        return True
 
 def is_ipv6(obj):
     """
     :param obj: Object that is to be validated
     :return: True/False if obj is a valid IPv6 address
     """
-    return False if not is_string(obj) else re.match(r'^(?:[a-fA-F0-9]{0,4}:){0,7}[a-fA-F0-9]{0,4}$', obj)
+    if not is_string(obj):
+        # the upaddress library will convert integers to IPs
+        # but that's not a valid case in this scenario as we don't want to consider 1 as a valid IP
+        return False
+    try:
+        IPv6Address(obj)
+    except (AddressValueError, NetmaskValueError):
+        return False
+    else:
+        return True
 
 def is_ip(obj):
     """
