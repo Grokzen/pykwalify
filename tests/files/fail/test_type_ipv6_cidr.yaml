@@ -1,0 +1,19 @@
+---
+name:  ipv6-cidr-fail
+desc:  basic ip network type validation. Fails as not IPv6 network
+#
+schema:
+  type: seq
+  sequence:
+    - type: ipv6_cidr
+#
+data:
+  - "foo"
+  - 1
+  - "127.0.1.0/24"
+  - "2001:db8::1/32"
+errors:
+   - "Value 'foo' is not of type 'ipv6_cidr'. Path: '/0'"
+   - "Value '1' is not of type 'ipv6_cidr'. Path: '/1'"
+   - "Value '127.0.1.0/24' is not of type 'ipv6_cidr'. Path: '/2'"
+   - "Value '2001:db8::1/32' is not of type 'ipv6_cidr'. Path: '/3'"

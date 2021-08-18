@@ -1,0 +1,14 @@
+---
+name:  ipv6-cidr-success
+desc:  basic ipv6 network type validation
+#
+schema:
+  type: seq
+  sequence:
+    - type: ipv6_cidr
+
+#
+data:
+  - "2001:db8::/32"
+  - "2001:db8::0/32"
+  - "2001:0db8:0000:0000:0000:0000:0000:0000/32"

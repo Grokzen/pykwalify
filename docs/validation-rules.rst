@@ -67,11 +67,22 @@ The following types are available:
 
 - **ipv4**
     - Validates data is a valid IPv4. Uses `IPv4Address(string)` and checks for
-      `AddressValueError, NetmaskValueError` exceptions.
+      `AddressValueError` exceptions.
 
 - **ipv6**
     - Validates data is a valid IPv6. Uses `IPv6Address(string)` and checks for
-      `AddressValueError, NetmaskValueError` exceptions.
+      `AddressValueError` exceptions.
+
+- **ip_cidr**
+    - Validates data is a valid IP network (both IPv4 and IPv6 are accepted, see below for details)
+
+- **ipv4_cidr**
+    - Validates data is a valid IPv4 network. Uses `IPv4Network(string, strict=True)` and checks for
+      `AddressValueError, NetmaskValueError, ValueError` exceptions.
+
+- **ipv6_cidr**
+    - Validates data is a valid IPv6 network. Uses `IPv6Network(string, strict=True)` and checks for
+      `AddressValueError, NetmaskValueError, ValueError` exceptions.
 
 
 Example

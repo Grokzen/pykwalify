@@ -1,0 +1,14 @@
+---
+name:  ip-cidr-success
+desc:  basic ip network type validation
+#
+schema:
+  type: seq
+  sequence:
+    - type: ip_cidr
+
+#
+data:
+  - "192.168.0.0/24"
+  - "2001:db8::/32"
+  - "2001:db8::0/32"
