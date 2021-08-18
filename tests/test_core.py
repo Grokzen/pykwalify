@@ -473,6 +473,10 @@ class TestCore(object):
             "test_type_ip.yaml",
             "test_type_ipv4.yaml",
             "test_type_ipv6.yaml",
+            # All tests for TYPE: ip_cidr
+            "test_type_ip_cidr.yaml",
+            "test_type_ipv4_cidr.yaml",
+            "test_type_ipv6_cidr.yaml",
         ]
 
         _fail_tests = [

@@ -9,7 +9,13 @@ schema:
 #
 data:
   - "foo"
+  - 1
+  - "127.0.1.0/24"
+  - "256.256.256.256"
   - "2001:db8:3333:4444:5555:6666:7777:8888"
 errors:
    - "Value 'foo' is not of type 'ipv4'. Path: '/0'"
-   - "Value '2001:db8:3333:4444:5555:6666:7777:8888' is not of type 'ipv4'. Path: '/1'"
+   - "Value '1' is not of type 'ipv4'. Path: '/1'"
+   - "Value '127.0.1.0/24' is not of type 'ipv4'. Path: '/2'"
+   - "Value '256.256.256.256' is not of type 'ipv4'. Path: '/3'"
+   - "Value '2001:db8:3333:4444:5555:6666:7777:8888' is not of type 'ipv4'. Path: '/4'"

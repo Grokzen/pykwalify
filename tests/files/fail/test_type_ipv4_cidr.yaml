@@ -1,0 +1,21 @@
+---
+name:  ipv4-cidr-fail
+desc:  basic ip network type validation. Fails as not IPv4 network
+#
+schema:
+  type: seq
+  sequence:
+    - type: ipv4_cidr
+#
+data:
+  - "foo"
+  - 1
+  - "127.0.1.1/24"
+  - "256.256.256.0/24"
+  - "2001:db8::/32"
+errors:
+   - "Value 'foo' is not of type 'ipv4_cidr'. Path: '/0'"
+   - "Value '1' is not of type 'ipv4_cidr'. Path: '/1'"
+   - "Value '127.0.1.1/24' is not of type 'ipv4_cidr'. Path: '/2'"
+   - "Value '256.256.256.0/24' is not of type 'ipv4_cidr'. Path: '/3'"
+   - "Value '2001:db8::/32' is not of type 'ipv4_cidr'. Path: '/4'"

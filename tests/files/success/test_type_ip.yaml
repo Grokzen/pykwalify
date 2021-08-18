@@ -3,7 +3,11 @@ name:  ip-success
 desc:  basic ip type validation
 #
 schema:
-  type: ip
+  type: seq
+  sequence:
+    - type: ip
+
 #
 data:
-  "8.8.8.8"
+  - "8.8.8.8"
+  - "2001:4860:4860::8888"

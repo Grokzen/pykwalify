@@ -1,0 +1,11 @@
+---
+name:  ip-cidr-fail
+desc:  basic ip network type validation. Fails as not IPv4 or V6 network
+#
+schema:
+  type: ip_cidr
+#
+data:
+  "foo"
+errors:
+   - "Value 'foo' is not of type 'ip'. Path: ''"

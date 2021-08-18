@@ -1,0 +1,9 @@
+---
+name:  ipv4-cidr-success
+desc:  basic ip network type validation
+#
+schema:
+  type: ipv4_cidr
+#
+data:
+  "192.168.0.0/24"

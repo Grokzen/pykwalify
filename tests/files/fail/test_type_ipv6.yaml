@@ -9,7 +9,11 @@ schema:
 #
 data:
   - "foo"
+  - 1
+  - "2001:db8::/32"
   - "8.8.8.8"
 errors:
    - "Value 'foo' is not of type 'ipv6'. Path: '/0'"
-   - "Value '8.8.8.8' is not of type 'ipv6'. Path: '/1'"
+   - "Value '1' is not of type 'ipv6'. Path: '/1'"
+   - "Value '2001:db8::/32' is not of type 'ipv6'. Path: '/2'"
+   - "Value '8.8.8.8' is not of type 'ipv6'. Path: '/3'"
