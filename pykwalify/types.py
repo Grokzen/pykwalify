@@ -5,8 +5,9 @@
 # python stdlib
 import datetime
 import re
+from ipaddress import IPv4Address, IPv4Network, IPv6Address, IPv6Network, AddressValueError, NetmaskValueError
+
 from pykwalify.compat import basestring, bytes
-from ipaddress import IPv4Address, IPv6Address, AddressValueError, NetmaskValueError
 
 DEFAULT_TYPE = "str"
 
@@ -41,8 +42,10 @@ _types = {
     "ipv4": str,
     "ipv6": str,
     "ip": str,
+    "ipv4_cidr": str,
+    "ipv6_cidr": str,
+    "ip_cidr": str
 }
-
 
 sequence_aliases = ["sequence", "seq"]
 mapping_aliases = ["map", "mapping"]
@@ -164,37 +167,40 @@ def is_url(obj):
     """
     return False if not is_string(obj) else re.match(r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*(),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', obj)
 
+
 def is_ipv4(obj):
     """
     :param obj: Object that is to be validated
     :return: True/False if obj is a valid IPv4 address
     """
-    if not is_string(obj):
-        # the upaddress library will convert integers to IPs
-        # but that's not a valid case in this scenario as we don't want to consider 1 as a valid IP
+    if not isinstance(obj, basestring):
+        # the ipaddress library will convert integers to IPs
+        # but that's not a valid case in this scenario as we don't want to consider 1 as a valid IPv4
         return False
     try:
         IPv4Address(obj)
-    except (AddressValueError, NetmaskValueError):
+    except AddressValueError:
         return False
     else:
         return True
+
 
 def is_ipv6(obj):
     """
     :param obj: Object that is to be validated
     :return: True/False if obj is a valid IPv6 address
     """
-    if not is_string(obj):
-        # the upaddress library will convert integers to IPs
-        # but that's not a valid case in this scenario as we don't want to consider 1 as a valid IP
+    if not isinstance(obj, basestring):
+        # the ipaddress library will convert integers to IPs
+        # but that's not a valid case in this scenario as we don't want to consider 1 as a valid IPv6
         return False
     try:
         IPv6Address(obj)
-    except (AddressValueError, NetmaskValueError):
+    except AddressValueError:
         return False
     else:
         return True
+
 
 def is_ip(obj):
     """
@@ -202,6 +208,49 @@ def is_ip(obj):
     :return: True/False if obj is a valid IP address (both IPv4 and IPv6)
     """
     return is_ipv4(obj) or is_ipv6(obj)
+
+
+def is_ipv4_cidr(obj):
+    """
+    :param obj: Object that is to be validated
+    :return: True/False if obj is a valid IPv4 network
+    """
+    if not isinstance(obj, basestring):
+        # the ipaddress library will convert integers to IPs
+        # but that's not a valid case in this scenario as we don't want to consider 1 as a valid IPv4 network
+        return False
+    try:
+        IPv4Network(obj, strict=True)
+    except (AddressValueError, NetmaskValueError, ValueError):
+        return False
+    else:
+        return True
+
+
+def is_ipv6_cidr(obj):
+    """
+    :param obj: Object that is to be validated
+    :return: True/False if obj is a valid IPv6 network
+    """
+    if not isinstance(obj, basestring):
+        # the ipaddress library will convert integers to IPs
+        # but that's not a valid case in this scenario as we don't want to consider 1 as a valid IPv6 network
+        return False
+    try:
+        IPv6Network(obj, strict=True)
+    except (AddressValueError, NetmaskValueError, ValueError):
+        return False
+    else:
+        return True
+
+
+def is_ip_cidr(obj):
+    """
+    :param obj: Object that is to be validated
+    :return: True/False if obj is a valid IP network (both IPv4 and IPv6)
+    """
+    return is_ipv4_cidr(obj) or is_ipv6_cidr(obj)
+
 
 tt = {
     "str": is_string,
@@ -221,4 +270,7 @@ tt = {
     "ipv4": is_ipv4,
     "ipv6": is_ipv6,
     "ip": is_ip,
+    "ipv4_cidr": is_ipv4_cidr,
+    "ipv6_cidr": is_ipv6_cidr,
+    "ip_cidr": is_ip_cidr
 }
