@@ -889,7 +889,7 @@ class Core(object):
 
         if min_ is not None and min_ > value_length:
             self.errors.append(SchemaError.SchemaErrorEntry(
-                msg=u"Value: '{value_str}' has length of '{value}', greater than min limit '{min_}'. Path: '{path}'",
+                msg=u"Value: '{value_str}' has length of '{value}', less than min limit '{min_}'. Path: '{path}'",
                 value_str=value,
                 path=path,
                 value=len(value),
@@ -898,7 +898,7 @@ class Core(object):
 
         if max_ex is not None and max_ex <= value_length:
             self.errors.append(SchemaError.SchemaErrorEntry(
-                msg=u"Value: '{value_str}' has length of '{value}', greater than max_ex limit '{max_ex}'. Path: '{path}'",
+                msg=u"Value: '{value_str}' has length of '{value}', greater than or equal to max_ex limit '{max_ex}'. Path: '{path}'",
                 value_str=value,
                 path=path,
                 value=len(value),
@@ -907,7 +907,7 @@ class Core(object):
 
         if min_ex is not None and min_ex >= value_length:
             self.errors.append(SchemaError.SchemaErrorEntry(
-                msg=u"Value: '{value_str}' has length of '{value}', greater than min_ex limit '{min_ex}'. Path: '{path}'",
+                msg=u"Value: '{value_str}' has length of '{value}', less than or equal to min_ex limit '{min_ex}'. Path: '{path}'",
                 value_str=value,
                 path=path,
                 value=len(value),
