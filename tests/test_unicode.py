@@ -12,7 +12,7 @@ from pykwalify.core import Core
 from pykwalify.errors import SchemaError
 
 # 3rd party imports
-from pykwalify.compat import yaml
+from pykwalify.compat import yml
 from testfixtures import compare
 
 
@@ -47,7 +47,8 @@ class TestUnicode(object):
         }
 
         source_f = tmpdir.join(u"2så.json")
-        source_f.write(yaml.safe_dump(fail_data_2s_yaml, allow_unicode=True))
+        with source_f.open('w') as stream:
+            yml.dump(fail_data_2s_yaml, stream)
 
         _pass_tests = [
             # Test mapping with unicode key and value
@@ -65,7 +66,7 @@ class TestUnicode(object):
             f = self.f(passing_test_files)
 
             with open(f, "r") as stream:
-                yaml_data = yaml.safe_load(stream)
+                yaml_data = yml.load(stream)
                 data = yaml_data["data"]
                 schema = yaml_data["schema"]
 
@@ -102,7 +103,8 @@ class TestUnicode(object):
         }
 
         source_f = tmpdir.join(u"2få.json")
-        source_f.write(yaml.safe_dump(fail_data_2f_yaml, allow_unicode=True))
+        with source_f.open('w') as stream:
+            yml.dump(fail_data_2f_yaml, stream)
 
         _fail_tests = [
             # Test mapping with unicode key and value but wrong type
@@ -120,7 +122,7 @@ class TestUnicode(object):
             f = self.f(failing_test)
 
             with open(f, "r") as stream:
-                yaml_data = yaml.safe_load(stream)
+                yaml_data = yml.load(stream)
                 data = yaml_data["data"]
                 schema = yaml_data["schema"]
                 errors = yaml_data["errors"]
